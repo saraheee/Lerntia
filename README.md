@@ -53,9 +53,5 @@ Der Student muss mit dem Tool eigenständig üben können, Tutoren müssen die d
     als ausführbares jar-File packetiert werden.
 
 *   Das Programm kann mit dem Befehl:\
-    ```mvnw package```\
-    als ausführbares jar-File packetiert werden.
-
-*   Das Programm kann mit dem Befehl:\
     ```mvnw clean verify && java -jar ./target/*.jar```\
     als ausführbares jar-File packetiert, verifiziert und ausgeführt werden.

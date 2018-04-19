@@ -17,6 +17,7 @@
         <!-- compile dependencies -->
         <spring.version>5.0.5.RELEASE</spring.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>
+        <mary.version>5.2</mary.version>
         <!-- runtime dependencies -->
         <h2.version>1.4.197</h2.version>
         <logback.version>1.3.0-alpha4</logback.version>
@@ -27,6 +28,14 @@
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
         <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
     </properties>
+
+    <repositories>
+        <!-- Mary TTS -->
+        <repository>
+            <id>MaryTTS</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- compile dependencies -->
@@ -70,6 +79,11 @@
             <version>${logback.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>de.dfki.mary</groupId>
+            <artifactId>voice-cmu-slt-hsmm</artifactId>
+            <version>${mary.version}</version>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -82,6 +96,11 @@
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.reporting</groupId>
+            <artifactId>maven-reporting-exec</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
