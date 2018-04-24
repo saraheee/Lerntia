@@ -13,14 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Repository
-public class JDBCUniverseDAO implements UniverseDAO {
+public class JDBCLerntiaDAO implements LerntiaDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SELECT_ANSWER_WHERE_QUESTION_LIKE = "SELECT id, answer FROM qanda WHERE question = ?";
 
     private final PreparedStatement getAnswerForQuestion;
 
-    public JDBCUniverseDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
+    public JDBCLerntiaDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
             final var connection = jdbcConnectionManager.getConnection();
             getAnswerForQuestion = connection.prepareStatement(SELECT_ANSWER_WHERE_QUESTION_LIKE);

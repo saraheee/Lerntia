@@ -24,16 +24,16 @@ public final class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // setup application
-        primaryStage.setTitle("Universe Calculator");
-        primaryStage.setWidth(1366);
-        primaryStage.setHeight(768);
+        primaryStage.setTitle("[Lerntia] Lern- und Prüfungstool");
+        primaryStage.setMaximized(true);
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
+
 
         context = new AnnotationConfigApplicationContext(MainApplication.class);
         final var fxmlLoader = context.getBean(SpringFXMLLoader.class);
         primaryStage.setScene(new Scene((Parent) fxmlLoader.load(
-            getClass().getResourceAsStream("/fxml/universe.fxml"))));
+            getClass().getResourceAsStream("/fxml/lerntia.fxml"))));
 
         // show application
         primaryStage.show();

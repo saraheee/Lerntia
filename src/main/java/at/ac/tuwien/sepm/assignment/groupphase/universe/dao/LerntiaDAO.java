@@ -5,9 +5,9 @@ import at.ac.tuwien.sepm.assignment.groupphase.universe.dto.Answer;
 import at.ac.tuwien.sepm.assignment.groupphase.universe.dto.Question;
 
 /**
- * The <code>UniverseDAO</code> is capable to load answers to popular questions from a data store.
+ * The <code>LerntiaDAO</code> is capable to load answers to popular questions from a data store.
  */
-public interface UniverseDAO {
+public interface LerntiaDAO {
 
     /**
      * Load answer for to a specific question.
