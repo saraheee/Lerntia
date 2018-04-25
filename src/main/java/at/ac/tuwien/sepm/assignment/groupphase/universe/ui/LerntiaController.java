@@ -26,6 +26,7 @@ public class LerntiaController {
         var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("[Lerntia] Info");
         alert.setHeaderText("Dieser Button hat noch keine Funktionalität!");
+        alert.setResizable(true);
         var dialogPane = alert.getDialogPane();
         //dialogPane.getStylesheets().add(getClass().getResource("css/dialog.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
