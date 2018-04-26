@@ -2,9 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.121"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.universe.ui.LerntiaController">
     <children>
         <VBox prefHeight="768" prefWidth="1024">
@@ -12,72 +11,54 @@
                 <HBox prefHeight="338.0" prefWidth="1024.0">
                     <children>
                         <Button mnemonicParsing="false" onAction="#onPlaceHolderButtonClicked" prefHeight="42.0"
-                                prefWidth="47.0" text="..">
-                            <font>
-                                <Font name="Arial Black" size="33.0"/>
-                            </font>
+                                prefWidth="47.0" styleClass="label" stylesheets="@/css/label.css" text="..">
                         </Button>
                     </children>
                 </HBox>
                 <HBox prefHeight="286.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <Label text="Hallo, ich bin eine Frage! Willst du mich beantworten?">
-                            <font>
-                                <Font name="Arial Black" size="38.0"/>
-                            </font>
-                        </Label>
+                        <Label stylesheets="@/css/label.css"
+                               text="Hallo, ich bin eine Frage! Willst du mich beantworten?"/>
                     </children>
                 </HBox>
                 <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" text="Ja!">
-                            <font>
-                                <Font name="Arial Black" size="36.0"/>
-                            </font>
+                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
+                                  stylesheets="@/css/label.css" text="Ja!">
                         </CheckBox>
                     </children>
                 </HBox>
                 <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" text="Nein!">
-                            <font>
-                                <Font name="Arial Black" size="36.0"/>
-                            </font>
+                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
+                                  stylesheets="@/css/label.css" text="Nein!">
                         </CheckBox>
                     </children>
                 </HBox>
                 <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" text="Wieso sollte ich?">
-                            <font>
-                                <Font name="Arial Black" size="36.0"/>
-                            </font>
+                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
+                                  stylesheets="@/css/label.css" text="Wieso sollte ich?">
                         </CheckBox>
                     </children>
                 </HBox>
                 <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0"
-                                  text="Wo bleibt die Frage?">
-                            <font>
-                                <Font name="Arial Black" size="36.0"/>
-                            </font>
+                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
+                                  stylesheets="@/css/label.css" text="Wo bleibt die Frage?">
                         </CheckBox>
                     </children>
                 </HBox>
                 <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0">
                     <children>
                         <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0"
-                                  text="Die letzte Antwortmöglichkeit">
-                            <font>
-                                <Font name="Arial Black" size="36.0"/>
-                            </font>
+                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
+                                  stylesheets="@/css/label.css" text="Die letzte Antwortmöglichkeit">
                         </CheckBox>
                     </children>
                 </HBox>
