@@ -30,7 +30,7 @@ public final class MainApplication extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
 
-        
+
         Font.loadFont(MainApplication.class.getResource("/fonts/Arial Black.ttf").toExternalForm(), 36);
         context = new AnnotationConfigApplicationContext(MainApplication.class);
         final var fxmlLoader = context.getBean(SpringFXMLLoader.class);

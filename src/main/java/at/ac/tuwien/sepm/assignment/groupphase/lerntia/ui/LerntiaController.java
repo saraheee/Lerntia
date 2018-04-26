@@ -1,6 +1,6 @@
-package at.ac.tuwien.sepm.assignment.groupphase.universe.ui;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.universe.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.assignment.groupphase.universe.dto;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 import java.util.Objects;
 
