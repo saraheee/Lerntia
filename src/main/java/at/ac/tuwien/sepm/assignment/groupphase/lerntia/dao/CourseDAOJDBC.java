@@ -50,6 +50,7 @@ public class CourseDAOJDBC implements CourseDAO {
             PreparedStatement psupdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT);
             psupdate.setString(1,course.getSemester());
             psupdate.setString(2,course.getMark());
+            psupdate.executeUpdate();
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage());
         }
