@@ -13,9 +13,9 @@ import java.sql.SQLException;
 public class UserDAO implements IUserDAO {
 
     Connection connection = null;
-    private static final String SQL_USER_CREATE_STATEMENT = "INSERT INTO User(name, matriculationNumber, studyProgramme) VALUES (?, ? ,?)";
-    private static final String  SQL_USER_UPDATE_STATEMENT = "UPDATE User SET name = ?, studyProgramme = ? WHERE matriculationNumber = ?";
-    private static final String SQL_USER_READ_STATEMENT = "SELECT * FROM User WHERE matriculationNumber = ?";
+    private static final String SQL_USER_CREATE_STATEMENT = "INSERT INTO PUser(name, matriculationNumber, studyProgramme) VALUES (?, ? ,?)";
+    private static final String  SQL_USER_UPDATE_STATEMENT = "UPDATE PUser SET name = ?, studyProgramme = ? WHERE matriculationNumber = ?";
+    private static final String SQL_USER_READ_STATEMENT = "SELECT * FROM PUser WHERE matriculationNumber = ?";
 
     public UserDAO() throws PersistenceException {
         try {

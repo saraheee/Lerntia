@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS User (
+CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reseved SQL word
   name                VARCHAR(255),
   matriculationNumber VARCHAR(255) PRIMARY KEY,
   studyProgramme      VARCHAR(255),
