@@ -14,20 +14,18 @@ CREATE TABLE IF NOT EXISTS Course (
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
-  cmark      VARCHAR(255) REFERENCES Course (mark),
+  cmark     VARCHAR(255) REFERENCES Course (mark),
   semester  VARCHAR(255) REFERENCES Course (Semester),
-  id        BIGINT AUTO_INCREMENT,
-  isDeleted BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (cmark, semester, id)
+  id        BIGINT  AUTO_INCREMENT,
+  isDeleted BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
-  cmark      VARCHAR(255) REFERENCES Questionnaire (cmark),
-  semester  VARCHAR(255) REFERENCES Questionnaire (Semester),
-  qid       BIGINT REFERENCES Questionnaire (id),
-  date      TIMESTAMP,
-  isDeleted BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (cmark, semester, qid)
+  cmark     VARCHAR(255) REFERENCES Course (mark),
+  semester  VARCHAR(255) REFERENCES Course (Semester),
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
+  date      TIMESTAMP NOT NULL,
+  isDeleted BOOLEAN DEFAULT FALSE
 );
 
 -- LearningQuestionnaire does not contain any additional arguments and
@@ -50,10 +48,8 @@ CREATE TABLE IF NOT EXISTS Question (
 );
 
 CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
-  cmark      VARCHAR(255) REFERENCES Questionnaire (cmark),
-  semester   VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid        BIGINT REFERENCES Questionnaire (id),
   questionid BIGINT REFERENCES Question (id),
   isDeleted  BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (cmark, semester, qid, questionid)
+  PRIMARY KEY (qid, questionid)
 );

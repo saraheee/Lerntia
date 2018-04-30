@@ -12,12 +12,11 @@ import java.lang.invoke.MethodHandles;
 @Component
 public class QuestionaireDAO implements IQuestionaireDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT="";
+    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT="INSERT INTO Questionaire(cmark, semester) VALUES (?,?)";
     private static final String SQL_QUESTIONAIRE_UPDATE_STATEMENT="";
     private static final String SQL_QUESTIONAIRE_SEARCH_STATEMENT="";
     private static final String SQL_QUESTIONAIRE_DELETE_STATEMENT="";
     private static final String SQL_QUESTIONAIRE_READALL_STATEMENT="";
-
 
 
     @Override
