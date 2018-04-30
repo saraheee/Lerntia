@@ -8,7 +8,7 @@ public interface IUserDAO {
 
     void update(User user) throws PersistenceException;
 
-    void read(User user) throws PersistenceException;
+    User read(User user) throws PersistenceException;
 
     void delete(User user) throws PersistenceException;
 }
