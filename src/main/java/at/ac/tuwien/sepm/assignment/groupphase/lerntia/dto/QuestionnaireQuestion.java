@@ -1,26 +1,26 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class QuestionnaireQuestion {
-    private String cid;
+    private String cmark;
     private String semester;
     private Long qid;
     private Long questionid;
 
     public QuestionnaireQuestion() {}
 
-    public QuestionnaireQuestion(String cid, String semester, Long qid, Long questionid) {
-        this.cid = cid;
+    public QuestionnaireQuestion(String cmark, String semester, Long qid, Long questionid) {
+        this.cmark = cmark;
         this.semester = semester;
         this.qid = qid;
         this.questionid = questionid;
     }
 
-    public String getCid() {
-        return cid;
+    public String getCmark() {
+        return cmark;
     }
 
-    public void setCid(String cid) {
-        this.cid = cid;
+    public void setCmark(String cmark) {
+        this.cmark = cmark;
     }
 
     public String getSemester() {
@@ -50,7 +50,7 @@ public class QuestionnaireQuestion {
     @Override
     public String toString() {
         return "QuestionnaireQuestion{" +
-            "cid='" + cid + '\'' +
+            "cmark='" + cmark + '\'' +
             ", semester='" + semester + '\'' +
             ", qid=" + qid +
             ", questionid=" + questionid +

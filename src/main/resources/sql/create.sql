@@ -6,24 +6,24 @@ CREATE TABLE IF NOT EXISTS User (
 
 
 CREATE TABLE IF NOT EXISTS Course (
-  id       VARCHAR(255),
+  mark       VARCHAR(255),
   semester VARCHAR(255),
   PRIMARY KEY (id, semester)
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
-  cid      VARCHAR(255) REFERENCES Course (id),
+  mark      VARCHAR(255) REFERENCES Course (mark),
   semester VARCHAR(255) REFERENCES Course (Semester),
   id       BIGINT AUTO_INCREMENT,
-  PRIMARY KEY (cid, semester, id)
+  PRIMARY KEY (cmark, semester, id)
 );
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
-  cid      VARCHAR(255) REFERENCES Questionnaire (cid),
+  mark      VARCHAR(255) REFERENCES Questionnaire (mark),
   semester VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid      BIGINT REFERENCES Questionnaire (id),
   date    TIMESTAMP,
-  PRIMARY KEY (cid, semester, qid)
+  PRIMARY KEY (cmark, semester, qid)
 );
 
 -- LearningQuestionnaire does not contain any additional arguments and
@@ -45,10 +45,10 @@ CREATE TABLE IF NOT EXISTS Question (
 );
 
 CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
-  cid        VARCHAR(255) REFERENCES Questionnaire (cid),
+  cmark        VARCHAR(255) REFERENCES Questionnaire (mark),
   semester   VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid        BIGINT REFERENCES Questionnaire (id),
   questionid BIGINT REFERENCES Question (id),
-  PRIMARY KEY (cid, semester, qid, questionid)
+  PRIMARY KEY (cmark, semester, qid, questionid)
 );
 

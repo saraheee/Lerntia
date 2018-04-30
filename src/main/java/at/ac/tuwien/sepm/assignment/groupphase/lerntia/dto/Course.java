@@ -1,22 +1,22 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class Course {
-    private String id;
+    private String mark;
     private String semester;
 
     public Course() {}
 
-    public Course(String id, String semester) {
-        this.id = id;
+    public Course(String mark, String semester) {
+        this.mark = mark;
         this.semester = semester;
     }
 
-    public String getId() {
-        return id;
+    public String getMark() {
+        return mark;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
     public String getSemester() {
@@ -30,7 +30,7 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-            "id='" + id + '\'' +
+            "mark='" + mark + '\'' +
             ", semester='" + semester + '\'' +
             '}';
     }

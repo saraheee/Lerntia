@@ -3,24 +3,24 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 import java.util.Objects;
 
 public class Questionnaire {
-    private String cid;
+    private String cmark;
     private String semester;
     private Long id;
 
     public Questionnaire() {}
 
-    public Questionnaire(String cid, String semester, Long id) {
-        this.cid = cid;
+    public Questionnaire(String cmark, String semester, Long id) {
+        this.cmark = cmark;
         this.semester = semester;
         this.id = id;
     }
 
-    public String getCid() {
-        return cid;
+    public String getCmark() {
+        return cmark;
     }
 
-    public void setCid(String cid) {
-        this.cid = cid;
+    public void setCmark(String cmark) {
+        this.cmark = cmark;
     }
 
     public String getSemester() {
@@ -42,7 +42,7 @@ public class Questionnaire {
     @Override
     public String toString() {
         return "Questionnaire{" +
-            "cid='" + cid + '\'' +
+            "cmark='" + cmark + '\'' +
             ", semester='" + semester + '\'' +
             ", id=" + id +
             '}';
