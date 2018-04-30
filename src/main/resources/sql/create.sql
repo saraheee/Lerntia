@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS Questionnaire (
   PRIMARY KEY (cid, semester, id)
 );
 
-CREATE TABLE IF NOT EXISTS TestQuestionnaire (
+CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
   cid      VARCHAR(255) REFERENCES Questionnaire (cid),
   semester VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid      BIGINT REFERENCES Questionnaire (id),
-  datum    TIMESTAMP,
+  date    TIMESTAMP,
   PRIMARY KEY (cid, semester, qid)
 );
 

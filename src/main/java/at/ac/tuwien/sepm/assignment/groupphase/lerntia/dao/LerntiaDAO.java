@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Answer;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 /**
  * The <code>LerntiaDAO</code> is capable to load answers to popular questions from a data store.

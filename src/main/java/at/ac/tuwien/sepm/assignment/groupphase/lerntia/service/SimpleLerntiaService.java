@@ -3,8 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LerntiaDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Answer;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.JDBCLerntiaDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LerntiaDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Answer;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleLerntiaService;
 import org.junit.Assert;
