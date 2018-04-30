@@ -11,10 +11,11 @@ public class Question {
     private String answer5;
     private String correctAnswers;
     private String optionalFeedback;
+    private Boolean isDeleted;
 
     public Question() {}
 
-    public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3, String answer4, String answer5, String correctAnswers, String optionalFeedback) {
+    public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3, String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
         this.id = id;
         this.questionText = questionText;
         this.picture = picture;
@@ -25,6 +26,7 @@ public class Question {
         this.answer5 = answer5;
         this.correctAnswers = correctAnswers;
         this.optionalFeedback = optionalFeedback;
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -107,6 +109,14 @@ public class Question {
         this.optionalFeedback = optionalFeedback;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -120,6 +130,7 @@ public class Question {
             ", answer5='" + answer5 + '\'' +
             ", correctAnswers='" + correctAnswers + '\'' +
             ", optionalFeedback='" + optionalFeedback + '\'' +
+            ", isDeleted=" + isDeleted +
             '}';
     }
 }

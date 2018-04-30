@@ -1,28 +1,32 @@
 CREATE TABLE IF NOT EXISTS User (
   name                VARCHAR(255),
   matriculationNumber VARCHAR(255) PRIMARY KEY,
-  studyProgramme      VARCHAR(255)
+  studyProgramme      VARCHAR(255),
+  isDeleted           BOOLEAN DEFAULT FALSE
 );
 
 
 CREATE TABLE IF NOT EXISTS Course (
-  mark       VARCHAR(255),
-  semester VARCHAR(255),
+  mark      VARCHAR(255),
+  semester  VARCHAR(255),
+  isDeleted BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (id, semester)
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
   mark      VARCHAR(255) REFERENCES Course (mark),
-  semester VARCHAR(255) REFERENCES Course (Semester),
-  id       BIGINT AUTO_INCREMENT,
+  semester  VARCHAR(255) REFERENCES Course (Semester),
+  id        BIGINT AUTO_INCREMENT,
+  isDeleted BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (cmark, semester, id)
 );
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
   mark      VARCHAR(255) REFERENCES Questionnaire (mark),
-  semester VARCHAR(255) REFERENCES Questionnaire (Semester),
-  qid      BIGINT REFERENCES Questionnaire (id),
-  date    TIMESTAMP,
+  semester  VARCHAR(255) REFERENCES Questionnaire (Semester),
+  qid       BIGINT REFERENCES Questionnaire (id),
+  date      TIMESTAMP,
+  isDeleted BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (cmark, semester, qid)
 );
 
@@ -41,14 +45,15 @@ CREATE TABLE IF NOT EXISTS Question (
   answer4          TEXT         DEFAULT NULL,
   answer5          TEXT         DEFAULT NULL,
   correctAnswers   VARCHAR(5) NOT NULL,
-  optionalFeedback TEXT         DEFAULT NULL
+  optionalFeedback TEXT         DEFAULT NULL,
+  isDeleted        BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
-  cmark        VARCHAR(255) REFERENCES Questionnaire (mark),
+  cmark      VARCHAR(255) REFERENCES Questionnaire (mark),
   semester   VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid        BIGINT REFERENCES Questionnaire (id),
   questionid BIGINT REFERENCES Question (id),
+  isDeleted  BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (cmark, semester, qid, questionid)
 );
-

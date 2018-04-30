@@ -7,8 +7,8 @@ public class ExamQuestionnaire extends Questionnaire {
 
     public ExamQuestionnaire() {}
 
-    public ExamQuestionnaire(String cmark, String semester, Long qid, LocalDate date) {
-        super(cmark, semester, qid);
+    public ExamQuestionnaire(String cmark, String semester, Long qid, Boolean isDeleted, LocalDate date) {
+        super(cmark, semester, qid, isDeleted);
         this.date = date;
     }
 
@@ -28,6 +28,7 @@ public class ExamQuestionnaire extends Questionnaire {
             ", semester='" + super.getSemester() + '\'' +
             ", qid=" + super.getId()+
             "date=" + date +
+            "isDeleted=" + super.getDeleted() +
             '}';
     }
 }

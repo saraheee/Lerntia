@@ -4,13 +4,15 @@ public class User {
     private String name;
     private String matriculationNumber;
     private String studyProgramme;
+    private Boolean isDeleted;
 
     public User() {}
 
-    public User(String name, String matriculationNumber, String studyProgramme) {
+    public User(String name, String matriculationNumber, String studyProgramme, Boolean isDeleted) {
         this.name = name;
         this.matriculationNumber = matriculationNumber;
         this.studyProgramme = studyProgramme;
+        this.isDeleted = isDeleted;
     }
 
     public String getName() {
@@ -37,12 +39,21 @@ public class User {
         this.studyProgramme = studyProgramme;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "User{" +
             "name='" + name + '\'' +
             ", matriculationNumber='" + matriculationNumber + '\'' +
             ", studyProgramme='" + studyProgramme + '\'' +
+            ", isDeleted=" + isDeleted +
             '}';
     }
 }

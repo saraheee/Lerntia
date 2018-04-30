@@ -5,15 +5,9 @@ public class QuestionnaireQuestion {
     private String semester;
     private Long qid;
     private Long questionid;
+    private Boolean isDeleted;
 
     public QuestionnaireQuestion() {}
-
-    public QuestionnaireQuestion(String cmark, String semester, Long qid, Long questionid) {
-        this.cmark = cmark;
-        this.semester = semester;
-        this.qid = qid;
-        this.questionid = questionid;
-    }
 
     public String getCmark() {
         return cmark;
@@ -47,6 +41,14 @@ public class QuestionnaireQuestion {
         this.questionid = questionid;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "QuestionnaireQuestion{" +
@@ -54,6 +56,7 @@ public class QuestionnaireQuestion {
             ", semester='" + semester + '\'' +
             ", qid=" + qid +
             ", questionid=" + questionid +
+            ", isDeleted=" + isDeleted +
             '}';
     }
 }
