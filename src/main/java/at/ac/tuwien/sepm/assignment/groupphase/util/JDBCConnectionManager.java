@@ -14,7 +14,7 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL =
-        "jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/createAndInsert.sql'";
+        "jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'";
 
     private Connection connection;
 
