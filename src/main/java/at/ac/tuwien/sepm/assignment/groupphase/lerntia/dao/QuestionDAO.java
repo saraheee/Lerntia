@@ -2,14 +2,39 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-public interface QuestionDAO {
 
-    void create(Question question) throws PersistenceException;
+import java.lang.invoke.MethodHandles;
+@Component
+public class QuestionDAO implements IQuestionDAO {
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    void update(Question question) throws PersistenceException;
+    private static final String SQL_EXAMQUESTIONAIRE_CREATE_STATEMENT="";
+    private static final String SQL_EXAMQUESTIONAIRE_UPDATE_STATEMENT="";
+    private static final String SQL_EXAMQUESTIONAIRE_SEARCH_STATEMENT="";
+    private static final String SQL_EXAMQUESTIONAIRE_DELETE_STATEMENT="";
+    private static final String SQL_EXAMQUESTIONAIRE_READALL_STATEMENT="";
 
-    void search(Question question) throws PersistenceException;
+    @Override
+    public void create(Question question) throws PersistenceException {
 
-    void delete(Question question) throws PersistenceException;
+    }
+
+    @Override
+    public void update(Question question) throws PersistenceException {
+
+    }
+
+    @Override
+    public void search(Question question) throws PersistenceException {
+
+    }
+
+    @Override
+    public void delete(Question question) throws PersistenceException {
+
+    }
 }

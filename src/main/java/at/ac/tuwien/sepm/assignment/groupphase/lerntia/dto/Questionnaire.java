@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
-import java.util.Objects;
 
 public class Questionnaire {
     private String cmark;

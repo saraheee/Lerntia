@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.Config;
 
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ExamQuestionaireDAOJDBC;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionaireDAOJDBC;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ExamQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionaireDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public ExamQuestionaireDAOJDBC examQuestionaireDAOJDBC(){
-        return new ExamQuestionaireDAOJDBC();
+    public ExamQuestionaireDAO examQuestionaireDAOJDBC(){
+        return new ExamQuestionaireDAO();
     }
 
     @Bean
-    public QuestionaireDAOJDBC questionaireDAOJDBC(){
-        return new QuestionaireDAOJDBC();
+    public QuestionaireDAO questionaireDAOJDBC(){
+        return new QuestionaireDAO();
     }
 }
