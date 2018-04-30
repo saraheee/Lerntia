@@ -31,10 +31,10 @@ public class LerntiaController {
         //dialogPane.getStylesheets().add(getClass().getResource("css/dialog.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
         alert.showAndWait();
-        try {
+        /*try {
             lerntiaService.goToExamMode();
         } catch (ServiceException e) {
             LOG.error("An error occured {}", e.getMessage());
-        }
+        }*/
     }
 }
