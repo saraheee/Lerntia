@@ -16,9 +16,9 @@ public class JDBCConnectionManager {
     private static final String CONNECTION_URL =
         "jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/createAndInsert.sql'";
 
-    private Connection connection;
+    private static Connection connection = null;
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         if (connection == null) {
             connection = DriverManager.getConnection(CONNECTION_URL);
         }

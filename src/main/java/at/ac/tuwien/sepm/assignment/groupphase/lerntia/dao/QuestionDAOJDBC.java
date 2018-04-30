@@ -1,18 +1,14 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import javafx.collections.ObservableList;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
 import java.lang.invoke.MethodHandles;
-
 @Repository
-public class ExamQuestionaireDAOJDBC implements ExamQuestionaireDAO {
-
+public class QuestionDAOJDBC implements QuestionDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String SQL_EXAMQUESTIONAIRE_CREATE_STATEMENT="";
@@ -21,29 +17,23 @@ public class ExamQuestionaireDAOJDBC implements ExamQuestionaireDAO {
     private static final String SQL_EXAMQUESTIONAIRE_DELETE_STATEMENT="";
     private static final String SQL_EXAMQUESTIONAIRE_READALL_STATEMENT="";
 
-
     @Override
-    public void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+    public void create(Question question) throws PersistenceException {
 
     }
 
     @Override
-    public void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+    public void update(Question question) throws PersistenceException {
 
     }
 
     @Override
-    public void search(ExamQuestionnaire searchparameters) throws PersistenceException{
+    public void search(Question question) throws PersistenceException {
 
     }
 
-
-
     @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{}
+    public void delete(Question question) throws PersistenceException {
 
-    @Override
-    public ObservableList readAll() throws PersistenceException{
-        return null;
     }
 }

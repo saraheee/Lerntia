@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
@@ -13,12 +12,12 @@ import java.lang.invoke.MethodHandles;
 public class LerntiaController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LerntiaService lerntiaService;
+   // private final LerntiaService lerntiaService;
 
 
-    public LerntiaController(LerntiaService lerntiaService) {
-        this.lerntiaService = lerntiaService;
-    }
+    //public LerntiaController(LerntiaService lerntiaService) {
+        //this.lerntiaService = lerntiaService;
+    //}
 
     @FXML
     private void onPlaceHolderButtonClicked() {
@@ -32,8 +31,8 @@ public class LerntiaController {
         dialogPane.getStyleClass().add("myDialog");
         alert.showAndWait();
         try {
-            lerntiaService.goToExamMode();
-        } catch (ServiceException e) {
+          //  lerntiaService.goToExamMode();
+        } catch (Exception e) {
             LOG.error("An error occured {}", e.getMessage());
         }
     }

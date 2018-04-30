@@ -9,11 +9,5 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
  */
 public interface LerntiaService {
 
-    /**
-     * Calculate the answer to the ultimate question of life, the universe, and everything.
-     *
-     * @return the answer to the ultimate question of life, the universe, and everything
-     */
-    Answer goToExamMode() throws ServiceException;
 
 }
