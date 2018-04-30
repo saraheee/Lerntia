@@ -1,16 +1,21 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOJDBC implements UserDAO {
 
     Connection connection = null;
-    
+    private static final String SQL_USER_CREATE_STATEMENT = "INSERT INTO User(name, matriculationNumber, studyProgramme) VALUES (?, ? ,?)";
+    private static final String  SQL_USER_UPDATE_STATEMENT = "UPDATE User SET name = ?, studyProgramme = ? WHERE matriculationNumber = ?";
+    private static final String SQL_USER_READ_STATEMENT = "SELECT * FROM User WHERE matriculationNumber = ?";
+
     public UserDAOJDBC() throws PersistenceException {
         try {
             connection = JDBCConnectionManager.getConnection();
@@ -20,22 +25,50 @@ public class UserDAOJDBC implements UserDAO {
     }
 
     @Override
-    public void create(Course course) throws PersistenceException {
-
+    public void create(User user) throws PersistenceException {
+        try {
+            PreparedStatement pscreate = connection.prepareStatement(SQL_USER_CREATE_STATEMENT);
+            pscreate.setString(1, user.getName());
+            pscreate.setString(2, user.getMatriculationNumber());
+            pscreate.setString(3, user.getStudyProgramme());
+            pscreate.executeUpdate();
+        }catch (Exception e){
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
-    public void update(Course course) throws PersistenceException {
-
+    public void update(User user) throws PersistenceException {
+        try {
+            PreparedStatement psupdate = connection.prepareStatement(SQL_USER_UPDATE_STATEMENT);
+            psupdate.setString(1, user.getName());
+            psupdate.setString(2, user.getStudyProgramme());
+            psupdate.setString(3, user.getMatriculationNumber());
+            psupdate.executeUpdate();
+        }catch (Exception e){
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
-    public void read(Course course) throws PersistenceException {
-
+    public void read(User user) throws PersistenceException {
+        try {
+            PreparedStatement psread = connection.prepareStatement(SQL_USER_READ_STATEMENT);
+            psread.setString(1, user.getMatriculationNumber());
+            User u = new User();
+            ResultSet rs = psread.executeQuery();
+            if(rs.next()) {
+                u.setName(rs.getString(1));
+                u.setMatriculationNumber(rs.getString(2));
+                u.setStudyProgramme(rs.getString(3));
+            }
+        }catch (Exception e){
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
-    public void delete(Course course) throws PersistenceException {
-
+    public void delete(User user) throws PersistenceException {
+        // todo check if soft delete is necessery
     }
 }
