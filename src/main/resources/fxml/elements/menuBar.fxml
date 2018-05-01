@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.String?>
+<MenuBar prefHeight="25.0" maxWidth="Infinity" xmlns="http://javafx.com/javafx/8.0.121" stylesheets="@/css/menu.css"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <Menu mnemonicParsing="false" text="Menü">
+        <MenuItem mnemonicParsing="false" text="Fragen verwalten"/>
+        <MenuItem mnemonicParsing="false" text="Fragen von CSV importieren"/>
+        <MenuItem mnemonicParsing="false" text="Fragen nach CSV exportieren"/>
+        <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Hilfe">
+        <MenuItem mnemonicParsing="false" text="Über Lerntia"/>
+    </Menu>
+    <styleClass>
+        <String fx:value="menu"/>
+    </styleClass>
+</MenuBar>

@@ -9,10 +9,11 @@
       xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
     <VBox prefHeight="768.0">
-        <VBox prefHeight="254.0">
-            <Button mnemonicParsing="false" onAction="#onPlaceHolderButtonClicked" prefHeight="42.0" prefWidth="47.0"
-                    styleClass="label" stylesheets="@/css/label.css" text="..">
-            </Button>
+        <VBox prefHeight="198.0" prefWidth="636.0">
+            <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
+        </VBox>
+        <VBox prefHeight="81.0" prefWidth="636.0">
+            <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
         </VBox>
         <ImageView fitHeight="477.0" fitWidth="683.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/icons/no-image.png"/>
@@ -21,7 +22,7 @@
     <VBox prefHeight="768">
         <HBox prefHeight="30.0"/>
         <HBox prefHeight="286.0">
-            <VBox prefHeight="140.0" minWidth="139.0">
+            <VBox minWidth="139.0" prefHeight="140.0">
                 <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
             </VBox>
             <VBox prefHeight="115.0" prefWidth="0.0"/>

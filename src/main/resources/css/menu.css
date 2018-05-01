@@ -1,0 +1,14 @@
+.menu {
+    -fx-font-size: 17px;
+    -fx-font-family: "Lora-Bold";
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(0, 50, 250, 0.01);
+}
+
+.menu:hover {
+    -fx-text-fill: #333333;
+}
+
+.menu:focused {
+    -fx-text-fill: #333333;
+}
