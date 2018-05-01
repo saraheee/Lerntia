@@ -5,32 +5,24 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
-      prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
-    <VBox prefHeight="768.0" prefWidth="661.0">
-        <VBox prefHeight="254.0" prefWidth="200.0">
-            <Button mnemonicParsing="false" onAction="#onPlaceHolderButtonClicked" prefHeight="42.0"
-                    prefWidth="47.0" styleClass="label" stylesheets="@/css/label.css" text="..">
+    <VBox prefHeight="768.0">
+        <VBox prefHeight="254.0">
+            <Button mnemonicParsing="false" onAction="#onPlaceHolderButtonClicked" prefHeight="42.0" prefWidth="47.0"
+                    styleClass="label" stylesheets="@/css/label.css" text="..">
             </Button>
         </VBox>
-        <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="477.0" fitWidth="683.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/icons/no-image.png"/>
         </ImageView>
     </VBox>
-    <VBox prefHeight="768" prefWidth="1024">
-        <HBox prefHeight="199.0" prefWidth="520.0"/>
-        <HBox prefHeight="286.0" prefWidth="1024.0">
-            <VBox prefHeight="115.0" prefWidth="72.0">
-                <Button mnemonicParsing="false" prefHeight="66.0" prefWidth="64.0"
-                        stylesheets="@/css/sound.css">
-                    <graphic>
-                        <ImageView fitHeight="57.0" fitWidth="57.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@/icons/audio.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
+    <VBox prefHeight="768">
+        <HBox prefHeight="30.0"/>
+        <HBox prefHeight="286.0">
+            <VBox prefHeight="140.0" minWidth="139.0">
+                <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
             </VBox>
             <VBox prefHeight="115.0" prefWidth="0.0"/>
             <fx:include fx:id="question" source="/fxml/elements/questionLabel.fxml"/>
@@ -51,12 +43,11 @@
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="757.0" prefHeight="250.0" prefWidth="1024.0">
-            <ButtonBar prefHeight="100.0" prefWidth="1007.0">
+            <ButtonBar prefHeight="98.0" prefWidth="1043.0">
                 <buttons>
-                    <fx:include fx:id="previousQuestionButton"
-                                source="/fxml/elements/previousQuestionButton.fxml"/>
+                    <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>
-                    <VBox prefHeight="92.0" prefWidth="100.0"/>
+                    <VBox prefHeight="98.0" prefWidth="104.0"/>
                     <fx:include fx:id="saveAnswerButton" source="/fxml/elements/saveAnswerButton.fxml"/>
                 </buttons>
             </ButtonBar>

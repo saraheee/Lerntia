@@ -4,3 +4,22 @@
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
+
+.button {
+    -fx-width: 80%;
+    -fx-border-radius: 3px;
+    -fx-border-color: black;
+    -fx-border: 2px;
+    -fx-background-color: rgba(51, 0, 102, 0.09);
+}
+
+.button:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.01);
+    -fx-color: white;
+}
+
+.button:focused {
+    -fx-background-color: rgba(0, 132, 203, 0.29);
+    -fx-border-color: #1b8b90;
+    -fx-color: white;
+}
