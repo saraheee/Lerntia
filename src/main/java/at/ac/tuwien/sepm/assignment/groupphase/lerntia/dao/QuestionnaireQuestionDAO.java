@@ -3,12 +3,14 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Component
 public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT ="INSERT INTO Questionnairequestion(qid,questionid,isDeleted) VALUES (?,?,?)";
     private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion set isDeleted=true where qid=? and questionid=?";
