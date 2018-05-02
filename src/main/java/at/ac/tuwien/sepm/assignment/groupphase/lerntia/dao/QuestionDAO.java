@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
@@ -22,6 +23,7 @@ public class QuestionDAO implements IQuestionDAO {
     private static final String SQL_QUESTION_SEARCH_STATEMENT="";
     private static final String SQL_QUESTION_DELETE_STATEMENT="UPDATE Question SET isDeleted = true where id = ?";
     private static final String SQL_QUESTION_READALL_STATEMENT="";
+    private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
 
     public QuestionDAO() throws PersistenceException {
         try {
@@ -95,5 +97,34 @@ public class QuestionDAO implements IQuestionDAO {
             throw new PersistenceException(e.getMessage());
         }
 
+    }
+
+    @Override
+    public Question get(long id) throws PersistenceException {
+        try {
+            String help ="";
+            help= SQL_QUESTION_GET_STATEMENT + id;
+            ResultSet rsget = connection.prepareStatement(help).executeQuery();
+
+            Question q = new Question();
+            if (rsget.next()){
+                q.setId(id);
+                q.setQuestionText(rsget.getString(2));
+                q.setPicture(rsget.getString(3));
+                q.setAnswer1(rsget.getString(4));
+                q.setAnswer2(rsget.getString(5));
+                q.setAnswer3(rsget.getString(6));
+                q.setAnswer4(rsget.getString(7));
+                q.setAnswer4(rsget.getString(8));
+                q.setAnswer5(rsget.getString(9));
+                q.setCorrectAnswers(rsget.getString(10));
+                q.setOptionalFeedback(rsget.getString(11));
+                q.setDeleted(rsget.getBoolean(12));
+            }
+            return q;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

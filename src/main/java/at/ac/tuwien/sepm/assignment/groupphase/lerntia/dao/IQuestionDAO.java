@@ -12,4 +12,6 @@ public interface IQuestionDAO {
     void search(Question question) throws PersistenceException;
 
     void delete(Question question) throws PersistenceException;
+
+    Question get(long id) throws PersistenceException;
 }
