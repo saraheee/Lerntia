@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS QuestionnaireQuestion;
 DROP TABLE IF EXISTS Question;
+DROP TABLE IF EXISTS LearningQuestionnaire;
 DROP TABLE IF EXISTS ExamQuestionnaire;
 DROP TABLE IF EXISTS Questionnaire;
 DROP TABLE IF EXISTS Course;

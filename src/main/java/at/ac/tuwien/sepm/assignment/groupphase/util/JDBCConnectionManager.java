@@ -13,14 +13,21 @@ import java.sql.SQLException;
 public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String CONNECTION_URL =
-        "jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'";
-
     private static Connection connection = null;
 
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
-            connection = DriverManager.getConnection(CONNECTION_URL);
+            // used for accessing create.sql file
+            String script = JDBCConnectionManager.class.getClassLoader().getResource("sql/create.sql").getPath();
+            if(script == null) {
+                LOG.warn("Script returned a null pointer!");
+            }
+            if(System.getProperty("os.name").startsWith("Windows")) {
+                script = script.substring(1); // on Windows, the string would start with an '/' causing an InvocationException
+            }
+            // for details, see: http://www.h2database.com/html/features.html
+            connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/lerntia;INIT=RUNSCRIPT FROM '"+ script +"'", "sa", "");
+            //connection = DriverManager.getConnection("jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'", "sa", "");
         }
         return connection;
     }

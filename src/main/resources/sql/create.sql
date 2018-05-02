@@ -16,22 +16,19 @@ CREATE TABLE IF NOT EXISTS Course (
 CREATE TABLE IF NOT EXISTS Questionnaire (
   cmark     VARCHAR(255) REFERENCES Course (mark),
   semester  VARCHAR(255) REFERENCES Course (Semester),
-  id        BIGINT  AUTO_INCREMENT,
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
   isDeleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
+  id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
+  name      VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
-  cmark     VARCHAR(255) REFERENCES Course (mark),
-  semester  VARCHAR(255) REFERENCES Course (Semester),
-  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
-  date      TIMESTAMP NOT NULL,
-  isDeleted BOOLEAN DEFAULT FALSE
+  id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
+  date      TIMESTAMP DEFAULT NULL,
 );
-
--- LearningQuestionnaire does not contain any additional arguments and
--- thus does not require an additional table (will be saved to the table
--- Questionnaire
-
 
 CREATE TABLE IF NOT EXISTS Question (
   id               BIGINT       AUTO_INCREMENT PRIMARY KEY,

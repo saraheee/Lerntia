@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 
-public class Questionnaire {
+public abstract class Questionnaire {
     private String cmark;
     private String semester;
     private Long id;
