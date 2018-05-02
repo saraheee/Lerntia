@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reseved SQL word
+CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   name                VARCHAR(255),
   matriculationNumber VARCHAR(255) PRIMARY KEY,
   studyProgramme      VARCHAR(255),
@@ -13,11 +13,24 @@ CREATE TABLE IF NOT EXISTS Course (
   PRIMARY KEY (mark, semester)
 );
 
+CREATE TABLE IF NOT EXISTS PUserCourse (
+  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
+  cmark               VARCHAR(255) REFERENCES Course (mark),
+  semester            VARCHAR(255) REFERENCES Course (semester),
+  PRIMARY KEY (matriculationNumber, cmark, semester)
+);
+
 CREATE TABLE IF NOT EXISTS Questionnaire (
   cmark     VARCHAR(255) REFERENCES Course (mark),
   semester  VARCHAR(255) REFERENCES Course (Semester),
   id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
   isDeleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
+  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
+  qid                 BIGINT REFERENCES Questionnaire (id),
+  PRIMARY KEY (matriculationNumber, qid)
 );
 
 CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
