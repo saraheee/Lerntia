@@ -9,6 +9,6 @@
           xmlns:fx="http://javafx.com/fxml/1">
     <styleClass>
         <String fx:value="button"/>
-        <String fx:value="label"/>
+        <String fx:value="antwort-label"/>
     </styleClass>
 </CheckBox>

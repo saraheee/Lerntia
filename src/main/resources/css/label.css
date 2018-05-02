@@ -1,5 +1,12 @@
 .label {
-    -fx-font-size: 36px;
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.antwort-label {
+    -fx-font-size: 26px;
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
