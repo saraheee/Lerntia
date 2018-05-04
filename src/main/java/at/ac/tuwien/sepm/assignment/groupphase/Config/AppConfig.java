@@ -1,8 +1,9 @@
 package at.ac.tuwien.sepm.assignment.groupphase.Config;
 
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ExamQuestionaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LearningLearningQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LearningQuestionnaireDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +16,7 @@ public class AppConfig {
     }
 
     @Bean
-    public LearningLearningQuestionaireDAO questionaireDAOJDBC(){
-        return new LearningLearningQuestionaireDAO();
+    public LearningQuestionnaireDAO questionaireDAOJDBC() throws PersistenceException {
+        return new LearningQuestionnaireDAO();
     }
 }

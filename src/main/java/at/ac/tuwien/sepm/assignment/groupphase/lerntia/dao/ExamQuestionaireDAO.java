@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 
 @Component
-public class ExamQuestionaireDAO implements IExamQuestionaireDAO {
+public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

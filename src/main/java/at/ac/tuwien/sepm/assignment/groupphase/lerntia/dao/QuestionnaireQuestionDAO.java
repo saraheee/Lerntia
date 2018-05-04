@@ -67,7 +67,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     }
 
     @Override
-    public List readAll(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
+    public List readAll() throws PersistenceException {
         //TODO see if there is any need for an readALl method or similar methods to it (readlAll,get,Search)
         return null;
     }

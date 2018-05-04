@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
@@ -36,5 +37,20 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     @Override
     public void update(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
 
+    }
+
+    @Override
+    public void search(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+
+    }
+
+    @Override
+    public void delete(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+
+    }
+
+    @Override
+    public List readAll() throws PersistenceException {
+        return null;
     }
 }
