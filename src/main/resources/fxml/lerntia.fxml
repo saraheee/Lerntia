@@ -4,46 +4,58 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<?import java.lang.String?>
+<HBox fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
-    <VBox prefHeight="768.0" prefWidth="493.0">
-        <VBox prefHeight="44.0" prefWidth="493.0">
+    <VBox fx:id="mainWindowLeft" prefHeight="768.0" styleClass="main-left" stylesheets="@/css/for-all-elements.css">
+        <VBox prefHeight="44.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
-        <VBox prefHeight="81.0" prefWidth="636.0">
+        <VBox prefHeight="134.0">
             <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
         </VBox>
-        <ImageView fitHeight="505.0" fitWidth="485.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@/icons/no-image.png"/>
-        </ImageView>
+        <VBox prefHeight="134.0">
+            <ImageView fitHeight="160" fitWidth="160" preserveRatio="true">
+                <Image url="@/icons/no-image.png"/>
+            </ImageView>
+
+        </VBox>
     </VBox>
-    <VBox prefHeight="768">
+    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/for-all-elements.css">
         <HBox prefHeight="30.0"/>
         <HBox prefHeight="286.0">
             <VBox minWidth="139.0" prefHeight="140.0">
                 <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
             </VBox>
-            <VBox prefHeight="115.0" prefWidth="0.0"/>
+            <VBox prefHeight="115.0"/>
             <fx:include fx:id="question" source="/fxml/elements/questionLabel.fxml"/>
+            <styleClass>
+                <String fx:value="question-box"/>
+            </styleClass>
         </HBox>
-        <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="1024.0">
+        <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
+              stylesheets="@/css/for-all-elements.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0">
+        <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/for-all-elements.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0">
+        <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
+              stylesheets="@/css/for-all-elements.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0">
+        <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/for-all-elements.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0">
+        <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/for-all-elements.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0">
-            <ButtonBar prefHeight="98.0" minWidth="1024.0">
+        <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
+              stylesheets="@/css/for-all-elements.css">
+            <ButtonBar prefHeight="98.0">
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>

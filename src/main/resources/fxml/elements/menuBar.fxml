@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <MenuBar prefHeight="25.0" maxWidth="Infinity" xmlns="http://javafx.com/javafx/8.0.121" stylesheets="@/css/menu.css"
-         styleClass="menu" xmlns:fx="http://javafx.com/fxml/1">
+         styleClass="main-left" xmlns:fx="http://javafx.com/fxml/1">
     <Menu mnemonicParsing="false" text="Menü">
         <MenuItem mnemonicParsing="false" text="Fragen verwalten"/>
         <MenuItem mnemonicParsing="false" text="Fragen von CSV importieren"/>
