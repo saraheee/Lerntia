@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<Label stylesheets="@/css/label.css"
+       text="&lt;Frage&gt; Hier steht eine Default-Frage, die auch etwas länger sein darf. Daher geht dieser Text über mehr als einer Zeile. Wird dieser Text korrekt dargestellt?"
+       wrapText="true" xmlns="http://javafx.com/javafx/8.0.121"
+       xmlns:fx="http://javafx.com/fxml/1"/>

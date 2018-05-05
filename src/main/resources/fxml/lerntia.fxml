@@ -1,74 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.121"
+<?import java.lang.String?>
+<HBox fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
-    <children>
-        <VBox prefHeight="768" prefWidth="1024">
-            <children>
-                <HBox prefHeight="338.0" prefWidth="1024.0">
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#onPlaceHolderButtonClicked" prefHeight="42.0"
-                                prefWidth="47.0" styleClass="label" stylesheets="@/css/label.css" text="..">
-                        </Button>
-                    </children>
-                </HBox>
-                <HBox prefHeight="286.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <Label stylesheets="@/css/label.css"
-                               text="Hallo, ich bin eine Frage! Willst du mich beantworten?"/>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
-                                  stylesheets="@/css/label.css" text="Ja!">
-                        </CheckBox>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
-                                  stylesheets="@/css/label.css" text="Nein!">
-                        </CheckBox>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
-                                  stylesheets="@/css/label.css" text="Wieso sollte ich?">
-                        </CheckBox>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
-                                  stylesheets="@/css/label.css" text="Wo bleibt die Frage?">
-                        </CheckBox>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <VBox prefHeight="128.0" prefWidth="69.0"/>
-                        <CheckBox mnemonicParsing="false" prefHeight="100.0" prefWidth="993.0" styleClass="label"
-                                  stylesheets="@/css/label.css" text="Die letzte Antwortmöglichkeit">
-                        </CheckBox>
-                    </children>
-                </HBox>
-                <HBox layoutX="10.0" layoutY="757.0" prefHeight="250.0" prefWidth="1024.0">
-                    <children>
-                        <ButtonBar prefHeight="100.0" prefWidth="1007.0"/>
-                    </children>
-                </HBox>
-                <VBox prefHeight="100.0" prefWidth="22.0"/>
-            </children>
+    <VBox fx:id="mainWindowLeft" prefHeight="768.0" styleClass="main-left" stylesheets="@/css/background-division.css">
+        <VBox prefHeight="44.0">
+            <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
-    </children>
-</VBox>
+        <VBox prefHeight="134.0">
+            <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
+        </VBox>
+        <VBox prefHeight="134.0">
+            <ImageView fx:id="mainImage" fitWidth="360" preserveRatio="true">
+                <Image url="@/icons/no-image.png"/>
+            </ImageView>
+        </VBox>
+    </VBox>
+    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="30.0"/>
+        <HBox prefHeight="286.0">
+            <VBox minWidth="139.0" prefHeight="140.0">
+                <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
+            </VBox>
+            <VBox prefHeight="115.0"/>
+            <fx:include fx:id="question" source="/fxml/elements/questionLabel.fxml"/>
+            <styleClass>
+                <String fx:value="question-box"/>
+            </styleClass>
+        </HBox>
+        <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
+            <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
+            <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
+            <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
+            <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
+            <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
+              stylesheets="@/css/background-division.css">
+            <ButtonBar prefHeight="98.0">
+                <buttons>
+                    <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
+                    <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>
+                    <VBox prefHeight="94.0" prefWidth="40.0"/>
+                    <fx:include fx:id="saveAnswerButton" source="/fxml/elements/saveAnswerButton.fxml"/>
+                </buttons>
+            </ButtonBar>
+        </HBox>
+        <VBox prefHeight="100.0" prefWidth="22.0"/>
+    </VBox>
+</HBox>

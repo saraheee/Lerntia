@@ -1,0 +1,32 @@
+
+* {
+    -fx-box-sizing: border-box;
+}
+
+.main-left {
+    -fx-width: 25%;
+    -fx-float: left;
+}
+.main-right {
+    -fx-width: 75%;
+    -fx-float: left;
+}
+
+
+.question-box {
+    -fx-width: 20%;
+    -fx-float: left;
+
+}
+
+.answer-box {
+    -fx-width: 16%;
+    -fx-float: left;
+
+}
+
+.button-box {
+    -fx-width: 16%;
+    -fx-float: left;
+
+}

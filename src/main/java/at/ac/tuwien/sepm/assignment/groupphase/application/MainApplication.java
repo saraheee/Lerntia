@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -26,12 +27,14 @@ public final class MainApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         // setup application
         primaryStage.setTitle("[Lerntia] Lern- und Prüfungstool");
+        primaryStage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("/icons/main.png")));
         primaryStage.setMaximized(true);
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
 
 
         Font.loadFont(MainApplication.class.getResource("/fonts/Arial Black.ttf").toExternalForm(), 36);
+        Font.loadFont(MainApplication.class.getResource("/fonts/Lora-Bold.ttf").toExternalForm(), 36);
         context = new AnnotationConfigApplicationContext(MainApplication.class);
         final var fxmlLoader = context.getBean(SpringFXMLLoader.class);
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));

@@ -2,11 +2,15 @@
 
 ## Projektname
 
-Lern- und Prüfungstool
+Lerntia
 
 ## Projektbeschreibung
-
-Der Student muss mit dem Tool eigenständig üben können, Tutoren müssen die darin eingetragenen Fragen verwalten können und die LVA-Leitung muss damit Prüfungen abwickeln können. Alle Fragen werden in Multiple-Choice-Form sein, da die Beeinträchtigung des Studenten keine abweichende Prüfungsform erlaubt.
+Lerntia (abgeleitet von Lernziel) ist ein Lern- und Prüfungstool, das einem Studenten einerseits die eigenständige
+Vorbereitung auf seine Prüfungen ermöglichen soll, und andererseits auch bei der Abwicklung seiner Prüfungen eingesetzt
+werden kann. Es richtet sich in erster Linie an den Studenten, der damit zu Übungszwecken Fragen beantworten kann.
+Weiters kann das Tutorenteam ihm damit seine Fragen verwalten und das LVA-Team kann damit Prüfungen abwickeln.
+Alle Fragen werden in Multiple-Choice-Form sein, da die Beeinträchtigung des Studenten keine abweichende
+Prüfungsform erlaubt.
 
 ## Projektteam
 

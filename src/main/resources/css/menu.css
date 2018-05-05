@@ -1,0 +1,14 @@
+.main-left {
+    -fx-font-size: 17px;
+    -fx-font-family: "Lora-Bold";
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(0, 50, 250, 0.01);
+}
+
+.main-left:hover {
+    -fx-text-fill: #333333;
+}
+
+.main-left:focused {
+    -fx-text-fill: #333333;
+}
