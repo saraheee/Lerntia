@@ -46,7 +46,7 @@ public class JDBCConnectionManager {
             throw new PersistenceException(e.getMessage());
         }
     }
-
+    
     public static void closeConnection() {
         if (connection != null) {
             try {
