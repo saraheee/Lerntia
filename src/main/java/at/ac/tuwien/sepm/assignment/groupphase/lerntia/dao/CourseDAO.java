@@ -42,7 +42,7 @@ public class CourseDAO implements ICourseDAO {
             PreparedStatement pscreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT);
             pscreate.setString(1,course.getMark());
             pscreate.setString(2,course.getSemester());
-            pscreate.execute();
+            pscreate.executeUpdate();
             LOG.info("Course succesfully added to Database.");
         }catch (Exception e){
             LOG.error("Course DAO CREATE error!");

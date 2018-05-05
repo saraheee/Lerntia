@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public ExamQuestionaireDAO examQuestionaireDAOJDBC(){
+    public ExamQuestionaireDAO examQuestionaireDAOJDBC() throws PersistenceException {
         return new ExamQuestionaireDAO();
     }
 

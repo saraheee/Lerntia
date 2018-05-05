@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
   id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
-  date      TIMESTAMP DEFAULT NULL,
+  qdate      TIMESTAMP DEFAULT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS Question (

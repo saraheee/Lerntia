@@ -49,7 +49,7 @@ public class QuestionDAO implements IQuestionDAO {
             pscreate.setString(7,question.getAnswer5());
             pscreate.setString(8,question.getCorrectAnswers());
             pscreate.setString(9,question.getOptionalFeedback());
-            pscreate.execute();
+            pscreate.executeUpdate();
             LOG.info("Question succesfully saved in Database");
         } catch (SQLException e) {
             LOG.error("Question CREATE DAO error!");
@@ -102,6 +102,7 @@ public class QuestionDAO implements IQuestionDAO {
     @Override
     public Question get(long id) throws PersistenceException {
         try {
+            LOG.info("Create GET statement for Question.");
             String help ="";
             help= SQL_QUESTION_GET_STATEMENT + id;
             ResultSet rsget = connection.prepareStatement(help).executeQuery();
@@ -121,10 +122,11 @@ public class QuestionDAO implements IQuestionDAO {
                 q.setOptionalFeedback(rsget.getString(11));
                 q.setDeleted(rsget.getBoolean(12));
             }
+            LOG.info("Matching Question found.");
             return q;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("Question GET DAO error!");
+            throw new PersistenceException(e.getMessage());
         }
-        return null;
     }
 }
