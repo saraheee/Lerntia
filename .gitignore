@@ -53,6 +53,9 @@ Icon
 *.ear
 hs_err_pid*
 
+### Database-Files ###
+*.db
+
 ###################
 ### Build-Tools ###
 ###################

@@ -18,9 +18,11 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
+    private static final String TEST_CONNECTION_URL = "jdbc:h2:file:database./lerntiaTestDB";
     private static final String INITIAL_RESOURCE = "classpath:sql/create.sql";
 
     private static Connection connection;
+    private static boolean isTestConnection;
 
     public static Connection getConnection() throws PersistenceException {
         if (connection == null) {
@@ -30,12 +32,21 @@ public class JDBCConnectionManager {
         return connection;
     }
 
+    public static Connection getTestConnection() throws PersistenceException {
+        isTestConnection = true;
+        return getConnection();
+    }
+
     private static void initDatabase() throws PersistenceException {
         try {
             Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
-            InputStream inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
-            if(inputStream == null) {
+            if (isTestConnection) {
+                connection = DriverManager.getConnection(TEST_CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + INITIAL_RESOURCE + "'", "sa", "");
+            } else {
+                connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
+            }
+            var inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
+            if (inputStream == null) {
                 LOG.error("Input stream for create statements is null!");
             } else {
                 RunScript.execute(connection, new InputStreamReader(inputStream));

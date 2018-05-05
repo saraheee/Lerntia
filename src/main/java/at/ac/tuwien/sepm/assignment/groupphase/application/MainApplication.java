@@ -1,11 +1,17 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
+import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +29,11 @@ public final class MainApplication extends Application {
 
     private AnnotationConfigApplicationContext context;
 
+    public static void main(String[] args) {
+        LOG.debug("Application starting with arguments={}", (Object) args);
+        Application.launch(MainApplication.class, args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         // setup application
@@ -30,8 +41,27 @@ public final class MainApplication extends Application {
         primaryStage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("/icons/main.png")));
         primaryStage.setMaximized(true);
         primaryStage.centerOnScreen();
-        primaryStage.setOnCloseRequest(event -> LOG.debug("Application shutdown initiated"));
+        primaryStage.setOnCloseRequest(event -> {
+            var alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initOwner(primaryStage);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setResizable(true);
+            alert.setTitle("[Lerntia] Wirklich beenden?");
 
+            var dialogPane = new DialogPane();
+            final var header = new Text("\n  Soll Lerntia wirklich beendet werden?");
+            dialogPane.setStyle("-fx-font-size: 34; -fx-font-family: Lora-Bold; -fx-font-weight: bold; -fx-text-fill: #333333");
+            dialogPane.setHeader(header);
+            dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+            alert.setDialogPane(dialogPane);
+            var optional = alert.showAndWait();
+
+            if (optional.isPresent() && optional.get() == ButtonType.YES) {
+                LOG.debug("Application shutdown initiated");
+                return;
+            }
+            event.consume();
+        });
 
         Font.loadFont(MainApplication.class.getResource("/fonts/Arial Black.ttf").toExternalForm(), 36);
         Font.loadFont(MainApplication.class.getResource("/fonts/Lora-Bold.ttf").toExternalForm(), 36);
@@ -47,14 +77,11 @@ public final class MainApplication extends Application {
         LOG.debug("Application startup complete");
     }
 
-    public static void main(String[] args) {
-        LOG.debug("Application starting with arguments={}", (Object) args);
-        Application.launch(MainApplication.class, args);
-    }
-
     @Override
     public void stop() {
         LOG.debug("Stopping application");
+        JDBCConnectionManager.closeConnection();
         context.close();
+
     }
 }
