@@ -29,9 +29,9 @@ public class CourseDAO implements ICourseDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Database connection for CourseDAO obtained.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Course Constructor failed while trying to get connection!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 

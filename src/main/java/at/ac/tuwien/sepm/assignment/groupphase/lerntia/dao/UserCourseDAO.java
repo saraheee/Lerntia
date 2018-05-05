@@ -24,9 +24,9 @@ public class UserCourseDAO implements IUserCourseDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Connection for UserCourseDAO succesfully found.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for UserCourseDAO!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 

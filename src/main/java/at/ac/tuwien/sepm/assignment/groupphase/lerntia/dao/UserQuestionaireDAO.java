@@ -25,9 +25,9 @@ public class UserQuestionaireDAO implements IUserQuestionaireDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Succesfully found connection for UserQuestionaireDAO.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for UserQuestionaireDAO");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
     @Override

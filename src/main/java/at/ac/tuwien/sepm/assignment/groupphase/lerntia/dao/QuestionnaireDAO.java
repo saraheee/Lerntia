@@ -29,9 +29,9 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Succesfully found connection for QuestionnaireDAO!");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for QuestionnaireDAO!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 
