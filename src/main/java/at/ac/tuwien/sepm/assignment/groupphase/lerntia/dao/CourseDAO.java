@@ -22,7 +22,8 @@ public class CourseDAO implements ICourseDAO {
     //private static final String SQL_COURSE_SEARCH_STATEMENT="";
     private static final String SQL_COURSE_DELETE_STATEMENT="UPDATE Course set isDeleted=true  WHERE mark = ?";
     private static final String SQL_COURSE_READALL_STATEMENT="SELECT * from Course where isDeleted = false ";
-    private Connection connection=null;
+
+    private Connection connection;
 
     public CourseDAO() throws PersistenceException{
         try {

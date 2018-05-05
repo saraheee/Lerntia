@@ -3,12 +3,14 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 public class UserQuestionnaire {
     private String matriculationNumber;
     private Long qid;
+    private Boolean isDeleted;
 
     public UserQuestionnaire() {}
 
-    public UserQuestionnaire(String matriculationNumber, Long qid) {
+    public UserQuestionnaire(String matriculationNumber, Long qid, Boolean isDeleted) {
         this.matriculationNumber = matriculationNumber;
         this.qid = qid;
+        this.isDeleted = isDeleted;
     }
 
     public String getMatriculationNumber() {
@@ -27,11 +29,20 @@ public class UserQuestionnaire {
         this.qid = qid;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "UserQuestionnaire{" +
             "matriculationNumber='" + matriculationNumber + '\'' +
             ", qid=" + qid +
+            ", isDeleted=" + isDeleted +
             '}';
     }
 }

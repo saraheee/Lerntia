@@ -4,13 +4,15 @@ public class UserCourse {
     private String matriculationNumber;
     private String cmark;
     private String semester;
+    private Boolean isDeleted;
 
     public UserCourse() {}
 
-    public UserCourse(String matriculationNumber, String cmark, String semester) {
+    public UserCourse(String matriculationNumber, String cmark, String semester, Boolean isDeleted) {
         this.matriculationNumber = matriculationNumber;
         this.cmark = cmark;
         this.semester = semester;
+        this.isDeleted = isDeleted;
     }
 
     public String getMatriculationNumber() {
@@ -37,12 +39,21 @@ public class UserCourse {
         this.semester = semester;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "UserCourse{" +
             "matriculationNumber='" + matriculationNumber + '\'' +
             ", cmark='" + cmark + '\'' +
             ", semester='" + semester + '\'' +
+            ", isDeleted=" + isDeleted +
             '}';
     }
 }

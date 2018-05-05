@@ -17,7 +17,7 @@ import java.sql.SQLException;
 @Component
 public class QuestionDAO implements IQuestionDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    Connection connection=null;
+    private Connection connection;
     private static final String SQL_QUESTION_CREATE_STATEMENT="INSERT INTO Question(id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback) VALUES (default,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUESTION_UPDATE_STATEMENT="UPDATE Question SET questionText = ?, picture = ?, answer1 = ?, answer2 = ?, answer3 = ?, answer4 = ?, answer5 = ?, correctAnswers = ?, optionalFeedback = ? ";
     private static final String SQL_QUESTION_SEARCH_STATEMENT="";

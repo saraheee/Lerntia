@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS PUserCourse (
   matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
   cmark               VARCHAR(255) REFERENCES Course (mark),
   semester            VARCHAR(255) REFERENCES Course (semester),
+  isDeleted           BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (matriculationNumber, cmark, semester)
 );
 
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS Questionnaire (
 CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
   matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
   qid                 BIGINT REFERENCES Questionnaire (id),
+  isDeleted           BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (matriculationNumber, qid)
 );
 

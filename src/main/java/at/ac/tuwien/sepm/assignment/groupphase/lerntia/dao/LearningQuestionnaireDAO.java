@@ -15,7 +15,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
 
     private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
-    private Connection connection = null;
+    private Connection connection;
     private QuestionnaireDAO questionaireDAO;
 
     @Autowired
