@@ -7,7 +7,7 @@
 <?import java.lang.String?>
 <HBox fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
-    <VBox fx:id="mainWindowLeft" prefHeight="768.0" styleClass="main-left" stylesheets="@/css/for-all-elements.css">
+    <VBox fx:id="mainWindowLeft" prefHeight="768.0" styleClass="main-left" stylesheets="@/css/background-division.css">
         <VBox prefHeight="44.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
@@ -15,13 +15,12 @@
             <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
         </VBox>
         <VBox prefHeight="134.0">
-            <ImageView fitHeight="160" fitWidth="160" preserveRatio="true">
+            <ImageView fx:id="mainImage" fitWidth="360" preserveRatio="true">
                 <Image url="@/icons/no-image.png"/>
             </ImageView>
-
         </VBox>
     </VBox>
-    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/for-all-elements.css">
+    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
         <HBox prefHeight="30.0"/>
         <HBox prefHeight="286.0">
             <VBox minWidth="139.0" prefHeight="140.0">
@@ -33,28 +32,28 @@
                 <String fx:value="question-box"/>
             </styleClass>
         </HBox>
-        <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
-              stylesheets="@/css/for-all-elements.css">
+        <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
+              stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
-              stylesheets="@/css/for-all-elements.css">
+              stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
-              stylesheets="@/css/for-all-elements.css">
+              stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
-              stylesheets="@/css/for-all-elements.css">
+              stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
-              stylesheets="@/css/for-all-elements.css">
+              stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
-              stylesheets="@/css/for-all-elements.css">
+              stylesheets="@/css/background-division.css">
             <ButtonBar prefHeight="98.0">
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
