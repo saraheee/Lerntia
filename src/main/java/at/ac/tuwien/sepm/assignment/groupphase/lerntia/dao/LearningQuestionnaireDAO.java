@@ -29,9 +29,9 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
             questionaireDAO =new QuestionnaireDAO();
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Connection succesfully found for LearningQuestionnaireDAO.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Connection couldn't be found for LearningQuestionnaireDAO!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 

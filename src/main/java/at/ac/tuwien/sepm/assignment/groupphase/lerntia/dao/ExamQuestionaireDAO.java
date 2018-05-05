@@ -25,16 +25,16 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     private static final String SQL_EXAMQUESTIONAIRE_DELETE_STATEMENT="";
     private static final String SQL_EXAMQUESTIONAIRE_READALL_STATEMENT="";
     private QuestionnaireDAO questionaireDAO;
-    private Connection connection =null;
+    private Connection connection;
 
     @Autowired
     public ExamQuestionaireDAO() throws PersistenceException {
         try {
             questionaireDAO =new QuestionnaireDAO();
             connection = JDBCConnectionManager.getConnection();
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 

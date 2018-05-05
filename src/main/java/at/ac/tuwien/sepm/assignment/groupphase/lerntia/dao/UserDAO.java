@@ -27,9 +27,9 @@ public class UserDAO implements IUserDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Database connection for UserDAO obtained.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("User Constructor failed while trying to get connection!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 

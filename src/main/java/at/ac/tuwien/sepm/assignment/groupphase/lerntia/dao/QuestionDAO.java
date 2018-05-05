@@ -29,9 +29,9 @@ public class QuestionDAO implements IQuestionDAO {
         try {
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Database connection for QuestionDAO obtained.");
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             LOG.error("Question Constructor failed while trying to get connection!");
-            throw new PersistenceException(e.getMessage());
+            throw e;
         }
     }
 
