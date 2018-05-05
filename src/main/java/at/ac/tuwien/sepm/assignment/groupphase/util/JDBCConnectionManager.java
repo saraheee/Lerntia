@@ -14,20 +14,11 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Connection connection = null;
+    private static final String CONNECTION_PATH = "jdbc:h2:file:database./lerntia;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'";
 
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
-            // used for accessing create.sql file
-            String script = JDBCConnectionManager.class.getClassLoader().getResource("sql/create.sql").getPath();
-            if(script == null) {
-                LOG.warn("Script returned a null pointer!");
-            }
-            if(System.getProperty("os.name").startsWith("Windows")) {
-                script = script.substring(1); // on Windows, the string would start with an '/' causing an InvocationException
-            }
-            // for details, see: http://www.h2database.com/html/features.html
-            connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/lerntia;INIT=RUNSCRIPT FROM '"+ script +"'", "sa", "");
-            //connection = DriverManager.getConnection("jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'", "sa", "");
+            connection = DriverManager.getConnection(CONNECTION_PATH, "sa", "");
         }
         return connection;
     }
