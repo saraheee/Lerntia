@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
 import javafx.scene.image.Image;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 @Service
 public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
 
-    public void importQuestionnaire( String filePath ) {
+    public void importQuestionnaire( File file ) throws ServiceException {
 
         String imgDirPath = "/home/stefan/java/sepm-gruppe/ss18_sepm_qse_08/img/";
 
         // define questionaire name
 
-        Path path = Paths.get(filePath);
+        Path path = Paths.get(file.getAbsolutePath());
 
         String fileName = path.getFileName().toString();
 
@@ -41,7 +42,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         ArrayList<String> fileContent = new ArrayList<>();
 
         try {
-            fileContent = test.getContents(filePath);
+            fileContent = test.getContents(file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +80,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
                     System.out.println(imgPath);
 
-                    File file = new File(imgPath);
+                    File filenew = new File(imgPath);
 
                     FileInputStream imgFileInputStream = null;
                     try {
@@ -101,7 +102,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                     }
 
                     // 5 mb
-                    if (5242880 < file.length()) {
+                    if (5242880 < filenew.length()) {
 
                     }
 

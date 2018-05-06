@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionnaireImportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionnaireQuestionService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
@@ -17,14 +19,12 @@ import java.lang.invoke.MethodHandles;
 public class MenuBarController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    //private final SimpleQuestionaireImportService service;
+    private final SimpleQuestionnaireImportService service;
     private Stage stage;
 
-    /*
-    public MenuBarController(SimpleQuestionaireImportService service) {
+    public MenuBarController(SimpleQuestionnaireImportService service) {
         this.service = service;
     }
-    */
 
     @FXML
     private void importQuestions() {
@@ -33,9 +33,8 @@ public class MenuBarController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            /*
             try {
-                service.importQuestionaire(file);
+                service.importQuestionnaire(file);
             }
             catch (ServiceException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -44,7 +43,6 @@ public class MenuBarController {
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
-            */
         }
     }
 }
