@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -34,7 +34,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         // get questionaire file content
 
-        QuestionaireImportDAO test = new QuestionaireImportDAO();
+        QuestionnaireImportDAO test = new QuestionnaireImportDAO();
 
         ArrayList<String> fileContent = new ArrayList<>();
 
