@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class SimpleQuestionaireImportService implements IQuestionaireImportService {
+public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
 
-    public void importQuestionaire( String filePath ) {
+    public void importQuestionnaire( String filePath ) {
 
         String imgDirPath = "/home/stefan/java/sepm-gruppe/ss18_sepm_qse_08/img/";
 
