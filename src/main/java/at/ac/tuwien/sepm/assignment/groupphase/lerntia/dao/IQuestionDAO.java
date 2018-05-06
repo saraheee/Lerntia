@@ -11,7 +11,7 @@ public interface IQuestionDAO {
      * @param question that is going to be sent to the Database
      * @throws PersistenceException if the Question can't be saved to the Database
      * */
-    void create(Question question) throws PersistenceException;
+    long create(Question question) throws PersistenceException;
 
     /**
      * Update an existing Question in the Database with new Values
