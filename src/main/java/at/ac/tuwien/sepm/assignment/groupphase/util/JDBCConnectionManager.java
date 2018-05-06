@@ -1,9 +1,13 @@
 package at.ac.tuwien.sepm.assignment.groupphase.util;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import org.h2.tools.RunScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,19 +17,37 @@ import java.sql.SQLException;
 public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String CONNECTION_URL =
-        "jdbc:h2:mem:test;INIT=RUNSCRIPT FROM 'classpath:sql/create.sql'";
+    private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
+    private static final String INITIAL_RESOURCE = "classpath:sql/create.sql";
 
-    private Connection connection;
+    private static Connection connection;
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws PersistenceException {
         if (connection == null) {
-            connection = DriverManager.getConnection(CONNECTION_URL);
+            LOG.info("Trying to initialize the database");
+            initDatabase();
         }
         return connection;
     }
 
-    public void closeConnection() {
+    private static void initDatabase() throws PersistenceException {
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
+            InputStream inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
+            if(inputStream == null) {
+                LOG.error("Input stream for create statements is null!");
+            } else {
+                RunScript.execute(connection, new InputStreamReader(inputStream));
+                LOG.info("Reading initial commands from input stream.");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            LOG.debug("Could not initialize the database:" + e.getMessage());
+            throw new PersistenceException(e.getMessage());
+        }
+    }
+
+    public static void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();

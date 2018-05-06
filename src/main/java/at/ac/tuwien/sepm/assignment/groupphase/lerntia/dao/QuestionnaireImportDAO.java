@@ -1,10 +1,9 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class QuestionaireImportDAO implements IQuestionaireImportDAO {
+public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
     @Override
     public ArrayList<String> getContents(String filePath) throws IOException {
