@@ -1,11 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 public interface IQuestionService {
 
-    long create(Question question) throws ServiceException;
+    long create(Question question) throws ServiceException, PersistenceException;
 
     /**
      * Update an existing Question in the Database with new Values
