@@ -1,19 +1,18 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+
+import static org.springframework.util.Assert.notNull;
 
 @Controller
 public class LerntiaController {
@@ -29,46 +28,46 @@ public class LerntiaController {
     @FXML
     private ImageView mainImage;
     @FXML
-    private HBox firstAnswer;
+    private AnswerCheckBoxController answer1Controller;
+    @FXML
+    private AnswerCheckBoxController answer2Controller;
+    @FXML
+    private AnswerCheckBoxController answer3Controller;
+    @FXML
+    private AnswerCheckBoxController answer4Controller;
+    @FXML
+    private AnswerCheckBoxController answer5Controller;
+    @FXML
+    private QuestionLabelController questionController;
 
-
+    @Autowired
     public LerntiaController(LerntiaService lerntiaService) {
+        notNull(lerntiaService, "'lerntiaService' should not be null");
         this.lerntiaService = lerntiaService;
     }
 
     @FXML
     private void initialize() {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
-        //mainImage.setFitWidth(mainWindow.getWidth() / 100 * 15);
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-
-        //Example for selecting the first answer
-        var nodeOut = firstAnswer.getChildren().get(0);
-        if (nodeOut instanceof HBox) {
-            for (var nodeIn : ((HBox) nodeOut).getChildren()) {
-                if (nodeIn instanceof CheckBox) {
-                    ((CheckBox) nodeIn).setSelected(true);
-                }
-            }
-        }
+        /*
+        notNull(answer1Controller, "'answer1Controller' should not be null");
+        notNull(answer2Controller, "'answer2Controller' should not be null");
+        notNull(answer3Controller, "'answer3Controller' should not be null");
+        notNull(answer4Controller, "'answer4Controller' should not be null");
+        notNull(answer5Controller, "'answer5Controller' should not be null");
+        notNull(questionController, "'questionController' should not be null");
+        */
     }
-
 
     @FXML
-    private void onPlaceHolderButtonClicked() {
-        LOG.trace("Placeholder button clicked");
-        var alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("[Lerntia] Info");
-        alert.setHeaderText("Dieser Button hat noch keine Funktionalität!");
-        alert.setResizable(true);
-        var dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("css/dialog.css").toExternalForm());
-        dialogPane.getStyleClass().add("myDialog");
-        alert.showAndWait();
-        /*try {
-            lerntiaService.goToExamMode();
-        } catch (ServiceException e) {
-            LOG.error("An error occured {}", e.getMessage());
-        }*/
+    private void onAudioButtonClicked() {
+        LOG.debug("Audio button clicked");
+
+        //Example for selecting the first answer
+        answer1Controller.selectAnswer(true, 1);
+        answer1Controller.setAnswer("My answer", 1);
     }
+
+
 }

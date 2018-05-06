@@ -32,25 +32,25 @@
                 <String fx:value="question-box"/>
             </styleClass>
         </HBox>
-        <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
+        <HBox layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer1" source="/fxml/elements/AnswerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer2" source="/fxml/elements/AnswerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer3" source="/fxml/elements/AnswerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer4" source="/fxml/elements/AnswerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer5" source="/fxml/elements/AnswerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
               stylesheets="@/css/background-division.css">

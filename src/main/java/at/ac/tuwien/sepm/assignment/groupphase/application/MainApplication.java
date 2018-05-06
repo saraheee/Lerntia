@@ -50,7 +50,8 @@ public final class MainApplication extends Application {
 
             var dialogPane = new DialogPane();
             final var header = new Text("\n  Soll Lerntia wirklich beendet werden?");
-            dialogPane.setStyle("-fx-font-size: 34; -fx-font-family: Lora-Bold; -fx-font-weight: bold; -fx-text-fill: #333333");
+            dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+            dialogPane.getStyleClass().add("dialogue");
             dialogPane.setHeader(header);
             dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
             alert.setDialogPane(dialogPane);
