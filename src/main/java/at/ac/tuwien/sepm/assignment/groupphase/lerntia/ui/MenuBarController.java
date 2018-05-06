@@ -41,12 +41,14 @@ public class MenuBarController {
                 alert.setTitle("Error Dialog");
                 alert.setHeaderText("Fehler");
                 alert.setContentText(e.getMessage());
+                alert.setResizable(true);
                 alert.showAndWait();
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
             alert.setHeaderText("Erfolgreich");
             alert.setContentText("Alle Fragen wurden erfolgreich importiert");
+            alert.setResizable(true);
             alert.showAndWait();
         }
     }
