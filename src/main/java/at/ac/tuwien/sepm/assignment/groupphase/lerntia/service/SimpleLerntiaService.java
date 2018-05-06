@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
 import java.lang.invoke.MethodHandles;
@@ -13,7 +14,7 @@ import java.time.Duration;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-@Component
+@Service
 public class SimpleLerntiaService implements LerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

@@ -2,9 +2,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SimpleUserService implements IUserService {
-
 
     @Override
     public void create(User user) throws ServiceException {

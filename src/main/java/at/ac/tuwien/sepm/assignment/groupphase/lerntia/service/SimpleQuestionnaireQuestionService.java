@@ -2,9 +2,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 
+@Service
 public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestionService {
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws ServiceException {
