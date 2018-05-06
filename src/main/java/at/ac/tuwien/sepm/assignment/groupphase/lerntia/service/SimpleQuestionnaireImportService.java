@@ -18,11 +18,10 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     public void importQuestionnaire( File file ) throws ServiceException {
 
-        String imgDirPath = "/home/stefan/java/sepm-gruppe/ss18_sepm_qse_08/img/";
+        String pathStr = file.getAbsolutePath();
+        Path path = Paths.get(file.getAbsolutePath());
 
         // define questionaire name
-
-        Path path = Paths.get(file.getAbsolutePath());
 
         String fileName = path.getFileName().toString();
 
@@ -37,96 +36,42 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         // get questionaire file content
 
-        QuestionnaireImportDAO test = new QuestionnaireImportDAO();
+        QuestionnaireImportDAO questionnaireImportDAO = new QuestionnaireImportDAO();
 
         ArrayList<String> fileContent = new ArrayList<>();
 
         try {
-            fileContent = test.getContents(file.getAbsolutePath());
+            fileContent = questionnaireImportDAO.getContents(pathStr);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         for(int i = 0; i < fileContent.size(); i++) {
 
+            // split the rows, the seperator is ";"
             String[] lineParts = fileContent.get(i).split(";");
 
+            // check if there are to many columns
             if(lineParts.length > 9){
-                // error
+                // TODO - error
             }
 
             // index 6 has the right answers. this is an integer
             try {
                 int rightAnswers = Integer.parseInt(lineParts[6]);
             } catch(NumberFormatException e) {
-                // error
+                // TODO - error
             }
 
-
-
-            // 7 image
-
+            // index 7 is the image (optional)
             try {
                 if ( ! lineParts[7].equals("")) {
-
-
-
-                    System.out.println(lineParts[7]);
-
-
-                    String imgPath = imgDirPath + questionaireName + "/" + lineParts[7];
-
-
-
-                    System.out.println(imgPath);
-
-                    File filenew = new File(imgPath);
-
-                    FileInputStream imgFileInputStream = null;
-                    try {
-                        imgFileInputStream = new FileInputStream(imgPath);
-                    } catch (FileNotFoundException e) {
-                        // TODO - error
-                        System.out.println("cint");
-                        continue;
-                    }
-
-                    Image image = new Image(imgFileInputStream);
-
-                    if (500 > image.getHeight()) {
-
-                    }
-
-                    if (500 > image.getWidth()) {
-
-                    }
-
-                    // 5 mb
-                    if (5242880 < filenew.length()) {
-
-                    }
-
-
-
-
-
-
-
-
-
-
+                    // TODO - validate image
                 }
             } catch (IndexOutOfBoundsException e) {
-
-                // es gibt einfach kein bild
-
+                // there is no image
             }
-
-
-
         }
-
-        //System.out.println(fileContent);
     }
 
 }
