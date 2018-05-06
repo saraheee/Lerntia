@@ -43,6 +43,11 @@ public class MenuBarController {
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("Erfolgreich");
+            alert.setContentText("Alle Fragen wurden erfolgreich importiert");
+            alert.showAndWait();
         }
     }
 }
