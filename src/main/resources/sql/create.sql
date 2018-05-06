@@ -1,35 +1,49 @@
-CREATE TABLE IF NOT EXISTS User (
+CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   name                VARCHAR(255),
   matriculationNumber VARCHAR(255) PRIMARY KEY,
-  studyProgramme      VARCHAR(255)
+  studyProgramme      VARCHAR(255),
+  isDeleted           BOOLEAN DEFAULT FALSE
 );
 
 
 CREATE TABLE IF NOT EXISTS Course (
-  id       VARCHAR(255),
-  semester VARCHAR(255),
-  PRIMARY KEY (id, semester)
+  mark      VARCHAR(255),
+  semester  VARCHAR(255),
+  isDeleted BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (mark, semester)
+);
+
+CREATE TABLE IF NOT EXISTS PUserCourse (
+  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
+  cmark               VARCHAR(255) REFERENCES Course (mark),
+  semester            VARCHAR(255) REFERENCES Course (semester),
+  isDeleted           BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (matriculationNumber, cmark, semester)
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
-  cid      VARCHAR(255) REFERENCES Course (id),
-  semester VARCHAR(255) REFERENCES Course (Semester),
-  id       BIGINT AUTO_INCREMENT,
-  PRIMARY KEY (cid, semester, id)
+  cmark     VARCHAR(255) REFERENCES Course (mark),
+  semester  VARCHAR(255) REFERENCES Course (Semester),
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
+  isDeleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE IF NOT EXISTS TestQuestionnaire (
-  cid      VARCHAR(255) REFERENCES Questionnaire (cid),
-  semester VARCHAR(255) REFERENCES Questionnaire (Semester),
-  qid      BIGINT REFERENCES Questionnaire (id),
-  datum    TIMESTAMP,
-  PRIMARY KEY (cid, semester, qid)
+CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
+  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
+  qid                 BIGINT REFERENCES Questionnaire (id),
+  isDeleted           BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (matriculationNumber, qid)
 );
 
--- LearningQuestionnaire does not contain any additional arguments and
--- thus does not require an additional table (will be saved to the table
--- Questionnaire
+CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
+  id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
+  name      VARCHAR(255) NOT NULL,
+);
 
+CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
+  id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
+  qdate      TIMESTAMP DEFAULT NULL,
+);
 
 CREATE TABLE IF NOT EXISTS Question (
   id               BIGINT       AUTO_INCREMENT PRIMARY KEY,
@@ -41,14 +55,13 @@ CREATE TABLE IF NOT EXISTS Question (
   answer4          TEXT         DEFAULT NULL,
   answer5          TEXT         DEFAULT NULL,
   correctAnswers   VARCHAR(5) NOT NULL,
-  optionalFeedback TEXT         DEFAULT NULL
+  optionalFeedback TEXT         DEFAULT NULL,
+  isDeleted        BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
-  cid        VARCHAR(255) REFERENCES Questionnaire (cid),
-  semester   VARCHAR(255) REFERENCES Questionnaire (Semester),
   qid        BIGINT REFERENCES Questionnaire (id),
   questionid BIGINT REFERENCES Question (id),
-  PRIMARY KEY (cid, semester, qid, questionid)
+  isDeleted  BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (qid, questionid)
 );
-
