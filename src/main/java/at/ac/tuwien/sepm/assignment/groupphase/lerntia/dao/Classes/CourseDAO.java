@@ -77,7 +77,9 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Deletion");
             PreparedStatement psdelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT);
-            psdelete.setString(1,course.getMark());
+            if (course.getMark()!=null) {
+                psdelete.setString(1, course.getMark());
+            }
             psdelete.executeUpdate();
             LOG.info("Course in question soft-deleted in Database.");
         } catch (SQLException e) {

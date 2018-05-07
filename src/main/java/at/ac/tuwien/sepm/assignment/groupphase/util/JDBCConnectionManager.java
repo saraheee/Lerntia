@@ -16,8 +16,10 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
-    private static final String TEST_CONNECTION_URL = "jdbc:h2:file:database./lerntiaTestDB";
+    //private static final String TEST_CONNECTION_URL = "jdbc:h2:file:database./lerntiaTestDB";
+    private static final String TEST_CONNECTION_URL = "jdbc:h2:~/lerntiaTestDB";
     private static final String INITIAL_RESOURCE = "classpath:sql/create.sql";
+    private static final String DROP_RESOURCE = "classpath:sql/drop.sql";
 
     private static Connection connection;
     private static boolean isTestConnection;
@@ -32,6 +34,7 @@ public class JDBCConnectionManager {
 
     public static Connection getTestConnection() throws PersistenceException {
         isTestConnection = true;
+        initDatabase();
         return getConnection();
     }
 
@@ -39,6 +42,7 @@ public class JDBCConnectionManager {
         try {
             Class.forName("org.h2.Driver");
             if (isTestConnection) {
+                connection = DriverManager.getConnection(TEST_CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + DROP_RESOURCE + "'", "sa", "");
                 connection = DriverManager.getConnection(TEST_CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + INITIAL_RESOURCE + "'", "sa", "");
             } else {
                 connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");

@@ -5,7 +5,9 @@ public class Course {
     private String semester;
     private Boolean isDeleted;
 
-    public Course() {}
+    public Course() {
+        this.isDeleted =false;
+    }
 
     public Course(String mark, String semester, Boolean isDeleted) {
         this.mark = mark;

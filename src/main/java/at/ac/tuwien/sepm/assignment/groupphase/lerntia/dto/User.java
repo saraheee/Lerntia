@@ -6,7 +6,9 @@ public class User {
     private String studyProgramme;
     private Boolean isDeleted;
 
-    public User() {}
+    public User() {
+        this.isDeleted = false;
+    }
 
     public User(String name, String matriculationNumber, String studyProgramme, Boolean isDeleted) {
         this.name = name;
