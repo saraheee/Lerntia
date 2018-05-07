@@ -18,7 +18,7 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
-    private static final String INITIAL_RESOURCE = "classpath:sql/createAndInsert.sql";
+    private static final String INITIAL_RESOURCE = "classpath:sql/create.sql";
 
     private static Connection connection;
 
@@ -33,7 +33,7 @@ public class JDBCConnectionManager {
     private static void initDatabase() throws PersistenceException {
         try {
             Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:file:database./lerntia;INIT=RUNSCRIPT FROM 'src/main/resources/sql/create.sql'", "sa", "");
+            connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
             InputStream inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
             if(inputStream == null) {
                 LOG.error("Input stream for create statements is null!");

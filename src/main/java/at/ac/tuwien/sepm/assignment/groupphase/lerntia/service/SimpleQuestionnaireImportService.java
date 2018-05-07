@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import javafx.scene.image.Image;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,16 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     private final QuestionnaireImportDAO questionnaireImportDAO;
     private final SimpleQuestionService simpleQuestionService;
+    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
 
     public SimpleQuestionnaireImportService(
         QuestionnaireImportDAO questionnaireImportDAO,
-        SimpleQuestionService simpleQuestionService
+        SimpleQuestionService simpleQuestionService,
+        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService
     ){
         this.questionnaireImportDAO = questionnaireImportDAO;
         this.simpleQuestionService = simpleQuestionService;
+        this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
     }
 
     public void importQuestionnaire( File file ) throws ServiceException {
@@ -87,5 +91,13 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
             questionIds.add(simpleQuestionService.create(q));
         }
+
+        long questionaireId = 0;
+
+        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long)0, false, questionaireName);
+        questionaireId = simpleLearningQuestionnaireService.create(learningQuestionnaire);
+
+
+
     }
 }
