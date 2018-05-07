@@ -7,12 +7,14 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.SysexMessage;
+
 @Service
 public class SimpleQuestionService implements IQuestionService {
 
-    private final IQuestionDAO questionDAO;
+    private final QuestionDAO questionDAO;
 
-    public SimpleQuestionService(IQuestionDAO questionDAO){
+    public SimpleQuestionService(QuestionDAO questionDAO){
         this.questionDAO = questionDAO;
     }
 

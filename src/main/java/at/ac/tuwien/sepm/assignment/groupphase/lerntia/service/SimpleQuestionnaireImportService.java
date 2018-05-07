@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import javafx.scene.image.Image;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,14 @@ import java.util.ArrayList;
 public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
 
     private final QuestionnaireImportDAO questionnaireImportDAO;
+    private final SimpleQuestionService simpleQuestionService;
 
-    public SimpleQuestionnaireImportService(QuestionnaireImportDAO questionnaireImportDAO){
+    public SimpleQuestionnaireImportService(
+        QuestionnaireImportDAO questionnaireImportDAO,
+        SimpleQuestionService simpleQuestionService
+    ){
         this.questionnaireImportDAO = questionnaireImportDAO;
+        this.simpleQuestionService = simpleQuestionService;
     }
 
     public void importQuestionnaire( File file ) throws ServiceException {
@@ -50,6 +56,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             e.printStackTrace();
         }
 
+        ArrayList<Long> questionIds = new ArrayList<>();
+
         for(int i = 0; i < fileContent.size(); i++) {
 
             // split the rows, the seperator is ";"
@@ -76,7 +84,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                 // there is no image
             }
 
-            System.out.println(lineParts[0]);
+            Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
+            questionIds.add(simpleQuestionService.create(q));
         }
     }
 }

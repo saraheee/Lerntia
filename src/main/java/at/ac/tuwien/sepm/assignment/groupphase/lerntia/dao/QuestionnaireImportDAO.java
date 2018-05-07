@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 import java.util.ArrayList;
 
+@Component
 public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
     @Override
