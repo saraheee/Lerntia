@@ -50,9 +50,9 @@ public class LerntiaController {
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
         //Example for selecting the first answer
-        var nodeOut = firstAnswer.getChildren().get(0);
-        if (nodeOut instanceof CheckBox) {
-            ((CheckBox) nodeOut).setSelected(true);
+        var node = firstAnswer.getChildren().get(0);
+        if (node instanceof CheckBox) {
+            ((CheckBox) node).setSelected(true);
         }
     }
 
