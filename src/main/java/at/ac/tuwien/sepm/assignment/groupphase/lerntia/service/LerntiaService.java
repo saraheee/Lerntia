@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 /**
  * The <code>LerntiaService</code> is capable to calculate the answer to
@@ -9,5 +10,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
  */
 public interface LerntiaService {
 
+    public Question getQuestion() throws ServiceException;
 
 }

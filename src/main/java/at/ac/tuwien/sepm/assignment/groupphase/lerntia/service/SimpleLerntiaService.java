@@ -46,7 +46,7 @@ public class SimpleLerntiaService implements LerntiaService {
 
     }
 
-    private Question getQuestion() throws ServiceException {
+    public Question getQuestion() throws ServiceException {
         try {
             Question question = questionDAO.get(1);
             return question;

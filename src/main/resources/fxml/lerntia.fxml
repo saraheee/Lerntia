@@ -22,7 +22,7 @@
     </VBox>
     <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
         <HBox prefHeight="30.0"/>
-        <HBox prefHeight="286.0">
+        <HBox fx:id="questionBox" prefHeight="286.0">
             <VBox minWidth="139.0" prefHeight="140.0">
                 <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
             </VBox>
@@ -48,7 +48,7 @@
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="fifthAnswer" layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
