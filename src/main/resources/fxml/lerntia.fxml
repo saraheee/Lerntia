@@ -36,15 +36,15 @@
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="secondAnswer" layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
+        <HBox  fx:id="thirdAnswer" layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox  fx:id="fourthAnswer" layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
         </HBox>

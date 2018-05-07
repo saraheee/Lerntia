@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,6 +31,12 @@ public class LerntiaController {
     private ImageView mainImage;
     @FXML
     private HBox firstAnswer;
+    @FXML
+    private HBox secondAnswer;
+    @FXML
+    private HBox thirdAnswer;
+    @FXML
+    private HBox fourthAnswer;
 
 
     public LerntiaController(LerntiaService lerntiaService) {
@@ -44,12 +51,8 @@ public class LerntiaController {
 
         //Example for selecting the first answer
         var nodeOut = firstAnswer.getChildren().get(0);
-        if (nodeOut instanceof HBox) {
-            for (var nodeIn : ((HBox) nodeOut).getChildren()) {
-                if (nodeIn instanceof CheckBox) {
-                    ((CheckBox) nodeIn).setSelected(true);
-                }
-            }
+        if (nodeOut instanceof CheckBox) {
+            ((CheckBox) nodeOut).setSelected(true);
         }
     }
 
