@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,15 @@ public class SimpleLerntiaService implements LerntiaService {
 
     }
 
-
+    private Question getQuestion() throws ServiceException {
+        try {
+            Question question = questionDAO.get(1);
+            return question;
+            //TODO better implementation after more related stories regarding choosing of question are done.
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
 
 
