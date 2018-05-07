@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
@@ -21,6 +24,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion set isDeleted=true where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion set qid=?, questionid=? where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_READALL_STATEMENT = "";
+    private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where qid=";
     private Connection connection = null;
 
 
@@ -47,6 +51,29 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             LOG.error("QuestionnaireQuestion CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException{
+
+        try {
+            List<QuestionnaireQuestion> searchresults = new ArrayList<>();
+            QuestionnaireQuestion questionnaireQuestion;
+            String searchStatement= SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT+searchparameters.getQid();
+            ResultSet rs = connection.prepareStatement(searchStatement).executeQuery();
+            while (rs.next()){
+                questionnaireQuestion = new QuestionnaireQuestion();
+                questionnaireQuestion.setQid(rs.getLong(1));
+                questionnaireQuestion.setQuestionid(rs.getLong(2));
+                questionnaireQuestion.setDeleted(rs.getBoolean(3));
+                searchresults.add(questionnaireQuestion);
+            }
+
+            return searchresults;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage());
+        }
+
     }
 
     @Override
@@ -83,7 +110,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     }
 
     @Override
-    public List readAll() throws PersistenceException {
+    public List<QuestionnaireQuestion> readAll() throws PersistenceException {
         //TODO see if there is any need for an readALl method or similar methods to it (readlAll,get,Search)
         return null;
     }
