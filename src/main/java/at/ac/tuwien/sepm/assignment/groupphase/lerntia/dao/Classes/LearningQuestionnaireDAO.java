@@ -1,6 +1,8 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.ILearningQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -15,23 +17,23 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
-public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
+public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id,name) VALUES (?,?)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
     private Connection connection;
-    private QuestionnaireDAO questionaireDAO;
+    private IQuestionnaireDAO questionaireDAO;
 
     @Autowired
-    public LearningQuestionnaireDAO() throws PersistenceException {
+    public LearningQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) throws PersistenceException {
         try {
-            questionaireDAO =new QuestionnaireDAO();
+            this.questionaireDAO = questionnaireDAO;
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Connection succesfully found for LearningQuestionnaireDAO.");
         } catch (PersistenceException e) {
             LOG.error("Connection couldn't be found for LearningQuestionnaireDAO!");
-            throw e;
+            throw new PersistenceException(e.getMessage());
         }
     }
 
@@ -51,7 +53,6 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
             LOG.error("LearningQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
-        //TODO after questionaireDAO create for the learningquestionaire
     }
 
     @Override
