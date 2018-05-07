@@ -16,6 +16,12 @@ import java.util.ArrayList;
 @Service
 public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
 
+    private final QuestionnaireImportDAO questionnaireImportDAO;
+
+    public SimpleQuestionnaireImportService(QuestionnaireImportDAO questionnaireImportDAO){
+        this.questionnaireImportDAO = questionnaireImportDAO;
+    }
+
     public void importQuestionnaire( File file ) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
@@ -35,8 +41,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         // TODO - check if questionaire already exists
 
         // get questionaire file content
-
-        QuestionnaireImportDAO questionnaireImportDAO = new QuestionnaireImportDAO();
 
         ArrayList<String> fileContent = new ArrayList<>();
 
