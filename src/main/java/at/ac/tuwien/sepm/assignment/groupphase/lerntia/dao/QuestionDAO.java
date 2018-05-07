@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestionDAO implements IQuestionDAO {
@@ -20,7 +22,7 @@ public class QuestionDAO implements IQuestionDAO {
     private Connection connection;
     private static final String SQL_QUESTION_CREATE_STATEMENT="INSERT INTO Question(id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback) VALUES (default,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUESTION_UPDATE_STATEMENT="UPDATE Question SET questionText = ?, picture = ?, answer1 = ?, answer2 = ?, answer3 = ?, answer4 = ?, answer5 = ?, correctAnswers = ?, optionalFeedback = ? ";
-    private static final String SQL_QUESTION_SEARCH_STATEMENT="";
+    private static final String SQL_QUESTION_SEARCH_STATEMENT="SELECT * FROM QUESTION";
     private static final String SQL_QUESTION_DELETE_STATEMENT="UPDATE Question SET isDeleted = true where id = ?";
     private static final String SQL_QUESTION_READALL_STATEMENT="";
     private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
@@ -80,8 +82,38 @@ public class QuestionDAO implements IQuestionDAO {
     }
 
     @Override
-    public void search(Question question) throws PersistenceException {
-        //TODO implement search for questions if necessary
+    public List<Question> search(List<Question> questionList) throws PersistenceException {
+        try {
+            List<Question> searchResults= new ArrayList<>();
+            Question questionparameter;
+            Question foundquestion;
+            String parameters="";
+            while (!questionList.isEmpty()){
+                questionparameter = questionList.get(0);
+                parameters+=parameters.length()==0?" WHERE id= "+questionparameter.getId(): " OR id= "+questionparameter.getId();
+                questionList.remove(0);
+            }
+            String searchStatement = SQL_QUESTION_SEARCH_STATEMENT+parameters;
+            ResultSet rs = connection.prepareStatement(searchStatement).executeQuery();
+            //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
+            while (rs.next()){
+                foundquestion = new Question();
+                foundquestion.setId(rs.getLong(1));
+                foundquestion.setQuestionText(rs.getString(2));
+                foundquestion.setPicture(rs.getString(3));
+                foundquestion.setAnswer1(rs.getString(4));
+                foundquestion.setAnswer2(rs.getString(5));
+                foundquestion.setAnswer3(rs.getString(6));
+                foundquestion.setAnswer4(rs.getString(7));
+                foundquestion.setAnswer5(rs.getString(8));
+                foundquestion.setCorrectAnswers(rs.getString(9));
+                foundquestion.setOptionalFeedback(rs.getString(10));
+                searchResults.add(foundquestion);
+            }
+            return searchResults;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
