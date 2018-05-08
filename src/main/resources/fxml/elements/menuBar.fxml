@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-
-<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu" stylesheets="@/css/menu.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
+<?import javafx.scene.control.*?>
+<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="main-left" stylesheets="@/css/menu.css"
+         xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
     <Menu mnemonicParsing="false" text="Menü">
-        <MenuItem mnemonicParsing="false" text="Fragen verwalten" />
-        <MenuItem mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren" />
-        <MenuItem mnemonicParsing="false" text="Fragen nach CSV exportieren" />
-        <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln" />
+        <MenuItem mnemonicParsing="false" text="Fragen verwalten"/>
+        <MenuItem mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren"/>
+        <MenuItem mnemonicParsing="false" text="Fragen nach CSV exportieren"/>
+        <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln"/>
     </Menu>
     <Menu mnemonicParsing="false" text="Hilfe">
-        <MenuItem mnemonicParsing="false" text="Über Lerntia" />
+        <MenuItem mnemonicParsing="false" text="Über Lerntia"/>
     </Menu>
 </MenuBar>
