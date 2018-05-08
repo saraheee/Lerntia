@@ -29,30 +29,7 @@ public class LerntiaMainController {
     private VBox mainWindowRight;
     @FXML
     private ImageView mainImage;
-    @FXML
-    private AnswerController answer1Controller;
-    @FXML
-    private AnswerController answer2Controller;
-    @FXML
-    private AnswerController answer3Controller;
-    @FXML
-    private AnswerController answer4Controller;
-    @FXML
-    private AnswerController answer5Controller;
-    @FXML
-    private QuestionController qLabelController;
-    @FXML
-    private HBox firstAnswer;
-    @FXML
-    private HBox secondAnswer;
-    @FXML
-    private HBox thirdAnswer;
-    @FXML
-    private HBox fourthAnswer;
-    @FXML
-    private HBox fifthAnswer;
-    @FXML
-    private HBox question;
+
     @FXML
     private Label qLabel;
     @FXML
@@ -78,22 +55,18 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        notNull(answer1Controller, "'answer1Controller' should not be null");
-        notNull(answer2Controller, "'answer2Controller' should not be null");
-        notNull(answer3Controller, "'answer3Controller' should not be null");
-        notNull(answer4Controller, "'answer4Controller' should not be null");
-        notNull(answer5Controller, "'answer5Controller' should not be null");
-        notNull(qLabelController, "'questionController' should not be null");
         notNull(qLabel, "'qLabel' should not be null");
         notNull(answer1, "'answer1' should not be null");
         notNull(answer2, "'answer2' should not be null");
         notNull(answer3, "'answer3' should not be null");
         notNull(answer4, "'answer4' should not be null");
         notNull(answer5, "'answer5' should not be null");
+
         //Example for selecting the fourth answer
-        answer4Controller.setSelected(fourthAnswer, true);
-        qLabel.setText("Hallo");
-        answer1.setText("Hiiiiiii");
+        answer4.setSelected(true);
+
+        //Example for setting a question text
+        qLabel.setText("Ein neuer Fragetext!");
 
     }
 
