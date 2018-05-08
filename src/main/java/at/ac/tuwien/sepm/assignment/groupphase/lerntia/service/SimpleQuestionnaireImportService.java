@@ -92,12 +92,9 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIds.add(simpleQuestionService.create(q));
         }
 
-        long questionaireId = 0;
+        //long questionaireId = 0;
 
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long)0, false, questionaireName);
-        questionaireId = simpleLearningQuestionnaireService.create(learningQuestionnaire);
-
-
-
+        //LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long)0, false, questionaireName);
+        //questionaireId = simpleLearningQuestionnaireService.create(learningQuestionnaire);
     }
 }
