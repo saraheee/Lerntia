@@ -17,8 +17,7 @@ public class QuestionController implements Initializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @FXML
-    private Label qLabel;
+
 
     //private Label questionLabel;
 
@@ -27,13 +26,13 @@ public class QuestionController implements Initializable {
     }
 
 
-    public String getQuestion() {
+   /* public String getQuestion() {
         return qLabel.getText();
     }
 
     public void setQuestion(String value) {
         qLabel.setText(value);
-    }
+    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

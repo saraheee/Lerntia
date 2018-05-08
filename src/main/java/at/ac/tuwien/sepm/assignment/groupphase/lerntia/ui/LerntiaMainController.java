@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -51,6 +53,19 @@ public class LerntiaMainController {
     private HBox fifthAnswer;
     @FXML
     private HBox question;
+    @FXML
+    private Label qLabel;
+    @FXML
+    private CheckBox answer1;
+    @FXML
+    private CheckBox answer2;
+    @FXML
+    private CheckBox answer3;
+    @FXML
+    private CheckBox answer4;
+    @FXML
+    private CheckBox answer5;
+
 
     @Autowired
     public LerntiaMainController(LerntiaService lerntiaService) {
@@ -69,12 +84,18 @@ public class LerntiaMainController {
         notNull(answer4Controller, "'answer4Controller' should not be null");
         notNull(answer5Controller, "'answer5Controller' should not be null");
         notNull(qLabelController, "'questionController' should not be null");
-
+        notNull(qLabel, "'qLabel' should not be null");
+        notNull(answer1, "'answer1' should not be null");
+        notNull(answer2, "'answer2' should not be null");
+        notNull(answer3, "'answer3' should not be null");
+        notNull(answer4, "'answer4' should not be null");
+        notNull(answer5, "'answer5' should not be null");
         //Example for selecting the fourth answer
         answer4Controller.setSelected(fourthAnswer, true);
+        qLabel.setText("Hallo");
+        answer1.setText("Hiiiiiii");
 
     }
-
 
 
 }
