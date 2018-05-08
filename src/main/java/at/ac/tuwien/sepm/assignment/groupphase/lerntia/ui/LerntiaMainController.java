@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.awt.*;
 import java.lang.invoke.MethodHandles;
 
 import static org.springframework.util.Assert.notNull;

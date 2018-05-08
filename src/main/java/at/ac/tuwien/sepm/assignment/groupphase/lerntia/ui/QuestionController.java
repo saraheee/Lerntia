@@ -18,9 +18,31 @@ public class QuestionController implements Initializable {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @FXML
-    private Label questionLabel;
+    private Label qLabel;
+
+    //private Label questionLabel;
+
+    QuestionController() {
+
+    }
 
 
+    public String getQuestion() {
+        return qLabel.getText();
+    }
+
+    public void setQuestion(String value) {
+        qLabel.setText(value);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //notNull(qLabel, "'qLabel' should not be null");
+    }
+
+
+
+    /* //workaround to access label nodes from their parent nodes
     public String getQuestionText(HBox question) {
         if (checkQuestion(question)) {
             return questionLabel.getText();
@@ -34,12 +56,6 @@ public class QuestionController implements Initializable {
         }
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
     private boolean checkQuestion(HBox question) {
         if (question.getChildren().get(0) instanceof Label) {
             this.questionLabel = (Label) question.getChildren().get(0);
@@ -49,7 +65,9 @@ public class QuestionController implements Initializable {
             LOG.error("Checking question failed. Not an instance of 'label'.");
             return false;
         }
-    }
+    } */
+
 }
+
 
 
