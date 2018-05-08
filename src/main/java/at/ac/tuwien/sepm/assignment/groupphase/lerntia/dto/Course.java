@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class Course {
+    private Long id;
     private String mark;
     private String semester;
     private Boolean isDeleted;
@@ -13,6 +14,14 @@ public class Course {
         this.mark = mark;
         this.semester = semester;
         this.isDeleted = isDeleted;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMark() {

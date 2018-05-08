@@ -25,7 +25,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion set isDeleted=true where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion set qid=?, questionid=? where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_READALL_STATEMENT = "";
-    private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where qid=";
+    private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
     private Connection connection = null;
 
 
@@ -45,7 +45,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT);
             pscreate.setLong(1,questionnaireQuestion.getQid());
             pscreate.setLong(2,questionnaireQuestion.getQuestionid());
-            pscreate.setBoolean(3,questionnaireQuestion.getDeleted());
+            pscreate.setBoolean(3,false);
             pscreate.execute();
             LOG.info("Statement for new QuestionnaireQuestion entry succesfully sent.");
         } catch (SQLException e) {

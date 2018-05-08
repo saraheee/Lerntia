@@ -19,7 +19,7 @@ public class UserCourseDAO implements IUserCourseDAO {
     private Connection connection=null;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String SQL_USERCOURSE_CREATE_STATEMENT ="INSERT INTO PUserCourse(matriculationNumber,cmark,semestr,isDeleted) VALUES (?,?,?,?)";
+    private static final String SQL_USERCOURSE_CREATE_STATEMENT ="INSERT INTO PUserCourse(matriculationNumber,cmark,semester,isDeleted) VALUES (?,?,?,false )";
 
     public UserCourseDAO() throws PersistenceException {
         try {
@@ -39,7 +39,6 @@ public class UserCourseDAO implements IUserCourseDAO {
             pscreate.setString(1, userCourse.getMatriculationNumber());
             pscreate.setString(2, userCourse.getCmark());
             pscreate.setString(3, userCourse.getSemester());
-            pscreate.setBoolean(4, userCourse.getDeleted());
             pscreate.execute();
             LOG.info("Statement for new UserCourse entry succesfully sent.");
         } catch (SQLException e) {

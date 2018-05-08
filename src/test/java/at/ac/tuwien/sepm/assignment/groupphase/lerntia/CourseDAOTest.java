@@ -10,10 +10,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static org.junit.Assert.*;
-
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 public class CourseDAOTest {
@@ -92,7 +90,6 @@ public class CourseDAOTest {
             courseDAO.create(tgi);
             Course tgidelete =new Course();
             tgidelete.setMark(tgi.getMark());
-            System.out.println(tgidelete.toString());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());

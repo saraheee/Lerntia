@@ -4,16 +4,14 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class QuestionDAO implements IQuestionDAO {
     public void create(Question question) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Question creation.");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT);
+            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
             pscreate.setString(1,question.getQuestionText());
             pscreate.setString(2,question.getPicture());
             pscreate.setString(3,question.getAnswer1());
@@ -53,7 +51,13 @@ public class QuestionDAO implements IQuestionDAO {
             pscreate.setString(8,question.getCorrectAnswers());
             pscreate.setString(9,question.getOptionalFeedback());
             pscreate.executeUpdate();
+
             LOG.info("Question succesfully saved in Database");
+            ResultSet generatedKeys= pscreate.getGeneratedKeys();
+
+            generatedKeys.next();
+
+            question.setId(generatedKeys.getLong(1));
         } catch (SQLException e) {
             LOG.error("Question CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
