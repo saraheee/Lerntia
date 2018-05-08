@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,8 +40,17 @@ public class LerntiaController {
     private AnswerCheckBoxController answer5Controller;
     @FXML
     private QuestionLabelController questionController;
+    @FXML
+    private HBox firstAnswer;
+    @FXML
+    private HBox secondAnswer;
+    @FXML
+    private HBox thirdAnswer;
+    @FXML
+    private HBox fourthAnswer;
 
-    @Autowired
+
+    //@Autowired
     public LerntiaController(LerntiaService lerntiaService) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         this.lerntiaService = lerntiaService;
@@ -58,15 +68,19 @@ public class LerntiaController {
         notNull(answer5Controller, "'answer5Controller' should not be null");
         notNull(questionController, "'questionController' should not be null");
         */
+
+        //Example for selecting the first answer
+        LOG.debug("HERE:  {}", firstAnswer == null);
+        var node = firstAnswer.getChildren().get(0);
+        if (node instanceof CheckBox) {
+            ((CheckBox) node).setSelected(true);
+        }
     }
 
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
 
-        //Example for selecting the first answer
-        answer1Controller.selectAnswer(true, 1);
-        answer1Controller.setAnswer("My answer", 1);
     }
 
 
