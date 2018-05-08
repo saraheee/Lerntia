@@ -11,9 +11,10 @@
         <VBox prefHeight="44.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
-        <VBox prefHeight="134.0">
+        <HBox prefHeight="134.0">
             <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
-        </VBox>
+            <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
+        </HBox>
         <VBox prefHeight="134.0">
             <ImageView fx:id="mainImage" fitWidth="360" preserveRatio="true">
                 <Image url="@/icons/no-image.png"/>
@@ -22,35 +23,28 @@
     </VBox>
     <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
         <HBox prefHeight="30.0"/>
-        <HBox prefHeight="286.0">
-            <VBox minWidth="139.0" prefHeight="140.0">
-                <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
-            </VBox>
-            <VBox prefHeight="115.0"/>
-            <fx:include fx:id="question" source="/fxml/elements/questionLabel.fxml"/>
-            <styleClass>
-                <String fx:value="question-box"/>
-            </styleClass>
+        <HBox fx:id="question" prefHeight="286.0" styleClass="question-box">
+            <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml"/>
         </HBox>
         <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer1" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
         <HBox fx:id="secondAnswer" layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer2" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
         <HBox  fx:id="thirdAnswer" layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer3" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
         <HBox  fx:id="fourthAnswer" layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer4" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
-        <HBox layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="fifthAnswer" layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
               stylesheets="@/css/background-division.css">
-            <fx:include fx:id="answer5" source="/fxml/elements/answerCheckbox.fxml"/>
+            <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
         <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
               stylesheets="@/css/background-division.css">

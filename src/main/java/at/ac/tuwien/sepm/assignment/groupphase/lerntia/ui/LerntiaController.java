@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,7 +39,7 @@ public class LerntiaController {
     @FXML
     private AnswerCheckBoxController answer5Controller;
     @FXML
-    private QuestionLabelController questionController;
+    private QuestionLabelController qLabelController;
     @FXML
     private HBox firstAnswer;
     @FXML
@@ -48,9 +48,12 @@ public class LerntiaController {
     private HBox thirdAnswer;
     @FXML
     private HBox fourthAnswer;
+    @FXML
+    private HBox fifthAnswer;
+    @FXML
+    private HBox question;
 
-
-    //@Autowired
+    @Autowired
     public LerntiaController(LerntiaService lerntiaService) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         this.lerntiaService = lerntiaService;
@@ -60,21 +63,21 @@ public class LerntiaController {
     private void initialize() {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-        /*
+
         notNull(answer1Controller, "'answer1Controller' should not be null");
         notNull(answer2Controller, "'answer2Controller' should not be null");
         notNull(answer3Controller, "'answer3Controller' should not be null");
         notNull(answer4Controller, "'answer4Controller' should not be null");
         notNull(answer5Controller, "'answer5Controller' should not be null");
-        notNull(questionController, "'questionController' should not be null");
-        */
+        notNull(qLabelController, "'questionController' should not be null");
 
-        //Example for selecting the first answer
-        LOG.debug("HERE:  {}", firstAnswer == null);
-        var node = firstAnswer.getChildren().get(0);
-        if (node instanceof CheckBox) {
-            ((CheckBox) node).setSelected(true);
-        }
+
+        answer1Controller.setAnswerText(firstAnswer, "Hello");
+        answer2Controller.setVisible(secondAnswer, false);
+        LOG.debug("RE: " + answer3Controller.getAnswerText(thirdAnswer));
+        answer4Controller.setSelected(fourthAnswer, true);
+        qLabelController.setQuestionText(question, "HAAAAAL");
+        LOG.debug("RESS: " + qLabelController.getQuestionText(question));
     }
 
     @FXML
