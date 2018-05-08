@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Component
 public class QuestionnaireDAO implements IQuestionnaireDAO {
@@ -39,14 +36,18 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     public void create(Questionnaire questionnaire) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for QUestionnaire creation");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT);
+
+            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
             pscreate.setString(1,questionnaire.getCmark());
             pscreate.setString(2,questionnaire.getSemester());
             pscreate.executeUpdate();
+
             LOG.info("Statement succesfully sent for Questionnaire creation.");
+
             ResultSet generatedKeys = pscreate.getGeneratedKeys();
             generatedKeys.next();
-            questionnaire.setId(generatedKeys.getLong(3));
+            questionnaire.setId(generatedKeys.getLong(1));
+
         } catch (SQLException e) {
             LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());

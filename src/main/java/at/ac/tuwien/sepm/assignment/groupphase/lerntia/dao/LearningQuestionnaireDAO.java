@@ -37,13 +37,17 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         try {
             LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
+
             questionaireDAO.create(learningQuestionnaire);
+
             LOG.info("Entry for general Questionnaire succesfull.");
             LOG.info("Prepare Statement for LearningQuestionnaire...");
+
             PreparedStatement pscreate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT);
             pscreate.setLong(1,learningQuestionnaire.getId());
             pscreate.setString(2,learningQuestionnaire.getName());
             pscreate.executeUpdate();
+
             LOG.info("Statement for LearningQuestionnaire succesfully sent.");
         } catch (SQLException e) {
             LOG.error("LearningQuestionnaire CREATE DAO error!");
