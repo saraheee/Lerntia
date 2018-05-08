@@ -73,10 +73,14 @@ public class LerntiaMainController {
 
         //Example for selecting the fourth answer
         answer4Controller.setSelected(fourthAnswer, true);
-        qLabelController.getQuestion();
 
     }
 
 
+    @FXML
+    private void onAudioButtonClicked() {
+        LOG.debug("Audio button clicked");
+
+    }
 
 }

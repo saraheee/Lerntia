@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
-import javafx.fxml.FXML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,6 @@ public class AudioController {
     @Autowired
     public AudioController(LerntiaService lerntiaService) {
         this.lerntiaService = lerntiaService;
-    }
-
-    @FXML
-    private void onAudioButtonClicked() {
-        LOG.debug("Audio button clicked");
-
     }
 
 
