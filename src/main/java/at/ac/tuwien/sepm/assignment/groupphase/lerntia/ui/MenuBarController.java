@@ -29,7 +29,7 @@ public class MenuBarController {
     @FXML
     private void importQuestions() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Verzeichnis");
+        fileChooser.setTitle("[Lerntia] Verzeichnis");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
@@ -38,14 +38,14 @@ public class MenuBarController {
             }
             catch (ServiceException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Dialog");
+                alert.setTitle("[Lerntia] Import fehlgeschlagen");
                 alert.setHeaderText("Fehler");
                 alert.setContentText(e.getMessage());
                 alert.setResizable(true);
                 alert.showAndWait();
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
+            alert.setTitle("[Lerntia] Import erfolgreich");
             alert.setHeaderText("Erfolgreich");
             alert.setContentText("Alle Fragen wurden erfolgreich importiert");
             alert.setResizable(true);
