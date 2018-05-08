@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Component
 public class QuestionDAO implements IQuestionDAO {
@@ -50,6 +47,7 @@ public class QuestionDAO implements IQuestionDAO {
             pscreate.setString(8,question.getCorrectAnswers());
             pscreate.setString(9,question.getOptionalFeedback());
             pscreate.executeUpdate();
+
             LOG.info("Question succesfully saved in Database");
         } catch (SQLException e) {
             LOG.error("Question CREATE DAO error!");
@@ -74,6 +72,7 @@ public class QuestionDAO implements IQuestionDAO {
             psupdate.executeUpdate();
             LOG.info("Question succesfully updated in Database.");
         } catch (SQLException e) {
+            e.printStackTrace();
             LOG.error("Question UPDATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
