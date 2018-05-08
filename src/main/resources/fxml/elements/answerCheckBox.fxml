@@ -3,7 +3,7 @@
 
 <?import javafx.scene.control.CheckBox?>
 <?import java.lang.String?>
-<CheckBox mnemonicParsing="false" stylesheets="@/css/label.css"
+<CheckBox fx:id="answer" mnemonicParsing="false" stylesheets="@/css/label.css"
           text="&lt;Antwort&gt; Ich bin eine Antwort und auch ich darf bis zu zwei Zeilen lang sein. Kannst du mich noch gut lesen?"
           wrapText="true" xmlns="http://javafx.com/javafx/8.0.121"
           xmlns:fx="http://javafx.com/fxml/1"
