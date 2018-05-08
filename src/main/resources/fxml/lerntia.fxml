@@ -4,9 +4,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
 <HBox fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaController">
+      fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
     <VBox fx:id="mainWindowLeft" prefHeight="768.0" styleClass="main-left" stylesheets="@/css/background-division.css">
         <VBox prefHeight="44.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
@@ -26,23 +25,28 @@
         <HBox fx:id="question" prefHeight="286.0" styleClass="question-box">
             <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml"/>
         </HBox>
-        <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0" styleClass="answer-box"
+        <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0"
+              styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
-        <HBox fx:id="secondAnswer" layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="secondAnswer" layoutX="10.0" layoutY="208.0" prefHeight="250.0" prefWidth="1024.0"
+              styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
-        <HBox  fx:id="thirdAnswer" layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0" styleClass="answer-box"
+        <HBox fx:id="thirdAnswer" layoutX="10.0" layoutY="345.0" prefHeight="250.0" prefWidth="2756.0"
+              styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
-        <HBox  fx:id="fourthAnswer" layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="fourthAnswer" layoutX="10.0" layoutY="482.0" prefHeight="250.0" prefWidth="1024.0"
+              styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
-        <HBox fx:id="fifthAnswer" layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0" styleClass="answer-box"
+        <HBox fx:id="fifthAnswer" layoutX="10.0" layoutY="619.0" prefHeight="250.0" prefWidth="1024.0"
+              styleClass="answer-box"
               stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml"/>
         </HBox>
