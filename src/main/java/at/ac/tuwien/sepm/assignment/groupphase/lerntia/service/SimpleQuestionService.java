@@ -2,12 +2,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import org.springframework.stereotype.Service;
-
-import javax.sound.midi.SysexMessage;
 
 @Service
 public class SimpleQuestionService implements IQuestionService {
@@ -19,16 +16,12 @@ public class SimpleQuestionService implements IQuestionService {
     }
 
     @Override
-    public long create(Question question) throws ServiceException {
-        long id = 0;
-
+    public void create(Question question) throws ServiceException {
         try {
-            id = questionDAO.create(question);
+            questionDAO.create(question);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
-
-        return id;
     }
 
     @Override

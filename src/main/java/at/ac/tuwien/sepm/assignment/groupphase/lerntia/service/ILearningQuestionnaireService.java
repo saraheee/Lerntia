@@ -12,7 +12,7 @@ public interface ILearningQuestionnaireService {
      * @param learningQuestionnaire in question that needs to be saved to the Database
      * @throws ServiceException if the method can't save the LearningQuestionnaire to the Database
      * */
-    long create(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
+    void create(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
 
     /**
      * Update an existing LearningQuestionnaire with new parameters to the Database

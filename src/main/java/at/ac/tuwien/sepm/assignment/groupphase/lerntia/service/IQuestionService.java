@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 public interface IQuestionService {
 
-    long create(Question question) throws ServiceException, PersistenceException;
+    void create(Question question) throws ServiceException, PersistenceException;
 
     /**
      * Update an existing Question in the Database with new Values

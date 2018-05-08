@@ -60,8 +60,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             e.printStackTrace();
         }
 
-        ArrayList<Long> questionIds = new ArrayList<>();
-
         for(int i = 0; i < fileContent.size(); i++) {
 
             // split the rows, the seperator is ";"
@@ -89,7 +87,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
 
             Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
-            questionIds.add(simpleQuestionService.create(q));
+            simpleQuestionService.create(q);
         }
 
         //long questionaireId = 0;

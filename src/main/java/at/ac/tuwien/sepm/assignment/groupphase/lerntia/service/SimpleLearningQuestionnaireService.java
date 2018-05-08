@@ -19,17 +19,12 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
     }
 
     @Override
-    public long create(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
-
-        long id = 0;
-
+    public void create(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
         try {
-            id = iLearningQuestionnaireDAO.create(learningQuestionnaire);
+            iLearningQuestionnaireDAO.create(learningQuestionnaire);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
-
-        return id;
     }
 
     @Override
