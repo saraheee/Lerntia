@@ -16,7 +16,7 @@ public interface ILearningQuestionnaireDAO {
      * @param learningQuestionnaire in question that needs to be saved to the Database
      * @throws PersistenceException if the method can't save the LearningQuestionnaire to the Database
      * */
-    void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
+    long create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
 
     /**
      * Update an existing LearningQuestionnaire with new parameters to the Database

@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 @Component
@@ -36,7 +34,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     }
 
     @Override
-    public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+    public long create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         try {
             LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
             questionaireDAO.create(learningQuestionnaire);
@@ -47,6 +45,8 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
             pscreate.setString(2,learningQuestionnaire.getName());
             pscreate.executeUpdate();
             LOG.info("Statement for LearningQuestionnaire succesfully sent.");
+
+            return learningQuestionnaire.getId();
         } catch (SQLException e) {
             LOG.error("LearningQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
