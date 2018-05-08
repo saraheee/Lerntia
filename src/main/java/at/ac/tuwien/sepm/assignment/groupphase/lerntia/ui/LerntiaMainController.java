@@ -77,10 +77,5 @@ public class LerntiaMainController {
     }
 
 
-    @FXML
-    private void onAudioButtonClicked() {
-        LOG.debug("Audio button clicked");
-
-    }
 
 }
