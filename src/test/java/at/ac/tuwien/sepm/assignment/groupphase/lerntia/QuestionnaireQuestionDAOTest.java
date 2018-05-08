@@ -245,6 +245,4 @@ public class QuestionnaireQuestionDAOTest {
             throw new PersistenceException(e.getMessage());
         }
     }
-
-    
 }
