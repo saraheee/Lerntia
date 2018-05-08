@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import javafx.scene.image.Image;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,18 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     private final QuestionnaireImportDAO questionnaireImportDAO;
     private final SimpleQuestionService simpleQuestionService;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
     public SimpleQuestionnaireImportService(
         QuestionnaireImportDAO questionnaireImportDAO,
         SimpleQuestionService simpleQuestionService,
-        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService
+        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService
     ){
         this.questionnaireImportDAO = questionnaireImportDAO;
         this.simpleQuestionService = simpleQuestionService;
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
     public void importQuestionnaire( File file ) throws ServiceException {
@@ -60,6 +64,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             e.printStackTrace();
         }
 
+        ArrayList<Long> questionIDs = new ArrayList<>();
+
         for(int i = 0; i < fileContent.size(); i++) {
 
             // split the rows, the seperator is ";"
@@ -88,9 +94,24 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
             Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
             simpleQuestionService.create(q);
+
+            questionIDs.add(q.getId());
         }
 
         LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long)0, false, questionaireName);
         simpleLearningQuestionnaireService.create(learningQuestionnaire);
+
+        Long learningQuestionnaireID = learningQuestionnaire.getId();
+
+        for ( int i = 0; i < questionIDs.size(); i++ ){
+
+            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+
+            questionnaireQuestion.setQid(learningQuestionnaireID);
+            questionnaireQuestion.setQuestionid(questionIDs.get(i));
+            questionnaireQuestion.setDeleted(false);
+
+            simpleQuestionnaireQuestionService.create(questionnaireQuestion);
+        }
     }
 }
