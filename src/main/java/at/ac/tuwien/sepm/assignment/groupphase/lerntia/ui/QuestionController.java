@@ -12,17 +12,14 @@ import java.lang.invoke.MethodHandles;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static org.springframework.util.Assert.notNull;
-
 @Controller
-public class QuestionLabelController implements Initializable {
+public class QuestionController implements Initializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @FXML
-    private Label qLabel;
-    @FXML
     private Label questionLabel;
+
 
     public String getQuestionText(HBox question) {
         if (checkQuestion(question)) {
@@ -37,17 +34,10 @@ public class QuestionLabelController implements Initializable {
         }
     }
 
-    public String getQuestion() {
-        return qLabel.getText();
-    }
-
-    public void setQuestion(String value) {
-        qLabel.setText(value);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //notNull(qLabel, "'qLabel' should not be null");
+
     }
 
     private boolean checkQuestion(HBox question) {

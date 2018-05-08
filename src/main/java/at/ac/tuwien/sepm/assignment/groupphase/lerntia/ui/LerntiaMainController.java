@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -11,12 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.awt.*;
 import java.lang.invoke.MethodHandles;
 
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class LerntiaController {
+public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaService lerntiaService;
@@ -29,17 +29,17 @@ public class LerntiaController {
     @FXML
     private ImageView mainImage;
     @FXML
-    private AnswerCheckBoxController answer1Controller;
+    private AnswerController answer1Controller;
     @FXML
-    private AnswerCheckBoxController answer2Controller;
+    private AnswerController answer2Controller;
     @FXML
-    private AnswerCheckBoxController answer3Controller;
+    private AnswerController answer3Controller;
     @FXML
-    private AnswerCheckBoxController answer4Controller;
+    private AnswerController answer4Controller;
     @FXML
-    private AnswerCheckBoxController answer5Controller;
+    private AnswerController answer5Controller;
     @FXML
-    private QuestionLabelController qLabelController;
+    private QuestionController qLabelController;
     @FXML
     private HBox firstAnswer;
     @FXML
@@ -54,7 +54,7 @@ public class LerntiaController {
     private HBox question;
 
     @Autowired
-    public LerntiaController(LerntiaService lerntiaService) {
+    public LerntiaMainController(LerntiaService lerntiaService) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         this.lerntiaService = lerntiaService;
     }
@@ -71,20 +71,12 @@ public class LerntiaController {
         notNull(answer5Controller, "'answer5Controller' should not be null");
         notNull(qLabelController, "'questionController' should not be null");
 
-
-        answer1Controller.setAnswerText(firstAnswer, "Hello");
-        answer2Controller.setVisible(secondAnswer, false);
-        LOG.debug("RE: " + answer3Controller.getAnswerText(thirdAnswer));
+        //Example for selecting the fourth answer
         answer4Controller.setSelected(fourthAnswer, true);
-        qLabelController.setQuestionText(question, "HAAAAAL");
-        LOG.debug("RESS: " + qLabelController.getQuestionText(question));
-    }
-
-    @FXML
-    private void onAudioButtonClicked() {
-        LOG.debug("Audio button clicked");
+        qLabelController.getQuestion();
 
     }
+
 
 
 }

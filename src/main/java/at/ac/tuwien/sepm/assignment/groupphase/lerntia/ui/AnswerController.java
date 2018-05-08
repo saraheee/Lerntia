@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 @Controller
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class AnswerCheckBoxController implements Initializable {
+public class AnswerController implements Initializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
