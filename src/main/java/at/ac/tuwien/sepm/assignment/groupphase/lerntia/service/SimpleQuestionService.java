@@ -19,9 +19,21 @@ public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final QuestionDAO questionDAO;
+    private QuestionDAO questionDAO;
 
     public SimpleQuestionService(QuestionDAO questionDAO){
+        this.questionDAO = questionDAO;
+    }
+
+    public SimpleQuestionService(){
+        try {
+            this.QuestionDAO(new QuestionDAO());
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void QuestionDAO(QuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
