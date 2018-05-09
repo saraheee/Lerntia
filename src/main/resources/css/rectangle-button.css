@@ -1,13 +1,13 @@
-.question-label {
-    -fx-font-size: 32px;
-    -fx-font-family: "Arial Black";
+.label {
+    -fx-font-size: 27px;
+    -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
 
-.answer-label {
-    -fx-font-size: 26px;
-    -fx-font-family: "Arial Black";
+.label-small {
+    -fx-font-size: 23px;
+    -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
