@@ -6,16 +6,20 @@
 .main-left {
     -fx-width: 25%;
     -fx-float: left;
+    -fx-background-color: white;
 }
+
 .main-right {
     -fx-width: 75%;
     -fx-float: left;
+    -fx-background-color: rgba(0, 50, 250, 0.005);
 }
 
 
 .question-box {
     -fx-width: 20%;
     -fx-float: left;
+    -fx-background-color: rgba(247, 250, 17, 0.02);
 
 }
 
