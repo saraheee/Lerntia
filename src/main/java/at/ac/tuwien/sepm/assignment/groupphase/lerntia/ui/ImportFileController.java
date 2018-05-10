@@ -4,10 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleCourseService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleLearningQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionnaireImportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,7 +50,11 @@ public class ImportFileController {
         SimpleQuestionService q = new SimpleQuestionService(d);
         ILearningQuestionnaireDAO a = new LearningQuestionnaireDAO();
         SimpleLearningQuestionnaireService l = new SimpleLearningQuestionnaireService(a);
-        qservice = new SimpleQuestionnaireImportService(i, q, l);
+
+        QuestionnaireQuestionDAO qqDAO = new QuestionnaireQuestionDAO();
+        SimpleQuestionnaireQuestionService qq = new SimpleQuestionnaireQuestionService(qqDAO);
+
+        qservice = new SimpleQuestionnaireImportService(i, q, l, qq);
     }
 
     @Autowired
