@@ -20,7 +20,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id,name) VALUES (?,?)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
-    private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * from LearningQuestionnaire";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
     private Connection connection;
     private QuestionnaireDAO questionaireDAO;
 
@@ -71,11 +71,11 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     }
 
     @Override
-    public List readAll() throws PersistenceException {
+    public List<LearningQuestionnaire> readAll() throws PersistenceException {
         try {
             LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");
             ArrayList<LearningQuestionnaire> list = new ArrayList<>();
-            ResultSet rsreadall = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT).executeQuery();
+            ResultSet rsreadall = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT).executeQuery();
             LearningQuestionnaire learning;
             while (rsreadall.next()){
                 learning = new LearningQuestionnaire();
