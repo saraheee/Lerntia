@@ -18,10 +18,9 @@
 }
 
 .button:hover {
-    -fx-background-color: rgba(0, 50, 250, 0.2);
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);
 }
 
 .button:focused {
-    -fx-background-color: rgba(0, 50, 250, 0.35);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 20, -5, 0, 0);
+    -fx-effect: dropshadow(gaussian, black, 20, -5, 0, 0);
 }
