@@ -2,11 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.Config;
 
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ExamQuestionaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LearningQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,5 +30,14 @@ public class AppConfig {
         return new QuestionDAO();
     }
 
+    @Bean
+    public SimpleCourseService SimpleCourseService(ICourseDAO courseDAO){
+        return new SimpleCourseService(courseDAO);
+    }
+
+    @Bean
+    public SimpleQuestionnaireImportService SimpleCourseService(QuestionnaireImportDAO questionnaireImportDAO, SimpleQuestionService simpleQuestionService, SimpleLearningQuestionnaireService simpleLearningQuestionnaireService, SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService){
+        return new SimpleQuestionnaireImportService(questionnaireImportDAO, simpleQuestionService, simpleLearningQuestionnaireService, simpleQuestionnaireQuestionService);
+    }
 
 }
