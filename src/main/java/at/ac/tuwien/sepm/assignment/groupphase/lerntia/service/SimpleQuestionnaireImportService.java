@@ -33,17 +33,11 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         String pathStr = file.getAbsolutePath();
 
         List<LearningQuestionnaire> questionnaires = simpleLearningQuestionnaireService.readAll();
-        boolean found = false;
         for (int i = 0; i < questionnaires.size(); i++) {
             if (name.equals(questionnaires.get(i).getName())) {
-                // TODO if exists
-                found = true;
+                throw new ServiceException("Dieser Name existiert schon!");
             }
         }
-        if (found == false) {
-            // TODO if not exists
-        }
-
 
         // get questionaire file content
 
