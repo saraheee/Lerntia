@@ -6,6 +6,6 @@ import java.io.File;
 
 public interface IQuestionnaireImportService {
 
-    public void importQuestionnaire( File filePath ) throws ServiceException;
+    public void importQuestionnaire(File file, String course, String name) throws ServiceException;
 
 }

@@ -56,6 +56,11 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
     @Override
     public List readAll() throws ServiceException {
-        return null;
+        try {
+            return iLearningQuestionnaireDAO.readAll();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

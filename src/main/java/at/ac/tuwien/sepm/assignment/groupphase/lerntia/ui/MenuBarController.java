@@ -1,55 +1,34 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionnaireImportService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionnaireQuestionService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
-import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Controller
 public class MenuBarController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final SimpleQuestionnaireImportService service;
-    private Stage stage;
-
-    public MenuBarController(SimpleQuestionnaireImportService service) {
-        this.service = service;
-    }
 
     @FXML
     private void importQuestions() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("[Lerntia] Verzeichnis");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            try {
-                service.importQuestionnaire(file);
-            }
-            catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
-            }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("[Lerntia] Import erfolgreich");
-            alert.setHeaderText("Erfolgreich");
-            alert.setContentText("Alle Fragen wurden erfolgreich importiert");
-            alert.setResizable(true);
-            alert.showAndWait();
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/elements/importFile.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("[Lerntia] Import Infos");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -4,6 +4,8 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
+import java.util.ArrayList;
+
 public interface IQuestionService {
 
     void create(Question question) throws ServiceException, PersistenceException;
@@ -40,5 +42,9 @@ public interface IQuestionService {
      * @throws ServiceException if the method can't get the Question
      * */
     Question get(long id) throws ServiceException;
+
+    ArrayList<String> getAllAnswers(Question question);
+
+    void validate(Question question) throws ServiceException;
 
 }
