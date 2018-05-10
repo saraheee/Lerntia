@@ -4,9 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -48,7 +45,7 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private Button audioButton;
+    private ImageController zoomButtonController;
 
     @Autowired
     public LerntiaMainController(LerntiaService lerntiaService) {
@@ -67,6 +64,7 @@ public class LerntiaMainController {
         //Example for setting a question text
         qLabelController.setQuestionText("Ein neuer Fragetext! Kannst du mich noch immer lesen?");
 
+
     }
 
     public void update(Scene scene) {
@@ -77,28 +75,53 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.Z) {
                 LOG.debug("Z key was pressed");
-                //TODO: handle zoom key event
+                zoomButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
-                //TODO: handle next question key event
+                //TODO: handle next question key event (nextQuestionButton)
             }
             if (e.getCode() == KeyCode.P) {
                 LOG.debug("P key was pressed");
-                //TODO: handle previous question key event
+                //TODO: handle previous question key event (previousQuestionButton)
             }
             if (e.getCode() == KeyCode.C) {
                 LOG.debug("C key was pressed");
-                //TODO: handle check answer key event
+                //TODO: handle check answer key event (checkAnswerButton)
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
                 //TODO: handle answer1 key event
             }
-
+            if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
+                LOG.debug("2 key was pressed");
+                //TODO: handle answer2 key event
+            }
+            if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
+                LOG.debug("3 key was pressed");
+                //TODO: handle answer3 key event
+            }
+            if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
+                LOG.debug("4 key was pressed");
+                //TODO: handle answer4 key event
+            }
+            if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
+                LOG.debug("5 key was pressed");
+                //TODO: handle answer5 key event
+            }
 
         }));
 
+    }
+
+
+    public String getAudioText() {
+        return qLabelController.getQuestionText() + '\n'
+            + answer1Controller.getAnswerText() + '\n'
+            + answer2Controller.getAnswerText() + '\n'
+            + answer3Controller.getAnswerText() + '\n'
+            + answer4Controller.getAnswerText() + '\n'
+            + answer5Controller.getAnswerText();
     }
 
 

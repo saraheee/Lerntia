@@ -13,16 +13,17 @@ import java.lang.invoke.MethodHandles;
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class AudioController {
+public class ImageController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaService lerntiaService;
     private final LerntiaMainController lerntiaMainController;
+
     @FXML
-    private Button audioButton;
+    private Button zoomButton;
 
     @Autowired
-    public AudioController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public ImageController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;
@@ -30,23 +31,20 @@ public class AudioController {
     }
 
     @FXML
-    private void onAudioButtonClicked() {
-        LOG.debug("Audio button clicked");
-        //TODO: play sound
-        String textToRead = lerntiaMainController.getAudioText();
-        //LOG.debug("Text to read:\n" + textToRead);
-
+    private void onZoomButtonClicked() {
+        LOG.debug("Zoom button clicked");
+        //TODO: maximize image
     }
 
 
 
     void setSelected() {
-        if (audioButton.isDefaultButton()) {
-            audioButton.defaultButtonProperty().setValue(false);
-            //TODO: stop sound
+        if (zoomButton.isDefaultButton()) {
+            zoomButton.defaultButtonProperty().setValue(false);
+            //TODO: minimize image
         } else {
-            audioButton.defaultButtonProperty().setValue(true);
-            onAudioButtonClicked();
+            zoomButton.defaultButtonProperty().setValue(true);
+            onZoomButtonClicked();
         }
 
     }

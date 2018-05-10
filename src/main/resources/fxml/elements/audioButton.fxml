@@ -4,7 +4,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
-<Button fx:id="audioButton" contentDisplay="TOP" defaultButton="true" mnemonicParsing="false"
+<Button fx:id="audioButton" contentDisplay="TOP" mnemonicParsing="false"
         onAction="#onAudioButtonClicked" prefHeight="120.0" prefWidth="150.0"
         stylesheets="@/css/square-button.css" text="Vorlesen" xmlns="http://javafx.com/javafx/8.0.121"
         xmlns:fx="http://javafx.com/fxml/1"
