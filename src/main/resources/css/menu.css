@@ -1,14 +1,46 @@
-.main-left {
+.menu-label {
     -fx-font-size: 17px;
     -fx-font-family: "Lora-Bold";
+    -fx-text-fill: #333333;
+    -fx-background-color: FDFCFD;
+}
+
+.menu-label:hover {
+    -fx-text-fill: #333333;
+}
+
+.menu-label:focused {
+    -fx-text-fill: #333333;
+}
+
+
+.menu-button {
     -fx-text-fill: #333333;
     -fx-background-color: rgba(0, 50, 250, 0.01);
 }
 
-.main-left:hover {
+.menu-button:hover {
     -fx-text-fill: #333333;
+    -fx-background-color: #A5A1A7;
 }
 
-.main-left:focused {
+.menu-button:focused {
     -fx-text-fill: #333333;
+    -fx-background-color: rgba(51, 0, 102, 0.4);
+}
+
+
+.menu-item {
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(0, 50, 250, 0.01);
+}
+
+.menu-item:hover {
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(51, 0, 102, 0.09);
+}
+
+.menu-item:focused {
+    -fx-text-fill: #333333;
+    -fx-background-color: #A5A1A7;
 }
