@@ -1,17 +1,15 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import com.google.inject.internal.UniqueAnnotations;
-import com.sun.jdi.IntegerValue;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @Service

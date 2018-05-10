@@ -1,6 +1,7 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;

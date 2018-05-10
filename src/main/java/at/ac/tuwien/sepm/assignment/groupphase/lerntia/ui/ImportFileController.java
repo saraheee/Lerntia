@@ -3,24 +3,30 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +87,9 @@ public class ImportFileController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
         Stage stage = new Stage();
         file = fileChooser.showOpenDialog(stage);
-        t_filename.setText(file.getName());
+        if (file != null) {
+            t_filename.setText(file.getName());
+        }
     }
 
     @FXML
@@ -98,11 +106,10 @@ public class ImportFileController {
                     alert.setContentText("Alle Fragen wurden erfolgreich importiert");
                     alert.setResizable(true);
                     alert.showAndWait();
-                    Node  source = (Node)  actionEvent.getSource();
-                    Stage stage  = (Stage) source.getScene().getWindow();
+                    Node source = (Node) actionEvent.getSource();
+                    Stage stage = (Stage) source.getScene().getWindow();
                     stage.close();
-                }
-                else {
+                } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("[Lerntia] Fehlerhafter Name");
                     alert.setHeaderText("Warnung");
@@ -110,8 +117,7 @@ public class ImportFileController {
                     alert.setResizable(true);
                     alert.showAndWait();
                 }
-            }
-            catch (ServiceException e) {
+            } catch (ServiceException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("[Lerntia] Import fehlgeschlagen");
                 alert.setHeaderText("Fehler");
@@ -119,14 +125,29 @@ public class ImportFileController {
                 alert.setResizable(true);
                 alert.showAndWait();
             }
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("[Lerntia] Kein File ausgewählt");
             alert.setHeaderText("Achtung");
             alert.setContentText("Bitte wähle zuerst eine csv-Datei aus!");
             alert.setResizable(true);
             alert.showAndWait();
+        }
+    }
+
+    void showImportWindow() {
+        var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/importFile.fxml"));
+        var stage = new Stage();
+        try {
+            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("[Lerntia] Import Infos");
+            stage.setScene(new Scene(fxmlLoader.load()));
+            stage.show();
+            LOG.debug("Successfully opened a window for importing questions.");
+        } catch (IOException e) {
+            LOG.error("Failed to open a window for importing questions. " + e.getMessage());
         }
     }
 }

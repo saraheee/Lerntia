@@ -1,10 +1,10 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserCourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.UserCourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserCourse;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserCourseService;
 import org.springframework.stereotype.Service;
 
 @Service

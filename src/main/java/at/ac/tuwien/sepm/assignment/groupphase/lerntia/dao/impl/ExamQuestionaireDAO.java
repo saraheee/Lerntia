@@ -1,6 +1,7 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import javafx.collections.ObservableList;

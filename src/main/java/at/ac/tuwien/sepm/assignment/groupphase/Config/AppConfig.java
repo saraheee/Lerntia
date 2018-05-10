@@ -3,7 +3,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.Config;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

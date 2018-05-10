@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.SimpleQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
