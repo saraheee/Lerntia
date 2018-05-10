@@ -26,5 +26,5 @@
 }
 
 .button:default {
-    -fx-background-color: rgba(0, 50, 250, 0.3);
+    -fx-background-color: rgba(0, 250, 50, 0.4);
 }

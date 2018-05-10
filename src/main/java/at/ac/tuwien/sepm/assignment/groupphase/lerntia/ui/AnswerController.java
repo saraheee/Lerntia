@@ -31,6 +31,7 @@ public class AnswerController implements Initializable {
     @Autowired
     public AnswerController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
+        notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
     }
