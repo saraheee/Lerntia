@@ -88,7 +88,8 @@ public class ImportFileController {
             try {
                 String name = tf_questionnaire.getText();
                 if (!name.equals("")) {
-                    qservice.importQuestionnaire(file);
+                    String course = cb_course.getSelectionModel().getSelectedItem();
+                    qservice.importQuestionnaire(file, course, name);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("[Lerntia] Import erfolgreich");
                     alert.setHeaderText("Erfolgreich");

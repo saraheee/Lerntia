@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
 CREATE TABLE IF NOT EXISTS Course (
   mark      VARCHAR(255),
   semester  VARCHAR(255),
+  name      VARCHAR(255),
   isDeleted BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (mark, semester)
 );

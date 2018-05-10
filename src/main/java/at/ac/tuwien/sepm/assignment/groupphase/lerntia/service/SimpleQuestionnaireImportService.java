@@ -2,14 +2,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireImportDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import javafx.scene.image.Image;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,21 +28,9 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
     }
 
-    public void importQuestionnaire( File file ) throws ServiceException {
+    public void importQuestionnaire(File file, String course, String name) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
-        Path path = Paths.get(file.getAbsolutePath());
-
-        // define questionaire name
-
-        String fileName = path.getFileName().toString();
-
-        int pos = fileName.lastIndexOf(".");
-        String questionaireName = fileName.substring(0, pos);
-
-        if (questionaireName.startsWith("fragen_")){
-            questionaireName = questionaireName.replace("fragen_", "");
-        }
 
         // TODO - check if questionaire already exists
 
