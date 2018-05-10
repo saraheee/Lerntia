@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -96,6 +97,9 @@ public class ImportFileController {
                     alert.setContentText("Alle Fragen wurden erfolgreich importiert");
                     alert.setResizable(true);
                     alert.showAndWait();
+                    Node  source = (Node)  actionEvent.getSource();
+                    Stage stage  = (Stage) source.getScene().getWindow();
+                    stage.close();
                 }
                 else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
