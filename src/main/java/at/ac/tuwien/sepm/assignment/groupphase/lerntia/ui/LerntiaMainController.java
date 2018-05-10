@@ -1,10 +1,14 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -41,6 +45,10 @@ public class LerntiaMainController {
     private AnswerController answer4Controller;
     @FXML
     private AnswerController answer5Controller;
+    @FXML
+    private AudioController audioButtonController;
+    @FXML
+    private Button audioButton;
 
     @Autowired
     public LerntiaMainController(LerntiaService lerntiaService) {
@@ -58,6 +66,38 @@ public class LerntiaMainController {
 
         //Example for setting a question text
         qLabelController.setQuestionText("Ein neuer Fragetext! Kannst du mich noch immer lesen?");
+
+    }
+
+    public void update(Scene scene) {
+        Platform.runLater(() -> scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.A) {
+                LOG.debug("A key was pressed");
+                audioButtonController.setSelected();
+            }
+            if (e.getCode() == KeyCode.Z) {
+                LOG.debug("Z key was pressed");
+                //TODO: handle zoom key event
+            }
+            if (e.getCode() == KeyCode.N) {
+                LOG.debug("N key was pressed");
+                //TODO: handle next question key event
+            }
+            if (e.getCode() == KeyCode.P) {
+                LOG.debug("P key was pressed");
+                //TODO: handle previous question key event
+            }
+            if (e.getCode() == KeyCode.C) {
+                LOG.debug("C key was pressed");
+                //TODO: handle check answer key event
+            }
+            if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
+                LOG.debug("1 key was pressed");
+                //TODO: handle answer1 key event
+            }
+
+
+        }));
 
     }
 

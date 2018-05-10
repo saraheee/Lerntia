@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -26,7 +29,6 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private AnnotationConfigApplicationContext context;
 
     public static void main(String[] args) {
@@ -68,7 +70,14 @@ public final class MainApplication extends Application {
         Font.loadFont(MainApplication.class.getResource("/fonts/Lora-Bold.ttf").toExternalForm(), 36);
         context = new AnnotationConfigApplicationContext(MainApplication.class);
         final var fxmlLoader = context.getBean(SpringFXMLLoader.class);
+
+        var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
+        loader.setControllerFactory(context::getBean);
+        Parent root = loader.load();
+        LerntiaMainController controller = loader.getController();
+
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
+        controller.update(scene);
         primaryStage.setScene(scene);
 
 
