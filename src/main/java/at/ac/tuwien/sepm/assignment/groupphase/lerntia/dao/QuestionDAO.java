@@ -36,7 +36,7 @@ public class QuestionDAO implements IQuestionDAO {
     public void create(Question question) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Question creation.");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT);
+            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
             pscreate.setString(1,question.getQuestionText());
             pscreate.setString(2,question.getPicture());
             pscreate.setString(3,question.getAnswer1());
@@ -47,6 +47,10 @@ public class QuestionDAO implements IQuestionDAO {
             pscreate.setString(8,question.getCorrectAnswers());
             pscreate.setString(9,question.getOptionalFeedback());
             pscreate.executeUpdate();
+
+            ResultSet generatedKeys = pscreate.getGeneratedKeys();
+            generatedKeys.next();
+            question.setId(generatedKeys.getLong(1));
 
             LOG.info("Question succesfully saved in Database");
         } catch (SQLException e) {
