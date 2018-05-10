@@ -24,3 +24,7 @@
 .button:focused {
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
+
+.button:default {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}

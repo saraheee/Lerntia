@@ -24,3 +24,7 @@
 .button:focused {
     -fx-effect: dropshadow(gaussian, black, 20, -5, 0, 0);
 }
+
+.button:default {
+    -fx-effect: dropshadow(gaussian, black, 20, -5, 0, 0);
+}
