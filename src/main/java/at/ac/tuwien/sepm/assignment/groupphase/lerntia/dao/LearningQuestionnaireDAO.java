@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -18,6 +20,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id,name) VALUES (?,?)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * from LearningQuestionnaire";
     private Connection connection;
     private QuestionnaireDAO questionaireDAO;
 
@@ -69,6 +72,22 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO{
 
     @Override
     public List readAll() throws PersistenceException {
-        return null;
+        try {
+            LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");
+            ArrayList<LearningQuestionnaire> list = new ArrayList<>();
+            ResultSet rsreadall = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT).executeQuery();
+            LearningQuestionnaire learning;
+            while (rsreadall.next()){
+                learning = new LearningQuestionnaire();
+                learning.setId(rsreadall.getLong(1));
+                learning.setName(rsreadall.getString(2));
+                list.add(learning);
+            }
+            LOG.info("All LearningQuestionnaires found.");
+            return list;
+        } catch (SQLException e) {
+            LOG.error("LearningQuestionnaire DAO READALL error!");
+            throw new PersistenceException(e.getMessage());
+        }
     }
 }
