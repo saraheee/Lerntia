@@ -78,6 +78,7 @@ public class UserDAO implements IUserDAO {
                 u.setName(rs.getString(1));
                 u.setMatriculationNumber(rs.getString(2));
                 u.setStudyProgramme(rs.getString(3));
+                u.setDeleted(rs.getBoolean(4));
             }
             LOG.info("User found.");
             return u;
