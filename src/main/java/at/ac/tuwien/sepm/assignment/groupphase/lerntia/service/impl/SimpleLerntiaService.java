@@ -1,22 +1,18 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 import java.lang.invoke.MethodHandles;
-import java.time.Duration;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Service
 public class SimpleLerntiaService implements LerntiaService {

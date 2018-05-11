@@ -1,10 +1,10 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.LearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +56,11 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
     @Override
     public List readAll() throws ServiceException {
-        return null;
+        try {
+            return iLearningQuestionnaireDAO.readAll();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
