@@ -1,12 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.ExamQuestionaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.QuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.ICourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IExamQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;

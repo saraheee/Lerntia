@@ -1,12 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.UserCourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.UserDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.ICourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IUserCourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IUserDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserCourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserCourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserCourse;
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.nio.file.FileAlreadyExistsException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
