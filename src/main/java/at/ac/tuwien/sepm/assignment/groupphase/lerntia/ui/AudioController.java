@@ -31,7 +31,7 @@ public class AudioController {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.textToSpeech = new TextToSpeech();
-        textToSpeech.setVoice(VOICE);
+        //textToSpeech.setVoice(VOICE);
     }
 
     @FXML
@@ -42,6 +42,7 @@ public class AudioController {
         //LOG.debug("Text to read:\n" + textToRead);
 
         try {
+            textToSpeech.setVoice(VOICE);
             textToSpeech.stopSpeaking();
             textToSpeech.speak(textToRead, 1.0f, false, false);
         } catch (Exception e) {
