@@ -25,14 +25,14 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     private QuestionnaireDAO questionaireDAO;
 
     @Autowired
-    public LearningQuestionnaireDAO() throws PersistenceException {
+    public LearningQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) throws PersistenceException {
         try {
-            questionaireDAO =new QuestionnaireDAO();
+            this.questionaireDAO = questionnaireDAO;
             connection = JDBCConnectionManager.getConnection();
             LOG.info("Connection succesfully found for LearningQuestionnaireDAO.");
         } catch (PersistenceException e) {
             LOG.error("Connection couldn't be found for LearningQuestionnaireDAO!");
-            throw e;
+            throw new PersistenceException(e.getMessage());
         }
     }
 

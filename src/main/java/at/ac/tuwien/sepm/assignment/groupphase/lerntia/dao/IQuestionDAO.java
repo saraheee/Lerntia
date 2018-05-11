@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
+import java.util.List;
+
 public interface IQuestionDAO {
 
     /**
@@ -24,10 +26,12 @@ public interface IQuestionDAO {
     /**
      * Search for Question with specific parameters
      *
-     * @param question Question with searchparameters
+     * @param questionList Question with searchparameters
      * @throws PersistenceException if the method can't search for the question
+     * @return List of found questions
      * */
-    void search(Question question) throws PersistenceException;
+
+    List<Question> search(List<Question> questionList) throws PersistenceException;
 
     /**
      * Delete Question from the Database

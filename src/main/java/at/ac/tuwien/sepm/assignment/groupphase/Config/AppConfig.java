@@ -3,10 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.Config;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +13,12 @@ public class AppConfig {
 
     @Bean
     public ExamQuestionaireDAO examQuestionaireDAO() throws PersistenceException {
-        return new ExamQuestionaireDAO();
+        return new ExamQuestionaireDAO(new QuestionnaireDAO());
     }
 
     @Bean
     public LearningQuestionnaireDAO learningQuestionnaireDAO() throws PersistenceException {
-        return new LearningQuestionnaireDAO();
+        return new LearningQuestionnaireDAO(new QuestionnaireDAO());
     }
 
     @Bean
@@ -34,14 +31,16 @@ public class AppConfig {
         return new QuestionDAO();
     }
 
-    @Bean
-    public SimpleCourseService SimpleCourseService(ICourseDAO courseDAO){
-        return new SimpleCourseService(courseDAO);
-    }
+//    @Bean
+//    public SimpleCourseService SimpleCourseService(ICourseDAO courseDAO){
+//        return new SimpleCourseService(courseDAO);
+//    }
 
+    /*
     @Bean
     public SimpleQuestionnaireImportService SimpleCourseService(QuestionnaireImportDAO questionnaireImportDAO, SimpleQuestionService simpleQuestionService, SimpleLearningQuestionnaireService simpleLearningQuestionnaireService, SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService){
         return new SimpleQuestionnaireImportService(questionnaireImportDAO, simpleQuestionService, simpleLearningQuestionnaireService, simpleQuestionnaireQuestionService);
     }
+    */
 
 }

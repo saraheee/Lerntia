@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IQuestionService {
 
@@ -21,10 +22,11 @@ public interface IQuestionService {
     /**
      * Search for Question with specific parameters
      *
-     * @param question Question with searchparameters
+     * @param questionList Questions with searchparameters
      * @throws ServiceException if the method can't search for the question
      * */
-    void search(Question question) throws ServiceException;
+
+    void search(List<Question> questionList) throws ServiceException;
 
     /**
      * Delete Question from the Database

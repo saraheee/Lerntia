@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SimpleQuestionService implements IQuestionService {
@@ -54,9 +55,9 @@ public class SimpleQuestionService implements IQuestionService {
     }
 
     @Override
-    public void search(Question question) throws ServiceException {
+    public void search(List<Question> questionList) throws ServiceException {
         try {
-            questionDAO.search(question);
+            List list =questionDAO.search(questionList);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
