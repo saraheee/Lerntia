@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Scanner;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -31,7 +32,6 @@ public class AudioController {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.textToSpeech = new TextToSpeech();
-        //textToSpeech.setVoice(VOICE);
     }
 
     @FXML
