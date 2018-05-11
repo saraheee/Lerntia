@@ -55,12 +55,10 @@ public class AnswerController implements Initializable {
 
     public void setSelected(boolean isSelected) {
         answer.setSelected(isSelected);
-
     }
 
     public void setVisible(boolean isVisible) {
         answer.setVisible(isVisible);
-
     }
 
 

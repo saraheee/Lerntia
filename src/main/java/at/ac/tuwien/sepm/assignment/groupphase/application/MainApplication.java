@@ -29,7 +29,7 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    Thread maryThread;
+    private Thread maryThread;
     private AnnotationConfigApplicationContext context;
 
     public static void main(String[] args) {

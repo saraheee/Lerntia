@@ -22,6 +22,7 @@ public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaService lerntiaService;
+    private final String BREAK = "....";
     @FXML
     private HBox mainWindow;
     @FXML
@@ -60,16 +61,14 @@ public class LerntiaMainController {
 
         //Example for setting some answer text
         //TODO: delete me, when we have real questions and answers
-        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können.");
+        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können");
         answer2Controller.setAnswerText("Sie ist ok, aber gibt es keine bessere?");
         answer3Controller.setAnswerText("Ich kann sie gut verstehen!");
-        answer4Controller.setAnswerText("Sie spricht sehr deutlich.");
-        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll.");
+        answer4Controller.setAnswerText("Sie spricht sehr deutlich");
+        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll");
 
         //Example for setting a question text
         qLabelController.setQuestionText("Wie findest du meine Stimme?");
-
-
     }
 
     public void update(Scene scene) {
@@ -121,13 +120,11 @@ public class LerntiaMainController {
 
 
     public String getAudioText() {
-        return qLabelController.getQuestionText() + '\n'
-            + answer1Controller.getAnswerText() + '\n'
-            + answer2Controller.getAnswerText() + '\n'
-            + answer3Controller.getAnswerText() + '\n'
-            + answer4Controller.getAnswerText() + '\n'
-            + answer5Controller.getAnswerText();
+        return qLabelController.getQuestionText() + BREAK + '\n'
+            + BREAK + "Antwort nummer eins: " + answer1Controller.getAnswerText() + '\n'
+            + BREAK + "Antwort nummer zwei: " + answer2Controller.getAnswerText() + '\n'
+            + BREAK + "Antwort nummer drei: " + answer3Controller.getAnswerText() + '\n'
+            + BREAK + "Antwort nummer vier: " + answer4Controller.getAnswerText() + '\n'
+            + BREAK + "Antwort nummer fünf: " + answer5Controller.getAnswerText();
     }
-
-
 }
