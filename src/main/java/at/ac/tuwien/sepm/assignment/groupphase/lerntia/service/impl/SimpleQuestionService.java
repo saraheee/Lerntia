@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,13 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void validate(Question question) throws ServiceException {
 
+        ConfigReader configReaderQuestions = new ConfigReader("questions");
+
+        var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
+        var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
+
+        configReaderQuestions.close();
+
         ArrayList<String> allAnswers = getAllAnswers(question);
 
         // -------------------------------------------------------------------------------------------------------------
@@ -113,7 +121,7 @@ public class SimpleQuestionService implements IQuestionService {
             throw new ServiceException("The Question has no question text");
         }
 
-        if (question.getQuestionText().length() > 200){
+        if (question.getQuestionText().length() > maxLengthQuestion){
             throw new ServiceException("The Question is too long and cannot be displayed in the user interface");
         }
 
@@ -142,7 +150,7 @@ public class SimpleQuestionService implements IQuestionService {
         for (var i = 0; i < allAnswers.size(); i++) {
 
             // answer is not "" and longer than 200 chars
-            if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > 200 )) {
+            if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > maxLengthAnswer )) {
                 throw new ServiceException("The Answer is too long and cannot be displayed in the user interface");
             }
         }

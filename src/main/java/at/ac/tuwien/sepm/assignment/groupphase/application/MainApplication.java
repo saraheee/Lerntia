@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.application;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
