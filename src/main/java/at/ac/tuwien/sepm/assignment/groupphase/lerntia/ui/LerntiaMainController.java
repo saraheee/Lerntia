@@ -47,6 +47,7 @@ public class LerntiaMainController {
     private AudioController audioButtonController;
     @FXML
     private ImageController zoomButtonController;
+    private String question;
 
     @Autowired
     public LerntiaMainController(LerntiaService lerntiaService) {
@@ -119,12 +120,22 @@ public class LerntiaMainController {
     }
 
 
-    public String getAudioText() {
-        return qLabelController.getQuestionText() + BREAK + '\n'
-            + BREAK + "Antwort nummer eins: " + answer1Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer zwei: " + answer2Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer drei: " + answer3Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer vier: " + answer4Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer fünf: " + answer5Controller.getAnswerText();
+    String getQuestion() {
+        return  qLabelController.getQuestionText();
+    }
+    String getAnswer1() {
+        return answer1Controller.getAnswerText();
+    }
+    String getAnswer2() {
+        return answer2Controller.getAnswerText();
+    }
+    String getAnswer3() {
+        return answer3Controller.getAnswerText();
+    }
+    String getAnswer4() {
+        return answer4Controller.getAnswerText();
+    }
+    String getAnswer5() {
+        return answer5Controller.getAnswerText();
     }
 }
