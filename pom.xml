@@ -81,7 +81,12 @@
         <dependency>
             <groupId>de.dfki.mary</groupId>
             <artifactId>voice-cmu-slt-hsmm</artifactId>
-            <version>5.2</version>
+            <version>${mary.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.dfki.mary</groupId>
+            <artifactId>voice-bits3-hsmm</artifactId>
+            <version>${mary.version}</version>
         </dependency>
         <!-- test dependencies -->
         <dependency>

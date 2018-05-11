@@ -85,10 +85,22 @@ public final class MainApplication extends Application {
         // show application
         primaryStage.show();
         primaryStage.toFront();
+        try {
+            var tts = new TextToSpeech();
+            tts.setVoice("bits3-hsmm");
+            tts.speak("Hallo und willkommen bei Lerntia. Schön dass du hier bist!", 1.0f, false, false);
+        } catch (Exception e) {
+            LOG.error("Failed to start MaryTTS.");
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("[Lerntia] MaryTTS konnte nicht gestartet werden");
+            alert.setHeaderText("MaryTTS konnte nicht gestartet werden.\nDaher wird die Sprachausgabe nicht funktionieren!");
+            alert.setContentText("Bitte Java 10.0.1 herunterladen!\nDer Fehler tretet in den Versionen Java 9 und Java 10 auf.");
+
+            alert.setResizable(true);
+            alert.showAndWait();
+        }
         LOG.debug("Application startup complete");
-        TextToSpeech tts = new TextToSpeech();
-        tts.setVoice("bits3-hsmm");
-        tts.speak("Hallo Mama, ich will Künafa essen",1.0f,false,false);
     }
 
     @Override
