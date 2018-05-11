@@ -26,9 +26,10 @@ import java.lang.invoke.MethodHandles;
 
 @Component
 @ComponentScan("at.ac.tuwien.sepm.assignment.groupphase")
-public final class MainApplication extends Application {
+public final class MainApplication extends Application implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    Thread maryThread;
     private AnnotationConfigApplicationContext context;
 
     public static void main(String[] args) {
@@ -84,6 +85,26 @@ public final class MainApplication extends Application {
         // show application
         primaryStage.show();
         primaryStage.toFront();
+
+        maryThread = new Thread(new MainApplication());
+        maryThread.start();
+        LOG.debug("Application startup complete");
+    }
+
+    @Override
+    public void stop() {
+        LOG.debug("Stopping application");
+        try {
+            maryThread.interrupt();
+        } catch (IllegalThreadStateException e) {
+            LOG.debug("Interrupting thread: " + e.getMessage());
+        }
+        JDBCConnectionManager.closeConnection();
+        context.close();
+    }
+
+    @Override
+    public void run() {
         try {
             var tts = new TextToSpeech();
             tts.setVoice("bits3-hsmm");
@@ -98,14 +119,5 @@ public final class MainApplication extends Application {
             alert.setResizable(true);
             alert.showAndWait();
         }
-        LOG.debug("Application startup complete");
-    }
-
-    @Override
-    public void stop() {
-        LOG.debug("Stopping application");
-        JDBCConnectionManager.closeConnection();
-        context.close();
-
     }
 }
