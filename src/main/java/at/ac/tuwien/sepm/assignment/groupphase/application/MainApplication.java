@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
@@ -85,6 +86,9 @@ public final class MainApplication extends Application {
         primaryStage.show();
         primaryStage.toFront();
         LOG.debug("Application startup complete");
+        TextToSpeech tts = new TextToSpeech();
+        tts.setVoice("bits3-hsmm");
+        tts.speak("Hallo Mama, ich will Künafa essen",1.0f,false,false);
     }
 
     @Override
