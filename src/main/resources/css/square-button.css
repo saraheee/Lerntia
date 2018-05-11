@@ -1,0 +1,26 @@
+.label {
+    -fx-font-size: 27px;
+    -fx-font-family: "Lora-Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.label-small {
+    -fx-font-size: 23px;
+    -fx-font-family: "Lora-Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.button {
+    -fx-width: 80%;
+    -fx-background-color: white;
+}
+
+.button:hover {
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);
+}
+
+.button:focused {
+    -fx-effect: dropshadow(gaussian, black, 20, -5, 0, 0);
+}

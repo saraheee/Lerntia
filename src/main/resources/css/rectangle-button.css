@@ -1,0 +1,26 @@
+.label {
+    -fx-font-size: 27px;
+    -fx-font-family: "Lora-Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.label-small {
+    -fx-font-size: 23px;
+    -fx-font-family: "Lora-Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.button {
+    -fx-width: 80%;
+    -fx-background-color: rgba(51, 0, 102, 0.09);
+}
+
+.button:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.1);
+}
+
+.button:focused {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}

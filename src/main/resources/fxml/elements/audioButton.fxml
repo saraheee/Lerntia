@@ -4,10 +4,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
-<Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="118.0" prefWidth="147.0" stylesheets="@/css/button.css"
-        text="Vorlesen" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<Button contentDisplay="TOP" defaultButton="true" mnemonicParsing="false" onAction="#onAudioButtonClicked"
+        prefHeight="120.0" prefWidth="150.0" stylesheets="@/css/square-button.css" text="Vorlesen"
+        xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AudioController">
     <graphic>
-        <ImageView fitHeight="66.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="80.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/icons/audio.png"/>
         </ImageView>
     </graphic>

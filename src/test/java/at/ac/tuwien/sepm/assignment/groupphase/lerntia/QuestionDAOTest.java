@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Classes.QuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.Interfaces.IQuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
