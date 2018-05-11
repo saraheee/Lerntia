@@ -103,6 +103,7 @@ public class CourseDAO implements ICourseDAO {
                 course = new Course();
                 course.setMark(rsreadall.getString(1));
                 course.setSemester(rsreadall.getString(2));
+                course.setName(rsreadall.getString(3));
                 list.add(course);
             }
             LOG.info("All Courses found.");
