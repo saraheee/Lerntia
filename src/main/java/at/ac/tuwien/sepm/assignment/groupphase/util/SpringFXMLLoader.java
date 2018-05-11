@@ -100,8 +100,8 @@ public class SpringFXMLLoader {
         Class<TLoad> loadType,
         Class<TController> controllerType) throws IOException {
         final var fxmlLoader = this.getFXMLLoader();
-        LOG.trace("Loading and wrapping object of type {} with controller of type {} from fxml resource {}",
-            loadType.getCanonicalName(), controllerType.getCanonicalName(), inputStream);
+        //LOG.trace("Loading and wrapping object of type {} with controller of type {} from fxml resource {}",
+          //  loadType.getCanonicalName(), controllerType.getCanonicalName(), inputStream);
         return new FXMLWrapper<>(
             fxmlLoader.load(inputStream),
             fxmlLoader.getController());

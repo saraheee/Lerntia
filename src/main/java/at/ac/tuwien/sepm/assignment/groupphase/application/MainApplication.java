@@ -84,6 +84,8 @@ public final class MainApplication extends Application {
         // show application
         primaryStage.show();
         primaryStage.toFront();
+
+
         try {
             var tts = new TextToSpeech();
             tts.setVoice("bits3-hsmm");

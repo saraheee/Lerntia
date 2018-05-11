@@ -60,16 +60,14 @@ public class LerntiaMainController {
 
         //Example for setting some answer text
         //TODO: delete me, when we have real questions and answers
-        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können.");
+        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können");
         answer2Controller.setAnswerText("Sie ist ok, aber gibt es keine bessere?");
         answer3Controller.setAnswerText("Ich kann sie gut verstehen!");
-        answer4Controller.setAnswerText("Sie spricht sehr deutlich.");
-        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll.");
+        answer4Controller.setAnswerText("Sie spricht sehr deutlich");
+        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll");
 
         //Example for setting a question text
         qLabelController.setQuestionText("Wie findest du meine Stimme?");
-
-
     }
 
     public void update(Scene scene) {
@@ -121,13 +119,12 @@ public class LerntiaMainController {
 
 
     public String getAudioText() {
-        return qLabelController.getQuestionText() + '\n'
-            + answer1Controller.getAnswerText() + '\n'
-            + answer2Controller.getAnswerText() + '\n'
-            + answer3Controller.getAnswerText() + '\n'
-            + answer4Controller.getAnswerText() + '\n'
-            + answer5Controller.getAnswerText();
+        int i = 0;
+        return qLabelController.getQuestionText() +"........"+ '\n'
+            + "Antwort nummer Eins: "+answer1Controller.getAnswerText() + '\n'
+            + "....Antwort nummer Zwei: "+answer2Controller.getAnswerText() + '\n'
+            + "....Antwort nummer Drei: "+answer3Controller.getAnswerText() + '\n'
+            + "....Antwort nummer Vier: "+answer4Controller.getAnswerText() + '\n'
+            + "....Antwort nummer Fünf: "+answer5Controller.getAnswerText();
     }
-
-
 }
