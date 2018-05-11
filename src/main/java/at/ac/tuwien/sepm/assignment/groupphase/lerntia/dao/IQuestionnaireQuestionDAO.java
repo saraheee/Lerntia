@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 
-import java.awt.*;
+import java.util.List;
 
 public interface IQuestionnaireQuestionDAO {
 
@@ -14,6 +14,15 @@ public interface IQuestionnaireQuestionDAO {
      * @throws PersistenceException if the method can't save the entry
      * */
     void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException;
+
+    /**
+     * Searches for specific QuestionnaireQuestions with given parameters
+     *
+     * @param searchparameters for the QuestionnaireQuesions we want to find
+     * @throws PersistenceException if the list cannot be retrieved
+     * @return list of all QuestionnaireQuestion matching the searchparameters
+     * */
+    List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException;
 
     /**
      * Delete a specific QuestionnaireQuestion entry in the Database
@@ -39,6 +48,6 @@ public interface IQuestionnaireQuestionDAO {
      * @return List of all QuestionnaireQuestions
      * @throws PersistenceException if the method can't read all elements from the Database
      * */
-    List readAll() throws PersistenceException;
+    List<QuestionnaireQuestion> readAll() throws PersistenceException;
 
 }

@@ -29,9 +29,9 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     private Connection connection;
 
     @Autowired
-    public ExamQuestionaireDAO() throws PersistenceException {
+    public ExamQuestionaireDAO(QuestionnaireDAO questionnaireDAO) throws PersistenceException {
         try {
-            questionaireDAO =new QuestionnaireDAO();
+            this.questionaireDAO =questionnaireDAO;
             connection = JDBCConnectionManager.getConnection();
         } catch (PersistenceException e) {
             LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");

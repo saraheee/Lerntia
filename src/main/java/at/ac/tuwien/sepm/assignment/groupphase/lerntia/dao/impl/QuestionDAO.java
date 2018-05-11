@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestionDAO implements IQuestionDAO {
@@ -18,7 +21,7 @@ public class QuestionDAO implements IQuestionDAO {
     private Connection connection;
     private static final String SQL_QUESTION_CREATE_STATEMENT="INSERT INTO Question(id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback) VALUES (default,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUESTION_UPDATE_STATEMENT="UPDATE Question SET questionText = ?, picture = ?, answer1 = ?, answer2 = ?, answer3 = ?, answer4 = ?, answer5 = ?, correctAnswers = ?, optionalFeedback = ? ";
-    private static final String SQL_QUESTION_SEARCH_STATEMENT="";
+    private static final String SQL_QUESTION_SEARCH_STATEMENT="SELECT * FROM QUESTION";
     private static final String SQL_QUESTION_DELETE_STATEMENT="UPDATE Question SET isDeleted = true where id = ?";
     private static final String SQL_QUESTION_READALL_STATEMENT="";
     private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
@@ -49,11 +52,12 @@ public class QuestionDAO implements IQuestionDAO {
             pscreate.setString(9,question.getOptionalFeedback());
             pscreate.executeUpdate();
 
-            ResultSet generatedKeys = pscreate.getGeneratedKeys();
-            generatedKeys.next();
-            question.setId(generatedKeys.getLong(1));
-
             LOG.info("Question succesfully saved in Database");
+            ResultSet generatedKeys= pscreate.getGeneratedKeys();
+
+            generatedKeys.next();
+
+            question.setId(generatedKeys.getLong(1));
         } catch (SQLException e) {
             LOG.error("Question CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
@@ -77,15 +81,44 @@ public class QuestionDAO implements IQuestionDAO {
             psupdate.executeUpdate();
             LOG.info("Question succesfully updated in Database.");
         } catch (SQLException e) {
-            e.printStackTrace();
             LOG.error("Question UPDATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Override
-    public void search(Question question) throws PersistenceException {
-        //TODO implement search for questions if necessary
+    public List<Question> search(List<Question> questionList) throws PersistenceException {
+        try {
+            List<Question> searchResults= new ArrayList<>();
+            Question questionparameter;
+            Question foundquestion;
+            String parameters="";
+            while (!questionList.isEmpty()){
+                questionparameter = questionList.get(0);
+                parameters+=parameters.length()==0?" WHERE id= "+questionparameter.getId(): " OR id= "+questionparameter.getId();
+                questionList.remove(0);
+            }
+            String searchStatement = SQL_QUESTION_SEARCH_STATEMENT+parameters;
+            ResultSet rs = connection.prepareStatement(searchStatement).executeQuery();
+            //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
+            while (rs.next()){
+                foundquestion = new Question();
+                foundquestion.setId(rs.getLong(1));
+                foundquestion.setQuestionText(rs.getString(2));
+                foundquestion.setPicture(rs.getString(3));
+                foundquestion.setAnswer1(rs.getString(4));
+                foundquestion.setAnswer2(rs.getString(5));
+                foundquestion.setAnswer3(rs.getString(6));
+                foundquestion.setAnswer4(rs.getString(7));
+                foundquestion.setAnswer5(rs.getString(8));
+                foundquestion.setCorrectAnswers(rs.getString(9));
+                foundquestion.setOptionalFeedback(rs.getString(10));
+                searchResults.add(foundquestion);
+            }
+            return searchResults;
+        } catch (SQLException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override

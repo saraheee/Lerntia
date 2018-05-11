@@ -54,7 +54,8 @@ public class ImportFileController {
         QuestionnaireImportDAO i = new QuestionnaireImportDAO();
         QuestionDAO d = new QuestionDAO();
         SimpleQuestionService q = new SimpleQuestionService(d);
-        ILearningQuestionnaireDAO a = new LearningQuestionnaireDAO();
+        QuestionnaireDAO questionnaireDAO = new QuestionnaireDAO();
+        ILearningQuestionnaireDAO a = new LearningQuestionnaireDAO(questionnaireDAO);
         SimpleLearningQuestionnaireService l = new SimpleLearningQuestionnaireService(a);
 
         QuestionnaireQuestionDAO qqDAO = new QuestionnaireQuestionDAO();
