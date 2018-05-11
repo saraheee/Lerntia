@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +18,13 @@ public class QuestionServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private IQuestionService questionService;
 
+    private ConfigReader configReaderQuestions;
+
     @Before
     public void setUp(){
         this.IQuestionService(new SimpleQuestionService());
+
+        configReaderQuestions = new ConfigReader("questions");
     }
 
     private void IQuestionService(SimpleQuestionService simpleQuestionService) {
@@ -48,8 +53,10 @@ public class QuestionServiceTest {
     public void validateTooLongQuestionText() throws ServiceException {
         Question q = new Question((long)0, "", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
 
+        var maxLength = this.configReaderQuestions.getValueInt("maxLengthQuestion");
+
         String tooLongQuestionText = "";
-        for (var i = 0; i < 201; i++){
+        for (var i = 0; i < maxLength + 1; i++){
             tooLongQuestionText += "a";
         }
         q.setQuestionText(tooLongQuestionText);
@@ -71,8 +78,10 @@ public class QuestionServiceTest {
     public void validateTooLongAnswer() throws ServiceException {
         Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
 
+        var maxLength = this.configReaderQuestions.getValueInt("maxLengthAnswer");
+
         String tooLongAnswer = "";
-        for (var i = 0; i < 201; i++){
+        for (var i = 0; i < maxLength + 1; i++){
             tooLongAnswer += "a";
         }
         q.setAnswer1(tooLongAnswer);
@@ -106,6 +115,6 @@ public class QuestionServiceTest {
 
     @After
     public void wrapUp(){
-
+        this.configReaderQuestions.close();
     }
 }
