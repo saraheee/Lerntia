@@ -58,11 +58,16 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        //Example for selecting the fourth answer
-        answer4Controller.setSelected(true);
+        //Example for setting some answer text
+        //TODO: delete me, when we have real questions and answers
+        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können.");
+        answer2Controller.setAnswerText("Sie ist ok, aber gibt es keine bessere?");
+        answer3Controller.setAnswerText("Ich kann sie gut verstehen!");
+        answer4Controller.setAnswerText("Sie spricht sehr deutlich.");
+        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll.");
 
         //Example for setting a question text
-        qLabelController.setQuestionText("Ein neuer Fragetext! Kannst du mich noch immer lesen?");
+        qLabelController.setQuestionText("Wie findest du meine Stimme?");
 
 
     }

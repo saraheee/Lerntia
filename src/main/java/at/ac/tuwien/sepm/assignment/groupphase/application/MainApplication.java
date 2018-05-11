@@ -18,7 +18,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -96,7 +95,6 @@ public final class MainApplication extends Application {
             alert.setTitle("[Lerntia] MaryTTS konnte nicht gestartet werden");
             alert.setHeaderText("MaryTTS konnte nicht gestartet werden.\nDaher wird die Sprachausgabe nicht funktionieren!");
             alert.setContentText("Bitte Java 10.0.1 herunterladen!\nDer Fehler tretet in den Versionen Java 9 und Java 10 auf.");
-
             alert.setResizable(true);
             alert.showAndWait();
         }
