@@ -1,15 +1,15 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ExamQuestionaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import javafx.collections.ObservableList;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimpleExamQuestionnaireService implements IExamQuestionnaireService{
+public class SimpleExamQuestionnaireService implements IExamQuestionnaireService {
 
     private final IExamQuestionnaireDAO examQuestionnaireDAO;
 

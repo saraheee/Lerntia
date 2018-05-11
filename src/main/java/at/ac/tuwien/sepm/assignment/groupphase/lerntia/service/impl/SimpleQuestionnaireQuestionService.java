@@ -1,10 +1,10 @@
-package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
+package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireQuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.QuestionnaireQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -14,7 +14,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
 
     private final IQuestionnaireQuestionDAO iQuestionnaireQuestionDAO;
 
-    public SimpleQuestionnaireQuestionService(IQuestionnaireQuestionDAO iQuestionnaireQuestionDAO){
+    public SimpleQuestionnaireQuestionService(IQuestionnaireQuestionDAO iQuestionnaireQuestionDAO) {
         this.iQuestionnaireQuestionDAO = iQuestionnaireQuestionDAO;
     }
 
