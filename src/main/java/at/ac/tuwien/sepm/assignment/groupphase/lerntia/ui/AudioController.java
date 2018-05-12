@@ -21,18 +21,21 @@ public class AudioController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ITextToSpeechService iTextToSpeechService;
-    private final LerntiaMainController lerntiaMainController;
 
     @FXML
     private Button audioButton;
+    private String question;
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
+    private String answer5;
 
     @Autowired
-    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService) {
         notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
         notNull(lerntiaService, "'lerntiaService' should not be null");
-        notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.iTextToSpeechService = iTextToSpeechService;
-        this.lerntiaMainController = lerntiaMainController;
     }
 
     @FXML
@@ -40,12 +43,12 @@ public class AudioController {
         LOG.debug("Audio button clicked");
         //play sound of the question and all answers
         var tts = new Speech();
-        tts.setQuestion(lerntiaMainController.getQuestion());
-        tts.setAnswer1(lerntiaMainController.getAnswer1());
-        tts.setAnswer2(lerntiaMainController.getAnswer2());
-        tts.setAnswer3(lerntiaMainController.getAnswer3());
-        tts.setAnswer4(lerntiaMainController.getAnswer4());
-        tts.setAnswer5(lerntiaMainController.getAnswer5());
+        tts.setQuestion(this.question);
+        tts.setAnswer1(this.answer1);
+        tts.setAnswer2(this.answer2);
+        tts.setAnswer3(this.answer3);
+        tts.setAnswer4(this.answer4);
+        tts.setAnswer5(this.answer5);
 
         if (iTextToSpeechService != null) {
             try {
@@ -60,12 +63,12 @@ public class AudioController {
         }
     }
 
-    void readSingleAnswer() {
+    void readSingleAnswer(String answerText) {
         var tts = new Speech();
-        tts.setSingleAnswer(lerntiaMainController.getActiveAnswer());
+        tts.setSingleAnswer(answerText);
         if (iTextToSpeechService != null) {
             try {
-                iTextToSpeechService.stopSpeaking();
+                stopReading();
                 iTextToSpeechService.readSingleAnswer(tts);
             } catch (ServiceException e) {
                 LOG.error("Failed to read question and answers.");
@@ -76,21 +79,48 @@ public class AudioController {
         }
     }
 
+    void stopReading() {
+        try {
+            iTextToSpeechService.stopSpeaking();
+        } catch (ServiceException e) {
+            LOG.error("Failed to stop the audio");
+        }
+    }
+
     void setSelected() {
         if (audioButton.isDefaultButton()) {
             audioButton.defaultButtonProperty().setValue(false);
             //stop sound
-            try {
-                iTextToSpeechService.stopSpeaking();
-            } catch (ServiceException e) {
-                LOG.error("Failed to stop speech synthesizer.");
-                //TODO: show alert
-            }
+            stopReading();
         } else {
             audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
         }
-
     }
+
+    void setQuestion(String question) {
+        this.question = question;
+    }
+
+    void setAnswer1(String answer) {
+        this.answer1 = answer;
+    }
+
+    void setAnswer2(String answer) {
+        this.answer2 = answer;
+    }
+
+    void setAnswer3(String answer) {
+        this.answer3 = answer;
+    }
+
+    void setAnswer4(String answer) {
+        this.answer4 = answer;
+    }
+
+    void setAnswer5(String answer) {
+        this.answer5 = answer;
+    }
+
 
 }
