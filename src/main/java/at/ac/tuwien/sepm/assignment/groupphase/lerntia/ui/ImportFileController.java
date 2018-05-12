@@ -74,9 +74,12 @@ public class ImportFileController {
     private void initialize() throws ServiceException {
         coursedata = cservice.readAll();
         ObservableList<Course> courses = FXCollections.observableArrayList(coursedata);
+
+        choices.removeAll(choices);
         for (int i = 0; i < courses.size(); i++) {
-            choices.add(courses.get(i).getName());
+            choices.add(courses.get(i).getMark());
         }
+
         cb_course.setItems(choices);
         cb_course.getSelectionModel().select(0);
     }
