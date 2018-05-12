@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -38,6 +39,9 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
             LOG.info("Prepare Statement for Questionnaire creation");
 
+            System.out.println(questionnaire.getCmark());
+            System.out.println(questionnaire.getSemester());
+
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
             pscreate.setString(1, questionnaire.getCmark());
             pscreate.setString(2, questionnaire.getSemester());
@@ -48,6 +52,9 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             ResultSet generatedKeys = pscreate.getGeneratedKeys();
             generatedKeys.next();
             questionnaire.setId(generatedKeys.getLong(1));
+
+            System.out.println("====================00");
+            System.out.println(questionnaire.getId());
         } catch (SQLException e) {
             LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());

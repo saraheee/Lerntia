@@ -3,15 +3,13 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 public class Course {
     private String mark;
     private String semester;
-    private String name;
     private Boolean isDeleted;
 
     public Course() {}
 
-    public Course(String mark, String semester, String name, Boolean isDeleted) {
+    public Course(String mark, String semester, Boolean isDeleted) {
         this.mark = mark;
         this.semester = semester;
-        this.name = name;
         this.isDeleted = isDeleted;
     }
 
@@ -31,14 +29,6 @@ public class Course {
         this.semester = semester;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Boolean getDeleted() {
         return isDeleted;
     }
@@ -52,7 +42,6 @@ public class Course {
         return "Course{" +
             "mark='" + mark + '\'' +
             ", semester='" + semester + '\'' +
-            ", name='" + name + '\'' +
             ", isDeleted=" + isDeleted +
             '}';
     }
