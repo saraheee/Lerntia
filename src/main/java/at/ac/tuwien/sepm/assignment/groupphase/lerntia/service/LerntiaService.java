@@ -21,5 +21,5 @@ public interface LerntiaService {
 
     Question getNextQuestionFromList() throws ServiceException;
 
-    Question getPreviousQuestionFromList() throws ServiceException;
+    Question getPreviousQuestionFromList()throws ServiceException;
 }

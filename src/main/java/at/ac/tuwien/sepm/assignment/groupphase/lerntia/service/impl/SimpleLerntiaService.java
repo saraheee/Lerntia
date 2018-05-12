@@ -3,14 +3,14 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
 import java.lang.invoke.MethodHandles;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service
+@Component
 public class SimpleLerntiaService implements LerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -43,15 +43,15 @@ public class SimpleLerntiaService implements LerntiaService {
 
     @Autowired
     public SimpleLerntiaService(CourseDAO courseDAO, UserDAO userDAO, QuestionnaireDAO questionnaireDAO, ExamQuestionaireDAO examQuestionaireDAO, LearningQuestionnaireDAO learningQuestionnaireDAO, QuestionDAO questionDAO, QuestionnaireQuestionDAO questionnaireQuestionDAO, UserCourseDAO userCourseDAO, UserQuestionaireDAO userQuestionaireDAO){
-         this.courseDAO = courseDAO;
-         this.userDAO = userDAO;
-         this.questionnaireDAO = questionnaireDAO;
-         this.examQuestionaireDAO = examQuestionaireDAO;
-         this.learningQuestionnaireDAO =learningQuestionnaireDAO;
-         this.questionDAO = questionDAO;
-         this.questionnaireQuestionDAO = questionnaireQuestionDAO;
-         this.userCourseDAO = userCourseDAO;
-         this.userQuestionaireDAO = userQuestionaireDAO;
+        this.courseDAO = courseDAO;
+        this.userDAO = userDAO;
+        this.questionnaireDAO = questionnaireDAO;
+        this.examQuestionaireDAO = examQuestionaireDAO;
+        this.learningQuestionnaireDAO =learningQuestionnaireDAO;
+        this.questionDAO = questionDAO;
+        this.questionnaireQuestionDAO = questionnaireQuestionDAO;
+        this.userCourseDAO = userCourseDAO;
+        this.userQuestionaireDAO = userQuestionaireDAO;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SimpleLerntiaService implements LerntiaService {
                 listcounter++;
             }
         } catch (PersistenceException e) {
-           throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         }
 
     }
@@ -149,6 +149,3 @@ public class SimpleLerntiaService implements LerntiaService {
         }
     }
 }
-
-
-

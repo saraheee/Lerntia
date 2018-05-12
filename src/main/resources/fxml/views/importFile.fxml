@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0"
+            prefWidth="376.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ImportFileController">
+    <children>
+        <Button layoutX="201.0" layoutY="137.0" mnemonicParsing="false" onAction="#selectFile" prefWidth="113.0"
+                text="Öffnen..."/>
+        <Button layoutX="201.0" layoutY="189.0" mnemonicParsing="false" onAction="#importFile" prefHeight="37.0"
+                prefWidth="113.0" text="Importieren"/>
+        <Text fx:id="t_filename" layoutX="28.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Keine Datei ausgewählt"/>
+        <Label layoutX="28.0" layoutY="89.0" text="Name des Fragebogens:"/>
+        <Label layoutX="28.0" layoutY="42.0" text="Lehrveranstaltung:"/>
+        <TextField fx:id="tf_questionnaire" layoutX="201.0" layoutY="84.0" prefHeight="26.0" prefWidth="150.0"/>
+        <ChoiceBox fx:id="cb_course" layoutX="201.0" layoutY="38.0" prefWidth="150.0"/>
+    </children>
+</AnchorPane>

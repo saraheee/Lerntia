@@ -18,6 +18,15 @@ public interface IQuestionnaireQuestionDAO {
     List<QuestionnaireQuestion> search(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException;
 
     /**
+     * Searches for specific QuestionnaireQuestions with given parameters
+     *
+     * @param searchparameters for the QuestionnaireQuesions we want to find
+     * @throws PersistenceException if the list cannot be retrieved
+     * @return list of all QuestionnaireQuestion matching the searchparameters
+     * */
+    List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException;
+
+    /**
      * Delete a specific QuestionnaireQuestion entry in the Database
      *
      * @param questionnaireQuestion the QuestionnaireQuestion that needs to be deleted from the Database

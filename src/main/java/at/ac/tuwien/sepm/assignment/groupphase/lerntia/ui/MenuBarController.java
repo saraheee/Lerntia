@@ -1,53 +1,26 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireImportService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.File;
 import java.lang.invoke.MethodHandles;
 
 @Controller
 public class MenuBarController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final SimpleQuestionnaireImportService service;
-    private Stage stage;
+    private final ImportFileController importFileController;
 
-    public MenuBarController(SimpleQuestionnaireImportService service) {
-        this.service = service;
+    @Autowired
+    MenuBarController(ImportFileController importFileController) {
+        this.importFileController = importFileController;
     }
 
     @FXML
     private void importQuestions() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("[Lerntia] Verzeichnis");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            try {
-                service.importQuestionnaire(file);
-            }
-            catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
-            }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("[Lerntia] Import erfolgreich");
-            alert.setHeaderText("Erfolgreich");
-            alert.setContentText("Alle Fragen wurden erfolgreich importiert");
-            alert.setResizable(true);
-            alert.showAndWait();
-        }
+        importFileController.showImportWindow();
     }
 }

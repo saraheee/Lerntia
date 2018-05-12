@@ -11,7 +11,7 @@ public class SimpleQuestionnaireService implements IQuestionnaireService {
 
     private final IQuestionnaireDAO iQuestionnaireDAO;
 
-    public SimpleQuestionnaireService(IQuestionnaireDAO iQuestionnaireDAO){
+    public SimpleQuestionnaireService(IQuestionnaireDAO iQuestionnaireDAO) {
         this.iQuestionnaireDAO = iQuestionnaireDAO;
     }
 

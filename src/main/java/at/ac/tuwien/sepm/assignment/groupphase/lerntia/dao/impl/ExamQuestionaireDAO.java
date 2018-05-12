@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import javafx.collections.ObservableList;
@@ -26,21 +25,19 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     private static final String SQL_EXAMQUESTIONAIRE_SEARCH_STATEMENT="";
     private static final String SQL_EXAMQUESTIONAIRE_DELETE_STATEMENT="";
     private static final String SQL_EXAMQUESTIONAIRE_READALL_STATEMENT="";
-    private IQuestionnaireDAO questionaireDAO;
+    private QuestionnaireDAO questionaireDAO;
     private Connection connection;
 
     @Autowired
     public ExamQuestionaireDAO(QuestionnaireDAO questionnaireDAO) throws PersistenceException {
         try {
-            this.questionaireDAO = questionnaireDAO;
+            this.questionaireDAO =questionnaireDAO;
             connection = JDBCConnectionManager.getConnection();
         } catch (PersistenceException e) {
             LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");
             throw e;
         }
     }
-
-
 
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException {

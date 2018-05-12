@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
