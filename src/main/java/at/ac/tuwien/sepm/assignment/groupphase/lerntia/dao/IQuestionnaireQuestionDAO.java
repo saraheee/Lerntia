@@ -14,9 +14,7 @@ public interface IQuestionnaireQuestionDAO {
      * @throws PersistenceException if the method can't save the entry
      * */
     void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException;
-
-    List<QuestionnaireQuestion> search(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException;
-
+    
     /**
      * Searches for specific QuestionnaireQuestions with given parameters
      *
