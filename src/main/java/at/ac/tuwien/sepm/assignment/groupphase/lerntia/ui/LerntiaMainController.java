@@ -7,10 +7,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,10 +254,23 @@ public class LerntiaMainController {
     }
 
     void showAnAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
+        var alert = new Alert(alertType);
         alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+
+       // alert.setHeaderText(header);
+       // alert.setContentText(content);
+       // alert.showAndWait();
+
+        var dialogPane = new DialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue");
+        dialogPane.setHeader(new Text(" " + header));
+        dialogPane.setContent(new Text(" " + content));
+        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        alert.setResizable(true);
+        alert.setDialogPane(dialogPane);
         alert.showAndWait();
+
+
     }
 }
