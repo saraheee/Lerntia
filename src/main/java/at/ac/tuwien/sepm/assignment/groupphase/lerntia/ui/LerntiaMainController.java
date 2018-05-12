@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
@@ -69,11 +68,7 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        try {
-            getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-
-        }
+        getAndShowTheFirstQuestion();
     }
 
     public void update(Scene scene) {
@@ -134,7 +129,7 @@ public class LerntiaMainController {
         if(answer5Controller.isSelected()) { checkedAnswers += "5"; }
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        LOG.debug("Correct answers: {} ; selceted answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+        LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if(answersCorrect) {
             showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
@@ -142,7 +137,7 @@ public class LerntiaMainController {
             showAnAlert(Alert.AlertType.WARNING,"Antowrten nicht richtig.", "Richtige Antworten: " +
                 question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
         }
-        // send checked answers to service (in order to use it fo statistics and learning algorithm)
+        // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
             Question mockQuestion = new Question();
             mockQuestion.setId(question.getId());
@@ -152,20 +147,18 @@ public class LerntiaMainController {
             lerntiaService.recordCheckedAnswers(mockQuestion);
         } catch (ServiceException e) {
             LOG.error("Could not check whether the answer was correct");
-            showAnAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen", "Die Resultat konnte nicht zum" +
+            showAnAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen", "Das Resultat konnte nicht zur" +
                 " Serviceschicht geschickt werden", e.getLocalizedMessage());
         }
         getAndShowNextQuestion();
     }
 
-    private void getAndShowTheFirstQuestion() throws ControllerException {
+    private void getAndShowTheFirstQuestion() {
         try {
             question = lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {
-            //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
-            //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Keine Fragen waren gefunden", "Sind die Fragen implementiert und mit einem Fragenbogen verbunden?");
-
-            throw new ControllerException("Es gibt noch keine Fragen");
+            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
         }
         showQuestionAndAnswers();
     }
@@ -179,13 +172,9 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
-            showAnAlert(Alert.AlertType.ERROR, "Keine weiteren Frage", "Du bist am Ende.", "Statistics: ");
-                try {
-                    getAndShowTheFirstQuestion();
-                } catch (ControllerException e) {
-                    e.printStackTrace();
-                }
-            }
+            showAnAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
+            getAndShowTheFirstQuestion();
+        }
     }
 
     @FXML
@@ -196,19 +185,15 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
-            showAnAlert(Alert.AlertType.ERROR, "Keine früheren Frage", "Du bist am Anfang.", "Statistics: ");
-            try {
-                getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
-                e.printStackTrace();
-            }
+            showAnAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
+            getAndShowTheFirstQuestion();
         }
     }
 
     private void showQuestionAndAnswers() {
         if(question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
-            showAnAlert(Alert.AlertType.ERROR, "Keine Frage verfügber", "", "");
+            showAnAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");
             return;
         }
 
@@ -232,13 +217,23 @@ public class LerntiaMainController {
         answerController.setAnswerText(answertText);
     }
 
-    public String getAudioText() {
-        return qLabelController.getQuestionText() + BREAK + '\n'
-            + BREAK + "Antwort nummer eins: " + answer1Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer zwei: " + answer2Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer drei: " + answer3Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer vier: " + answer4Controller.getAnswerText() + '\n'
-            + BREAK + "Antwort nummer fünf: " + answer5Controller.getAnswerText();
+    String getQuestion() {
+        return qLabelController.getQuestionText();
+    }
+    String getAnswer1() {
+        return answer1Controller.getAnswerText();
+    }
+    String getAnswer2() {
+        return answer2Controller.getAnswerText();
+    }
+    String getAnswer3() {
+        return answer3Controller.getAnswerText();
+    }
+    String getAnswer4() {
+        return answer4Controller.getAnswerText();
+    }
+    String getAnswer5() {
+        return answer5Controller.getAnswerText();
     }
 
 
@@ -247,7 +242,6 @@ public class LerntiaMainController {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
-        alert.setResizable(true);
         alert.showAndWait();
     }
 }
