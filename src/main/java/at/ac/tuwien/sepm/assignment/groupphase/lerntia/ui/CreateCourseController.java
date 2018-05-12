@@ -60,7 +60,7 @@ public class CreateCourseController {
 
             if ( ! name.equals("") ) {
 
-                Course course = new Course("1", "1", name, false);
+                Course course = new Course(name, "234", false);
                 courseService.create(course);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

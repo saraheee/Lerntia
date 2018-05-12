@@ -88,11 +88,15 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long) 0, false, name);
+        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("TIL", "ws15", (long) 0, false, name);
 
         simpleLearningQuestionnaireService.create(learningQuestionnaire);
 
         Long learningQuestionnaireID = learningQuestionnaire.getId();
+
+        System.out.println("--------------------------------------");
+        System.out.println(learningQuestionnaireID);
+        System.out.println(questionIDs);
 
         for (int i = 0; i < questionIDs.size(); i++) {
 
