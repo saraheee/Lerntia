@@ -26,7 +26,7 @@ public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
-    private final String BREAK = "....";
+    //private final AudioController audioController;
 
     @FXML
     private HBox mainWindow;
@@ -55,12 +55,15 @@ public class LerntiaMainController {
 
 
     // question to be displayed and to be used for checking whether the selected answers were correct
-    Question question;
+    private Question question;
+    private String activeAnswer;
 
     @Autowired
     public LerntiaMainController(IMainLerntiaService lerntiaService) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
+        //notNull(audioController, "'audioController' should not be null");
         this.lerntiaService = lerntiaService;
+        //this.audioController = audioController;
     }
 
     @FXML
@@ -96,22 +99,32 @@ public class LerntiaMainController {
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
                 answer1Controller.setSelected(!answer1Controller.isSelected());
+                this.activeAnswer = answer1Controller.getAnswerText();
+                //audioController.readSingleAnswer();
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
                 LOG.debug("2 key was pressed");
                 answer2Controller.setSelected(!answer2Controller.isSelected());
+                this.activeAnswer = answer2Controller.getAnswerText();
+                //audioController.readSingleAnswer();
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
                 LOG.debug("3 key was pressed");
                 answer3Controller.setSelected(!answer3Controller.isSelected());
+                this.activeAnswer = answer3Controller.getAnswerText();
+                //audioController.readSingleAnswer();
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
                 LOG.debug("4 key was pressed");
                 answer4Controller.setSelected(!answer4Controller.isSelected());
+                this.activeAnswer = answer4Controller.getAnswerText();
+                //audioController.readSingleAnswer();
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
                 LOG.debug("5 key was pressed");
                 answer5Controller.setSelected(!answer5Controller.isSelected());
+                this.activeAnswer = answer5Controller.getAnswerText();
+                //audioController.readSingleAnswer();
             }
 
         }));
@@ -234,6 +247,9 @@ public class LerntiaMainController {
     }
     String getAnswer5() {
         return answer5Controller.getAnswerText();
+    }
+    String getActiveAnswer() {
+        return this.activeAnswer;
     }
 
 

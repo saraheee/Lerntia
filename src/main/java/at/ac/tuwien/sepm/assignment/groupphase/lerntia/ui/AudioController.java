@@ -38,7 +38,7 @@ public class AudioController {
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
-        //play sound
+        //play sound of the question and all answers
         var tts = new Speech();
         tts.setQuestion(lerntiaMainController.getQuestion());
         tts.setAnswer1(lerntiaMainController.getAnswer1());
@@ -50,7 +50,7 @@ public class AudioController {
         if (iTextToSpeechService != null) {
             try {
                 iTextToSpeechService.stopSpeaking();
-                iTextToSpeechService.speak(tts);
+                iTextToSpeechService.readQuestionAndAnswers(tts);
             } catch (ServiceException e) {
                 LOG.error("Failed to read question and answers.");
                 //TODO: show alert
@@ -60,6 +60,21 @@ public class AudioController {
         }
     }
 
+    void readSingleAnswer() {
+        var tts = new Speech();
+        tts.setSingleAnswer(lerntiaMainController.getActiveAnswer());
+        if (iTextToSpeechService != null) {
+            try {
+                iTextToSpeechService.stopSpeaking();
+                iTextToSpeechService.readSingleAnswer(tts);
+            } catch (ServiceException e) {
+                LOG.error("Failed to read question and answers.");
+                //TODO: show alert
+            }
+        } else {
+            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+        }
+    }
 
     void setSelected() {
         if (audioButton.isDefaultButton()) {
@@ -69,6 +84,7 @@ public class AudioController {
                 iTextToSpeechService.stopSpeaking();
             } catch (ServiceException e) {
                 LOG.error("Failed to stop speech synthesizer.");
+                //TODO: show alert
             }
         } else {
             audioButton.defaultButtonProperty().setValue(true);

@@ -15,13 +15,20 @@ public interface ITextToSpeechService {
 
 
     /**
-     * Plays a text with an audio player
+     * Reads a question and all answers with an audio player
      *
      * @param textToSpeech the textToSpeech object with the properties of the text
      * @throws ServiceException if audio can't be played.
      */
-    void speak(Speech textToSpeech) throws ServiceException;
+    void readQuestionAndAnswers(Speech textToSpeech) throws ServiceException;
 
+    /**
+     * Reads a single answer with an audio player
+     *
+     * @param textToSpeech the textToSpeech object with the properties of the text
+     * @throws ServiceException if audio can't be played.
+     */
+    void readSingleAnswer(Speech textToSpeech) throws ServiceException;
 
     /**
      * Stops the playing of an audio text
