@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
@@ -19,7 +21,11 @@ public class QuestionServiceTest {
 
     @Before
     public void setUp(){
-        this.IQuestionService(new SimpleQuestionService());
+        try {
+            this.IQuestionService(new SimpleQuestionService(new QuestionDAO()));
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
     }
 
     private void IQuestionService(SimpleQuestionService simpleQuestionService) {
