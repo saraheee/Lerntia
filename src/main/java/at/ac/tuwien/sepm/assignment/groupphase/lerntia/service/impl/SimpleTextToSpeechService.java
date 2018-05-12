@@ -18,7 +18,7 @@ import java.lang.invoke.MethodHandles;
 public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
+    private final String WELCOME = "Hallo (das) und (hier) willkommen (wird) bei (nicht) Lerntia. Schöön, dass (ausgesprochen) du hier bist!";
     private final String ANSWER = "Antwort nummer ";
     private final String VOICE = "bits3-hsmm";
     private final String BREAK = "....";
@@ -76,8 +76,25 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     }
 
     private void playText(String text) {
+
+        //First Step - ignoring the text between the ()
+        String finalText = "";
+        for(int i = 0;i<text.length();i++){
+            if(text.charAt(i)== '('){
+                i++;
+                while(text.charAt(i) != ')'){
+                    i++;
+                }
+                i++;
+            }
+            finalText += text.charAt(i);
+        }
+
+        //LOG.info("Text: "+text);
+        //LOG.info("Finaltext: "+finalText);
+
         LOG.trace("Entering method playText.");
-        try (var audio = marytts.generateAudio(text)) {
+        try (var audio = marytts.generateAudio(finalText)) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
