@@ -1,5 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
+import java.util.List;
+
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 
@@ -40,4 +43,13 @@ public interface IQuestionnaireQuestionService {
      * @throws ServiceException if the method can't read all elements from the Database
      * */
     List readAll() throws ServiceException;
+
+    /**
+     * Searches for specific QuestionnaireQuestions with given parameters
+     *
+     * @param searchparameters for the QuestionnaireQuesions we want to find
+     * @throws PersistenceException if the list cannot be retrieved
+     * @return list of all QuestionnaireQuestion matching the searchparameters
+     * */
+    List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters);
 }

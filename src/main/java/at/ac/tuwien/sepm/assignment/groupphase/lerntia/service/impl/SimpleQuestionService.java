@@ -55,11 +55,12 @@ public class SimpleQuestionService implements IQuestionService {
     }
 
     @Override
-    public void search(List<Question> questionList) throws ServiceException {
+    public List<Question> search(List<Question> questionList) throws ServiceException {
         try {
-            List list =questionDAO.search(questionList);
+            return questionDAO.search(questionList);
         } catch (PersistenceException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
