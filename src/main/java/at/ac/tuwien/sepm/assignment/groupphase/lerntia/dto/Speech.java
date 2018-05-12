@@ -8,6 +8,7 @@ public class Speech {
     private String answer4;
     private String answer5;
     private String voice;
+    private String singleAnswer;
 
     public Speech() {
     }
@@ -76,6 +77,14 @@ public class Speech {
 
     public void setVoice(String voice) {
         this.voice = voice;
+    }
+
+    public String getSingleAnswer() {
+        return singleAnswer;
+    }
+
+    public void setSingleAnswer(String singleAnswer) {
+        this.singleAnswer = singleAnswer;
     }
 
     @Override
