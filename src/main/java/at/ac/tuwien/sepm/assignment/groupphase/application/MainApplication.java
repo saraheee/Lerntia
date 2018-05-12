@@ -109,7 +109,7 @@ public final class MainApplication extends Application implements Runnable {
         try {
             var tts = new TextToSpeech();
             tts.setVoice("bits3-hsmm");
-            tts.speak("Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!", 1.0f, false, false);
+            //tts.speak("Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!", 1.0f, false, false);
         } catch (Exception e) {
             LOG.error("Failed to start MaryTTS.");
             var alert = new Alert(Alert.AlertType.ERROR);

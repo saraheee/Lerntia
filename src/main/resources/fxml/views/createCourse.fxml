@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.CreateCourseController"
+            prefHeight="200.0" prefWidth="600.0">
+
+    <children>
+        <Label layoutX="28.0" layoutY="89.0" text="Name der LVA:"/>
+        <TextField fx:id="tf_courseName" layoutX="201.0" layoutY="84.0" prefHeight="26.0" prefWidth="150.0"/>
+
+        <Button layoutX="201.0" layoutY="189.0" mnemonicParsing="false" onAction="#createCourse" prefHeight="37.0"
+            prefWidth="113.0" text="Erstellen"/>
+    </children>
+
+</AnchorPane>
