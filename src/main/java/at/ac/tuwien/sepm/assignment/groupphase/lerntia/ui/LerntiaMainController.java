@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
@@ -72,7 +73,11 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        getAndShowTheFirstQuestion();
+        try {
+            getAndShowTheFirstQuestion();
+        } catch (ControllerException e) {
+
+        }
     }
 
     public void update(Scene scene) {
@@ -161,9 +166,9 @@ public class LerntiaMainController {
         LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if(answersCorrect) {
-            showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
+            showAnAlert(Alert.AlertType.INFORMATION,"Antworten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
         } else {
-            showAnAlert(Alert.AlertType.WARNING,"Antowrten nicht richtig.", "Richtige Antworten: " +
+            showAnAlert(Alert.AlertType.WARNING,"Antworten nicht richtig.", "Richtige Antworten: " +
                 question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
@@ -182,12 +187,14 @@ public class LerntiaMainController {
         getAndShowNextQuestion();
     }
 
-    private void getAndShowTheFirstQuestion() {
+    private void getAndShowTheFirstQuestion() throws ControllerException{
         try {
             question = lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {
-            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
-            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
+            //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
+
+            throw new ControllerException("Es gibt noch keine Fragen");
         }
         showQuestionAndAnswers();
     }
@@ -202,8 +209,12 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
             showAnAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
-            getAndShowTheFirstQuestion();
-        }
+                try {
+                    getAndShowTheFirstQuestion();
+                } catch (ControllerException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     @FXML
@@ -215,7 +226,11 @@ public class LerntiaMainController {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
             showAnAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
-            getAndShowTheFirstQuestion();
+            try {
+                getAndShowTheFirstQuestion();
+            } catch (ControllerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -255,18 +270,13 @@ public class LerntiaMainController {
 
     void showAnAlert(Alert.AlertType alertType, String title, String header, String content) {
         var alert = new Alert(alertType);
-        alert.setTitle(title);
-
-       // alert.setHeaderText(header);
-       // alert.setContentText(content);
-       // alert.showAndWait();
-
         var dialogPane = new DialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
         dialogPane.getStyleClass().add("dialogue");
-        dialogPane.setHeader(new Text(" " + header));
-        dialogPane.setContent(new Text(" " + content));
+        dialogPane.setHeader(new Text(" " + header + " "));
+        dialogPane.setContent(new Text(" " + content + " "));
         dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        alert.setTitle(title);
         alert.setResizable(true);
         alert.setDialogPane(dialogPane);
         alert.showAndWait();
