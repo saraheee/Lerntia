@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
-public class MaryTTS {
+public class Speech {
     private String question;
     private String answer1;
     private String answer2;
@@ -9,10 +9,10 @@ public class MaryTTS {
     private String answer5;
     private String voice;
 
-    public MaryTTS() {
+    public Speech() {
     }
 
-    public MaryTTS(String question, String answer1, String answer2, String answer3, String answer4, String answer5, String voice) {
+    public Speech(String question, String answer1, String answer2, String answer3, String answer4, String answer5, String voice) {
         this.question = question;
         this.answer1 = answer1;
         this.answer2 = answer2;
