@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
@@ -68,7 +69,11 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        getAndShowTheFirstQuestion();
+        try {
+            getAndShowTheFirstQuestion();
+        } catch (ControllerException e) {
+
+        }
     }
 
     public void update(Scene scene) {
@@ -153,12 +158,14 @@ public class LerntiaMainController {
         getAndShowNextQuestion();
     }
 
-    private void getAndShowTheFirstQuestion() {
+    private void getAndShowTheFirstQuestion() throws ControllerException{
         try {
             question = lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {
-            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
-            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
+            //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
+
+            throw new ControllerException("Es gibt noch keine Fragen");
         }
         showQuestionAndAnswers();
     }
@@ -173,8 +180,12 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
             showAnAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
-            getAndShowTheFirstQuestion();
-        }
+                try {
+                    getAndShowTheFirstQuestion();
+                } catch (ControllerException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     @FXML
@@ -186,7 +197,11 @@ public class LerntiaMainController {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
             showAnAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
-            getAndShowTheFirstQuestion();
+            try {
+                getAndShowTheFirstQuestion();
+            } catch (ControllerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
