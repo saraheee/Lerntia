@@ -48,8 +48,8 @@ public interface IQuestionnaireQuestionService {
      * Searches for specific QuestionnaireQuestions with given parameters
      *
      * @param searchparameters for the QuestionnaireQuesions we want to find
-     * @throws PersistenceException if the list cannot be retrieved
      * @return list of all QuestionnaireQuestion matching the searchparameters
+     * @throws ServiceException if the list cannot be retrieved
      * */
-    List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters);
+    List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws ServiceException;
 }

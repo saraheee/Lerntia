@@ -6,15 +6,20 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final QuestionnaireImportDAO questionnaireImportDAO;
     private final SimpleQuestionService simpleQuestionService;
@@ -51,7 +56,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         try {
             fileContent = questionnaireImportDAO.getContents(pathStr);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
 
         ArrayList<Long> questionIDs = new ArrayList<>();

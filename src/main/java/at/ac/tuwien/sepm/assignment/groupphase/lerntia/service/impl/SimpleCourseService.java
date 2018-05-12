@@ -5,13 +5,17 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Service
 public class SimpleCourseService implements ICourseService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
 
     public SimpleCourseService(ICourseDAO courseDAO){
@@ -23,7 +27,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courseDAO.create(course);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -32,8 +37,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courseDAO.update(course);
         } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());        }
     }
 
     @Override
@@ -41,7 +46,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courseDAO.search(course);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -50,7 +56,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courseDAO.delete(course);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -61,7 +68,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courses = courseDAO.readAll();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
 
         return courses;
