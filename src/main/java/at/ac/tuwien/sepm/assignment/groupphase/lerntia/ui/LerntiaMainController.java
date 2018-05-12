@@ -68,13 +68,7 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        try {
-            question = lerntiaService.getFirstQuestion();
-        } catch (ServiceException e) {
-            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
-            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Keine Fragen waren gefunden", "Sind die Fragen implementiert und mit einem Fragenbogen verbunden?");
-        }
-        showQuestionAndAnswers();
+        getAndShowTheFirstQuestion();
     }
 
     public void update(Scene scene) {
@@ -124,6 +118,7 @@ public class LerntiaMainController {
 
     }
 
+    @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
         String checkedAnswers = "";
@@ -134,49 +129,65 @@ public class LerntiaMainController {
         if(answer5Controller.isSelected()) { checkedAnswers += "5"; }
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
+        LOG.debug("Correct answers: {} ; selceted answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
+        if(answersCorrect) {
+            showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
+        } else {
+            showAnAlert(Alert.AlertType.WARNING,"Antowrten nicht richtig.", "Richtige Antworten: " +
+                question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
+        }
         // send checked answers to service (in order to use it fo statistics and learning algorithm)
         try {
-            Question mockQuestion = question;
-            mockQuestion.setQuestionText(qLabelController.getQuestionText());
-            LOG.info("Trying to send {} answers on question \"{}\"",
-                mockQuestion.getCorrectAnswers(), mockQuestion.getQuestionText());
+            Question mockQuestion = new Question();
+            mockQuestion.setId(question.getId());
             mockQuestion.setCorrectAnswers(checkedAnswers);
+            LOG.info("Trying to send {} answers on question \"{}\"",
+                mockQuestion.getCorrectAnswers(), mockQuestion.getId());
             lerntiaService.recordCheckedAnswers(mockQuestion);
         } catch (ServiceException e) {
             LOG.error("Could not check whether the answer was correct");
             showAnAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen", "Die Resultat konnte nicht zum" +
                 " Serviceschicht geschickt werden", e.getLocalizedMessage());
         }
-
-        if(answersCorrect) {
-            showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
-        } else {
-            showAnAlert(Alert.AlertType.INFORMATION,"Antowrten nicht richtig.", "Richtige Antworten: " +
-                question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
-        }
-
         getAndShowNextQuestion();
     }
 
-    private void getAndShowNextQuestion() {
+    private void getAndShowTheFirstQuestion() {
         try {
-            question = lerntiaService.getNextQuestionFromList();
-        } catch (ServiceException e1) {
-            LOG.warn("No next question to be displayed.");
-            showAnAlert(Alert.AlertType.ERROR, "Keine nächste Frage", "Du bist am Ende.", e1.getLocalizedMessage());
+            question = lerntiaService.getFirstQuestion();
+        } catch (ServiceException e) {
+            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Keine Fragen waren gefunden", "Sind die Fragen implementiert und mit einem Fragenbogen verbunden?");
         }
         showQuestionAndAnswers();
     }
 
+
+    @FXML
+    private void getAndShowNextQuestion() {
+            try {
+            question = lerntiaService.getNextQuestionFromList();
+            showQuestionAndAnswers();
+        } catch (ServiceException e1) {
+            LOG.warn("No next question to be displayed.");
+            // todo add statistics after that is implemented
+            showAnAlert(Alert.AlertType.ERROR, "Keine weiteren Frage", "Du bist am Ende.", "Statistics: ");
+            getAndShowTheFirstQuestion();
+        }
+    }
+
+    @FXML
     private void getAndShowPreviousQuestion() {
         try {
             question = lerntiaService.getPreviousQuestionFromList();
+            showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
-            showAnAlert(Alert.AlertType.ERROR, "Keine vorige Frage", "Du bist am Anfang.", e1.getLocalizedMessage());
+            // todo add statistics after that is implemented
+            showAnAlert(Alert.AlertType.ERROR, "Keine früheren Frage", "Du bist am Anfang.", "Statistics: ");
+            getAndShowTheFirstQuestion();
         }
-        showQuestionAndAnswers();
     }
 
     private void showQuestionAndAnswers() {

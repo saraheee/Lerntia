@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -22,14 +22,14 @@ import static org.springframework.util.Assert.notNull;
 public class AnswerController implements Initializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LerntiaService lerntiaService;
+    private final IMainLerntiaService lerntiaService;
     private final LerntiaMainController lerntiaMainController;
 
     @FXML
     private CheckBox answer;
 
     @Autowired
-    public AnswerController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public AnswerController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;

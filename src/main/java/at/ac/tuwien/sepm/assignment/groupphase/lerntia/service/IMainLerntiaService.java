@@ -6,11 +6,11 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 /**
- * The <code>LerntiaService</code> is capable to calculate the answer to
+ * The <code>IMainLerntiaService</code> is capable to calculate the answer to
  * <blockquote>Ultimate Question of Life, the Universe, and Everything</blockquote>.
  * Depending on the implementation it might take a while.
  */
-public interface LerntiaService {
+public interface IMainLerntiaService {
 
 
     void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException;
@@ -22,4 +22,8 @@ public interface LerntiaService {
     Question getNextQuestionFromList() throws ServiceException;
 
     Question getPreviousQuestionFromList()throws ServiceException;
+
+    Question getFirstQuestion() throws ServiceException;
+
+    void recordCheckedAnswers(Question mockQuestion) throws ServiceException;
 }

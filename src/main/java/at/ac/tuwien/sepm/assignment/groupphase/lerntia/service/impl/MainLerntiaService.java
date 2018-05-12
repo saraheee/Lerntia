@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,21 @@ import java.util.List;
 
 
 @Component
-public class SimpleLerntiaService implements LerntiaService {
+public class MainLerntiaService implements IMainLerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final int SLEEP_SECONDS = 2;
 
+    private boolean learningMode = true;
+    private List<LearningQuestionnaire> allLQs;
+    private LearningQuestionnaire currentLQ;
+    private List<ExamQuestionnaire> allEQs;
+    private ExamQuestionnaire currentEQ;
     private List<QuestionnaireQuestion> questionnaireQuestionsList;
     private List<Question> questionList;
     private Question currentQuestion;
-    private int listcounter = 0;
-    private int currentQuestionIndex = 0;
+    private int listcounter;
+    private int currentQuestionIndex;
 
     private ICourseDAO courseDAO;
     private IUserDAO userDAO;
@@ -42,7 +47,7 @@ public class SimpleLerntiaService implements LerntiaService {
 
 
     @Autowired
-    public SimpleLerntiaService(CourseDAO courseDAO, UserDAO userDAO, QuestionnaireDAO questionnaireDAO, ExamQuestionaireDAO examQuestionaireDAO, LearningQuestionnaireDAO learningQuestionnaireDAO, QuestionDAO questionDAO, QuestionnaireQuestionDAO questionnaireQuestionDAO, UserCourseDAO userCourseDAO, UserQuestionaireDAO userQuestionaireDAO){
+    public MainLerntiaService(CourseDAO courseDAO, UserDAO userDAO, QuestionnaireDAO questionnaireDAO, ExamQuestionaireDAO examQuestionaireDAO, LearningQuestionnaireDAO learningQuestionnaireDAO, QuestionDAO questionDAO, QuestionnaireQuestionDAO questionnaireQuestionDAO, UserCourseDAO userCourseDAO, UserQuestionaireDAO userQuestionaireDAO){
         this.courseDAO = courseDAO;
         this.userDAO = userDAO;
         this.questionnaireDAO = questionnaireDAO;
@@ -57,6 +62,7 @@ public class SimpleLerntiaService implements LerntiaService {
     @Override
     public void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException{
         try {
+            listcounter = 0;
             questionnaireQuestionsList = new ArrayList<>();
             questionList = new ArrayList<>();
             List<Question> searchparameters = new ArrayList<>();
@@ -86,6 +92,7 @@ public class SimpleLerntiaService implements LerntiaService {
     @Override
     public void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException{
         try {
+            listcounter = 0;
             questionnaireQuestionsList = new ArrayList<>();
             questionList = new ArrayList<>();
             List<Question> searchparameters = new ArrayList<>();
@@ -147,5 +154,23 @@ public class SimpleLerntiaService implements LerntiaService {
         }catch (IndexOutOfBoundsException e){
             throw new ServiceException(e.getMessage());
         }
+    }
+
+    @Override
+    public Question getFirstQuestion() throws ServiceException {
+        try {
+            allLQs = learningQuestionnaireDAO.readAll();
+            currentLQ = allLQs.get(allLQs.size()-1);
+            getQuestionsFromLearningQuestionnaire(currentLQ);
+            currentQuestionIndex = -1;
+            return getNextQuestionFromList();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void recordCheckedAnswers(Question mockQuestion) throws ServiceException {
+        // todo implement this when implementing learning algorithm
     }
 }

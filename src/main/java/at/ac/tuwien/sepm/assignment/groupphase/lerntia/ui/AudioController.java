@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Scanner;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -18,7 +17,7 @@ import static org.springframework.util.Assert.notNull;
 public class AudioController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LerntiaService lerntiaService;
+    private final IMainLerntiaService lerntiaService;
     private final LerntiaMainController lerntiaMainController;
     private final TextToSpeech textToSpeech;
     private final String VOICE = "bits3-hsmm";
@@ -26,7 +25,7 @@ public class AudioController {
     private Button audioButton;
 
     @Autowired
-    public AudioController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public AudioController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;
