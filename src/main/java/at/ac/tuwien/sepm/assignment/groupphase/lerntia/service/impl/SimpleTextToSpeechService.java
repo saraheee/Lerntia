@@ -34,7 +34,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         } catch (MaryConfigurationException e) {
             LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
         }
-        playText(WELCOME);
+        //playText(WELCOME);
     }
 
     @Override
