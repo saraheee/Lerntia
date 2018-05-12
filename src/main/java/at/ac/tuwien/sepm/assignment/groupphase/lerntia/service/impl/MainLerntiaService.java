@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
@@ -160,6 +161,11 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getFirstQuestion() throws ServiceException {
         allLQs = learningQuestionnaireService.readAll();
+
+        if (allLQs.isEmpty()){
+            throw new ServiceException("Es sind noch keine Fregen vorhanden");
+        }
+
         currentLQ = allLQs.get(allLQs.size()-1);
         getQuestionsFromLearningQuestionnaire(currentLQ);
         currentQuestionIndex = -1;
