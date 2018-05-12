@@ -1,9 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDateTime;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -21,8 +25,9 @@ import static org.springframework.util.Assert.notNull;
 public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LerntiaService lerntiaService;
+    private final IMainLerntiaService lerntiaService;
     private final String BREAK = "....";
+
     @FXML
     private HBox mainWindow;
     @FXML
@@ -48,8 +53,12 @@ public class LerntiaMainController {
     @FXML
     private ImageController zoomButtonController;
 
+
+    // question to be displayed and to be used for checking whether the selected answers were correct
+    Question question;
+
     @Autowired
-    public LerntiaMainController(LerntiaService lerntiaService) {
+    public LerntiaMainController(IMainLerntiaService lerntiaService) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         this.lerntiaService = lerntiaService;
     }
@@ -59,16 +68,13 @@ public class LerntiaMainController {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
 
-        //Example for setting some answer text
-        //TODO: delete me, when we have real questions and answers
-        answer1Controller.setAnswerText("Sehr gut. Eine bessere Stimme hätte ich mir nie vorstellen können");
-        answer2Controller.setAnswerText("Sie ist ok, aber gibt es keine bessere?");
-        answer3Controller.setAnswerText("Ich kann sie gut verstehen!");
-        answer4Controller.setAnswerText("Sie spricht sehr deutlich");
-        answer5Controller.setAnswerText("Ich weiß nicht, wie ich sie auf Dauer ertragen soll");
-
-        //Example for setting a question text
-        qLabelController.setQuestionText("Wie findest du meine Stimme?");
+        try {
+            question = lerntiaService.getFirstQuestion();
+        } catch (ServiceException e) {
+            LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Keine Fragen waren gefunden", "Sind die Fragen implementiert und mit einem Fragenbogen verbunden?");
+        }
+        showQuestionAndAnswers();
     }
 
     public void update(Scene scene) {
@@ -83,41 +89,122 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
-                //TODO: handle next question key event (nextQuestionButton)
+                getAndShowNextQuestion();
             }
             if (e.getCode() == KeyCode.P) {
                 LOG.debug("P key was pressed");
-                //TODO: handle previous question key event (previousQuestionButton)
+                getAndShowPreviousQuestion();
             }
             if (e.getCode() == KeyCode.C) {
                 LOG.debug("C key was pressed");
-                //TODO: handle check answer key event (checkAnswerButton)
+                checkIfQuestionWasCorrect();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
-                //TODO: handle answer1 key event
+                answer1Controller.setSelected(!answer1Controller.isSelected());
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
                 LOG.debug("2 key was pressed");
-                //TODO: handle answer2 key event
+                answer2Controller.setSelected(!answer2Controller.isSelected());
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
                 LOG.debug("3 key was pressed");
-                //TODO: handle answer3 key event
+                answer3Controller.setSelected(!answer3Controller.isSelected());
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
                 LOG.debug("4 key was pressed");
-                //TODO: handle answer4 key event
+                answer4Controller.setSelected(!answer4Controller.isSelected());
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
                 LOG.debug("5 key was pressed");
-                //TODO: handle answer5 key event
+                answer5Controller.setSelected(!answer5Controller.isSelected());
             }
 
         }));
 
     }
 
+    private void checkIfQuestionWasCorrect() {
+        // gather the info about the checked answers
+        String checkedAnswers = "";
+        if(answer1Controller.isSelected()) { checkedAnswers += "1"; }
+        if(answer2Controller.isSelected()) { checkedAnswers += "2"; }
+        if(answer3Controller.isSelected()) { checkedAnswers += "3"; }
+        if(answer4Controller.isSelected()) { checkedAnswers += "4"; }
+        if(answer5Controller.isSelected()) { checkedAnswers += "5"; }
+
+        boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
+
+        // send checked answers to service (in order to use it fo statistics and learning algorithm)
+        try {
+            Question mockQuestion = question;
+            mockQuestion.setQuestionText(qLabelController.getQuestionText());
+            LOG.info("Trying to send {} answers on question \"{}\"",
+                mockQuestion.getCorrectAnswers(), mockQuestion.getQuestionText());
+            mockQuestion.setCorrectAnswers(checkedAnswers);
+            lerntiaService.recordCheckedAnswers(mockQuestion);
+        } catch (ServiceException e) {
+            LOG.error("Could not check whether the answer was correct");
+            showAnAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen", "Die Resultat konnte nicht zum" +
+                " Serviceschicht geschickt werden", e.getLocalizedMessage());
+        }
+
+        if(answersCorrect) {
+            showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
+        } else {
+            showAnAlert(Alert.AlertType.INFORMATION,"Antowrten nicht richtig.", "Richtige Antworten: " +
+                question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
+        }
+
+        getAndShowNextQuestion();
+    }
+
+    private void getAndShowNextQuestion() {
+        try {
+            question = lerntiaService.getNextQuestionFromList();
+        } catch (ServiceException e1) {
+            LOG.warn("No next question to be displayed.");
+            showAnAlert(Alert.AlertType.ERROR, "Keine nächste Frage", "Du bist am Ende.", e1.getLocalizedMessage());
+        }
+        showQuestionAndAnswers();
+    }
+
+    private void getAndShowPreviousQuestion() {
+        try {
+            question = lerntiaService.getPreviousQuestionFromList();
+        } catch (ServiceException e1) {
+            LOG.warn("No previous question to be displayed.");
+            showAnAlert(Alert.AlertType.ERROR, "Keine vorige Frage", "Du bist am Anfang.", e1.getLocalizedMessage());
+        }
+        showQuestionAndAnswers();
+    }
+
+    private void showQuestionAndAnswers() {
+        if(question == null) {
+            LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
+            showAnAlert(Alert.AlertType.ERROR, "Keine Frage verfügber", "", "");
+            return;
+        }
+
+        qLabelController.setQuestionText(question.getQuestionText());
+
+        setAnswerText(answer1Controller, question.getAnswer1());
+        setAnswerText(answer2Controller, question.getAnswer2());
+        setAnswerText(answer3Controller, question.getAnswer3());
+        setAnswerText(answer4Controller, question.getAnswer4());
+        setAnswerText(answer5Controller, question.getAnswer5());
+    }
+
+    private void setAnswerText(AnswerController answerController, String answertText) {
+        answerController.setSelected(false);
+        // if answer is not provided the whole box will be invisible
+        if(answertText == null) {
+            answerController.setVisible(false);
+            return;
+        }
+        answerController.setVisible(true);
+        answerController.setAnswerText(answertText);
+    }
 
     public String getAudioText() {
         return qLabelController.getQuestionText() + BREAK + '\n'
@@ -126,5 +213,14 @@ public class LerntiaMainController {
             + BREAK + "Antwort nummer drei: " + answer3Controller.getAnswerText() + '\n'
             + BREAK + "Antwort nummer vier: " + answer4Controller.getAnswerText() + '\n'
             + BREAK + "Antwort nummer fünf: " + answer5Controller.getAnswerText();
+    }
+
+
+    void showAnAlert(Alert.AlertType alertType, String title, String header, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
