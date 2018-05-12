@@ -70,6 +70,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void readSingleAnswer(Speech textToSpeech) throws ServiceException {
+        LOG.trace("Entering method readSingleAnswer.");
         singleAnswer = true;
         readQuestionAndAnswers(textToSpeech);
     }

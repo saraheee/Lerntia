@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDateTime;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -26,7 +25,7 @@ public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
-    //private final AudioController audioController;
+    private final AudioController audioController;
 
     @FXML
     private HBox mainWindow;
@@ -56,14 +55,13 @@ public class LerntiaMainController {
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
-    private String activeAnswer;
 
     @Autowired
-    public LerntiaMainController(IMainLerntiaService lerntiaService) {
+    public LerntiaMainController(IMainLerntiaService lerntiaService, AudioController audioController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
-        //notNull(audioController, "'audioController' should not be null");
+        notNull(audioController, "'audioController' should not be null");
         this.lerntiaService = lerntiaService;
-        //this.audioController = audioController;
+        this.audioController = audioController;
     }
 
     @FXML
@@ -99,32 +97,47 @@ public class LerntiaMainController {
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
                 answer1Controller.setSelected(!answer1Controller.isSelected());
-                this.activeAnswer = answer1Controller.getAnswerText();
-                //audioController.readSingleAnswer();
+                if(answer1Controller.isSelected()) {
+                    audioController.readSingleAnswer(answer1Controller.getAnswerText());
+                } else {
+                    audioController.stopReading();
+                }
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
                 LOG.debug("2 key was pressed");
                 answer2Controller.setSelected(!answer2Controller.isSelected());
-                this.activeAnswer = answer2Controller.getAnswerText();
-                //audioController.readSingleAnswer();
+                if(answer2Controller.isSelected()) {
+                    audioController.readSingleAnswer(answer2Controller.getAnswerText());
+                } else {
+                    audioController.stopReading();
+                }
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
                 LOG.debug("3 key was pressed");
                 answer3Controller.setSelected(!answer3Controller.isSelected());
-                this.activeAnswer = answer3Controller.getAnswerText();
-                //audioController.readSingleAnswer();
+                if(answer3Controller.isSelected()) {
+                    audioController.readSingleAnswer(answer3Controller.getAnswerText());
+                } else {
+                    audioController.stopReading();
+                }
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
                 LOG.debug("4 key was pressed");
                 answer4Controller.setSelected(!answer4Controller.isSelected());
-                this.activeAnswer = answer4Controller.getAnswerText();
-                //audioController.readSingleAnswer();
+                if(answer4Controller.isSelected()) {
+                    audioController.readSingleAnswer(answer4Controller.getAnswerText());
+                } else {
+                    audioController.stopReading();
+                }
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
                 LOG.debug("5 key was pressed");
                 answer5Controller.setSelected(!answer5Controller.isSelected());
-                this.activeAnswer = answer5Controller.getAnswerText();
-                //audioController.readSingleAnswer();
+                if(answer5Controller.isSelected()) {
+                    audioController.readSingleAnswer(answer5Controller.getAnswerText());
+                } else {
+                    audioController.stopReading();
+                }
             }
 
         }));
@@ -211,47 +224,31 @@ public class LerntiaMainController {
         }
 
         qLabelController.setQuestionText(question.getQuestionText());
+        audioController.setQuestion(qLabelController.getQuestionText());
 
         setAnswerText(answer1Controller, question.getAnswer1());
         setAnswerText(answer2Controller, question.getAnswer2());
         setAnswerText(answer3Controller, question.getAnswer3());
         setAnswerText(answer4Controller, question.getAnswer4());
         setAnswerText(answer5Controller, question.getAnswer5());
+
+        audioController.setAnswer1(answer1Controller.getAnswerText());
+        audioController.setAnswer2(answer2Controller.getAnswerText());
+        audioController.setAnswer3(answer3Controller.getAnswerText());
+        audioController.setAnswer4(answer4Controller.getAnswerText());
+        audioController.setAnswer5(answer5Controller.getAnswerText());
     }
 
-    private void setAnswerText(AnswerController answerController, String answertText) {
+    private void setAnswerText(AnswerController answerController, String answerText) {
         answerController.setSelected(false);
         // if answer is not provided the whole box will be invisible
-        if(answertText == null) {
+        if(answerText == null) {
             answerController.setVisible(false);
             return;
         }
         answerController.setVisible(true);
-        answerController.setAnswerText(answertText);
+        answerController.setAnswerText(answerText);
     }
-
-    String getQuestion() {
-        return qLabelController.getQuestionText();
-    }
-    String getAnswer1() {
-        return answer1Controller.getAnswerText();
-    }
-    String getAnswer2() {
-        return answer2Controller.getAnswerText();
-    }
-    String getAnswer3() {
-        return answer3Controller.getAnswerText();
-    }
-    String getAnswer4() {
-        return answer4Controller.getAnswerText();
-    }
-    String getAnswer5() {
-        return answer5Controller.getAnswerText();
-    }
-    String getActiveAnswer() {
-        return this.activeAnswer;
-    }
-
 
     void showAnAlert(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
