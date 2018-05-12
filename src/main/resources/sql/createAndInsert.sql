@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
 CREATE TABLE IF NOT EXISTS Course (
   mark      VARCHAR(255),
   semester  VARCHAR(255),
+  name      VARCHAR(255),
   isDeleted BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (mark, semester)
 );
@@ -83,11 +84,11 @@ INSERT INTO PUser
   )
 WHERE NOT EXISTS (SELECT * FROM PUser);
 
---mark, semester, isDeleted
+--mark, semester, name, isDeleted
 INSERT INTO Course
    SELECT * FROM (
       SELECT * FROM Course WHERE FALSE
-        UNION SELECT '1', '4', false
+        UNION SELECT '1', '4', 'TIL', false
   )
 WHERE NOT EXISTS (SELECT * FROM Course);
 

@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
@@ -99,13 +99,13 @@ public class UserDAOTest {
     @Test
     public void deleteUser() throws PersistenceException {
         try {
-            User fabio = new User();
-            fabio.setMatriculationNumber("01526912");
-            fabio.setName("Fabio");
-            fabio.setStudyProgramme("033 532");
-            userDAO.create(fabio);
-            userDAO.delete(fabio);
-            User other = userDAO.read(fabio);
+            User deletedUser = new User();
+            deletedUser.setMatriculationNumber("0123456");
+            deletedUser.setName("Fabio");
+            deletedUser.setStudyProgramme("033 532");
+            userDAO.create(deletedUser);
+            userDAO.delete(deletedUser);
+            User other = userDAO.read(deletedUser);
             assertEquals(true,other.getDeleted());
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());

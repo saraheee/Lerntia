@@ -54,7 +54,7 @@
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>
                     <VBox prefHeight="94.0" prefWidth="40.0"/>
-                    <fx:include fx:id="saveAnswerButton" source="/fxml/elements/saveAnswerButton.fxml"/>
+                    <fx:include fx:id="checkAnswerButton" source="/fxml/elements/checkAnswerButton.fxml"/>
                 </buttons>
             </ButtonBar>
         </HBox>

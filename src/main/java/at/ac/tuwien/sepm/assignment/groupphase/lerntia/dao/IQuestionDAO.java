@@ -26,10 +26,12 @@ public interface IQuestionDAO {
     /**
      * Search for Question with specific parameters
      *
-     * @param question Question with searchparameters
+     * @param questionList Question with searchparameters
      * @throws PersistenceException if the method can't search for the question
+     * @return List of found questions
      * */
-    List<Question> search(List<Question> question) throws PersistenceException;
+
+    List<Question> search(List<Question> questionList) throws PersistenceException;
 
     /**
      * Delete Question from the Database

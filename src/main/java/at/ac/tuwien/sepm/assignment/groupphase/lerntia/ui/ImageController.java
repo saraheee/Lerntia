@@ -2,64 +2,51 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class AnswerController implements Initializable {
+public class ImageController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaService lerntiaService;
     private final LerntiaMainController lerntiaMainController;
 
     @FXML
-    private CheckBox answer;
+    private Button zoomButton;
 
     @Autowired
-    public AnswerController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public ImageController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+    @FXML
+    private void onZoomButtonClicked() {
+        LOG.debug("Zoom button clicked");
+        //TODO: maximize image
     }
 
-    public String getAnswerText() {
-        return answer.getText();
-    }
 
-    public void setAnswerText(String text) {
-        answer.setText(text);
-    }
 
-    public boolean isSelected() {
-        return answer.isSelected();
-    }
+    void setSelected() {
+        if (zoomButton.isDefaultButton()) {
+            zoomButton.defaultButtonProperty().setValue(false);
+            //TODO: minimize image
+        } else {
+            zoomButton.defaultButtonProperty().setValue(true);
+            onZoomButtonClicked();
+        }
 
-    public void setSelected(boolean isSelected) {
-        answer.setSelected(isSelected);
     }
-
-    public void setVisible(boolean isVisible) {
-        answer.setVisible(isVisible);
-    }
-
 
 }

@@ -11,7 +11,7 @@ public class SimpleUserService implements IUserService {
 
     private final UserDAO userDAO;
 
-    public SimpleUserService(UserDAO userDAO){
+    public SimpleUserService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
