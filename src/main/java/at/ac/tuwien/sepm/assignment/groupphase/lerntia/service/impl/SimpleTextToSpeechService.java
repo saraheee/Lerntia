@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Service
-public class SimpleTextToSpeechService extends Thread implements ITextToSpeechService {
+public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
@@ -25,12 +25,9 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
     private AudioPlayer audioPlayer;
     private MaryInterface marytts;
 
-    public enum answerNumber {
-        eins, zwei, drei, vier, fünf
-    }
-
     @Override
     public void playWelcomeText() {
+        LOG.trace("Entering method playWelcomeText.");
         try {
             marytts = new LocalMaryInterface();
             marytts.setVoice(VOICE);
@@ -42,13 +39,20 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
 
     @Override
     public void speak(Speech textToSpeech) {
+        LOG.trace("Entering method speak.");
         if (marytts != null) {
+            LOG.trace("marytts is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
+            LOG.trace("stopSpeaking method is called. Calling playText method.");
             playText(getText(textToSpeech));
+            LOG.trace("playText method is called.");
         } else {
             try {
+                LOG.trace("marytts is null. Creating a new mary interface.");
                 marytts = new LocalMaryInterface();
+                LOG.trace("mary interface is created. marytts is not null anymore.");
                 marytts.setVoice(VOICE);
+                playText(getText(textToSpeech));
             } catch (MaryConfigurationException e) {
                 LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
             } catch (Exception e) {
@@ -58,12 +62,15 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
     }
 
     private void playText(String text) {
+        LOG.trace("Entering method playText.");
         try (var audio = marytts.generateAudio(text)) {
+            LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
             audioPlayer.setGain(1);
             audioPlayer.setDaemon(false);
             audioPlayer.start();
+            LOG.debug("audioPlayer successfully created and started.");
         } catch (SynthesisException e) {
             LOG.error("Failed to generate audio with speech synthesizer: " + e.getMessage());
         } catch (IOException e) {
@@ -73,8 +80,12 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
 
     @Override
     public void stopSpeaking() {
+        LOG.debug("Entering method stopSpeaking.");
         if (audioPlayer != null) {
             audioPlayer.cancel();
+            LOG.debug("Cancelling speech.");
+        } else {
+            LOG.debug("audioPlayer is already null.");
         }
     }
 
@@ -82,7 +93,6 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
     public void setVoice(Speech textToSpeech) {
         marytts.setVoice(textToSpeech.getVoice());
     }
-
 
     private String getText(Speech textToSpeech) {
         return textToSpeech.getQuestion() + BREAK + '\n'
@@ -93,12 +103,8 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
             + BREAK + ANSWER + answerNumber.fünf + DP + textToSpeech.getAnswer5();
     }
 
-
-    @Override
-    public void run() {
-
-
-
+    public enum answerNumber {
+        eins, zwei, drei, vier, fünf
     }
 
 }

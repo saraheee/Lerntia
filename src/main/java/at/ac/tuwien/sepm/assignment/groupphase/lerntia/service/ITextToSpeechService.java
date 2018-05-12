@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
+import at.ac.tuwien.sepm.assignment.groupphase.application.MainApplication;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 
@@ -37,6 +38,5 @@ public interface ITextToSpeechService {
      * @throws ServiceException if the method can't set the voice
      */
     void setVoice(Speech textToSpeech) throws ServiceException;
-
 
 }
