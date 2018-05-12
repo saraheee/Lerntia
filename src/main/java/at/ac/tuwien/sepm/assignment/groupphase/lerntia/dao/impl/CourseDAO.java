@@ -18,7 +18,7 @@ import java.util.List;
 public class CourseDAO implements ICourseDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String SQL_COURSE_CREATE_STATEMENT="INSERT INTO Course(mark,semester) VALUES (?,?)";
+    private static final String SQL_COURSE_CREATE_STATEMENT="INSERT INTO Course(mark,semester,isDeleted) VALUES (?,?,?)";
     private static final String SQL_COURSE_UPDATE_STATEMENT="UPDATE Course set semester=? WHERE mark =?" ;
     //private static final String SQL_COURSE_SEARCH_STATEMENT="";
     private static final String SQL_COURSE_DELETE_STATEMENT="UPDATE Course set isDeleted=true  WHERE mark = ?";
@@ -44,6 +44,7 @@ public class CourseDAO implements ICourseDAO {
 
             pscreate.setString(1,course.getMark());
             pscreate.setString(2,course.getSemester());
+            pscreate.setBoolean(3,false);
 
             pscreate.executeUpdate();
             LOG.info("Course succesfully added to Database.");

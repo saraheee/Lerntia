@@ -52,9 +52,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             ResultSet generatedKeys = pscreate.getGeneratedKeys();
             generatedKeys.next();
             questionnaire.setId(generatedKeys.getLong(1));
-
-            System.out.println("====================00");
-            System.out.println(questionnaire.getId());
+            
         } catch (SQLException e) {
             LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());

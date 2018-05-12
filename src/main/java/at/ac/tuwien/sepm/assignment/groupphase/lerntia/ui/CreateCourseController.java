@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,9 +30,21 @@ public class CreateCourseController {
 
     @FXML
     private TextField tf_courseName;
+    @FXML
+    private ChoiceBox<String> cb_semester;
+    @FXML
+    private TextField tf_semesterYear;
 
     public CreateCourseController(SimpleCourseService courseService){
         this.courseService = courseService;
+    }
+
+    @FXML
+    private void initialize() {
+        cb_semester.getItems().add("ws");
+        cb_semester.getItems().add("ss");
+
+        cb_semester.getSelectionModel().selectFirst();
     }
 
     void showCreateCourseWindow() {
@@ -57,33 +70,14 @@ public class CreateCourseController {
         try {
 
             String name = tf_courseName.getText().trim();
+            String semester = cb_semester.getSelectionModel().getSelectedItem();
+            String semesterYear = tf_semesterYear.getText().trim();
 
-            if ( ! name.equals("") ) {
+            Course course = new Course(name, semester + semesterYear, false);
 
-                Course course = new Course(name, "234", false);
-                courseService.create(course);
+            courseService.validate(course);
+            courseService.create(course);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("[Lerntia] LVA erstellen erfolgreich");
-                alert.setHeaderText("Erfolgreich");
-                alert.setContentText("Die LVA wurde erfolgreich erstellt.");
-                alert.setResizable(true);
-                alert.showAndWait();
-
-                Node source = (Node) actionEvent.getSource();
-                Stage stage = (Stage) source.getScene().getWindow();
-                stage.close();
-
-            } else {
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Fehlerhafter Name");
-                alert.setHeaderText("Warnung");
-                alert.setContentText("Bitte gib einen gültigen Namen an!");
-                alert.setResizable(true);
-                alert.showAndWait();
-
-            }
         } catch (ServiceException e) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
