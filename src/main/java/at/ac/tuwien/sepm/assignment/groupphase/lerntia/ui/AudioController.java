@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
@@ -17,35 +19,44 @@ import static org.springframework.util.Assert.notNull;
 public class AudioController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final IMainLerntiaService lerntiaService;
+
+    private final ITextToSpeechService iTextToSpeechService;
     private final LerntiaMainController lerntiaMainController;
-    private final TextToSpeech textToSpeech;
-    private final String VOICE = "bits3-hsmm";
+
     @FXML
     private Button audioButton;
 
     @Autowired
-    public AudioController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+        notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
-        this.lerntiaService = lerntiaService;
+        this.iTextToSpeechService = iTextToSpeechService;
         this.lerntiaMainController = lerntiaMainController;
-        this.textToSpeech = new TextToSpeech();
     }
 
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
         //play sound
-        var textToRead = lerntiaMainController.getAudioText();
-        //LOG.debug("Text to read:\n" + textToRead);
+        var tts = new Speech();
+        tts.setQuestion(lerntiaMainController.getQuestion());
+        tts.setAnswer1(lerntiaMainController.getAnswer1());
+        tts.setAnswer2(lerntiaMainController.getAnswer2());
+        tts.setAnswer3(lerntiaMainController.getAnswer3());
+        tts.setAnswer4(lerntiaMainController.getAnswer4());
+        tts.setAnswer5(lerntiaMainController.getAnswer5());
 
-        try {
-            textToSpeech.setVoice(VOICE);
-            textToSpeech.stopSpeaking();
-            textToSpeech.speak(textToRead, 1.0f, false, false);
-        } catch (Exception e) {
-            LOG.error("Failed to read question and answers with MaryTTS.");
+        if (iTextToSpeechService != null) {
+            try {
+                iTextToSpeechService.stopSpeaking();
+                iTextToSpeechService.speak(tts);
+            } catch (ServiceException e) {
+                LOG.error("Failed to read question and answers.");
+                //TODO: show alert
+            }
+        } else {
+            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
         }
     }
 
@@ -54,7 +65,11 @@ public class AudioController {
         if (audioButton.isDefaultButton()) {
             audioButton.defaultButtonProperty().setValue(false);
             //stop sound
-            textToSpeech.stopSpeaking();
+            try {
+                iTextToSpeechService.stopSpeaking();
+            } catch (ServiceException e) {
+                LOG.error("Failed to stop speech synthesizer.");
+            }
         } else {
             audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
