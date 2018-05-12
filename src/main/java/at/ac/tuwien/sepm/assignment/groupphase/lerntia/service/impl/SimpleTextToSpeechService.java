@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.MaryTTS;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.AudioPlayer;
 import marytts.LocalMaryInterface;
@@ -35,13 +35,13 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
             marytts = new LocalMaryInterface();
             marytts.setVoice(VOICE);
         } catch (MaryConfigurationException e) {
-            LOG.error("Failed to initialize MaryTTS: " + e.getMessage());
+            LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
         }
         playText(WELCOME);
     }
 
     @Override
-    public void speak(MaryTTS textToSpeech) {
+    public void speak(Speech textToSpeech) {
         if (marytts != null) {
             stopSpeaking();
             playText(getText(textToSpeech));
@@ -50,9 +50,9 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
                 marytts = new LocalMaryInterface();
                 marytts.setVoice(VOICE);
             } catch (MaryConfigurationException e) {
-                LOG.error("Failed to initialize MaryTTS: " + e.getMessage());
+                LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
             } catch (Exception e) {
-                LOG.error("Failed to play text with MaryTTS: " + e.getMessage());
+                LOG.error("Failed to play text with speech synthesizer: " + e.getMessage());
             }
         }
     }
@@ -65,7 +65,7 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
             audioPlayer.setDaemon(false);
             audioPlayer.start();
         } catch (SynthesisException e) {
-            LOG.error("Failed to generate audio with MaryTTS: " + e.getMessage());
+            LOG.error("Failed to generate audio with speech synthesizer: " + e.getMessage());
         } catch (IOException e) {
             LOG.error("Failed or interrupted IO operation occurred: " + e.getMessage());
         }
@@ -79,12 +79,12 @@ public class SimpleTextToSpeechService extends Thread implements ITextToSpeechSe
     }
 
     @Override
-    public void setVoice(MaryTTS textToSpeech) {
+    public void setVoice(Speech textToSpeech) {
         marytts.setVoice(textToSpeech.getVoice());
     }
 
 
-    private String getText(MaryTTS textToSpeech) {
+    private String getText(Speech textToSpeech) {
         return textToSpeech.getQuestion() + BREAK + '\n'
             + BREAK + ANSWER + answerNumber.eins + DP + textToSpeech.getAnswer1() + '\n'
             + BREAK + ANSWER + answerNumber.zwei + DP + textToSpeech.getAnswer2() + '\n'

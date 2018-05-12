@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.MaryTTS;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import javafx.fxml.FXML;
@@ -39,7 +39,7 @@ public class AudioController {
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
         //play sound
-        var tts = new MaryTTS();
+        var tts = new Speech();
         tts.setQuestion(lerntiaMainController.getQuestion());
         tts.setAnswer1(lerntiaMainController.getAnswer1());
         tts.setAnswer2(lerntiaMainController.getAnswer2());
@@ -52,11 +52,11 @@ public class AudioController {
                 iTextToSpeechService.stopSpeaking();
                 iTextToSpeechService.speak(tts);
             } catch (ServiceException e) {
-                LOG.error("Failed to read question and answers with MaryTTS.");
+                LOG.error("Failed to read question and answers.");
                 //TODO: show alert
             }
         } else {
-            LOG.error("Failed to read question and answers with MaryTTS: iTextToSpeechService is 'null'");
+            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
         }
     }
 

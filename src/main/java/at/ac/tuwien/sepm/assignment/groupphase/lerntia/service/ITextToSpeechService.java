@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.MaryTTS;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 
 public interface ITextToSpeechService {
 
@@ -19,7 +19,7 @@ public interface ITextToSpeechService {
      * @param textToSpeech the textToSpeech object with the properties of the text
      * @throws ServiceException if audio can't be played.
      */
-    void speak(MaryTTS textToSpeech) throws ServiceException;
+    void speak(Speech textToSpeech) throws ServiceException;
 
 
     /**
@@ -36,7 +36,7 @@ public interface ITextToSpeechService {
      * @param textToSpeech the new textToSpeech object with the voice properties
      * @throws ServiceException if the method can't set the voice
      */
-    void setVoice(MaryTTS textToSpeech) throws ServiceException;
+    void setVoice(Speech textToSpeech) throws ServiceException;
 
 
 }

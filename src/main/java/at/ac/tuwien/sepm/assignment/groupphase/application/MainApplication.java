@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
@@ -30,7 +29,7 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Thread maryThread;
+    private Thread textToSpeechThread;
     private AnnotationConfigApplicationContext context;
     private SimpleTextToSpeechService simpleTextToSpeechService;
 
@@ -88,8 +87,8 @@ public final class MainApplication extends Application implements Runnable {
         primaryStage.show();
         primaryStage.toFront();
 
-        maryThread = new Thread(new MainApplication());
-        maryThread.start();
+        textToSpeechThread = new Thread(new MainApplication());
+        textToSpeechThread.start();
         LOG.debug("Application startup complete");
     }
 
@@ -97,9 +96,9 @@ public final class MainApplication extends Application implements Runnable {
     public void stop() {
         LOG.debug("Stopping application");
         try {
-            maryThread.interrupt();
+            textToSpeechThread.interrupt();
         } catch (IllegalThreadStateException e) {
-            LOG.debug("Interrupting thread: " + e.getMessage());
+            LOG.debug("Interrupting textToSpeech thread: " + e.getMessage());
         }
         JDBCConnectionManager.closeConnection();
         context.close();
@@ -109,6 +108,5 @@ public final class MainApplication extends Application implements Runnable {
     public void run() {
         simpleTextToSpeechService = new SimpleTextToSpeechService();
         simpleTextToSpeechService.playWelcomeText();
-        Thread.currentThread().interrupt();
     }
 }
