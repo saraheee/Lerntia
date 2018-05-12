@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
@@ -18,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -31,7 +34,7 @@ public final class MainApplication extends Application implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Thread textToSpeechThread;
     private AnnotationConfigApplicationContext context;
-    private SimpleTextToSpeechService simpleTextToSpeechService;
+    private ITextToSpeechService iTextToSpeechService;
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
@@ -92,9 +95,23 @@ public final class MainApplication extends Application implements Runnable {
         LOG.debug("Application startup complete");
     }
 
+    @Autowired
+    public void getiTextToSpeechService(ITextToSpeechService iTextToSpeechService) {
+        this.iTextToSpeechService = iTextToSpeechService;
+    }
+
     @Override
     public void stop() {
         LOG.debug("Stopping application");
+        if (iTextToSpeechService != null) {
+            try {
+                iTextToSpeechService.stopSpeaking();
+            } catch (ServiceException e) {
+                LOG.error("Failed to stop speech synthesizer: " + e.getMessage());
+            }
+        } else {
+            LOG.debug("iTextToSpeechService is already null.");
+        }
         try {
             textToSpeechThread.interrupt();
         } catch (IllegalThreadStateException e) {
@@ -106,7 +123,12 @@ public final class MainApplication extends Application implements Runnable {
 
     @Override
     public void run() {
-        simpleTextToSpeechService = new SimpleTextToSpeechService();
-        simpleTextToSpeechService.playWelcomeText();
+        iTextToSpeechService = new SimpleTextToSpeechService();
+        try {
+            iTextToSpeechService.playWelcomeText();
+        } catch (ServiceException e) {
+            LOG.error("Failed to play welcome text with the speech synthesizer: " + e.getMessage());
+        }
     }
+
 }

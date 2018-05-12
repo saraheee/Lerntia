@@ -65,7 +65,11 @@ public class AudioController {
         if (audioButton.isDefaultButton()) {
             audioButton.defaultButtonProperty().setValue(false);
             //stop sound
-            textToSpeech.stopSpeaking();
+            try {
+                iTextToSpeechService.stopSpeaking();
+            } catch (ServiceException e) {
+                LOG.error("Failed to stop speech synthesizer.");
+            }
         } else {
             audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
