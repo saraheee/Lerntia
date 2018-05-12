@@ -46,5 +46,5 @@ public interface ILearningQuestionnaireDAO {
      * @return List with all LearningQuestionnaire
      * @throws PersistenceException  if it's not possible to get the List
      * */
-    List readAll() throws PersistenceException;
+    List<LearningQuestionnaire> readAll() throws PersistenceException;
 }
