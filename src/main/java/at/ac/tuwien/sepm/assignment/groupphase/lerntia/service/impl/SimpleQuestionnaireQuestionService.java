@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import java.util.List;
+
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireQuestionDAO;
@@ -48,5 +50,15 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
     @Override
     public List readAll() throws ServiceException {
         return null;
+    }
+
+    @Override
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) {
+        try {
+            return iQuestionnaireQuestionDAO.search(searchparameters);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -3,10 +3,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,31 @@ public class MainLerntiaService implements IMainLerntiaService {
     private int listcounter;
     private int currentQuestionIndex;
 
+    private ICourseService courseService;
+    private IUserService userService;
+    private IQuestionnaireService questionnaireService;
+    private IExamQuestionnaireService examQuestionaireService;
+    private ILearningQuestionnaireService learningQuestionnaireService;
+    private IQuestionService questionService;
+    private IQuestionnaireQuestionService questionnaireQuestionService;
+    private IUserCourseService userCourseService;
+    private IUserQuestionnaireService userQuestionaireService;
+
+
+    @Autowired
+    public MainLerntiaService(ICourseService courseService, IUserService userService, IQuestionnaireService questionnaireService, IExamQuestionnaireService examQuestionaireService, ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService, IQuestionnaireQuestionService questionnaireQuestionService, IUserCourseService userCourseService, IUserQuestionnaireService userQuestionaireService) {
+        this.courseService = courseService;
+        this.userService = userService;
+        this.questionnaireService = questionnaireService;
+        this.examQuestionaireService = examQuestionaireService;
+        this.learningQuestionnaireService = learningQuestionnaireService;
+        this.questionService = questionService;
+        this.questionnaireQuestionService = questionnaireQuestionService;
+        this.userCourseService = userCourseService;
+        this.userQuestionaireService = userQuestionaireService;
+    }
+
+    /*
     private ICourseDAO courseDAO;
     private IUserDAO userDAO;
     private IQuestionnaireDAO questionnaireDAO;
@@ -58,77 +81,55 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.userCourseDAO = userCourseDAO;
         this.userQuestionaireDAO = userQuestionaireDAO;
     }
+    */
 
-    @Override
-    public void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException{
-        try {
-            listcounter = 0;
-            questionnaireQuestionsList = new ArrayList<>();
-            questionList = new ArrayList<>();
-            List<Question> searchparameters = new ArrayList<>();
-            Question question;
-            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            questionnaireQuestion.setQid(eQ.getId());
-            questionnaireQuestionsList = questionnaireQuestionDAO.search(questionnaireQuestion);
-            //TODO send updated DATE to ExamQuestionnaireDAO
-            while (!questionnaireQuestionsList.isEmpty()){
-                question = new Question();
-                questionnaireQuestion = questionnaireQuestionsList.get(0);
-                question.setId(questionnaireQuestion.getQuestionid());
-                searchparameters.add(question);
-                questionnaireQuestionsList.remove(0);
-                LOG.info("ExamQuestionnaire Question found.");
-            }
-            questionList = questionDAO.search(searchparameters);
-            for (Question q:questionList) {
-                listcounter++;
-            }
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+    private void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException{
+        listcounter = 0;
+        questionnaireQuestionsList = new ArrayList<>();
+        questionList = new ArrayList<>();
+        List<Question> searchparameters = new ArrayList<>();
+        Question question;
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        questionnaireQuestion.setQid(eQ.getId());
+        questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
+        //TODO send updated DATE to ExamQuestionnaireDAO
+        while (!questionnaireQuestionsList.isEmpty()){
+            question = new Question();
+            questionnaireQuestion = questionnaireQuestionsList.get(0);
+            question.setId(questionnaireQuestion.getQuestionid());
+            searchparameters.add(question);
+            questionnaireQuestionsList.remove(0);
+            LOG.info("ExamQuestionnaire Question found.");
         }
-
-    }
-
-    @Override
-    public void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException{
-        try {
-            listcounter = 0;
-            questionnaireQuestionsList = new ArrayList<>();
-            questionList = new ArrayList<>();
-            List<Question> searchparameters = new ArrayList<>();
-            Question question;
-            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            questionnaireQuestion.setQid(lQ.getId());
-            questionnaireQuestionsList = questionnaireQuestionDAO.search(questionnaireQuestion);
-            while (!questionnaireQuestionsList.isEmpty()){
-                question = new Question();
-                questionnaireQuestion = questionnaireQuestionsList.get(0);
-                question.setId(questionnaireQuestion.getQuestionid());
-                searchparameters.add(question);
-                questionnaireQuestionsList.remove(0);
-                LOG.info("LearningQuestionnaire Question found.");
-            }
-            questionList = questionDAO.search(searchparameters);
-            for (Question q:questionList) {
-                listcounter++;
-            }
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
-        }
-
-
-    }
-
-    @Override
-    public Question getQuestion() throws ServiceException {
-        try {
-            Question question = questionDAO.get(1);
-            return question;
-            //TODO better implementation after more related stories regarding choosing of question are done.
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+        questionList = questionService.search(searchparameters);
+        for (Question q:questionList) {
+            listcounter++;
         }
     }
+
+    private void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException{
+        listcounter = 0;
+        questionnaireQuestionsList = new ArrayList<>();
+        questionList = new ArrayList<>();
+        List<Question> searchparameters = new ArrayList<>();
+        Question question;
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        questionnaireQuestion.setQid(lQ.getId());
+        questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
+        while (!questionnaireQuestionsList.isEmpty()){
+            question = new Question();
+            questionnaireQuestion = questionnaireQuestionsList.get(0);
+            question.setId(questionnaireQuestion.getQuestionid());
+            searchparameters.add(question);
+            questionnaireQuestionsList.remove(0);
+            LOG.info("LearningQuestionnaire Question found.");
+        }
+        questionList = questionService.search(searchparameters);
+        for (Question q:questionList) {
+            listcounter++;
+        }
+    }
+
 
     @Override
     public Question getNextQuestionFromList() throws ServiceException{
@@ -158,15 +159,11 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public Question getFirstQuestion() throws ServiceException {
-        try {
-            allLQs = learningQuestionnaireDAO.readAll();
-            currentLQ = allLQs.get(allLQs.size()-1);
-            getQuestionsFromLearningQuestionnaire(currentLQ);
-            currentQuestionIndex = -1;
-            return getNextQuestionFromList();
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
-        }
+        allLQs = learningQuestionnaireService.readAll();
+        currentLQ = allLQs.get(allLQs.size()-1);
+        getQuestionsFromLearningQuestionnaire(currentLQ);
+        currentQuestionIndex = -1;
+        return getNextQuestionFromList();
     }
 
     @Override
