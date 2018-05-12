@@ -105,4 +105,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             simpleQuestionnaireQuestionService.create(questionnaireQuestion);
         }
     }
+
+    @Override
+    public void importPictures (File file) {
+        // validieren
+
+        // kopieren
+
+    }
 }

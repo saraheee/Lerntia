@@ -8,4 +8,6 @@ public interface IQuestionnaireImportService {
 
     public void importQuestionnaire(File file, String course, String name) throws ServiceException;
 
+    public void importPictures(File file) throws ServiceException;
+
 }
