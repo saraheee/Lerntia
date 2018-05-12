@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.AudioPlayer;
@@ -46,7 +45,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.trace("marytts is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
             LOG.trace("stopSpeaking method is called. Calling playText method.");
-            if(!singleAnswer) {
+            if (!singleAnswer) {
                 playText(getText(textToSpeech));
             } else {
                 playText(textToSpeech.getSingleAnswer());
@@ -69,32 +68,15 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     }
 
     @Override
-    public void readSingleAnswer(Speech textToSpeech) throws ServiceException {
+    public void readSingleAnswer(Speech textToSpeech) {
         LOG.trace("Entering method readSingleAnswer.");
         singleAnswer = true;
         readQuestionAndAnswers(textToSpeech);
     }
 
     private void playText(String text) {
-
-        //First Step - ignoring the text between the ()
-        String finalText = "";
-        for(int i = 0;i<text.length();i++){
-            if(text.charAt(i)== '('){
-                i++;
-                while(text.charAt(i) != ')'){
-                    i++;
-                }
-                i++;
-            }
-            finalText += text.charAt(i);
-        }
-
-        //LOG.info("Text: "+text);
-        //LOG.info("Finaltext: "+finalText);
-
         LOG.trace("Entering method playText.");
-        try (var audio = marytts.generateAudio(finalText)) {
+        try (var audio = marytts.generateAudio(filterTextInParenthesis(text))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -107,6 +89,23 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         } catch (IOException e) {
             LOG.error("Failed or interrupted IO operation occurred: " + e.getMessage());
         }
+    }
+
+    private String filterTextInParenthesis(String text) {
+        var counter = 0;
+        var filtered = new StringBuilder();
+        for (var p : text.toCharArray()) {
+            if (p == '(') {
+                counter++;
+            }
+            if (p == ')') {
+                counter--;
+            }
+            if (p != ')' && p != '(' && counter == 0) {
+                filtered.append(p);
+            }
+        }
+        return filtered.toString();
     }
 
     @Override
