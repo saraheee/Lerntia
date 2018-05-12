@@ -13,7 +13,7 @@ import java.lang.invoke.MethodHandles;
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class ImageController {
+public class ImageController { // todo rename to zoomButtonController
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
@@ -36,8 +36,6 @@ public class ImageController {
         //TODO: maximize image
     }
 
-
-
     void setSelected() {
         if (zoomButton.isDefaultButton()) {
             zoomButton.defaultButtonProperty().setValue(false);
@@ -49,4 +47,5 @@ public class ImageController {
 
     }
 
+    void setVisible(boolean visible) {zoomButton.setVisible(visible);}
 }
