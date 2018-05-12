@@ -27,7 +27,7 @@ public class ExamQuestionnaire extends Questionnaire {
             "cmark='" + super.getCmark() + '\'' +
             ", semester='" + super.getSemester() + '\'' +
             ", id=" + super.getId()+
-            "date=" + date +
+            ", date=" + date +
             "isDeleted=" + super.getDeleted() +
             '}';
     }
