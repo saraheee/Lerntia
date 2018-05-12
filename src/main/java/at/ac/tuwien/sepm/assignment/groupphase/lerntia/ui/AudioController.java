@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
@@ -19,20 +19,20 @@ import static org.springframework.util.Assert.notNull;
 public class AudioController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private final ITextToSpeechService iTextToSpeechService;
     private final LerntiaMainController lerntiaMainController;
-    private final TextToSpeech textToSpeech;
-    private final String VOICE = "bits3-hsmm";
+
     @FXML
     private Button audioButton;
 
     @Autowired
-    public AudioController(ITextToSpeechService iTextToSpeechService, LerntiaMainController lerntiaMainController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
+        notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.iTextToSpeechService = iTextToSpeechService;
         this.lerntiaMainController = lerntiaMainController;
-        this.textToSpeech = new TextToSpeech();
     }
 
     @FXML

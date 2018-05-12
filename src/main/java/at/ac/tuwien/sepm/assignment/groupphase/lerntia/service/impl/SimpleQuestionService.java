@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -17,23 +18,12 @@ import java.util.List;
 public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private QuestionDAO questionDAO;
 
+
+    @Autowired
     public SimpleQuestionService(QuestionDAO questionDAO){
-        this.questionDAO = questionDAO;
-    }
-
-    public SimpleQuestionService(){
-        try {
-            this.QuestionDAO(new QuestionDAO());
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void QuestionDAO(QuestionDAO questionDAO) {
-        this.questionDAO = questionDAO;
+            this.questionDAO = questionDAO;
     }
 
     @Override
@@ -41,7 +31,8 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             questionDAO.create(question);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -50,16 +41,18 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             questionDAO.update(question);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
-    public void search(List<Question> questionList) throws ServiceException {
+    public List<Question> search(List<Question> questionList) throws ServiceException {
         try {
-            List list =questionDAO.search(questionList);
+            return questionDAO.search(questionList);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -68,22 +61,19 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             questionDAO.delete(question);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
     public Question get(long id) throws ServiceException {
-
-        Question question = null;
-
         try {
-            question = questionDAO.get(id);
+            return questionDAO.get(id);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
-
-        return question;
     }
 
     @Override

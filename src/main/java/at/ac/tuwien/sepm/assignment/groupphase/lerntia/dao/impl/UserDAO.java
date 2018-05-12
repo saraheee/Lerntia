@@ -93,7 +93,10 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare statement for User deletion.");
             PreparedStatement psdelete = connection.prepareStatement(SQL_USER_DELETE_STATEMENT);
-            psdelete.setString(1,user.getMatriculationNumber());
+            if (user.getMatriculationNumber()!=null) {
+                psdelete.setString(1, user.getMatriculationNumber());
+            }
+
             psdelete.executeUpdate();
             LOG.info("User soft-deleted from Database.");
         } catch (SQLException e) {

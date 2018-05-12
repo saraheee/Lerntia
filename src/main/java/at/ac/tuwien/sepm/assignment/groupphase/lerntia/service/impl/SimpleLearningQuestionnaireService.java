@@ -5,12 +5,17 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Service
 public class SimpleLearningQuestionnaireService implements ILearningQuestionnaireService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ILearningQuestionnaireDAO iLearningQuestionnaireDAO;
 
@@ -23,7 +28,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.create(learningQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -32,7 +38,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.update(learningQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -41,7 +48,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.search(learningQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -50,7 +58,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.delete(learningQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -59,8 +68,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             return iLearningQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            e.printStackTrace();
-            return null;
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 }

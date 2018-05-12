@@ -5,11 +5,16 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserCourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserCourse;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserCourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.lang.invoke.MethodHandles;
 
 @Service
 public class SimpleUserCourseService implements IUserCourseService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IUserCourseDAO iUserCourseDAO;
 
     public SimpleUserCourseService(IUserCourseDAO iUserCourseDAO){
@@ -21,7 +26,8 @@ public class SimpleUserCourseService implements IUserCourseService {
         try {
             iUserCourseDAO.create(userCourse);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 }

@@ -12,7 +12,7 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import static org.hamcrest.core.Is.is;
 
-public class LerntiaServiceTest {
+public class IMainLerntiaServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
@@ -32,9 +32,9 @@ public class LerntiaServiceTest {
     }
 
    /** private final LerntiaDAO lerntiaDAO = mock(JDBCLerntiaDAO.class);
-    private final LerntiaService lerntiaService = new SimpleLerntiaService(lerntiaDAO);
+    private final IMainLerntiaService lerntiaService = new SimpleLerntiaService(lerntiaDAO);
 
-    public LerntiaServiceTest() throws PersistenceException {
+    public IMainLerntiaServiceTest() throws PersistenceException {
         when(lerntiaDAO.readAnswerForQuestion(any())).thenReturn(new Answer(0L, "42"));
     }
 
