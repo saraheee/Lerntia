@@ -73,26 +73,26 @@ public class UserDAOTest {
     public void updateExistingUserandReadUser()throws PersistenceException{
         try {
             User fabio = new User();
-            fabio.setMatriculationNumber("01526912");
+            fabio.setMatriculationNumber("123123123");
             fabio.setName("Fabio");
             fabio.setStudyProgramme("033 532");
             userDAO.create(fabio);
 
             User fabio2 = new User();
-            fabio2.setMatriculationNumber("01526912");
+            fabio2.setMatriculationNumber("123123123");
             fabio2.setStudyProgramme("033 555");
             fabio2.setName("NotFabio");
             userDAO.update(fabio2);
 
             User other = new User();
-            other.setMatriculationNumber("01526912");
+            other.setMatriculationNumber("123123123");
             other = userDAO.read(other);
 
             assertEquals(fabio2.getMatriculationNumber(),other.getMatriculationNumber());
             assertEquals(fabio2.getName(),other.getName());
             assertEquals(fabio2.getStudyProgramme(),other.getStudyProgramme());
         }catch (PersistenceException e){
-           throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
     }
 

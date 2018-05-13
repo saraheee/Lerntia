@@ -6,6 +6,7 @@ public abstract class Questionnaire {
     private String semester;
     private Long id;
     private Boolean isDeleted;
+    private Long courseID;
 
     public Questionnaire() {}
 
@@ -14,6 +15,14 @@ public abstract class Questionnaire {
         this.semester = semester;
         this.id = id;
         this.isDeleted = isDeleted;
+    }
+
+    public Long getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(Long courseID) {
+        this.courseID = courseID;
     }
 
     public String getCmark() {
