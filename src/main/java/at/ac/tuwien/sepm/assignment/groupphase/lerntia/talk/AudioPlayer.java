@@ -1,26 +1,17 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk;
 
-import java.io.File;
+import marytts.util.data.audio.MonoAudioInputStream;
+import marytts.util.data.audio.StereoAudioInputStream;
+
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import marytts.util.data.audio.MonoAudioInputStream;
-import marytts.util.data.audio.StereoAudioInputStream;
-
 /**
  * This class is taken from a Youtube Tutorial. URL: https://www.youtube.com/watch?v=OLKxBorVwk8
- * @author GOXR3PLUS
  *
+ * @author GOXR3PLUS
  */
 public class AudioPlayer extends Thread {
 
@@ -38,129 +29,9 @@ public class AudioPlayer extends Thread {
     private float gain = 1.0f;
 
     /**
-     * The status of the player
-     *
-     * @author GOXR3PLUS
-     *
-     */
-    public enum Status {
-        /**
-         *
-         */
-        WAITING,
-        /**
-         *
-         */
-        PLAYING;
-    }
-
-    /**
      * AudioPlayer which can be used if audio stream is to be set separately, using setAudio().
-     *
      */
     public AudioPlayer() {
-    }
-
-    /**
-     * @param audioFile
-     * @throws IOException
-     * @throws UnsupportedAudioFileException
-     */
-    public AudioPlayer(File audioFile) throws IOException, UnsupportedAudioFileException {
-        this.ais = AudioSystem.getAudioInputStream(audioFile);
-    }
-
-    /**
-     * @param ais
-     */
-    public AudioPlayer(AudioInputStream ais) {
-        this.ais = ais;
-    }
-
-    /**
-     * @param audioFile
-     * @param lineListener
-     * @throws IOException
-     * @throws UnsupportedAudioFileException
-     */
-    public AudioPlayer(File audioFile, LineListener lineListener) throws IOException, UnsupportedAudioFileException {
-        this.ais = AudioSystem.getAudioInputStream(audioFile);
-        this.lineListener = lineListener;
-    }
-
-    /**
-     * @param ais
-     * @param lineListener
-     */
-    public AudioPlayer(AudioInputStream ais, LineListener lineListener) {
-        this.ais = ais;
-        this.lineListener = lineListener;
-    }
-
-    /**
-     * @param audioFile
-     * @param line
-     * @param lineListener
-     * @throws IOException
-     * @throws UnsupportedAudioFileException
-     */
-    public AudioPlayer(File audioFile, SourceDataLine line, LineListener lineListener) throws IOException, UnsupportedAudioFileException {
-        this.ais = AudioSystem.getAudioInputStream(audioFile);
-        this.line = line;
-        this.lineListener = lineListener;
-    }
-
-    /**
-     * @param ais
-     * @param line
-     * @param lineListener
-     */
-    public AudioPlayer(AudioInputStream ais, SourceDataLine line, LineListener lineListener) {
-        this.ais = ais;
-        this.line = line;
-        this.lineListener = lineListener;
-    }
-
-    /**
-     *
-     * @param audioFile
-     *            audiofile
-     * @param line
-     *            line
-     * @param lineListener
-     *            lineListener
-     * @param outputMode
-     *            if MONO, force output to be mono; if STEREO, force output to be STEREO; if LEFT_ONLY, play a mono signal over the left channel of a
-     *            stereo output, or mute the right channel of a stereo signal; if RIGHT_ONLY, do the same with the right output channel.
-     * @throws IOException
-     *             IOException
-     * @throws UnsupportedAudioFileException
-     *             UnsupportedAudioFileException
-     */
-    public AudioPlayer(File audioFile, SourceDataLine line, LineListener lineListener, int outputMode) throws IOException, UnsupportedAudioFileException {
-        this.ais = AudioSystem.getAudioInputStream(audioFile);
-        this.line = line;
-        this.lineListener = lineListener;
-        this.outputMode = outputMode;
-    }
-
-    /**
-     *
-     * @param ais
-     *            ais
-     * @param line
-     *            line
-     * @param lineListener
-     *            lineListener
-     * @param outputMode
-     *            if MONO, force output to be mono; if STEREO, force output to be STEREO; if LEFT_ONLY, play a mono signal over the left channel of a
-     *            stereo output, or mute the right channel of a stereo signal; if RIGHT_ONLY, do the same with the right output channel.
-     */
-    public AudioPlayer(AudioInputStream ais, SourceDataLine line, LineListener lineListener, int outputMode) {
-        this.ais = ais;
-        this.line = line;
-        this.lineListener = lineListener;
-        this.outputMode = outputMode;
     }
 
     /**
@@ -203,22 +74,12 @@ public class AudioPlayer extends Thread {
      * @param fGain
      */
     public void setGain(float fGain) {
-
-        // if (line != null)
-        // System.out.println(((FloatControl)
-        // line.getControl(FloatControl.Type.MASTER_GAIN)).getValue())
-
-        // Set the value
         gain = fGain;
 
         // Better type
         if (line != null && line.isControlSupported(FloatControl.Type.MASTER_GAIN))
-            ( (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN) ).setValue((float) ( 20 * Math.log10(fGain <= 0.0 ? 0.0000 : fGain) ));
-        // OR (Math.log(fGain == 0.0 ? 0.0000 : fGain) / Math.log(10.0))
+            ((FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN)).setValue((float) (20 * Math.log10(fGain <= 0.0 ? 0.0000 : fGain)));
 
-        // if (line != null)
-        // System.out.println(((FloatControl)
-        // line.getControl(FloatControl.Type.MASTER_GAIN)).getValue())
     }
 
     @Override
@@ -242,7 +103,7 @@ public class AudioPlayer extends Thread {
             }
         }
 
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+        var info = new DataLine.Info(SourceDataLine.class, audioFormat);
 
         try {
             if (line == null) {
@@ -250,7 +111,7 @@ public class AudioPlayer extends Thread {
                 if (!bIsSupportedDirectly) {
                     AudioFormat sourceFormat = audioFormat;
                     AudioFormat targetFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), sourceFormat.getSampleSizeInBits(),
-                        sourceFormat.getChannels(), sourceFormat.getChannels() * ( sourceFormat.getSampleSizeInBits() / 8 ), sourceFormat.getSampleRate(),
+                        sourceFormat.getChannels(), sourceFormat.getChannels() * (sourceFormat.getSampleSizeInBits() / 8), sourceFormat.getSampleRate(),
                         sourceFormat.isBigEndian());
 
                     ais = AudioSystem.getAudioInputStream(targetFormat, ais);
@@ -271,9 +132,9 @@ public class AudioPlayer extends Thread {
         line.start();
         setGain(getGainValue());
 
-        int nRead = 0;
-        byte[] abData = new byte[65532];
-        while ( ( nRead != -1 ) && ( !exitRequested )) {
+        var nRead = 0;
+        var abData = new byte[65532];
+        while ((nRead != -1) && (!exitRequested)) {
             try {
                 nRead = ais.read(abData, 0, abData.length);
             } catch (IOException ex) {
@@ -287,6 +148,22 @@ public class AudioPlayer extends Thread {
             line.drain();
         }
         line.close();
+    }
+
+    /**
+     * The status of the player
+     *
+     * @author GOXR3PLUS
+     */
+    public enum Status {
+        /**
+         *
+         */
+        WAITING,
+        /**
+         *
+         */
+        PLAYING;
     }
 }
 
