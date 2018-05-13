@@ -288,7 +288,7 @@ public class LerntiaMainController {
                 mainImage.setImage(image);
                 mainImage.setVisible(true);
                 zoomButtonController.setVisible(true);
-                LOG.info("Image for this vehicle is displayed: '{}'", question.getPicture());
+                LOG.info("Image for this question is displayed: '{}'", question.getPicture());
             } catch (MalformedURLException e) {
                 LOG.debug("Exception while trying to display image " + e.getMessage());
             }
