@@ -15,25 +15,26 @@ CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   isDeleted           BOOLEAN DEFAULT FALSE
 );
 
+
 CREATE TABLE IF NOT EXISTS Course (
-  mark      VARCHAR(255) primary key,
-  semester  VARCHAR(255),
+  id bigint auto_increment primary key,
+  mark      VARCHAR(255) not null,
+  semester  VARCHAR(255) not null,
   name      VARCHAR(255),
   isDeleted BOOLEAN DEFAULT FALSE,
-  -- PRIMARY KEY (mark, semester) kein many to one relation hier möglich
 );
+
+
 
 CREATE TABLE IF NOT EXISTS PUserCourse (
   matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
-  cmark               VARCHAR(255) REFERENCES Course (mark),
-  semester            VARCHAR(255) REFERENCES Course (semester),
+  courseid             bigint references Course (id),
   isDeleted           BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (matriculationNumber, cmark, semester)
+  PRIMARY KEY (matriculationNumber, courseid)
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
-  cmark     VARCHAR(255) REFERENCES Course (mark),
-  semester  VARCHAR(255) REFERENCES Course (Semester),
+  courseid  bigint REFERENCES Course (id),
   id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
   isDeleted BOOLEAN DEFAULT FALSE
 );
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
   isDeleted           BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (matriculationNumber, qid)
 );
---
+
 CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
   id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
   name      VARCHAR(255) NOT NULL,
@@ -84,22 +85,25 @@ INSERT INTO PUser
   )
 WHERE NOT EXISTS (SELECT * FROM PUser);
 
---mark, semester, name, isDeleted
+--id bigint auto_increment primary key,
+--mark      VARCHAR(255) not null,
+--semester  VARCHAR(255) not null,
+--name      VARCHAR(255),
+--isDeleted BOOLEAN DEFAULT FALSE,
 INSERT INTO Course
    SELECT * FROM (
       SELECT * FROM Course WHERE FALSE
-        UNION SELECT '1', '4', 'TIL', false
+        UNION SELECT 1, '1', '4', 'TIL', false
   )
 WHERE NOT EXISTS (SELECT * FROM Course);
 
---matriculationNumber REF PUser (matriculationNumber),
---cmark               REF Course (mark),
---semester            REF Course (semester),
---isDeleted
+--matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
+--courseid             bigint references Course (id),
+--isDeleted           BOOLEAN DEFAULT FALSE,
 INSERT INTO PUserCourse
    SELECT * FROM (
       SELECT * FROM PUserCourse WHERE FALSE
-        UNION SELECT '15', '1', '4', false
+        UNION SELECT '15', 1, false
   )
 WHERE NOT EXISTS (SELECT * FROM PUserCourse);
 

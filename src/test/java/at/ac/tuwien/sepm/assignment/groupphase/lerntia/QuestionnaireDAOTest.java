@@ -53,14 +53,13 @@ public class QuestionnaireDAOTest {
         try {
             Course tgi = new Course();
             tgi.setSemester("2018S");
-            tgi.setMark("123.349");
+            tgi.setMark("999.349");
             courseDAO.create(tgi);
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Chapter 1");
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2018S");
+            chapter1.setCourseID(tgi.getId());
             questionnaireDAO.create(chapter1);
-            Long expected = Long.valueOf(1);
+            Long expected = Long.valueOf(3);
             Assert.assertEquals(expected,chapter1.getId());
 
         } catch (PersistenceException e) {
@@ -68,14 +67,14 @@ public class QuestionnaireDAOTest {
         }
     }
 
-    @Test(expected = PersistenceException.class)
+    @Test(expected = Exception.class)
     public void createNewQuestionnaireError() throws PersistenceException {
         try {
 
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Chapter 1");
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2018S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2018S");
             questionnaireDAO.create(chapter1);
 
 

@@ -75,9 +75,10 @@ public class UserCourseDAOTest {
             tgi.setMark(mark);
             courseDAO.create(tgi);
             UserCourse FabioTGI = new UserCourse();
-        FabioTGI.setCmark(mark);
-        FabioTGI.setMatriculationNumber("01526912");
-        FabioTGI.setSemester("2019W");
+            FabioTGI.setCmark(mark);
+            FabioTGI.setMatriculationNumber("01526912");
+            FabioTGI.setSemester("2019W");
+            FabioTGI.setCourseID(tgi.getId());
 
             userCourseDAO.create(FabioTGI);
         } catch (PersistenceException e) {
@@ -88,14 +89,14 @@ public class UserCourseDAOTest {
     @Test(expected = PersistenceException.class)
     public void createNewUserCourseReferentialError() throws PersistenceException {
         try {
-        UserCourse FabioTGI = new UserCourse();
-        FabioTGI.setCmark("123.123");
-        FabioTGI.setMatriculationNumber("01526912");
-        FabioTGI.setSemester("2019W");
+            UserCourse FabioTGI = new UserCourse();
+            FabioTGI.setCmark("123.123");
+            FabioTGI.setMatriculationNumber("01526912");
+            FabioTGI.setSemester("2019W");
 
             userCourseDAO.create(FabioTGI);
         } catch (PersistenceException e) {
-           throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
     }
 

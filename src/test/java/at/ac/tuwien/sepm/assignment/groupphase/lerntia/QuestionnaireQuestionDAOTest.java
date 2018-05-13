@@ -72,8 +72,9 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
+            chapter1.setCourseID(tgi.getId());
             examQuestionnaireDAO.create(chapter1);
 
             Question firstquestion = new Question();
@@ -82,7 +83,7 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(3),firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
@@ -97,9 +98,10 @@ public class QuestionnaireQuestionDAOTest {
     public void createNewQuestionnaireQuestionError() throws PersistenceException {
         try {
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(Long.valueOf(5));
+            firstquestionfirstchapter.setQid(Long.valueOf(1));
             firstquestionfirstchapter.setQuestionid(Long.valueOf(34));
             questionnaireQuestionDAO.create(firstquestionfirstchapter);
+            Assert.assertEquals(Long.valueOf(1),firstquestionfirstchapter.getQid());
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());
         }
@@ -108,15 +110,16 @@ public class QuestionnaireQuestionDAOTest {
     @Test
     public void checkpersistenceQuestionnaireQuestionDAO(){
         try {
-            Course tgi = new Course();
-            tgi.setSemester("2015S");
-            tgi.setMark("123.349");
-            courseDAO.create(tgi);
+            Course course = new Course();
+            course.setSemester("2013S");
+            course.setMark("123.555");
+            courseDAO.create(course);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
+            chapter1.setCourseID(course.getId());
             examQuestionnaireDAO.create(chapter1);
 
             Question firstquestion = new Question();
@@ -125,7 +128,7 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(6),firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
@@ -138,7 +141,7 @@ public class QuestionnaireQuestionDAOTest {
             secondquestion.setAnswer2("Monday");
             secondquestion.setCorrectAnswers("1");
             questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(2),secondquestion.getId());
+            Assert.assertEquals(Long.valueOf(7),secondquestion.getId());
 
             QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
             secondquestionfirstchapter.setQid(chapter1.getId());
@@ -153,14 +156,15 @@ public class QuestionnaireQuestionDAOTest {
     public void searchQuestionnaireQuestions(){
         try {
             Course tgi = new Course();
-            tgi.setSemester("2015S");
+            tgi.setSemester("2010S");
             tgi.setMark("123.349");
             courseDAO.create(tgi);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
+            chapter1.setCourseID(tgi.getId());
             examQuestionnaireDAO.create(chapter1);
 
             Question firstquestion = new Question();
@@ -169,10 +173,11 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(4),firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
+            System.out.println(chapter1.getId());
             firstquestionfirstchapter.setQuestionid(firstquestion.getId());
             questionnaireQuestionDAO.create(firstquestionfirstchapter);
 
@@ -182,7 +187,7 @@ public class QuestionnaireQuestionDAOTest {
             secondquestion.setAnswer2("Monday");
             secondquestion.setCorrectAnswers("12");
             questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(2),secondquestion.getId());
+            Assert.assertEquals(Long.valueOf(5),secondquestion.getId());
 
             QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
             secondquestionfirstchapter.setQid(chapter1.getId());
@@ -190,15 +195,17 @@ public class QuestionnaireQuestionDAOTest {
             questionnaireQuestionDAO.create(secondquestionfirstchapter);
 
             QuestionnaireQuestion searchparameters = new QuestionnaireQuestion();
-            searchparameters.setQid(Long.valueOf(1));
+            Long id = Long.valueOf(5);
+            searchparameters.setQid(id);
             List list = questionnaireQuestionDAO.search(searchparameters);
+            System.out.println(list.size());
             Assert.assertEquals(2,list.size());
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = Exception.class)
     public void deleteQuestionnaireQuestionError() throws PersistenceException {
 
         try {
@@ -209,8 +216,8 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             examQuestionnaireDAO.create(chapter1);
 
             Question firstquestion = new Question();

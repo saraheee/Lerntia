@@ -1,3 +1,4 @@
+DROP ALL OBJECTS;
 CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   name                VARCHAR(255),
   matriculationNumber VARCHAR(255) PRIMARY KEY,

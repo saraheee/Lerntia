@@ -5,6 +5,7 @@ public class UserCourse {
     private String cmark;
     private String semester;
     private Boolean isDeleted;
+    private long courseID;
 
     public UserCourse() {}
 
@@ -13,6 +14,14 @@ public class UserCourse {
         this.cmark = cmark;
         this.semester = semester;
         this.isDeleted = isDeleted;
+    }
+
+    public long getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(long courseID) {
+        this.courseID = courseID;
     }
 
     public String getMatriculationNumber() {
