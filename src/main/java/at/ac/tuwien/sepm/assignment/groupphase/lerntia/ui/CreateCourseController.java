@@ -78,6 +78,10 @@ public class CreateCourseController {
             courseService.validate(course);
             courseService.create(course);
 
+            Node source = (Node) actionEvent.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
+
         } catch (ServiceException e) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);

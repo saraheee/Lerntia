@@ -78,6 +78,7 @@ public class UserDAO implements IUserDAO {
                 u.setName(rs.getString(1));
                 u.setMatriculationNumber(rs.getString(2));
                 u.setStudyProgramme(rs.getString(3));
+                u.setDeleted(rs.getBoolean(4));
             }
             LOG.info("User found.");
             return u;
@@ -92,7 +93,10 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare statement for User deletion.");
             PreparedStatement psdelete = connection.prepareStatement(SQL_USER_DELETE_STATEMENT);
-            psdelete.setString(1,user.getMatriculationNumber());
+            if (user.getMatriculationNumber()!=null) {
+                psdelete.setString(1, user.getMatriculationNumber());
+            }
+
             psdelete.executeUpdate();
             LOG.info("User soft-deleted from Database.");
         } catch (SQLException e) {

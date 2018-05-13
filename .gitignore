@@ -45,6 +45,7 @@ Icon
 
 ### Log-Files ###
 *.log
+log/
 
 ### Java ###
 *.class

@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.LerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.TextToSpeech;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Scanner;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -18,49 +19,108 @@ import static org.springframework.util.Assert.notNull;
 public class AudioController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final LerntiaService lerntiaService;
-    private final LerntiaMainController lerntiaMainController;
-    private final TextToSpeech textToSpeech;
-    private final String VOICE = "bits3-hsmm";
+
+    private final ITextToSpeechService iTextToSpeechService;
+
     @FXML
     private Button audioButton;
+    private String question;
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
+    private String answer5;
 
     @Autowired
-    public AudioController(LerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService) {
+        notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
         notNull(lerntiaService, "'lerntiaService' should not be null");
-        notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
-        this.lerntiaService = lerntiaService;
-        this.lerntiaMainController = lerntiaMainController;
-        this.textToSpeech = new TextToSpeech();
+        this.iTextToSpeechService = iTextToSpeechService;
     }
 
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
-        //play sound
-        var textToRead = lerntiaMainController.getAudioText();
-        //LOG.debug("Text to read:\n" + textToRead);
+        //play sound of the question and all answers
+        var tts = new Speech();
+        tts.setQuestion(this.question);
+        tts.setAnswer1(this.answer1);
+        tts.setAnswer2(this.answer2);
+        tts.setAnswer3(this.answer3);
+        tts.setAnswer4(this.answer4);
+        tts.setAnswer5(this.answer5);
 
-        try {
-            textToSpeech.setVoice(VOICE);
-            textToSpeech.stopSpeaking();
-            textToSpeech.speak(textToRead, 1.0f, false, false);
-        } catch (Exception e) {
-            LOG.error("Failed to read question and answers with MaryTTS.");
+        if (iTextToSpeechService != null) {
+            try {
+                iTextToSpeechService.stopSpeaking();
+                iTextToSpeechService.readQuestionAndAnswers(tts);
+            } catch (ServiceException e) {
+                LOG.error("Failed to read question and answers.");
+                //TODO: show alert
+            }
+        } else {
+            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
         }
     }
 
+    void readSingleAnswer(String answerText) {
+        var tts = new Speech();
+        tts.setSingleAnswer(answerText);
+        if (iTextToSpeechService != null) {
+            try {
+                stopReading();
+                iTextToSpeechService.readSingleAnswer(tts);
+            } catch (ServiceException e) {
+                LOG.error("Failed to read question and answers.");
+                //TODO: show alert
+            }
+        } else {
+            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+        }
+    }
+
+    void stopReading() {
+        try {
+            iTextToSpeechService.stopSpeaking();
+        } catch (ServiceException e) {
+            LOG.error("Failed to stop the audio");
+        }
+    }
 
     void setSelected() {
         if (audioButton.isDefaultButton()) {
             audioButton.defaultButtonProperty().setValue(false);
             //stop sound
-            textToSpeech.stopSpeaking();
+            stopReading();
         } else {
             audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
         }
-
     }
+
+    void setQuestion(String question) {
+        this.question = question;
+    }
+
+    void setAnswer1(String answer) {
+        this.answer1 = answer;
+    }
+
+    void setAnswer2(String answer) {
+        this.answer2 = answer;
+    }
+
+    void setAnswer3(String answer) {
+        this.answer3 = answer;
+    }
+
+    void setAnswer4(String answer) {
+        this.answer4 = answer;
+    }
+
+    void setAnswer5(String answer) {
+        this.answer5 = answer;
+    }
+
 
 }
