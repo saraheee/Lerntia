@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class AudioController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ITextToSpeechService iTextToSpeechService;
+    private final AlertController alertController;
 
     @FXML
     private Button audioButton;
@@ -32,10 +34,12 @@ public class AudioController {
     private String answer5;
 
     @Autowired
-    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, AlertController alertController) {
         notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
         notNull(lerntiaService, "'lerntiaService' should not be null");
+        notNull(alertController, "'alertController' should not be null");
         this.iTextToSpeechService = iTextToSpeechService;
+        this.alertController = alertController;
     }
 
     @FXML
@@ -56,7 +60,7 @@ public class AudioController {
                 iTextToSpeechService.readQuestionAndAnswers(tts);
             } catch (ServiceException e) {
                 LOG.error("Failed to read question and answers.");
-                //TODO: show alert
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Lesen fehlgeschlagen", "Die Audio Ausgabe ist fehlgeschlagen.", "");
             }
         } else {
             LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
@@ -72,7 +76,7 @@ public class AudioController {
                 iTextToSpeechService.readSingleAnswer(tts);
             } catch (ServiceException e) {
                 LOG.error("Failed to read question and answers.");
-                //TODO: show alert
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Lesen fehlgeschlagen", "Die Audio Ausgabe ist fehlgeschlagen.", "");
             }
         } else {
             LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");

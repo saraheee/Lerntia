@@ -110,7 +110,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void stopSpeaking() {
-        LOG.debug("Entering method stopSpeaking.");
+        LOG.trace("Entering method stopSpeaking.");
         if (audioPlayer != null) {
             audioPlayer.cancel();
             LOG.debug("Cancelling speech.");
