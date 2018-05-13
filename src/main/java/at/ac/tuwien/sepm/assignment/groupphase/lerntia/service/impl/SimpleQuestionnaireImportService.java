@@ -93,12 +93,14 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                 // there is no image
             }
 
+            // TODO - add picture
             Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
             simpleQuestionService.create(q);
 
             questionIDs.add(q.getId());
         }
 
+        // TODO - course data
         LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long) 0, false, name);
 
         simpleLearningQuestionnaireService.create(learningQuestionnaire);
