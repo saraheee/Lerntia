@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -17,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
 import java.lang.invoke.MethodHandles;
+import java.net.MalformedURLException;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -52,11 +55,12 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private ImageController zoomButtonController;
+    private ZoomButtonController zoomButtonController;
 
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
+    private File imageFile;
 
     @Autowired
     public LerntiaMainController(IMainLerntiaService lerntiaService, AudioController audioController, AlertController alertController) {
@@ -76,7 +80,7 @@ public class LerntiaMainController {
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-
+            LOG.warn("No first answer. Loop stoped.");
         }
     }
 
@@ -87,7 +91,7 @@ public class LerntiaMainController {
                 audioButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.Z) {
-                LOG.debug("Z key was pressed");
+                LOG.debug("Z key was pressed, imageFile = {}", imageFile);
                 zoomButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.N) {
@@ -265,6 +269,29 @@ public class LerntiaMainController {
         audioController.setAnswer3(answer3Controller.getAnswerText());
         audioController.setAnswer4(answer4Controller.getAnswerText());
         audioController.setAnswer5(answer5Controller.getAnswerText());
+
+        // show image in the main window or hide the zoom button if there is no image to be shown
+        if (question.getPicture() == null || question.getPicture().trim().isEmpty()) {
+            mainImage.setVisible(false);
+            zoomButtonController.setVisible(false);
+            zoomButtonController.setImageFile(null);
+            LOG.debug("No image to be displayed for this question");
+        } else {
+            try {
+                String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
+                    + "img" + File.separator + question.getPicture();
+                LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
+                File imageFile = new File(imagePath);
+                zoomButtonController.setImageFile(imageFile);
+                Image image = new Image(imageFile.toURI().toURL().toExternalForm());
+                mainImage.setImage(image);
+                mainImage.setVisible(true);
+                zoomButtonController.setVisible(true);
+                LOG.info("Image for this vehicle is displayed: '{}'", question.getPicture());
+            } catch (MalformedURLException e) {
+                LOG.debug("Exception while trying to display image " + e.getMessage());
+            }
+        }
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
