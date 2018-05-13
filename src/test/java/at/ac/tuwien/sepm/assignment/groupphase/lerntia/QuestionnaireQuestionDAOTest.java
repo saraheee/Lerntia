@@ -72,8 +72,8 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             chapter1.setCourseID(tgi.getId());
             examQuestionnaireDAO.create(chapter1);
 
@@ -117,8 +117,8 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             chapter1.setCourseID(course.getId());
             examQuestionnaireDAO.create(chapter1);
 
@@ -162,8 +162,8 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             chapter1.setCourseID(tgi.getId());
             examQuestionnaireDAO.create(chapter1);
 
@@ -216,8 +216,8 @@ public class QuestionnaireQuestionDAOTest {
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             examQuestionnaireDAO.create(chapter1);
 
             Question firstquestion = new Question();
