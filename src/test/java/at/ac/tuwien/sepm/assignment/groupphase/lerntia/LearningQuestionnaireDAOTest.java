@@ -63,8 +63,8 @@ public class LearningQuestionnaireDAOTest {
             courseDAO.create(tgi);
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Success chapter");
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             chapter1.setCourseID(tgi.getId());
             learningQuestionnaireDAO.create(chapter1);
             Long expected = Long.valueOf(2);
@@ -79,8 +79,8 @@ public class LearningQuestionnaireDAOTest {
         try {
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Error chapter");
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2015S");
             learningQuestionnaireDAO.create(chapter1);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());

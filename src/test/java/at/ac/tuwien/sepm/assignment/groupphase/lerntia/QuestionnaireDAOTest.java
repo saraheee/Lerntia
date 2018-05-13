@@ -73,8 +73,8 @@ public class QuestionnaireDAOTest {
 
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Chapter 1");
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2018S");
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester("2018S");
             questionnaireDAO.create(chapter1);
 
 

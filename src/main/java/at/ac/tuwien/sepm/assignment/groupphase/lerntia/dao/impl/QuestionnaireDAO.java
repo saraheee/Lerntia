@@ -39,10 +39,8 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
             LOG.info("Prepare Statement for Questionnaire creation");
 
-            System.out.println(questionnaire.getCmark());
-            System.out.println(questionnaire.getSemester());
-
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
+
             pscreate.setLong(1,questionnaire.getCourseID());
             pscreate.executeUpdate();
 
@@ -51,7 +49,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             ResultSet generatedKeys = pscreate.getGeneratedKeys();
             generatedKeys.next();
             questionnaire.setId(generatedKeys.getLong(1));
-            
+
         } catch (SQLException e) {
             LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
