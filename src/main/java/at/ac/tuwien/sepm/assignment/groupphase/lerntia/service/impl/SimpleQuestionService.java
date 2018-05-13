@@ -34,6 +34,7 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void create(Question question) throws ServiceException {
         try {
+            validate(question);
             questionDAO.create(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
@@ -44,6 +45,7 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void update(Question question) throws ServiceException {
         try {
+            validate(question);
             questionDAO.update(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
