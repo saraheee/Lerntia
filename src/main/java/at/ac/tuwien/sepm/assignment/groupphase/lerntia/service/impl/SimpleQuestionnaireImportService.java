@@ -8,8 +8,13 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,10 +112,18 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     }
 
     @Override
-    public void importPictures (File file) {
-        // validieren
-
-        // kopieren
-
+    public void importPictures (File file, String name) throws ServiceException {
+        File dir = new File(name); // in current directory
+        dir.mkdir();
+        File[] files = file.listFiles();
+        for (File child : files) {
+            try {
+                String p = dir.getName()+"/"+child.getName();
+                Path path = Paths.get(p);
+                Files.copy(child.toPath(), path);
+            } catch (IOException e) {
+                throw new ServiceException("Bild kann nicht gelesen werden");
+            }
+        }
     }
 }

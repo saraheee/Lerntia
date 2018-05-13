@@ -103,13 +103,26 @@ public class ImportFileController {
         directoryChooser.setTitle("[Lerntia] Ordner");
         Stage stage = new Stage();
         directory = directoryChooser.showDialog(stage);
-        if (file != null) {
-            t_directoryname.setText(file.getName());
+        if (directory != null) {
+            t_directoryname.setText(directory.getName());
         }
     }
 
     @FXML
     public void importFile(ActionEvent actionEvent) {
+        if (directory != null) {
+            try {
+                qservice.importPictures(directory, tf_questionnaire.getText());
+            }
+            catch (ServiceException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("[Lerntia] Import fehlgeschlagen");
+                alert.setHeaderText("Fehler");
+                alert.setContentText(e.getMessage());
+                alert.setResizable(true);
+                alert.showAndWait();
+            }
+        }
         if (file != null) {
             try {
                 String name = tf_questionnaire.getText();
@@ -122,9 +135,6 @@ public class ImportFileController {
                     alert.setContentText("Alle Fragen wurden erfolgreich importiert");
                     alert.setResizable(true);
                     alert.showAndWait();
-                    Node source = (Node) actionEvent.getSource();
-                    Stage stage = (Stage) source.getScene().getWindow();
-                    stage.close();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("[Lerntia] Fehlerhafter Name");
@@ -149,9 +159,9 @@ public class ImportFileController {
             alert.setResizable(true);
             alert.showAndWait();
         }
-        if (directory != null) {
-            qservice.importPictures(directory);
-        }
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     void showImportWindow() {
