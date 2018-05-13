@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.AudioPlayer;
@@ -24,6 +25,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private final String DP = ": ";
     private AudioPlayer audioPlayer;
     private MaryInterface marytts;
+    private boolean singleAnswer = false;
 
     @Override
     public void playWelcomeText() {
@@ -38,13 +40,18 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     }
 
     @Override
-    public void speak(Speech textToSpeech) {
+    public void readQuestionAndAnswers(Speech textToSpeech) {
         LOG.trace("Entering method speak.");
         if (marytts != null) {
             LOG.trace("marytts is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
             LOG.trace("stopSpeaking method is called. Calling playText method.");
-            playText(getText(textToSpeech));
+            if(!singleAnswer) {
+                playText(getText(textToSpeech));
+            } else {
+                playText(textToSpeech.getSingleAnswer());
+                singleAnswer = false;
+            }
             LOG.trace("playText method is called.");
         } else {
             try {
@@ -59,6 +66,13 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 LOG.error("Failed to play text with speech synthesizer: " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public void readSingleAnswer(Speech textToSpeech) throws ServiceException {
+        LOG.trace("Entering method readSingleAnswer.");
+        singleAnswer = true;
+        readQuestionAndAnswers(textToSpeech);
     }
 
     private void playText(String text) {
