@@ -43,6 +43,8 @@ public class ImportFileController {
     private List<Course> coursedata = new ArrayList<>();
     private ObservableList<String> choices = FXCollections.observableArrayList();
 
+    private ObservableList<Course> courses;
+
     @FXML
     private Text t_filename;
     @FXML
@@ -77,11 +79,11 @@ public class ImportFileController {
     @FXML
     private void initialize() throws ServiceException {
         coursedata = cservice.readAll();
-        ObservableList<Course> courses = FXCollections.observableArrayList(coursedata);
+        courses = FXCollections.observableArrayList(coursedata);
 
         choices.removeAll(choices);
         for (int i = 0; i < courses.size(); i++) {
-            choices.add(courses.get(i).getMark());
+            choices.add(courses.get(i).getName());
         }
 
         cb_course.setItems(choices);
@@ -129,9 +131,15 @@ public class ImportFileController {
         if (file != null) {
             try {
                 String name = tf_questionnaire.getText();
+
                 if (!name.equals("")) {
+
                     String course = cb_course.getSelectionModel().getSelectedItem();
-                    qservice.importQuestionnaire(file, course, name);
+
+                    int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
+                    Course selectedCourse = courses.get(cb_courseIndex);
+
+                    qservice.importQuestionnaire(file, selectedCourse, name);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("[Lerntia] Import erfolgreich");
                     alert.setHeaderText("Erfolgreich");

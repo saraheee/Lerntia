@@ -54,7 +54,7 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             LOG.info("Statement succesfully sent.");
         } catch (SQLException e) {
             LOG.error("ExamQuestionnaire CREATE DAO error!");
-           throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
 
     }

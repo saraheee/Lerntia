@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
@@ -43,7 +44,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
-    public void importQuestionnaire(File file, String course, String name) throws ServiceException {
+    public void importQuestionnaire(File file, Course course, String name) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
 
@@ -117,8 +118,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        // TODO - course data
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long) 0, false, name);
+        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name);
 
         simpleLearningQuestionnaireService.create(learningQuestionnaire);
 
