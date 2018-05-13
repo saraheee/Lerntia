@@ -62,14 +62,13 @@ public class ExamQuestionnaireDAOTest {
     @Test
     public void createNewExamQuestionnaire() throws PersistenceException {
         try {
-            Course tgi = new Course();
-            tgi.setSemester("2015S");
-            tgi.setMark("123.349");
-            courseDAO.create(tgi);
+            Course course = new Course();
+            course.setSemester("2018W");
+            course.setMark("123.14232");
+            courseDAO.create(course);
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            chapter1.setCmark("123.349");
-            chapter1.setSemester("2015S");
+            chapter1.setCourseID(course.getId());
             examQuestionnaireDAO.create(chapter1);
             Long expected = Long.valueOf(1);
             Assert.assertEquals(expected, chapter1.getId());
@@ -78,17 +77,17 @@ public class ExamQuestionnaireDAOTest {
         }
     }
 
-    @Test(expected = PersistenceException.class)
+    @Test(expected = Exception.class)
     public void createNewExamQuestionnaireError() throws PersistenceException{
-       try {
-           ExamQuestionnaire chapter1 = new ExamQuestionnaire();
-           chapter1.setDate(LocalDate.now());
-           chapter1.setCmark("123.349");
-           chapter1.setSemester("2015S");
-           examQuestionnaireDAO.create(chapter1);
-       }catch (PersistenceException e){
-           throw new PersistenceException(e.getMessage());
-       }
+        try {
+            ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+            chapter1.setDate(LocalDate.now());
+            chapter1.setCmark("123.349");
+            chapter1.setSemester("2015S");
+            examQuestionnaireDAO.create(chapter1);
+        }catch (PersistenceException e){
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
 }

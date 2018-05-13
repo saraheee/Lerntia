@@ -40,17 +40,15 @@ public class CourseDAOTest {
         this.courseDAO = courseDAO;
     }
 
+
     @Test
     public void createNewCourse() throws PersistenceException {
         try {
-            Course tgi = new Course();
-            tgi.setSemester("2018W");
-            tgi.setName("TGI");
-            tgi.setMark("653.349");
-            courseDAO.create(tgi);
-            Course other = tgi;
-            other.setDeleted(false);
-            assertEquals(other,tgi);
+            Course course = new Course();
+            course.setSemester("2018W");
+            course.setName("ECG");
+            course.setMark("124.119");
+            courseDAO.create(course);
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());
         }
@@ -60,7 +58,7 @@ public class CourseDAOTest {
     public void createNewCourseError() throws PersistenceException {
         try {
             Course tgi = new Course();
-            tgi.setSemester("2019W");
+            tgi.setSemester("2018W");
             tgi.setName("TGI");
             tgi.setMark(null);
             courseDAO.create(tgi);
@@ -72,18 +70,19 @@ public class CourseDAOTest {
     @Test
     public void updateExistingUserandReadUser()throws PersistenceException{
         try {
-            Course tgi = new Course();
-            tgi.setSemester("2011S");
-            tgi.setMark("151.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
+            Course course = new Course();
+            course.setSemester("2017S");
+            course.setMark("151.999");
+            course.setName("Akustik 2");
+            courseDAO.create(course);
 
-            Course tgiUpdated = new Course();
-            tgiUpdated.setSemester("2010W");
-            tgiUpdated.setMark("111.349");
-            tgiUpdated.setName("TGI");
+            Course courseUpdated = new Course();
+            courseUpdated.setId(course.getId());
+            courseUpdated.setSemester("2018W");
+            courseUpdated.setMark("151.999");
+            courseUpdated.setName("Akustik 2");
 
-            courseDAO.update(tgiUpdated);
+            courseDAO.update(courseUpdated);
 
 
         }catch (PersistenceException e){
@@ -101,40 +100,32 @@ public class CourseDAOTest {
             courseDAO.create(tgi);
             Course tgidelete =new Course();
             tgidelete.setMark(tgi.getMark());
+            System.out.println(tgi.getId());
+            tgidelete.setId(tgi.getId());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());
         }
     }
 
-    @Test(expected = PersistenceException.class)
+    @Test(expected = NullPointerException.class)
     public void deleteCourseError() throws PersistenceException{
         try {
             Course tgi = new Course();
             tgi.setSemester("2018S");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
+            tgi.setMark("111.222");
+            tgi.setName("Informatik 1");
             courseDAO.create(tgi);
-            tgi.setMark(null);
+            tgi.setId(null);
             courseDAO.delete(tgi);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());
         }
     }
 
+
     @Test
     public void countSizeofReadAll() throws PersistenceException{
-        Course PK1 = new Course();
-        PK1.setSemester("2016W");
-        PK1.setMark("112.659");
-        PK1.setName("Programmieren 1");
-        courseDAO.create(PK1);
-
-        Course tgi = new Course();
-        tgi.setSemester("2012S");
-        tgi.setMark("126.349");
-        tgi.setName("TGI");
-        courseDAO.create(tgi);
 
         Course ECV = new Course();
         ECV.setSemester("2015S");
@@ -143,27 +134,11 @@ public class CourseDAOTest {
         courseDAO.create(ECV);
 
         List list = courseDAO.readAll();
-        assertEquals(4,list.size());
+        assertEquals(3,list.size());
         courseDAO.delete(ECV);
 
         List list2 = courseDAO.readAll();
-        assertEquals(3,list2.size());
+        assertEquals(2,list2.size());
     }
 
-    @Test
-    public void keyTest() throws PersistenceException{
-
-        Course PK1 = new Course();
-        PK1.setSemester("2016W");
-        PK1.setMark("112.659asdf");
-        PK1.setName("Programmieren 1");
-        courseDAO.create(PK1);
-
-        Course tgi = new Course();
-        tgi.setSemester("2016W");
-        tgi.setMark("126.349asdf");
-        tgi.setName("TGI");
-        courseDAO.create(tgi);
-
-    }
 }
