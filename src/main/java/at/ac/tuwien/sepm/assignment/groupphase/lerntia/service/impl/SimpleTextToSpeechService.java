@@ -40,7 +40,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void readQuestionAndAnswers(Speech textToSpeech) {
-        LOG.trace("Entering method speak.");
+        LOG.trace("Entering method readQuestionAndAnswers.");
         if (marytts != null) {
             LOG.trace("marytts is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
@@ -58,7 +58,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 marytts = new LocalMaryInterface();
                 LOG.trace("mary interface is created. marytts is not null anymore.");
                 marytts.setVoice(VOICE);
-                playText(getText(textToSpeech));
+                if (!singleAnswer) {
+                    playText(getText(textToSpeech));
+                } else {
+                    playText(textToSpeech.getSingleAnswer());
+                    singleAnswer = false;
+                }
             } catch (MaryConfigurationException e) {
                 LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
             } catch (Exception e) {
