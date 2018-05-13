@@ -24,7 +24,7 @@
     </VBox>
     <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
         <HBox prefHeight="30.0"/>
-        <HBox fx:id="question" prefHeight="286.0" styleClass="question-box">
+        <HBox fx:id="questionBox" prefHeight="286.0" styleClass="question-box">
             <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml"/>
         </HBox>
         <HBox fx:id="firstAnswer" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="2919.0"
