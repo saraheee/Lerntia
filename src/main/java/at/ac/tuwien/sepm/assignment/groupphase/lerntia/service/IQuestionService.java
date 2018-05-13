@@ -24,9 +24,10 @@ public interface IQuestionService {
      *
      * @param questionList Questions with searchparameters
      * @throws ServiceException if the method can't search for the question
+     * @return list of questions that were found
      * */
 
-    void search(List<Question> questionList) throws ServiceException;
+    List<Question> search(List<Question> questionList) throws ServiceException;
 
     /**
      * Delete Question from the Database

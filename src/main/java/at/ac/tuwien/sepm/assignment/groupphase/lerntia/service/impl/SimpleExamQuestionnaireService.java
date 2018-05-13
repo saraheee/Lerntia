@@ -6,10 +6,16 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.lang.invoke.MethodHandles;
 
 @Service
 public class SimpleExamQuestionnaireService implements IExamQuestionnaireService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final IExamQuestionnaireDAO examQuestionnaireDAO;
 
@@ -22,7 +28,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.create(examQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -31,7 +38,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.update(examQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -40,7 +48,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.search(searchparameters);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -49,7 +58,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.delete(examQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 

@@ -3,8 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
-import javafx.collections.ObservableList;
 
 import java.util.List;
 
@@ -48,5 +46,5 @@ public interface ILearningQuestionnaireDAO {
      * @return List with all LearningQuestionnaire
      * @throws PersistenceException  if it's not possible to get the List
      * */
-    List readAll() throws PersistenceException;
+    List<LearningQuestionnaire> readAll() throws PersistenceException;
 }
