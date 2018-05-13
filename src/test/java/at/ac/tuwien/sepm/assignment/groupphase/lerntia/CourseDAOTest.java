@@ -140,4 +140,21 @@ public class CourseDAOTest {
         List list2 = courseDAO.readAll();
         assertEquals(3,list2.size());
     }
+
+    @Test
+    public void keyTest() throws PersistenceException{
+
+        Course PK1 = new Course();
+        PK1.setSemester("2016W");
+        PK1.setMark("112.659asdf");
+        PK1.setName("Programmieren 1");
+        courseDAO.create(PK1);
+
+        Course tgi = new Course();
+        tgi.setSemester("2016W");
+        tgi.setMark("126.349asdf");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
+
+    }
 }

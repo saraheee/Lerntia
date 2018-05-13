@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk.AudioPlayer;
@@ -18,7 +17,7 @@ import java.lang.invoke.MethodHandles;
 public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
+    private final String WELCOME = "Hallo (das) und (hier) willkommen (wird) bei (nicht) Lerntia. Schöön, dass (ausgesprochen) du hier bist!";
     private final String ANSWER = "Antwort nummer ";
     private final String VOICE = "bits3-hsmm";
     private final String BREAK = "....";
@@ -41,12 +40,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void readQuestionAndAnswers(Speech textToSpeech) {
-        LOG.trace("Entering method speak.");
+        LOG.trace("Entering method readQuestionAndAnswers.");
         if (marytts != null) {
             LOG.trace("marytts is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
             LOG.trace("stopSpeaking method is called. Calling playText method.");
-            if(!singleAnswer) {
+            if (!singleAnswer) {
                 playText(getText(textToSpeech));
             } else {
                 playText(textToSpeech.getSingleAnswer());
@@ -59,7 +58,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 marytts = new LocalMaryInterface();
                 LOG.trace("mary interface is created. marytts is not null anymore.");
                 marytts.setVoice(VOICE);
-                playText(getText(textToSpeech));
+                if (!singleAnswer) {
+                    playText(getText(textToSpeech));
+                } else {
+                    playText(textToSpeech.getSingleAnswer());
+                    singleAnswer = false;
+                }
             } catch (MaryConfigurationException e) {
                 LOG.error("Failed to initialize speech synthesizer: " + e.getMessage());
             } catch (Exception e) {
@@ -69,7 +73,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     }
 
     @Override
-    public void readSingleAnswer(Speech textToSpeech) throws ServiceException {
+    public void readSingleAnswer(Speech textToSpeech) {
         LOG.trace("Entering method readSingleAnswer.");
         singleAnswer = true;
         readQuestionAndAnswers(textToSpeech);
@@ -77,7 +81,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private void playText(String text) {
         LOG.trace("Entering method playText.");
-        try (var audio = marytts.generateAudio(text)) {
+        try (var audio = marytts.generateAudio(filterTextInParenthesis(text))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -92,9 +96,26 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
     }
 
+    private String filterTextInParenthesis(String text) {
+        var counter = 0;
+        var filtered = new StringBuilder();
+        for (var p : text.toCharArray()) {
+            if (p == '(') {
+                counter++;
+            }
+            if (p == ')') {
+                counter--;
+            }
+            if (p != ')' && p != '(' && counter == 0) {
+                filtered.append(p);
+            }
+        }
+        return filtered.toString();
+    }
+
     @Override
     public void stopSpeaking() {
-        LOG.debug("Entering method stopSpeaking.");
+        LOG.trace("Entering method stopSpeaking.");
         if (audioPlayer != null) {
             audioPlayer.cancel();
             LOG.debug("Cancelling speech.");
