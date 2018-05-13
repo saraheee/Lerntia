@@ -65,15 +65,16 @@ public class LearningQuestionnaireDAOTest {
             chapter1.setName("Success chapter");
             chapter1.setCmark("123.349");
             chapter1.setSemester("2015S");
+            chapter1.setCourseID(tgi.getId());
             learningQuestionnaireDAO.create(chapter1);
-            Long expected = Long.valueOf(1);
+            Long expected = Long.valueOf(2);
             Assert.assertEquals(expected, chapter1.getId());
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());
         }
     }
 
-    @Test(expected = PersistenceException.class)
+    @Test(expected = Exception.class)
     public void createNewExamQuestionnaireError() throws PersistenceException{
         try {
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();

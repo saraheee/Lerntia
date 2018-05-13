@@ -50,9 +50,9 @@ public class QuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(2),firstquestion.getId());
         } catch (PersistenceException e) {
-           throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
     }
 
