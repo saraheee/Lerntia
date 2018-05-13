@@ -17,6 +17,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class LerntiaMainController {
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-
+            LOG.warn("No first answer. Loop stoped.");
         }
     }
 
