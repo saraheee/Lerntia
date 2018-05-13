@@ -5,7 +5,9 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -13,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
-import java.time.LocalDateTime;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -55,11 +57,12 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private ImageController zoomButtonController;
+    private ZoomButtonController zoomButtonController;
 
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     Question question;
+    File imageFile;
 
     @Autowired
     public LerntiaMainController(IMainLerntiaService lerntiaService) {
@@ -86,7 +89,7 @@ public class LerntiaMainController {
                 audioButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.Z) {
-                LOG.debug("Z key was pressed");
+                LOG.debug("Z key was pressed, imageFile = {}", imageFile);
                 zoomButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.N) {
@@ -227,14 +230,16 @@ public class LerntiaMainController {
         if(question.getPicture() == null || question.getPicture().trim().isEmpty()) {
             mainImage.setVisible(false);
             zoomButtonController.setVisible(false);
+            zoomButtonController.setImageFile(null);
             LOG.debug("No image to be displayed for this question");
         } else {
             try {
                 String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
                     + "img" + File.separator + question.getPicture();
                 LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
-                File file =  new File(imagePath);
-                Image image = new Image(file.toURI().toURL().toExternalForm());
+                File imageFile =  new File(imagePath);
+                zoomButtonController.setImageFile(imageFile);
+                Image image = new Image(imageFile.toURI().toURL().toExternalForm());
                 mainImage.setImage(image);
                 mainImage.setVisible(true);
                 zoomButtonController.setVisible(true);
@@ -282,5 +287,9 @@ public class LerntiaMainController {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public File getImageFile() {
+        return imageFile;
     }
 }
