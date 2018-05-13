@@ -31,6 +31,8 @@ public class CreateCourseController {
     @FXML
     private TextField tf_courseName;
     @FXML
+    private TextField tf_courseMark;
+    @FXML
     private ChoiceBox<String> cb_semester;
     @FXML
     private TextField tf_semesterYear;
@@ -41,8 +43,8 @@ public class CreateCourseController {
 
     @FXML
     private void initialize() {
-        cb_semester.getItems().add("ws");
-        cb_semester.getItems().add("ss");
+        cb_semester.getItems().add("W");
+        cb_semester.getItems().add("S");
 
         cb_semester.getSelectionModel().selectFirst();
     }
@@ -69,11 +71,12 @@ public class CreateCourseController {
 
         try {
 
+            String mark = tf_courseMark.getText().trim();
             String name = tf_courseName.getText().trim();
             String semester = cb_semester.getSelectionModel().getSelectedItem();
             String semesterYear = tf_semesterYear.getText().trim();
 
-            Course course = new Course(name, semester + semesterYear, name, false);
+            Course course = new Course(mark, semesterYear+semester, name, false);
 
             courseService.validate(course);
             courseService.create(course);
