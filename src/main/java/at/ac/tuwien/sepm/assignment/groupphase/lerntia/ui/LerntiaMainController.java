@@ -143,9 +143,9 @@ public class LerntiaMainController {
         LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if(answersCorrect) {
-            showAnAlert(Alert.AlertType.INFORMATION,"Antoweten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
+            showAnAlert(Alert.AlertType.INFORMATION,"Antworten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
         } else {
-            showAnAlert(Alert.AlertType.WARNING,"Antowrten nicht richtig.", "Richtige Antworten: " +
+            showAnAlert(Alert.AlertType.WARNING,"Antworten nicht richtig.", "Richtige Antworten: " +
                 question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
@@ -286,6 +286,7 @@ public class LerntiaMainController {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
+        alert.setResizable(true);
         alert.showAndWait();
     }
 
