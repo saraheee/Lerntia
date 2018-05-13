@@ -85,16 +85,33 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
 
             // index 7 is the image (optional)
+            String picture = "";
             try {
                 if (!lineParts[7].equals("")) {
-                    // TODO - validate image
+                    picture = lineParts[7];
+                    String path = System.getProperty("user.dir") + File.separator + name + File.separator + picture;
+                    File f = new File(path);
+                    if(!f.exists()) {
+                        throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
+                    }
                 }
             } catch (IndexOutOfBoundsException e) {
                 // there is no image
+                picture = "";
             }
 
-            // TODO - add picture
-            Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
+            Question q = new Question();
+            q.setId((long) 0);
+            q.setQuestionText(lineParts[0]);
+            q.setPicture(picture);
+            q.setAnswer1(lineParts[1]);
+            q.setAnswer2(lineParts[2]);
+            q.setAnswer3(lineParts[3]);
+            q.setAnswer4(lineParts[4]);
+            q.setAnswer5(lineParts[5]);
+            q.setCorrectAnswers(lineParts[6]);
+            q.setOptionalFeedback("");
+            q.setDeleted(false);
             simpleQuestionService.create(q);
 
             questionIDs.add(q.getId());
@@ -121,7 +138,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     @Override
     public void importPictures (File file, String name) throws ServiceException {
-        File dir = new File(name); // in current directory
+        File dir = new File(System.getProperty("user.dir") + File.separator + name);
         dir.mkdir();
         File[] files = file.listFiles();
         for (File child : files) {
