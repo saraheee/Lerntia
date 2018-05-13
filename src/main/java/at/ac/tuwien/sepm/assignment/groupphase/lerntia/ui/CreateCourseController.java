@@ -73,7 +73,7 @@ public class CreateCourseController {
             String semester = cb_semester.getSelectionModel().getSelectedItem();
             String semesterYear = tf_semesterYear.getText().trim();
 
-            Course course = new Course(name, semester + semesterYear, false);
+            Course course = new Course(name, semester + semesterYear, name, false);
 
             courseService.validate(course);
             courseService.create(course);
