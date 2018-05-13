@@ -79,7 +79,19 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void validate(Course course) throws ServiceException {
 
-        // pls note: mark is the name
+        // -------------------------------------------------------------------------------------------------------------
+        // mark
+        // -------------------------------------------------------------------------------------------------------------
+
+        // pls note: mark is the id of the course
+
+        // mark is not empty
+
+        if (course.getMark().equals("")){
+            throw new ServiceException("Die ID ist leer");
+        }
+
+        // TODO - mark is not too long
 
         // -------------------------------------------------------------------------------------------------------------
         // name
@@ -87,35 +99,33 @@ public class SimpleCourseService implements ICourseService {
 
         // name is not empty
 
-        if (course.getMark().equals("")){
+        if (course.getName().equals("")){
             throw new ServiceException("Der Name ist leer");
         }
-
-        // name is not used already
-
-        List<Course> courses = this.readAll();
-
-        for (int i = 0; i < courses.size(); i++){
-            if (course.getMark() == courses.get(i).getMark()){
-                throw new ServiceException("Der Name ist bereits vergeben");
-            }
-        }
-
-        // TODO - name is not too long
 
         // -------------------------------------------------------------------------------------------------------------
         // semester
         // -------------------------------------------------------------------------------------------------------------
 
-        // starts with ws or ss
+        // ends with "W" or "S"
 
         if (
-            ! course.getSemester().startsWith("ws") &&
-            ! course.getSemester().startsWith("ss")
+            ! course.getSemester().endsWith("W") &&
+            ! course.getSemester().endsWith("S")
         ) {
-            throw new ServiceException("Das Semester sollte mit 'ws' oder 'ss' beginnen");
+            throw new ServiceException("Das Semester sollte mit 'W' oder 'S' enden");
         }
 
-        // TODO - something about the year (only 2 digits or 4)
+        // year is a number with 4 digits
+
+        String yearStr;
+        int yearInt;
+
+        try{
+            yearStr = course.getSemester().substring(0,3);
+            yearInt = Integer.parseInt(yearStr);
+        } catch(NumberFormatException e) {
+            throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
+        }
     }
 }
