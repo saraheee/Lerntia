@@ -3,14 +3,12 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +16,10 @@ import java.util.List;
 public class CourseDAO implements ICourseDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String SQL_COURSE_CREATE_STATEMENT="INSERT INTO Course(name,mark,semester) VALUES (?,?,?)";
-    private static final String SQL_COURSE_UPDATE_STATEMENT="UPDATE Course set semester=? , name=? WHERE mark =?" ;
+    private static final String SQL_COURSE_CREATE_STATEMENT="INSERT INTO Course(id,name,mark,semester,isDeleted) VALUES (default ,?,?,?,false)";
+    private static final String SQL_COURSE_UPDATE_STATEMENT="UPDATE Course set mark = ?, semester=? , name=? WHERE id =?" ;
     //private static final String SQL_COURSE_SEARCH_STATEMENT="";
-    private static final String SQL_COURSE_DELETE_STATEMENT="UPDATE Course set isDeleted=true  WHERE mark = ?";
+    private static final String SQL_COURSE_DELETE_STATEMENT="UPDATE Course set isDeleted=true  WHERE id = ?";
     private static final String SQL_COURSE_READALL_STATEMENT="SELECT * from Course where isDeleted = false ";
 
     private Connection connection;
@@ -40,13 +38,17 @@ public class CourseDAO implements ICourseDAO {
     public void create(Course course) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Course Creation.");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT);
+            PreparedStatement pscreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
 
             pscreate.setString(1,course.getName());
             pscreate.setString(2,course.getMark());
             pscreate.setString(3,course.getSemester());
-
             pscreate.executeUpdate();
+            ResultSet generatedKeys = pscreate.getGeneratedKeys();
+
+            if (generatedKeys.next()){
+                course.setId(generatedKeys.getLong(1));
+            }
             LOG.info("Course succesfully added to Database.");
         }catch (Exception e){
             LOG.error("Course DAO CREATE error!");
@@ -59,9 +61,11 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Update.");
             PreparedStatement psupdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT);
-            psupdate.setString(1,course.getSemester());
-            psupdate.setString(2,course.getName());
-            psupdate.setString(3,course.getMark());
+            psupdate.setString(1,course.getMark());
+            psupdate.setString(2,course.getSemester());
+            psupdate.setString(3,course.getName());
+            psupdate.setLong(4,course.getId());
+
             psupdate.executeUpdate();
             LOG.info("Course succefsully updated in Database.");
         } catch (SQLException e) {
@@ -81,9 +85,7 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Deletion");
             PreparedStatement psdelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT);
-            if (course.getMark()!=null) {
-                psdelete.setString(1, course.getMark());
-            }
+            psdelete.setLong(1,course.getId());
             psdelete.executeUpdate();
             LOG.info("Course in question soft-deleted in Database.");
         } catch (SQLException e) {
@@ -101,9 +103,10 @@ public class CourseDAO implements ICourseDAO {
             Course course;
             while (rsreadall.next()){
                 course = new Course();
-                course.setMark(rsreadall.getString(1));
-                course.setSemester(rsreadall.getString(2));
-                course.setName(rsreadall.getString(3));
+                course.setId(rsreadall.getLong(1));
+                course.setMark(rsreadall.getString(2));
+                course.setSemester(rsreadall.getString(3));
+                course.setName(rsreadall.getString(4));
                 list.add(course);
             }
             LOG.info("All Courses found.");

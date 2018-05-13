@@ -16,7 +16,7 @@ import java.sql.*;
 public class QuestionnaireDAO implements IQuestionnaireDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT = "INSERT INTO Questionnaire(cmark, semester,id) VALUES (?,?,default)";
+    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT = "INSERT INTO Questionnaire(courseid,id) VALUES (?,default)";
     private static final String SQL_QUESTIONAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_SEARCH_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_DELETE_STATEMENT = "";
@@ -43,8 +43,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             System.out.println(questionnaire.getSemester());
 
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
-            pscreate.setString(1, questionnaire.getCmark());
-            pscreate.setString(2, questionnaire.getSemester());
+            pscreate.setLong(1,questionnaire.getCourseID());
             pscreate.executeUpdate();
 
             LOG.info("Statement succesfully sent for Questionnaire creation.");
