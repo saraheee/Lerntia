@@ -103,7 +103,7 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.Z) {
                 LOG.debug("Z key was pressed, imageFile = {}", imageFile);
-                zoomButtonController.setSelected();
+                zoomButtonController.onZoomButtonClicked();
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
