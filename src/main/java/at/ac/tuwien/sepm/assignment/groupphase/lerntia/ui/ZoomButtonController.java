@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,6 +31,7 @@ public class ZoomButtonController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
     private final LerntiaMainController lerntiaMainController;
+    private final AlertController alertController;
     private File imageFile;
 
     @FXML
@@ -38,36 +40,23 @@ public class ZoomButtonController {
     private ImageView zoomedImage;
 
     @Autowired
-    public ZoomButtonController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public ZoomButtonController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController, AlertController alertController) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
+        this.alertController = alertController;
     }
 
-    @FXML
-    private void onZoomButtonClicked() {
-        LOG.debug("Zoom button clicked");
-        setSelected();
-    }
-
-    void setSelected( ) {
-        if (zoomButton.isDefaultButton()) {
-            LOG.debug("Zoom button will be set to false.");
-            zoomButton.defaultButtonProperty().setValue(false);
-            closeZoomedImageWindows();
-        } else {
-            LOG.debug("Zoom button will be set to true.");
-            zoomButton.defaultButtonProperty().setValue(true);
-            openZoomedImageWindows();
-        }
-    }
 
     void setVisible(boolean visible) {zoomButton.setVisible(visible);}
 
-    private void openZoomedImageWindows() {
-        if(imageFile == null) {
-            LOG.warn("No image to be zoomed");
+    @FXML
+    void onZoomButtonClicked() {
+        LOG.debug("Zoom button clicked");
+        if(imageFile == null || !imageFile.exists()) {
+            LOG.debug("Zooming was selected, but there was no image to be shown.");
+            alertController.showBigAlert(Alert.AlertType.WARNING, "Bild nicht gefunden", "Diese Frage hat kein verbundenes Bild", "");
             return;
         }
         Image image = null;
@@ -105,7 +94,7 @@ public class ZoomButtonController {
         ((Stage) zoomedImage.getScene().getWindow()).close();
     }
 
-    public void setImageFile(File imageFile) {
+    void setImageFile(File imageFile) {
         this.imageFile = imageFile;
     }
 }
