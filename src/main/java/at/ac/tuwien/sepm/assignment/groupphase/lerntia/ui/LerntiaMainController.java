@@ -80,6 +80,7 @@ public class LerntiaMainController {
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
+            zoomButtonController.setVisible(false);
             LOG.warn("No first answer. Loop stoped.");
         }
     }
