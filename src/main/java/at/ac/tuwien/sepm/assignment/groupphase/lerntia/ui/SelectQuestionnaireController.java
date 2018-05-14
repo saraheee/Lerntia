@@ -25,7 +25,7 @@ public class SelectQuestionnaireController {
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
 
-    private List<LearningQuestionnaire> learningQuestionnaireList = null;
+    private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
     private ChoiceBox<String> cb_questionnaire;
@@ -75,9 +75,14 @@ public class SelectQuestionnaireController {
 
 
 
+        int selectedQuestionnaireIndex = cb_questionnaire.getSelectionModel().getSelectedIndex();
+        LearningQuestionnaire selectedQuestionnaire = learningQuestionnaireList.get(selectedQuestionnaireIndex);
 
-
-
+        try {
+            learningQuestionnaireService.select(selectedQuestionnaire);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
 
     }
