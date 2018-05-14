@@ -26,7 +26,7 @@ public class JDBCConnectionManager {
     private static Connection connection;
     private static boolean isTestConnection;
 
-    public static Connection getConnection() throws PersistenceException {
+    public Connection getConnection() throws PersistenceException {
         if (connection == null) {
             LOG.info("Trying to initialize the database");
             initDatabase();
@@ -34,12 +34,12 @@ public class JDBCConnectionManager {
         return connection;
     }
 
-    public static Connection getTestConnection() throws PersistenceException {
+    public Connection getTestConnection() throws PersistenceException {
         isTestConnection = true;
         return getConnection();
     }
 
-    private static void initDatabase() throws PersistenceException {
+    private void initDatabase() throws PersistenceException {
         try {
             Class.forName("org.h2.Driver");
             if (isTestConnection) {
@@ -60,7 +60,7 @@ public class JDBCConnectionManager {
         }
     }
 
-    public static void closeConnection() {
+    public void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();

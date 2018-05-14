@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -26,9 +27,10 @@ public class QuestionDAO implements IQuestionDAO {
     private static final String SQL_QUESTION_READALL_STATEMENT="";
     private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
 
-    public QuestionDAO() throws PersistenceException {
+    @Autowired
+    public QuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for QuestionDAO obtained.");
         } catch (PersistenceException e) {
             LOG.error("Question Constructor failed while trying to get connection!");

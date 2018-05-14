@@ -21,12 +21,13 @@ public class CourseDAOTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
     private ICourseDAO courseDAO;
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {
         try {
-            connection = JDBCConnectionManager.getTestConnection();
-            this.ICourseDAO(new CourseDAO());
+            connection = jdbcConnectionManager.getTestConnection();
+            this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
         }

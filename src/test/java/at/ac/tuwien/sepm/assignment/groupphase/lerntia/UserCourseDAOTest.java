@@ -29,13 +29,15 @@ public class UserCourseDAOTest {
     private IUserDAO userDAO;
     private ICourseDAO courseDAO;
 
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+
     @Before
     public void setUp() {
         try {
-            connection = JDBCConnectionManager.getTestConnection();
-            this.IUserCourseDAO(new UserCourseDAO());
-            this.IUserDAO(new UserDAO());
-            this.ICourseDAO(new CourseDAO());
+            connection = jdbcConnectionManager.getTestConnection();
+            this.IUserCourseDAO(new UserCourseDAO(jdbcConnectionManager));
+            this.IUserDAO(new UserDAO(jdbcConnectionManager));
+            this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);

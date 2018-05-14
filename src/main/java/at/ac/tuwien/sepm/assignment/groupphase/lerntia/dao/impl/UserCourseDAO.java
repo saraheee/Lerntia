@@ -16,14 +16,14 @@ import java.sql.SQLException;
 @Component
 public class UserCourseDAO implements IUserCourseDAO {
 
-    private Connection connection=null;
+    private Connection connection;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String SQL_USERCOURSE_CREATE_STATEMENT ="INSERT INTO PUserCourse(matriculationNumber,courseid,isDeleted) VALUES (?,?,false )";
 
-    public UserCourseDAO() throws PersistenceException {
+    public UserCourseDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Connection for UserCourseDAO succesfully found.");
         } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for UserCourseDAO!");
