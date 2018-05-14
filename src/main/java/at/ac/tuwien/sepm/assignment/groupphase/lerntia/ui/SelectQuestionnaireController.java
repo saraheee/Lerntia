@@ -78,6 +78,16 @@ public class SelectQuestionnaireController {
         int selectedQuestionnaireIndex = cb_questionnaire.getSelectionModel().getSelectedIndex();
         LearningQuestionnaire selectedQuestionnaire = learningQuestionnaireList.get(selectedQuestionnaireIndex);
 
+        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+
+            try {
+                learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
+            } catch (ServiceException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         try {
             learningQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {

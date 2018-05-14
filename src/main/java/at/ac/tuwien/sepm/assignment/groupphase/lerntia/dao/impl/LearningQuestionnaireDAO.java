@@ -22,6 +22,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_SELECT_STATEMENT = "UPDATE LearningQuestionnaire SET selected = true where id = ?";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_DESELECT_STATEMENT = "UPDATE LearningQuestionnaire SET selected = false where id = ?";
 
     private Connection connection;
     private QuestionnaireDAO questionaireDAO;
@@ -111,6 +112,20 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             throw new PersistenceException(e.getMessage());
         }
 
+    }
+
+    @Override
+    public void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+        try {
+            LOG.info("Prepare statement for learningquestionnaire selectione.");
+            PreparedStatement psupdate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_DESELECT_STATEMENT);
+            psupdate.setLong(1,learningQuestionnaire.getId());
+            psupdate.executeUpdate();
+            LOG.info("Learningquestionnaire succesfully selected in Database.");
+        } catch (SQLException e) {
+            LOG.error("Learningquestionnaire selection DAO error!");
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
 }
