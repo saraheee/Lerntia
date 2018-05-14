@@ -13,10 +13,10 @@
 
 <children>
 
-    <Label layoutX="28.0" layoutY="118.0" text="Semester:" />
+    <Label layoutX="28.0" layoutY="118.0" text="Fragebogen:" />
     <ChoiceBox fx:id="cb_questionnaire" layoutX="201.0" layoutY="118.0" prefWidth="150.0" />
 
-    <Button layoutX="202.0" layoutY="182.0" mnemonicParsing="false" onAction="#selectQuestionnaire" prefHeight="37.0" prefWidth="113.0" text="Erstellen" />
+    <Button layoutX="202.0" layoutY="182.0" mnemonicParsing="false" onAction="#selectQuestionnaire" prefHeight="37.0" prefWidth="113.0" text="Auswählen" />
 </children>
 
 </AnchorPane>
