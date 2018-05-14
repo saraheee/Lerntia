@@ -50,4 +50,6 @@ public interface ILearningQuestionnaireService {
     void select(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
 
     void deselect(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
+
+    LearningQuestionnaire getSelected() throws ServiceException;
 }

@@ -52,4 +52,6 @@ public interface ILearningQuestionnaireDAO {
     void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
 
     void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
+
+    LearningQuestionnaire getSelected() throws PersistenceException;
 }

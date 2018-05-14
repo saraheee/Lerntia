@@ -2,7 +2,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -31,6 +33,8 @@ public class LerntiaMainController {
     private final IMainLerntiaService lerntiaService;
     private final AudioController audioController;
     private final AlertController alertController;
+
+    private final ILearningQuestionnaireService learningQuestionnaireService;
 
     @FXML
     private HBox mainWindow;
@@ -63,13 +67,19 @@ public class LerntiaMainController {
     private File imageFile;
 
     @Autowired
-    public LerntiaMainController(IMainLerntiaService lerntiaService, AudioController audioController, AlertController alertController) {
+    public LerntiaMainController(
+        IMainLerntiaService lerntiaService,
+        AudioController audioController,
+        AlertController alertController,
+        ILearningQuestionnaireService learningQuestionnaireService
+    ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;
+        this.learningQuestionnaireService = learningQuestionnaireService;
     }
 
     @FXML
@@ -280,7 +290,21 @@ public class LerntiaMainController {
             try {
                 //String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
                 //    + "img" + File.separator + question.getPicture();
-                String imagePath = System.getProperty("user.dir") + File.separator + "tilfragebogen" + File.separator + question.getPicture();
+
+                LearningQuestionnaire selectedLearningQuestionnaire = null;
+
+                try {
+                    selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+
+                String imagePath =
+                    System.getProperty("user.dir") + File.separator +
+                    selectedLearningQuestionnaire.getName() + File.separator +
+                    question.getPicture()
+                ;
+
                 LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                 File imageFile = new File(imagePath);
                 zoomButtonController.setImageFile(imageFile);
