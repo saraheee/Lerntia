@@ -47,4 +47,11 @@ public interface ILearningQuestionnaireDAO {
      * @throws PersistenceException  if it's not possible to get the List
      * */
     List<LearningQuestionnaire> readAll() throws PersistenceException;
+
+
+    void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
+
+    void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
+
+    LearningQuestionnaire getSelected() throws PersistenceException;
 }

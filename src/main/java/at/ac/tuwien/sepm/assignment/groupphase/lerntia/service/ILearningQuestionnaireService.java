@@ -45,4 +45,11 @@ public interface ILearningQuestionnaireService {
      * @throws ServiceException  if it's not possible to get the List
      * */
     List readAll() throws ServiceException;
+
+
+    void select(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
+
+    void deselect(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
+
+    LearningQuestionnaire getSelected() throws ServiceException;
 }
