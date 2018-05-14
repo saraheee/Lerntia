@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
-
+/*
     @Bean
     public ExamQuestionaireDAO examQuestionaireDAO() throws PersistenceException {
         return new ExamQuestionaireDAO(new QuestionnaireDAO());
@@ -30,7 +30,7 @@ public class AppConfig {
     public QuestionDAO questionDAO() throws PersistenceException {
         return new QuestionDAO();
     }
-
+*/
 //    @Bean
 //    public SimpleCourseService SimpleCourseService(ICourseDAO courseDAO){
 //        return new SimpleCourseService(courseDAO);

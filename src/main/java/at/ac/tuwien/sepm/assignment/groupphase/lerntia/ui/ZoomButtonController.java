@@ -29,9 +29,7 @@ import static org.springframework.util.Assert.notNull;
 public class ZoomButtonController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final IMainLerntiaService lerntiaService;
-    private final LerntiaMainController lerntiaMainController;
-    private final AlertController alertController;
+    private final ZoomedImageController zoomedImageController;
     private File imageFile;
 
     @FXML
@@ -40,61 +38,15 @@ public class ZoomButtonController {
     private ImageView zoomedImage;
 
     @Autowired
-    public ZoomButtonController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController, AlertController alertController) {
-        notNull(lerntiaService, "'lerntiaService' should not be null");
-        notNull(lerntiaMainController, "'lerntiaMainController' should not be null");
-        this.lerntiaService = lerntiaService;
-        this.lerntiaMainController = lerntiaMainController;
-        this.alertController = alertController;
+    public ZoomButtonController(ZoomedImageController zoomedImageController) {
+        this.zoomedImageController = zoomedImageController;
     }
-
 
     void setVisible(boolean visible) {zoomButton.setVisible(visible);}
 
     @FXML
     void onZoomButtonClicked() {
-        LOG.debug("Zoom button clicked");
-        if(imageFile == null || !imageFile.exists()) {
-            LOG.debug("Zooming was selected, but there was no image to be shown.");
-            alertController.showBigAlert(Alert.AlertType.WARNING, "Bild nicht gefunden", "Diese Frage hat kein verbundenes Bild", "");
-            return;
-        }
-        Image image = null;
-        try {
-            image = (new Image(imageFile.toURI().toURL().toExternalForm()));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/zoomedImage.fxml"));
-        var stage = new Stage();
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Bild");
-            Scene newScene = new Scene(fxmlLoader.load());
-            Platform.runLater(() -> newScene.setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.Z || e.getCode() == KeyCode.S || e.getCode() == KeyCode.C || e.getCode() == KeyCode.ESCAPE) {
-                    LOG.debug("Key pressed, closing");
-                    closeZoomedImageWindows();
-                }
-            }));
-            stage.setScene(newScene);
-            stage.show();
-            LOG.debug("Successfully opened a window for the zoomed image");
-            zoomedImage.setImage(image);
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for the zoomed image. " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void closeZoomedImageWindows() {
-        LOG.debug("Trying to close the zoomed image window.");
-        ((Stage) zoomedImage.getScene().getWindow()).close();
-    }
-
-    void setImageFile(File imageFile) {
-        this.imageFile = imageFile;
+        LOG.debug("Clicked on zoom button");
+        zoomedImageController.onZoomButtonClicked();
     }
 }
