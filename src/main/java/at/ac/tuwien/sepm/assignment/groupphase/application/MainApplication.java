@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
@@ -35,6 +36,7 @@ public final class MainApplication extends Application implements Runnable {
     private Thread textToSpeechThread;
     private AnnotationConfigApplicationContext context;
     private ITextToSpeechService iTextToSpeechService;
+    private LerntiaMainController controller;
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
@@ -79,7 +81,8 @@ public final class MainApplication extends Application implements Runnable {
         var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
         loader.setControllerFactory(context::getBean);
         Parent root = loader.load();
-        LerntiaMainController controller = loader.getController();
+        //LerntiaMainController controller = loader.getController();
+        controller = loader.getController();
 
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
         controller.update(scene);
@@ -89,6 +92,7 @@ public final class MainApplication extends Application implements Runnable {
         // show application
         primaryStage.show();
         primaryStage.toFront();
+        iTextToSpeechService = new SimpleTextToSpeechService();
 
         textToSpeechThread = new Thread(new MainApplication());
         textToSpeechThread.start();
@@ -103,20 +107,21 @@ public final class MainApplication extends Application implements Runnable {
     @Override
     public void stop() {
         LOG.debug("Stopping application");
+
         if (iTextToSpeechService != null) {
-            try {
-                iTextToSpeechService.stopSpeaking();
-            } catch (ServiceException e) {
-                LOG.error("Failed to stop speech synthesizer: " + e.getMessage());
-            }
+            controller.stopAudio();
         } else {
             LOG.debug("iTextToSpeechService is already null.");
         }
+
         try {
+            LOG.info("Starting Thread interrupt");
             textToSpeechThread.interrupt();
+            LOG.info("Thread is Interrupted");
         } catch (IllegalThreadStateException e) {
             LOG.debug("Interrupting textToSpeech thread: " + e.getMessage());
         }
+
         JDBCConnectionManager.closeConnection();
         context.close();
     }

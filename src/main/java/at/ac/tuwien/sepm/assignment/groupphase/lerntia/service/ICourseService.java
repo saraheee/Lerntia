@@ -47,4 +47,6 @@ public interface ICourseService {
      * */
     List<Course> readAll() throws ServiceException;
 
+    void validate(Course course) throws ServiceException;
+
 }

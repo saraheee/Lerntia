@@ -2,43 +2,24 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 
 public abstract class Questionnaire {
-    private String cmark;
-    private String semester;
+    private Long courseId;
     private Long id;
     private Boolean isDeleted;
-    private Long courseID;
 
     public Questionnaire() {}
 
-    public Questionnaire(String cmark, String semester, Long id, Boolean isDeleted) {
-        this.cmark = cmark;
-        this.semester = semester;
+    public Questionnaire(Long courseId, Long id, Boolean isDeleted) {
+        this.courseId = courseId;
         this.id = id;
         this.isDeleted = isDeleted;
     }
 
     public Long getCourseID() {
-        return courseID;
+        return courseId;
     }
 
     public void setCourseID(Long courseID) {
-        this.courseID = courseID;
-    }
-
-    public String getCmark() {
-        return cmark;
-    }
-
-    public void setCmark(String cmark) {
-        this.cmark = cmark;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
+        this.courseId = courseId;
     }
 
     public Long getId() {

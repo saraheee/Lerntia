@@ -7,8 +7,8 @@ public class ExamQuestionnaire extends Questionnaire {
 
     public ExamQuestionnaire() {}
 
-    public ExamQuestionnaire(String cmark, String semester, Long id, Boolean isDeleted, LocalDate date) {
-        super(cmark, semester, id, isDeleted);
+    public ExamQuestionnaire(Long courseId, Long id, Boolean isDeleted, LocalDate date) {
+        super(courseId, id, isDeleted);
         this.date = date;
     }
 
@@ -24,8 +24,7 @@ public class ExamQuestionnaire extends Questionnaire {
     @Override
     public String toString() {
         return "ExamQuestionnaire{" +
-            "cmark='" + super.getCmark() + '\'' +
-            ", semester='" + super.getSemester() + '\'' +
+            "courseId='" + super.getCourseID() + '\'' +
             ", id=" + super.getId()+
             ", date=" + date +
             "isDeleted=" + super.getDeleted() +
