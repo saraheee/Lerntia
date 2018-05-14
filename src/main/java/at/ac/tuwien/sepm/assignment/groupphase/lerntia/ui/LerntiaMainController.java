@@ -280,7 +280,7 @@ public class LerntiaMainController {
             try {
                 //String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
                 //    + "img" + File.separator + question.getPicture();
-                String imagePath = System.getProperty("user.dir") + File.separator + question.getPicture();
+                String imagePath = System.getProperty("user.dir") + File.separator + "tilfragebogen" + File.separator + question.getPicture();
                 LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                 File imageFile = new File(imagePath);
                 zoomButtonController.setImageFile(imageFile);
