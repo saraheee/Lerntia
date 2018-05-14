@@ -177,7 +177,7 @@ public class LerntiaMainController {
         }
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+        //LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
             alertController.showBigAlert(Alert.AlertType.INFORMATION, "Antworten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
@@ -304,6 +304,11 @@ public class LerntiaMainController {
         }
         answerController.setVisible(true);
         answerController.setAnswerText(answerText);
+    }
+
+    public void stopAudio(){
+        LOG.debug("Stop Audio");
+        audioButtonController.stopReading();
     }
 
 }
