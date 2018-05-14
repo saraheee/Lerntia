@@ -13,6 +13,13 @@
                 </ImageView>
             </graphic>
         </MenuItem>
+        <MenuItem mnemonicParsing="false" onAction="#selectQuestionnaire" text="Fragebogen auswählen">
+            <graphic>
+                <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@/icons/manage.png"/>
+                </ImageView>
+            </graphic>
+        </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#createCourse" text="LVA erstellen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
