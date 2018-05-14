@@ -22,11 +22,13 @@ public class QuestionDAOTest {
     private Connection connection;
     private IQuestionDAO questionDAO;
 
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+
     @Before
-    public void setUp() {
+    public void setUp(JDBCConnectionManager jdbcConnectionManager) {
         try {
-            connection = JDBCConnectionManager.getTestConnection();
-            this.IQuestionDAO(new QuestionDAO());
+            connection = jdbcConnectionManager.getTestConnection();
+            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
         }
