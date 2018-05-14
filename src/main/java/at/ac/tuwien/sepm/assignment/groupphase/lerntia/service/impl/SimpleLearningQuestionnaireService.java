@@ -90,4 +90,20 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public LearningQuestionnaire getSelected() throws ServiceException {
+
+        LearningQuestionnaire selectedLearningQuestionnaire = null;
+
+        try {
+            selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+
+        return selectedLearningQuestionnaire;
+    }
+
+
 }
