@@ -160,13 +160,13 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public Question getFirstQuestion() throws ServiceException {
-        allLQs = learningQuestionnaireService.readAll();
+        LearningQuestionnaire currentLQ = null;
+        currentLQ = learningQuestionnaireService.getSelected();
 
-        if (allLQs.isEmpty()){
-            throw new ServiceException("Es sind noch keine Fregen vorhanden");
+        if (currentLQ == null){
+            throw new ServiceException("Es wurde noch kein Fragebogen ausgewählt");
         }
 
-        currentLQ = allLQs.get(allLQs.size()-1);
         getQuestionsFromLearningQuestionnaire(currentLQ);
         currentQuestionIndex = -1;
         return getNextQuestionFromList();
