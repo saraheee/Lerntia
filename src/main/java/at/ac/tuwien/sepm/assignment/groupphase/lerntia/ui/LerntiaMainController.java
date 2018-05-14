@@ -177,7 +177,7 @@ public class LerntiaMainController {
         }
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+        //LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
             alertController.showBigAlert(Alert.AlertType.INFORMATION, "Antworten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
@@ -278,8 +278,9 @@ public class LerntiaMainController {
             LOG.debug("No image to be displayed for this question");
         } else {
             try {
-                String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
-                    + "img" + File.separator + question.getPicture();
+                //String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
+                //    + "img" + File.separator + question.getPicture();
+                String imagePath = System.getProperty("user.dir") + File.separator + "tilfragebogen" + File.separator + question.getPicture();
                 LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                 File imageFile = new File(imagePath);
                 zoomButtonController.setImageFile(imageFile);
@@ -287,7 +288,7 @@ public class LerntiaMainController {
                 mainImage.setImage(image);
                 mainImage.setVisible(true);
                 zoomButtonController.setVisible(true);
-                LOG.info("Image for this vehicle is displayed: '{}'", question.getPicture());
+                LOG.info("Image for this question is displayed: '{}'", question.getPicture());
             } catch (MalformedURLException e) {
                 LOG.debug("Exception while trying to display image " + e.getMessage());
             }
@@ -303,6 +304,11 @@ public class LerntiaMainController {
         }
         answerController.setVisible(true);
         answerController.setAnswerText(answerText);
+    }
+
+    public void stopAudio(){
+        LOG.debug("Stop Audio");
+        audioButtonController.stopReading();
     }
 
 }

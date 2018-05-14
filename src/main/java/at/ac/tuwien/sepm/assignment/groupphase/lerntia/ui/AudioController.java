@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.application.MainApplication;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
@@ -56,7 +57,8 @@ public class AudioController {
 
         if (iTextToSpeechService != null) {
             try {
-                iTextToSpeechService.stopSpeaking();
+                //iTextToSpeechService.stopSpeaking();
+                stopReading();
                 iTextToSpeechService.readQuestionAndAnswers(tts);
             } catch (ServiceException e) {
                 LOG.error("Failed to read question and answers.");

@@ -5,11 +5,16 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
+import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +34,7 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void create(Question question) throws ServiceException {
         try {
+            validate(question);
             questionDAO.create(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
@@ -39,6 +45,7 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void update(Question question) throws ServiceException {
         try {
+            validate(question);
             questionDAO.update(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
@@ -93,6 +100,15 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void validate(Question question) throws ServiceException {
 
+        ConfigReader configReaderQuestions = new ConfigReader("questions");
+
+        var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
+        var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
+        var maxHeightPicture = configReaderQuestions.getValueInt("maxHeightPicture");
+        var maxWidthPicture = configReaderQuestions.getValueInt("maxWidthPicture");
+
+        configReaderQuestions.close();
+
         ArrayList<String> allAnswers = getAllAnswers(question);
 
         // -------------------------------------------------------------------------------------------------------------
@@ -103,7 +119,7 @@ public class SimpleQuestionService implements IQuestionService {
             throw new ServiceException("The Question has no question text");
         }
 
-        if (question.getQuestionText().length() > 200){
+        if (question.getQuestionText().length() > maxLengthQuestion){
             throw new ServiceException("The Question is too long and cannot be displayed in the user interface");
         }
 
@@ -132,7 +148,7 @@ public class SimpleQuestionService implements IQuestionService {
         for (var i = 0; i < allAnswers.size(); i++) {
 
             // answer is not "" and longer than 200 chars
-            if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > 200 )) {
+            if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > maxLengthAnswer )) {
                 throw new ServiceException("The Answer is too long and cannot be displayed in the user interface");
             }
         }
@@ -175,7 +191,22 @@ public class SimpleQuestionService implements IQuestionService {
         // validate image
         // -------------------------------------------------------------------------------------------------------------
 
-        // TODO - validate image
+        // TODO - more image validation?
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(question.getPicture());
+            Image image = new Image(input);
 
+            if (image.getHeight() < maxHeightPicture) {
+                LOG.error("image has too small height");
+                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
+            }
+            if (image.getWidth() < maxWidthPicture) {
+                LOG.error("image has too small width");
+                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
+            }
+        } catch (FileNotFoundException e) {
+            LOG.error("cannot find image");
+        }
     }
 }

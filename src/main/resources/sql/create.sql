@@ -7,24 +7,24 @@ CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
 
 
 CREATE TABLE IF NOT EXISTS Course (
-  mark      VARCHAR(255) primary key ,
-  semester  VARCHAR(255),
+  id bigint auto_increment primary key,
+  mark      VARCHAR(255) not null,
+  semester  VARCHAR(255) not null,
   name      VARCHAR(255),
   isDeleted BOOLEAN DEFAULT FALSE,
-  -- PRIMARY KEY (mark, semester) kein many to one relation hier möglich
 );
+
+
 
 CREATE TABLE IF NOT EXISTS PUserCourse (
   matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
-  cmark               VARCHAR(255) REFERENCES Course (mark),
-  semester            VARCHAR(255) REFERENCES Course (semester),
+  courseid             bigint references Course (id),
   isDeleted           BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (matriculationNumber, cmark, semester)
+  PRIMARY KEY (matriculationNumber, courseid)
 );
 
 CREATE TABLE IF NOT EXISTS Questionnaire (
-  cmark     VARCHAR(255) REFERENCES Course (mark),
-  semester  VARCHAR(255) REFERENCES Course (Semester),
+  courseid  bigint REFERENCES Course (id),
   id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
   isDeleted BOOLEAN DEFAULT FALSE
 );

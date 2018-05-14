@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
@@ -10,8 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +44,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
-    public void importQuestionnaire(File file, String course, String name) throws ServiceException {
+    public void importQuestionnaire(File file, Course course, String name) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
 
@@ -80,21 +86,39 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
 
             // index 7 is the image (optional)
+            String picture = "";
             try {
                 if (!lineParts[7].equals("")) {
-                    // TODO - validate image
+                    picture = lineParts[7];
+                    String path = System.getProperty("user.dir") + File.separator + name + File.separator + picture;
+                    File f = new File(path);
+                    if(!f.exists()) {
+                        throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
+                    }
                 }
             } catch (IndexOutOfBoundsException e) {
                 // there is no image
+                picture = "";
             }
 
-            Question q = new Question((long) 0, lineParts[0], "", lineParts[1], lineParts[2], lineParts[3], lineParts[4], lineParts[5], lineParts[6], "", false);
+            Question q = new Question();
+            q.setId((long) 0);
+            q.setQuestionText(lineParts[0]);
+            q.setPicture(picture);
+            q.setAnswer1(lineParts[1]);
+            q.setAnswer2(lineParts[2]);
+            q.setAnswer3(lineParts[3]);
+            q.setAnswer4(lineParts[4]);
+            q.setAnswer5(lineParts[5]);
+            q.setCorrectAnswers(lineParts[6]);
+            q.setOptionalFeedback("");
+            q.setDeleted(false);
             simpleQuestionService.create(q);
 
             questionIDs.add(q.getId());
         }
 
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire("1", "4", (long) 0, false, name);
+        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name);
 
         simpleLearningQuestionnaireService.create(learningQuestionnaire);
 
@@ -109,6 +133,22 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionnaireQuestion.setDeleted(false);
 
             simpleQuestionnaireQuestionService.create(questionnaireQuestion);
+        }
+    }
+
+    @Override
+    public void importPictures (File file, String name) throws ServiceException {
+        File dir = new File(System.getProperty("user.dir") + File.separator + name);
+        dir.mkdir();
+        File[] files = file.listFiles();
+        for (File child : files) {
+            try {
+                String p = dir.getName()+"/"+child.getName();
+                Path path = Paths.get(p);
+                Files.copy(child.toPath(), path);
+            } catch (IOException e) {
+                throw new ServiceException("Bild kann nicht gelesen werden");
+            }
         }
     }
 }

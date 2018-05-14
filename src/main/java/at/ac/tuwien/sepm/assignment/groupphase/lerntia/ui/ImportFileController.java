@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,11 +39,16 @@ public class ImportFileController {
     private final SimpleCourseService cservice;
     private final SimpleQuestionnaireImportService qservice;
     private File file;
+    private File directory;
     private List<Course> coursedata = new ArrayList<>();
     private ObservableList<String> choices = FXCollections.observableArrayList();
 
+    private ObservableList<Course> courses;
+
     @FXML
     private Text t_filename;
+    @FXML
+    private Text t_directoryname;
     @FXML
     private TextField tf_questionnaire;
     @FXML
@@ -73,10 +79,13 @@ public class ImportFileController {
     @FXML
     private void initialize() throws ServiceException {
         coursedata = cservice.readAll();
-        ObservableList<Course> courses = FXCollections.observableArrayList(coursedata);
+        courses = FXCollections.observableArrayList(coursedata);
+
+        choices.removeAll(choices);
         for (int i = 0; i < courses.size(); i++) {
             choices.add(courses.get(i).getName());
         }
+
         cb_course.setItems(choices);
         cb_course.getSelectionModel().select(0);
     }
@@ -94,22 +103,49 @@ public class ImportFileController {
     }
 
     @FXML
+    public void selectDirectory(ActionEvent actionEvent) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("[Lerntia] Ordner");
+        Stage stage = new Stage();
+        directory = directoryChooser.showDialog(stage);
+        if (directory != null) {
+            t_directoryname.setText(directory.getName());
+        }
+    }
+
+    @FXML
     public void importFile(ActionEvent actionEvent) {
+        if (directory != null) {
+            try {
+                qservice.importPictures(directory, tf_questionnaire.getText());
+            }
+            catch (ServiceException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("[Lerntia] Import fehlgeschlagen");
+                alert.setHeaderText("Fehler");
+                alert.setContentText(e.getMessage());
+                alert.setResizable(true);
+                alert.showAndWait();
+            }
+        }
         if (file != null) {
             try {
                 String name = tf_questionnaire.getText();
+
                 if (!name.equals("")) {
+
                     String course = cb_course.getSelectionModel().getSelectedItem();
-                    qservice.importQuestionnaire(file, course, name);
+
+                    int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
+                    Course selectedCourse = courses.get(cb_courseIndex);
+
+                    qservice.importQuestionnaire(file, selectedCourse, name);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("[Lerntia] Import erfolgreich");
                     alert.setHeaderText("Erfolgreich");
                     alert.setContentText("Alle Fragen wurden erfolgreich importiert");
                     alert.setResizable(true);
                     alert.showAndWait();
-                    Node source = (Node) actionEvent.getSource();
-                    Stage stage = (Stage) source.getScene().getWindow();
-                    stage.close();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("[Lerntia] Fehlerhafter Name");
@@ -134,6 +170,9 @@ public class ImportFileController {
             alert.setResizable(true);
             alert.showAndWait();
         }
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     void showImportWindow() {
