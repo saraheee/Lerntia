@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearni
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Modality;
@@ -36,9 +37,7 @@ public class SelectQuestionnaireController {
 
     @FXML
     private void initialize() {
-
-
-
+        
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
@@ -50,7 +49,6 @@ public class SelectQuestionnaireController {
         }
 
         cb_questionnaire.getSelectionModel().selectFirst();
-
     }
 
     void showSelectQuestionnaireWindow() {
@@ -73,19 +71,15 @@ public class SelectQuestionnaireController {
 
     public void selectQuestionnaire(ActionEvent actionEvent) {
 
-
-
         int selectedQuestionnaireIndex = cb_questionnaire.getSelectionModel().getSelectedIndex();
         LearningQuestionnaire selectedQuestionnaire = learningQuestionnaireList.get(selectedQuestionnaireIndex);
 
         for (int i = 0; i < learningQuestionnaireList.size(); i++){
-
             try {
                 learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
             } catch (ServiceException e) {
                 e.printStackTrace();
             }
-
         }
 
         try {
@@ -94,8 +88,8 @@ public class SelectQuestionnaireController {
             e.printStackTrace();
         }
 
-
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
-
-
 }
