@@ -24,8 +24,6 @@ CREATE TABLE IF NOT EXISTS Course (
   isDeleted BOOLEAN DEFAULT FALSE,
 );
 
-
-
 CREATE TABLE IF NOT EXISTS PUserCourse (
   matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
   courseid             bigint references Course (id),
