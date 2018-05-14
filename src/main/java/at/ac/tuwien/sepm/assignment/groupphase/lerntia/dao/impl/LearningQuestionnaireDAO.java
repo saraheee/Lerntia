@@ -150,6 +150,9 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             System.out.println(list.size());
             System.out.println(list);
 
+            if (list.isEmpty()) {
+                return null;
+            }
             return list.get(0);
 
         } catch (SQLException e) {

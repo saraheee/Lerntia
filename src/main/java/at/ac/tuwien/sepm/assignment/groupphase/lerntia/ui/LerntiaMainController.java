@@ -298,21 +298,22 @@ public class LerntiaMainController {
                 } catch (ServiceException e) {
                     e.printStackTrace();
                 }
+                if (selectedLearningQuestionnaire != null) {
+                    String imagePath =
+                        System.getProperty("user.dir") + File.separator +
+                            selectedLearningQuestionnaire.getName() + File.separator +
+                            question.getPicture()
+                        ;
 
-                String imagePath =
-                    System.getProperty("user.dir") + File.separator +
-                    selectedLearningQuestionnaire.getName() + File.separator +
-                    question.getPicture()
-                ;
-
-                LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
-                File imageFile = new File(imagePath);
-                zoomButtonController.setImageFile(imageFile);
-                Image image = new Image(imageFile.toURI().toURL().toExternalForm());
-                mainImage.setImage(image);
-                mainImage.setVisible(true);
-                zoomButtonController.setVisible(true);
-                LOG.info("Image for this question is displayed: '{}'", question.getPicture());
+                    LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
+                    File imageFile = new File(imagePath);
+                    zoomButtonController.setImageFile(imageFile);
+                    Image image = new Image(imageFile.toURI().toURL().toExternalForm());
+                    mainImage.setImage(image);
+                    mainImage.setVisible(true);
+                    zoomButtonController.setVisible(true);
+                    LOG.info("Image for this question is displayed: '{}'", question.getPicture());
+                }
             } catch (MalformedURLException e) {
                 LOG.debug("Exception while trying to display image " + e.getMessage());
             }
