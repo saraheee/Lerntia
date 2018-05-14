@@ -216,7 +216,7 @@ public class LerntiaMainController {
         getAndShowNextQuestion();
     }
 
-    private void getAndShowTheFirstQuestion() throws ControllerException {
+    public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
             question = lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {

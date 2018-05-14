@@ -1,11 +1,13 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Modality;
@@ -24,20 +26,20 @@ public class SelectQuestionnaireController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
+    private final LerntiaMainController lerntiaMainController;
 
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
     private ChoiceBox<String> cb_questionnaire;
 
-    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService) {
+    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService, LerntiaMainController lerntiaMainController) {
         this.learningQuestionnaireService = learningQuestionnaireService;
+        this.lerntiaMainController = lerntiaMainController;
     }
 
     @FXML
     private void initialize() {
-
-
 
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
@@ -50,7 +52,6 @@ public class SelectQuestionnaireController {
         }
 
         cb_questionnaire.getSelectionModel().selectFirst();
-
     }
 
     void showSelectQuestionnaireWindow() {
@@ -73,20 +74,20 @@ public class SelectQuestionnaireController {
 
     public void selectQuestionnaire(ActionEvent actionEvent) {
 
-
-
         int selectedQuestionnaireIndex = cb_questionnaire.getSelectionModel().getSelectedIndex();
         LearningQuestionnaire selectedQuestionnaire = learningQuestionnaireList.get(selectedQuestionnaireIndex);
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+        // unselect all questionnaires
 
+        for (int i = 0; i < learningQuestionnaireList.size(); i++){
             try {
                 learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
             } catch (ServiceException e) {
                 e.printStackTrace();
             }
-
         }
+
+        // select questionnaire
 
         try {
             learningQuestionnaireService.select(selectedQuestionnaire);
@@ -94,8 +95,16 @@ public class SelectQuestionnaireController {
             e.printStackTrace();
         }
 
+        // show first question of new questionnaire
 
+        try {
+            lerntiaMainController.getAndShowTheFirstQuestion();
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
-
-
 }
