@@ -72,4 +72,38 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public void select(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
+        try {
+            iLearningQuestionnaireDAO.select(learningQuestionnaire);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deselect(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
+        try {
+            iLearningQuestionnaireDAO.deselect(learningQuestionnaire);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public LearningQuestionnaire getSelected() throws ServiceException {
+
+        LearningQuestionnaire selectedLearningQuestionnaire = null;
+
+        try {
+            selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+
+        return selectedLearningQuestionnaire;
+    }
+
+
 }
