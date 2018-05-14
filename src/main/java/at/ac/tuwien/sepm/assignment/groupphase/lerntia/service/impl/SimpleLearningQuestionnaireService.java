@@ -75,12 +75,19 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
     @Override
     public void select(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
-
         try {
             iLearningQuestionnaireDAO.select(learningQuestionnaire);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
+    }
 
+    @Override
+    public void deselect(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
+        try {
+            iLearningQuestionnaireDAO.deselect(learningQuestionnaire);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 }
