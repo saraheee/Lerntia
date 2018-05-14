@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
@@ -25,19 +26,21 @@ public class SelectQuestionnaireController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
+    private final LerntiaMainController lerntiaMainController;
 
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
     private ChoiceBox<String> cb_questionnaire;
 
-    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService) {
+    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService, LerntiaMainController lerntiaMainController) {
         this.learningQuestionnaireService = learningQuestionnaireService;
+        this.lerntiaMainController = lerntiaMainController;
     }
 
     @FXML
     private void initialize() {
-        
+
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
@@ -74,6 +77,8 @@ public class SelectQuestionnaireController {
         int selectedQuestionnaireIndex = cb_questionnaire.getSelectionModel().getSelectedIndex();
         LearningQuestionnaire selectedQuestionnaire = learningQuestionnaireList.get(selectedQuestionnaireIndex);
 
+        // unselect all questionnaires
+
         for (int i = 0; i < learningQuestionnaireList.size(); i++){
             try {
                 learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
@@ -82,9 +87,19 @@ public class SelectQuestionnaireController {
             }
         }
 
+        // select questionnaire
+
         try {
             learningQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        // show first question of new questionnaire
+
+        try {
+            lerntiaMainController.getAndShowTheFirstQuestion();
+        } catch (ControllerException e) {
             e.printStackTrace();
         }
 
