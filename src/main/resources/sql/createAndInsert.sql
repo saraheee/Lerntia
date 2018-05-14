@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
 CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
   id BIGINT PRIMARY KEY REFERENCES Questionnaire(id),
   name      VARCHAR(255) NOT NULL,
+  selected    BOOLEAN DEFAULT FALSE,
 );
 
 CREATE TABLE IF NOT EXISTS ExamQuestionnaire (
