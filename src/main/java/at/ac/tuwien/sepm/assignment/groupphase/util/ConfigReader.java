@@ -38,6 +38,10 @@ public class ConfigReader {
         return Integer.parseInt(this.prop.getProperty(key));
     }
 
+    public boolean getValueBoolean(String key){
+        return Boolean.valueOf(this.prop.getProperty(key));
+    }
+
     public void close(){
         try {
             this.inputStream.close();
