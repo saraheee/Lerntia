@@ -4,18 +4,18 @@ Fuer die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.8 ist, w
 Welcher Effekt entsteht, wenn man von einem Bild das Laplacegefilterte Bild abzieht?;Bild wird schaerfer;Bild wird unscharf;Bild wird heller;Bild wird invertiert;Keine der genannten Antworten.;1;
 Welche Arten von Fotorezeptorzellen gibt es beim menschlichen Auge?;Staebchen;Zaepfchen;Schuppen;Poren;Keine der genannten Antworten.;12;
 Welche grundlegenden Arten von Pixelsensoren gibt es?; CCD; CMOS; FOV; DOF;Keine der genannten Antworten.;12;
-[Bild 8] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;1;8n.jpg
-[Bild 9] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;2;9n.jpg
-[Bild 10] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;3;10n.jpg
-[Bild 11] Um welche Art von Matrixtransformation kann es sich hierbei handeln?;Translation;Rotation;Skalierung;Projektion ;Keine der genannten Antworten.;23;11n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 1 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;1;12n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 2 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;2;12n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 3 in der Viewing-Pipeline?; Weltkoordinaten; Pixelkoordinaten; Projektion und Homogenisierung; View-Transformation;Keine der genannten Antworten.;3;12n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 4 in der Viewing-Pipeline?; Weltkoordinaten; Normalisierte Geraetekoordinaten; Pixelkoordinaten; Objektkoordinaten;Keine der genannten Antworten.;2;12n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 5 in der Viewing-Pipeline?; Viewport-Transformation; Schattierung; Pixelkoordinaten; RGB-Farbraum;Keine der genannten Antworten.;1;12n.jpg
-[Bild 12] Welcher ist der richtige Begriff fuer Position 6 in der Viewing-Pipeline?; Ray-Tracing; Octree-Berechnung; Pixelkoordinaten; Modellkoordinaten;Keine der genannten Antworten.;3;12n.jpg
-[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird fuer die Speicherung aller Pixelwerte in unkomprimierter Form benoetigt?; 49 Byte; 98 Byte; 7 Byte; 56 Byte;Keine der genannten Antworten.;1;18n.jpg
-[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird bei einer Lauflaengenkodierung aller Pixelwerte benoetigt, wenn fuer jedes Element der Lauflaengenkodierung 8 Bit verwendet werden?; 8 Byte; 98 Byte; 392 Byte; 56 Byte;Keine der genannten Antworten.;2;18n.jpg
+[Bild 8] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;1;8n.png
+[Bild 9] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;2;9n.png
+[Bild 10] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;3;10n.png
+[Bild 11] Um welche Art von Matrixtransformation kann es sich hierbei handeln?;Translation;Rotation;Skalierung;Projektion ;Keine der genannten Antworten.;23;11n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 1 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;1;12n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 2 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;2;12n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 3 in der Viewing-Pipeline?; Weltkoordinaten; Pixelkoordinaten; Projektion und Homogenisierung; View-Transformation;Keine der genannten Antworten.;3;12n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 4 in der Viewing-Pipeline?; Weltkoordinaten; Normalisierte Geraetekoordinaten; Pixelkoordinaten; Objektkoordinaten;Keine der genannten Antworten.;2;12n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 5 in der Viewing-Pipeline?; Viewport-Transformation; Schattierung; Pixelkoordinaten; RGB-Farbraum;Keine der genannten Antworten.;1;12n.png
+[Bild 12] Welcher ist der richtige Begriff fuer Position 6 in der Viewing-Pipeline?; Ray-Tracing; Octree-Berechnung; Pixelkoordinaten; Modellkoordinaten;Keine der genannten Antworten.;3;12n.png
+[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird fuer die Speicherung aller Pixelwerte in unkomprimierter Form benoetigt?; 49 Byte; 98 Byte; 7 Byte; 56 Byte;Keine der genannten Antworten.;1;18n.png
+[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird bei einer Lauflaengenkodierung aller Pixelwerte benoetigt, wenn fuer jedes Element der Lauflaengenkodierung 8 Bit verwendet werden?; 8 Byte; 98 Byte; 392 Byte; 56 Byte;Keine der genannten Antworten.;2;18n.png
 Die Farbkoordinaten des HLS-Farbmodells setzen sich zusammen aus Werten fuer:; Farbton;Saettigung; Helligkeit; Kontrast;Keine der genannten Antworten.;123;
 Die Wellenlaengen welcher Farben sind laenger als jene von Blau?; Violett; Rot;Gruen; Gelb;Keine der genannten Antworten.;234;
 Die Wellenlaengen welcher Farben sind laenger als jene von Gruen?; Blau; Violett; Rot;Orange;Keine der genannten Antworten.;34;
@@ -55,7 +55,7 @@ Je groeszer der Durchmesser der Blende einer Kamera, desto groeszer ist der Tief
 Octrees erlauben ein schnelles Durchsuchen bestimmter raeumlicher Positionen eines Objektes.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Bei geometrischen Transformationen muessen Octrees oft komplett neu generiert werden.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Die Genauigkeit der Objektdarstellung in Quad- und Octrees ist generell abhaengig von der Baumtiefe.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-[Bild 59] Gegeben ist ein 5x5 Grauwertbild. Welches ist das Ergebnis fuer die 3 fett umrandeten Pixel bei Anwendung eines 3x3 Medianfilters auf das Bild?;| 50 | 100 | 90 |;| 90 | 90 | 90 |;| 100 | 50 | 90 |;| 100 | 90 | 90 |;Keine der genannten Antworten.;4;59n.jpg
+[Bild 59] Gegeben ist ein 5x5 Grauwertbild. Welches ist das Ergebnis fuer die 3 fett umrandeten Pixel bei Anwendung eines 3x3 Medianfilters auf das Bild?;| 50 | 100 | 90 |;| 90 | 90 | 90 |;| 100 | 50 | 90 |;| 100 | 90 | 90 |;Keine der genannten Antworten.;4;59n.png
 Durch die hierarchische Objektdarstellung von Octrees lassen sich einzelne Teile im Octree sehr einfach transformieren.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Die Matrizenmultiplikation ist kommutativ, d.h. die Reihenfolge der Matrizen kann vertauscht werden, ohne dass sich das Ergebnis veraendert.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Wie heiszt das Theorem, das besagt, dass man ein Signal f(t) exakt wiedergewinnen kann, wenn man f(t) mit einer Rate abtastet, die groeszer als das Doppelte seiner hoechsten Frequenzkomponente ist?;Bayer;Shannon-Nyquist;Laplace;Fourier;Keine der genannten Antworten.;2;
