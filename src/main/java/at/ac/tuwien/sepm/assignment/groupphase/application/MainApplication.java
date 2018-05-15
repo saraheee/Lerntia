@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
-import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
@@ -21,7 +21,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -81,7 +80,6 @@ public final class MainApplication extends Application implements Runnable {
         var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
         loader.setControllerFactory(context::getBean);
         Parent root = loader.load();
-        // LerntiaMainController
         controller = loader.getController();
 
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
@@ -92,15 +90,9 @@ public final class MainApplication extends Application implements Runnable {
         primaryStage.show();
         primaryStage.toFront();
         iTextToSpeechService = new SimpleTextToSpeechService();
-
         textToSpeechThread = new Thread(new MainApplication());
         textToSpeechThread.start();
         LOG.debug("Application startup complete");
-    }
-
-    @Autowired
-    public void getiTextToSpeechService(ITextToSpeechService iTextToSpeechService) {
-        this.iTextToSpeechService = iTextToSpeechService;
     }
 
     @Override
@@ -112,7 +104,6 @@ public final class MainApplication extends Application implements Runnable {
         } else {
             LOG.debug("iTextToSpeechService is already null.");
         }
-
         try {
             LOG.info("Starting Thread interrupt");
             textToSpeechThread.interrupt();
@@ -130,8 +121,8 @@ public final class MainApplication extends Application implements Runnable {
         iTextToSpeechService = new SimpleTextToSpeechService();
         try {
             iTextToSpeechService.playWelcomeText();
-        } catch (ServiceException e) {
-            LOG.error("Failed to play welcome text with the speech synthesizer: " + e.getMessage());
+        } catch (TextToSpeechServiceException e) {
+            LOG.error("Failed to play welcome text with the speech synthesizer!");
         }
     }
 
