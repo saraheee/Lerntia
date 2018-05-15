@@ -41,13 +41,16 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare Statement for User creation.");
             PreparedStatement pscreate = connection.prepareStatement(SQL_USER_CREATE_STATEMENT);
-            pscreate.setString(1, user.getName());
-            pscreate.setString(2, user.getMatriculationNumber());
-            pscreate.setString(3, user.getStudyProgramme());
-            pscreate.executeUpdate();
-            LOG.info("User succesfully added to Database.");
+            try {
+                pscreate.setString(1, user.getName());
+                pscreate.setString(2, user.getMatriculationNumber());
+                pscreate.setString(3, user.getStudyProgramme());
+                pscreate.executeUpdate();
+                LOG.info("User succesfully added to Database.");
+            }finally {
+                pscreate.close();
+            }
         }catch (Exception e){
-            LOG.error("User CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
@@ -57,13 +60,16 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare statement for updating User values.");
             PreparedStatement psupdate = connection.prepareStatement(SQL_USER_UPDATE_STATEMENT);
-            psupdate.setString(1, user.getName());
-            psupdate.setString(2, user.getStudyProgramme());
-            psupdate.setString(3, user.getMatriculationNumber());
-            psupdate.executeUpdate();
-            LOG.info("User succesfully updated.");
+            try {
+                psupdate.setString(1, user.getName());
+                psupdate.setString(2, user.getStudyProgramme());
+                psupdate.setString(3, user.getMatriculationNumber());
+                psupdate.executeUpdate();
+                LOG.info("User succesfully updated.");
+            }finally {
+                psupdate.close();
+            }
         }catch (Exception e){
-            LOG.error("User UPDATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
@@ -73,19 +79,23 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare statement to get User from Database");
             PreparedStatement psread = connection.prepareStatement(SQL_USER_READ_STATEMENT);
-            psread.setString(1, user.getMatriculationNumber());
-            User u = new User();
-            ResultSet rs = psread.executeQuery();
-            if(rs.next()) {
-                u.setName(rs.getString(1));
-                u.setMatriculationNumber(rs.getString(2));
-                u.setStudyProgramme(rs.getString(3));
-                u.setDeleted(rs.getBoolean(4));
+            try {
+                psread.setString(1, user.getMatriculationNumber());
+                User u = new User();
+                try (ResultSet rs = psread.executeQuery()) {
+                    if (rs.next()) {
+                        u.setName(rs.getString(1));
+                        u.setMatriculationNumber(rs.getString(2));
+                        u.setStudyProgramme(rs.getString(3));
+                        u.setDeleted(rs.getBoolean(4));
+                    }
+                }
+                LOG.info("User found.");
+                return u;
+            }finally {
+                psread.close();
             }
-            LOG.info("User found.");
-            return u;
         }catch (Exception e){
-            LOG.error("User READ DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
@@ -95,14 +105,16 @@ public class UserDAO implements IUserDAO {
         try {
             LOG.info("Prepare statement for User deletion.");
             PreparedStatement psdelete = connection.prepareStatement(SQL_USER_DELETE_STATEMENT);
-            if (user.getMatriculationNumber()!=null) {
-                psdelete.setString(1, user.getMatriculationNumber());
+            try {
+                if (user.getMatriculationNumber() != null) {
+                    psdelete.setString(1, user.getMatriculationNumber());
+                }
+                psdelete.executeUpdate();
+                LOG.info("User soft-deleted from Database.");
+            }finally {
+                psdelete.close();
             }
-
-            psdelete.executeUpdate();
-            LOG.info("User soft-deleted from Database.");
         } catch (SQLException e) {
-            LOG.error("User DELETE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
