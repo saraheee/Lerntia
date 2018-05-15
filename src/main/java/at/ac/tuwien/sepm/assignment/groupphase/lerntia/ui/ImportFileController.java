@@ -2,8 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import javafx.collections.FXCollections;
@@ -14,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -36,8 +35,11 @@ import java.util.List;
 public class ImportFileController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private final SimpleCourseService cservice;
     private final SimpleQuestionnaireImportService qservice;
+    private final AlertController alertController;
+
     private File file;
     private File directory;
     private List<Course> coursedata = new ArrayList<>();
@@ -53,15 +55,19 @@ public class ImportFileController {
     private TextField tf_questionnaire;
     @FXML
     private ChoiceBox<String> cb_course;
+    @FXML
+    private CheckBox questionnaireIsExam;
 
     @Autowired
-    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService) throws PersistenceException {
+    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService, AlertController alertController) throws PersistenceException {
         cservice = simpleCourseService;
         qservice = simpleQuestionnaireImportService;
+        this.alertController = alertController;
     }
 
     @FXML
     private void initialize() throws ServiceException {
+
         coursedata = cservice.readAll();
         courses = FXCollections.observableArrayList(coursedata);
 
@@ -99,17 +105,14 @@ public class ImportFileController {
 
     @FXML
     public void importFile(ActionEvent actionEvent) {
+
         if (directory != null) {
             try {
                 qservice.importPictures(directory, tf_questionnaire.getText());
             }
             catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
+                // TODO - e.getMessage()
+                alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
             }
         }
         if (file != null) {
@@ -123,36 +126,19 @@ public class ImportFileController {
                     int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
                     Course selectedCourse = courses.get(cb_courseIndex);
 
+                    alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
+
                     qservice.importQuestionnaire(file, selectedCourse, name);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("[Lerntia] Import erfolgreich");
-                    alert.setHeaderText("Erfolgreich");
-                    alert.setContentText("Alle Fragen wurden erfolgreich importiert");
-                    alert.setResizable(true);
-                    alert.showAndWait();
+
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("[Lerntia] Fehlerhafter Name");
-                    alert.setHeaderText("Warnung");
-                    alert.setContentText("Bitte gib einen gültigen Namen an!");
-                    alert.setResizable(true);
-                    alert.showAndWait();
+                    alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
                 }
             } catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
+                // TODO - e.getMessage()
+                alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("[Lerntia] Kein File ausgewählt");
-            alert.setHeaderText("Achtung");
-            alert.setContentText("Bitte wähle zuerst eine csv-Datei aus!");
-            alert.setResizable(true);
-            alert.showAndWait();
+            alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein File ausgewählt","Achtung","Bitte wähle zuerst eine csv-Datei aus!");
         }
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
