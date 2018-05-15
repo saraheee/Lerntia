@@ -7,7 +7,7 @@ import java.io.File;
 
 public interface IQuestionnaireImportService {
 
-    public void importQuestionnaire(File file, Course course, String name) throws ServiceException;
+    public void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException;
 
     public void importPictures(File file, String name) throws ServiceException;
 

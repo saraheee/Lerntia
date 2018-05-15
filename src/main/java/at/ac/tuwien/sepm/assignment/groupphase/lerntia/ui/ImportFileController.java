@@ -126,10 +126,8 @@ public class ImportFileController {
                     int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
                     Course selectedCourse = courses.get(cb_courseIndex);
 
+                    qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
                     alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
-
-                    qservice.importQuestionnaire(file, selectedCourse, name);
-
                 } else {
                     alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
                 }

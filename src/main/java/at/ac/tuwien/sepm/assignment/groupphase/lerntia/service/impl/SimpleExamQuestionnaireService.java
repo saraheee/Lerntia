@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class SimpleExamQuestionnaireService implements IExamQuestionnaireService {
@@ -26,7 +27,11 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws ServiceException {
         try {
+            System.out.println("======================== 1");
+
             examQuestionnaireDAO.create(examQuestionnaire);
+
+            System.out.println("======================== 10");
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
@@ -64,7 +69,12 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     }
 
     @Override
-    public ObservableList readAll() throws ServiceException {
+    public List<ExamQuestionnaire> readAll() throws ServiceException {
+        try {
+            return examQuestionnaireDAO.readAll();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
