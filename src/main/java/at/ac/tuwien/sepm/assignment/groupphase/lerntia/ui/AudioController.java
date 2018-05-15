@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.application.MainApplication;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
@@ -57,15 +57,19 @@ public class AudioController {
 
         if (iTextToSpeechService != null) {
             try {
-                //iTextToSpeechService.stopSpeaking();
                 stopReading();
                 iTextToSpeechService.readQuestionAndAnswers(tts);
-            } catch (ServiceException e) {
+
+            } catch (TextToSpeechServiceException e) {
                 LOG.error("Failed to read question and answers.");
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Lesen fehlgeschlagen", "Die Audio Ausgabe ist fehlgeschlagen.", "");
+                showAudioErrorDialog();
+            } catch (TextToSpeechServiceValidationException e) {
+                LOG.info("Validation failed for the input text of the speech synthesizer.");
+                showValidationFailedDialog();
             }
         } else {
             LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+            showAudioErrorDialog();
         }
     }
 
@@ -76,21 +80,22 @@ public class AudioController {
             try {
                 stopReading();
                 iTextToSpeechService.readSingleAnswer(tts);
-            } catch (ServiceException e) {
+
+            } catch (TextToSpeechServiceException e) {
                 LOG.error("Failed to read question and answers.");
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Lesen fehlgeschlagen", "Die Audio Ausgabe ist fehlgeschlagen.", "");
+                showAudioErrorDialog();
+            } catch (TextToSpeechServiceValidationException e) {
+                LOG.info("Validation failed for the input text of the speech synthesizer.");
+                showValidationFailedDialog();
             }
         } else {
             LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+            showAudioErrorDialog();
         }
     }
 
     void stopReading() {
-        try {
-            iTextToSpeechService.stopSpeaking();
-        } catch (ServiceException e) {
-            LOG.error("Failed to stop the audio");
-        }
+        iTextToSpeechService.stopSpeaking();
     }
 
     void setSelected() {
@@ -102,6 +107,16 @@ public class AudioController {
             audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
         }
+    }
+
+    private void showAudioErrorDialog() {
+        alertController.showBigAlert(Alert.AlertType.ERROR, "Sprachausgabe fehlgeschlagen",
+            "Der Text konnte leider nicht vorgelesen werden.", "");
+    }
+
+    private void showValidationFailedDialog() {
+        alertController.showBigAlert(Alert.AlertType.ERROR, "Validierung fehlgeschlagen",
+            "Kein Text zum Lesen vorhanden.", "");
     }
 
     void setQuestion(String question) {
