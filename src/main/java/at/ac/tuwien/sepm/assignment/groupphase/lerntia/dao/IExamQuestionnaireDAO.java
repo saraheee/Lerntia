@@ -4,6 +4,8 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public interface IExamQuestionnaireDAO {
 
     /**
@@ -38,5 +40,5 @@ public interface IExamQuestionnaireDAO {
      * */
     void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
-    ObservableList readAll() throws PersistenceException;
+    List<ExamQuestionnaire> readAll() throws PersistenceException;
 }
