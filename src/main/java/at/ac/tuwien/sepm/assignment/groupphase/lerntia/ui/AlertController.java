@@ -32,10 +32,10 @@ public class AlertController {
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
         var alert = new Alert(alertType);
-        var dialogPane = new DialogPane();
+        alert.setHeaderText(header);
+        alert.setContentText(content);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        alert.setDialogPane(dialogPane);
         alert.showAndWait();
     }
 
