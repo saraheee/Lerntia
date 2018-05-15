@@ -25,12 +25,14 @@ public class QuestionnaireDAOTest {
 
     private ICourseDAO courseDAO;
 
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+
     @Before
     public void setUp() {
         try {
-            connection = JDBCConnectionManager.getTestConnection();
-            this.IQuestionnaireDAO(new QuestionnaireDAO());
-            this.ICourseDAO(new CourseDAO());
+            connection = jdbcConnectionManager.getTestConnection();
+            this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
+            this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);

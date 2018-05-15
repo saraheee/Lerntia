@@ -36,6 +36,7 @@ public class LerntiaMainController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
+    private final ZoomedImageController zoomedImageController;
     private final AudioController audioController;
     private final AlertController alertController;
 
@@ -82,15 +83,18 @@ public class LerntiaMainController {
         IMainLerntiaService lerntiaService,
         AudioController audioController,
         AlertController alertController,
-        ILearningQuestionnaireService learningQuestionnaireService
+        ILearningQuestionnaireService learningQuestionnaireService,
+        ZoomedImageController zoomedImageController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
+        notNull(zoomedImageController, "'zoomedImageController' should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;
         this.learningQuestionnaireService = learningQuestionnaireService;
+        this.zoomedImageController = zoomedImageController;
     }
 
     @FXML
@@ -116,7 +120,7 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.Z) {
                 LOG.debug("Z key was pressed, imageFile = {}", imageFile);
-                zoomButtonController.setSelected();
+                zoomedImageController.onZoomButtonClicked();
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
@@ -297,7 +301,7 @@ public class LerntiaMainController {
         if (question.getPicture() == null || question.getPicture().trim().isEmpty()) {
             mainImage.setVisible(false);
             zoomButtonController.setVisible(false);
-            zoomButtonController.setImageFile(null);
+            zoomedImageController.setImageFile(null);
             LOG.debug("No image to be displayed for this question");
         } else {
             try {
@@ -320,7 +324,7 @@ public class LerntiaMainController {
 
                     LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                     File imageFile = new File(imagePath);
-                    zoomButtonController.setImageFile(imageFile);
+                    zoomedImageController.setImageFile(imageFile);
                     Image image = new Image(imageFile.toURI().toURL().toExternalForm());
                     mainImage.setImage(image);
                     mainImage.setVisible(true);

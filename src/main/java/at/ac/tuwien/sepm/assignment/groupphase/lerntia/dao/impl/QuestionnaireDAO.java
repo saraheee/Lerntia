@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
@@ -23,9 +24,10 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     private static final String SQL_QUESTIONAIRE_READALL_STATEMENT = "";
     private Connection connection = null;
 
-    public QuestionnaireDAO() throws PersistenceException {
+    @Autowired
+    public QuestionnaireDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Succesfully found connection for QuestionnaireDAO!");
         } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for QuestionnaireDAO!");
