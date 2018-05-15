@@ -81,13 +81,12 @@ public final class MainApplication extends Application implements Runnable {
         var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
         loader.setControllerFactory(context::getBean);
         Parent root = loader.load();
-        //LerntiaMainController controller = loader.getController();
+        // LerntiaMainController
         controller = loader.getController();
 
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
         controller.update(scene);
         primaryStage.setScene(scene);
-
 
         // show application
         primaryStage.show();
@@ -122,7 +121,7 @@ public final class MainApplication extends Application implements Runnable {
             LOG.debug("Interrupting textToSpeech thread: " + e.getMessage());
         }
 
-        JDBCConnectionManager.closeConnection();
+    // todo check if it really is ok just delete this   JDBCConnectionManager.closeConnection();
         context.close();
     }
 

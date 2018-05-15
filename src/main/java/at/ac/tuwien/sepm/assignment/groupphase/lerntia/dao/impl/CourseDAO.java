@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
@@ -24,9 +25,10 @@ public class CourseDAO implements ICourseDAO {
 
     private Connection connection;
 
-    public CourseDAO() throws PersistenceException{
+    @Autowired
+    public CourseDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException{
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for CourseDAO obtained.");
         } catch (PersistenceException e) {
             LOG.error("Course Constructor failed while trying to get connection!");

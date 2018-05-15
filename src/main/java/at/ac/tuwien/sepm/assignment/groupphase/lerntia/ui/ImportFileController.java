@@ -54,26 +54,10 @@ public class ImportFileController {
     @FXML
     private ChoiceBox<String> cb_course;
 
-    public ImportFileController() throws PersistenceException {
-        CourseDAO c = new CourseDAO();
-        cservice = new SimpleCourseService(c);
-        QuestionnaireImportDAO i = new QuestionnaireImportDAO();
-        QuestionDAO d = new QuestionDAO();
-        SimpleQuestionService q = new SimpleQuestionService(d);
-        QuestionnaireDAO questionnaireDAO = new QuestionnaireDAO();
-        ILearningQuestionnaireDAO a = new LearningQuestionnaireDAO(questionnaireDAO);
-        SimpleLearningQuestionnaireService l = new SimpleLearningQuestionnaireService(a);
-
-        QuestionnaireQuestionDAO qqDAO = new QuestionnaireQuestionDAO();
-        SimpleQuestionnaireQuestionService qq = new SimpleQuestionnaireQuestionService(qqDAO);
-
-        qservice = new SimpleQuestionnaireImportService(i, q, l, qq);
-    }
-
     @Autowired
-    public ImportFileController(SimpleCourseService cservice, SimpleQuestionnaireImportService qservice) {
-        this.cservice = cservice;
-        this.qservice = qservice;
+    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService) throws PersistenceException {
+        cservice = simpleCourseService;
+        qservice = simpleQuestionnaireImportService;
     }
 
     @FXML

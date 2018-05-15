@@ -29,10 +29,10 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     private Connection connection;
 
     @Autowired
-    public ExamQuestionaireDAO(QuestionnaireDAO questionnaireDAO) throws PersistenceException {
+    public ExamQuestionaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            this.questionaireDAO =questionnaireDAO;
-            connection = JDBCConnectionManager.getConnection();
+            this.questionaireDAO = questionnaireDAO;
+            connection = jdbcConnectionManager.getConnection();
         } catch (PersistenceException e) {
             LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");
             throw e;

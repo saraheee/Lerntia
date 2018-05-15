@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -26,12 +27,13 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion set qid=?, questionid=? where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_READALL_STATEMENT = "";
     private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
-    private Connection connection = null;
+    private Connection connection;
 
 
-    public QuestionnaireQuestionDAO() throws PersistenceException {
+    @Autowired
+    public QuestionnaireQuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Connection for QuestionnaireQuestionDAO found.");
         } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for QuestionnaireQuestionDAO!");

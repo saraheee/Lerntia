@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +19,12 @@ public class CourseServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ICourseService courseService;
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp(){
         try {
-            this.ICourseService(new SimpleCourseService(new CourseDAO()));
+            this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             e.printStackTrace();
         }

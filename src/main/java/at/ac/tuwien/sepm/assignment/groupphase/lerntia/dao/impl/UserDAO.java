@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
@@ -24,9 +25,10 @@ public class UserDAO implements IUserDAO {
     private static final String SQL_USER_READ_STATEMENT = "SELECT * FROM PUser WHERE matriculationNumber = ?";
     private static final String SQL_USER_DELETE_STATEMENT ="UPDATE PUser SET isDeleted=TRUE WHERE matriculationNumber = ?";
 
-    public UserDAO() throws PersistenceException {
+    @Autowired
+    public UserDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for UserDAO obtained.");
         } catch (PersistenceException e) {
             LOG.error("User Constructor failed while trying to get connection!");

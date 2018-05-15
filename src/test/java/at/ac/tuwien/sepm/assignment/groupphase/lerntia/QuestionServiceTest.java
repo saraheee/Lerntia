@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
+import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,11 +23,13 @@ public class QuestionServiceTest {
 
     private ConfigReader configReaderQuestions;
 
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+
     @Before
     public void setUp(){
         configReaderQuestions = new ConfigReader("questions");
         try {
-            this.IQuestionService(new SimpleQuestionService(new QuestionDAO()));
+            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             e.printStackTrace();
         }

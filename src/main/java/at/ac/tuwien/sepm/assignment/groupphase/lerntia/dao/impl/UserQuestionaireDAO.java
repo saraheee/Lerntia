@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
@@ -19,12 +20,12 @@ public class UserQuestionaireDAO implements IUserQuestionaireDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String SQL_USERQUESTIONNAIREQ_CREATE_STATEMENT ="INSERT INTO PUserQuestionnaire(matriculationNumber,qid,isDeleted) VALUES (?,?,?)";
-
     private Connection connection;
 
-    public UserQuestionaireDAO() throws PersistenceException {
+    @Autowired
+    public UserQuestionaireDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
-            connection = JDBCConnectionManager.getConnection();
+            connection = jdbcConnectionManager.getConnection();
             LOG.info("Succesfully found connection for UserQuestionaireDAO.");
         } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for UserQuestionaireDAO");

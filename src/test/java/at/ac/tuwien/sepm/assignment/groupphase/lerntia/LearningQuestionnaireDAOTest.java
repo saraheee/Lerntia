@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 
@@ -25,14 +27,15 @@ public class LearningQuestionnaireDAOTest {
     private IQuestionnaireDAO questionnaireDAO;
     private ILearningQuestionnaireDAO learningQuestionnaireDAO;
     private ICourseDAO courseDAO;
+    private JDBCConnectionManager jdbcConnectionManager;
 
     @Before
     public void setUp() {
         try {
-            connection = JDBCConnectionManager.getTestConnection();
-            this.IQuestionnaireDAO(new QuestionnaireDAO());
-            this.ILearningQuestionnaireDAO(new LearningQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO));
-            this.ICourseDAO(new CourseDAO());
+            connection = jdbcConnectionManager.getTestConnection();
+            this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
+            this.ILearningQuestionnaireDAO(new LearningQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
+            this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
