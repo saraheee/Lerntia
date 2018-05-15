@@ -38,29 +38,32 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     @Override
     public void create(Questionnaire questionnaire) throws PersistenceException {
         try {
-
             LOG.info("Prepare Statement for Questionnaire creation");
-
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
+            try {
+                pscreate.setLong(1, questionnaire.getCourseID());
+                pscreate.executeUpdate();
 
-            pscreate.setLong(1,questionnaire.getCourseID());
-            pscreate.executeUpdate();
+                LOG.info("Statement succesfully sent for Questionnaire creation.");
 
-            LOG.info("Statement succesfully sent for Questionnaire creation.");
-
-            ResultSet generatedKeys = pscreate.getGeneratedKeys();
-            generatedKeys.next();
-            questionnaire.setId(generatedKeys.getLong(1));
-
+                ResultSet generatedKeys = pscreate.getGeneratedKeys();
+                try {
+                    generatedKeys.next();
+                    questionnaire.setId(generatedKeys.getLong(1));
+                }finally {
+                    generatedKeys.close();
+                }
+            }finally {
+                pscreate.close();
+            }
         } catch (SQLException e) {
-            LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Override
     public void update(Questionnaire questionnaire) throws PersistenceException {
-
+        //method not yet implemented because feature regarding that method hasn't been started implementing yet
     }
 
 

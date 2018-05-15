@@ -48,12 +48,15 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             Timestamp timestamp = Timestamp.valueOf(examQuestionnaire.getDate().atStartOfDay());
             LOG.info("Prepare Statement for ExamQuestionnaire...");
             PreparedStatement pscreate = connection.prepareStatement(SQL_EXAMQUESTIONAIRE_CREATE_STATEMENT);
-            pscreate.setLong(1,examQuestionnaire.getId());
-            pscreate.setTimestamp(2,timestamp);
-            pscreate.executeUpdate();
-            LOG.info("Statement succesfully sent.");
+            try {
+                pscreate.setLong(1, examQuestionnaire.getId());
+                pscreate.setTimestamp(2, timestamp);
+                pscreate.executeUpdate();
+                LOG.info("Statement succesfully sent.");
+            }finally {
+                pscreate.close();
+            }
         } catch (SQLException e) {
-            LOG.error("ExamQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
 
@@ -61,21 +64,24 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
 
     @Override
     public void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-
+         //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 
     @Override
     public void search(ExamQuestionnaire searchparameters) throws PersistenceException{
-
+        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 
 
 
     @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{}
+    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{
+        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
+    }
 
     @Override
     public ObservableList readAll() throws PersistenceException{
+        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
         return null;
     }
 }
