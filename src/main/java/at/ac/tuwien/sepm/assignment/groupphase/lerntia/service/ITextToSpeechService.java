@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 
 public interface ITextToSpeechService {
@@ -8,41 +9,40 @@ public interface ITextToSpeechService {
     /**
      * Plays a first audio output on startup to welcome the user
      *
-     * @throws ServiceException if welcome audio can't be played.
+     * @throws TextToSpeechServiceException if welcome audio can't be played.
      */
-    void playWelcomeText() throws ServiceException;
+    void playWelcomeText() throws TextToSpeechServiceException;
 
 
     /**
      * Reads a question and all answers with an audio player
      *
      * @param textToSpeech the textToSpeech object with the properties of the text
-     * @throws ServiceException if audio can't be played.
+     * @throws TextToSpeechServiceException           if the audio can't be played.
+     * @throws TextToSpeechServiceValidationException if the text input fails the validation.
      */
-    void readQuestionAndAnswers(Speech textToSpeech) throws ServiceException;
+    void readQuestionAndAnswers(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException;
 
     /**
      * Reads a single answer with an audio player
      *
      * @param textToSpeech the textToSpeech object with the properties of the text
-     * @throws ServiceException if audio can't be played.
+     * @throws TextToSpeechServiceException           if the audio can't be played.
+     * @throws TextToSpeechServiceValidationException if the text input fails the validation.
      */
-    void readSingleAnswer(Speech textToSpeech) throws ServiceException;
+    void readSingleAnswer(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException;
 
     /**
      * Stops the playing of an audio text
-     *
-     * @throws ServiceException if the method can't stop playing the audio
      */
-    void stopSpeaking() throws ServiceException;
+    void stopSpeaking();
 
 
     /**
      * Sets a certain voice for speaking
      *
      * @param textToSpeech the new textToSpeech object with the voice properties
-     * @throws ServiceException if the method can't set the voice
      */
-    void setVoice(Speech textToSpeech) throws ServiceException;
+    void setVoice(Speech textToSpeech);
 
 }
