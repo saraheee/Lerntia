@@ -46,51 +46,59 @@ public class AudioController {
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
-        //play sound of the question and all answers
-        var tts = new Speech();
-        tts.setQuestion(this.question);
-        tts.setAnswer1(this.answer1);
-        tts.setAnswer2(this.answer2);
-        tts.setAnswer3(this.answer3);
-        tts.setAnswer4(this.answer4);
-        tts.setAnswer5(this.answer5);
-
-        if (iTextToSpeechService != null) {
-            try {
-                stopReading();
-                iTextToSpeechService.readQuestionAndAnswers(tts);
-
-            } catch (TextToSpeechServiceException e) {
-                LOG.error("Failed to read question and answers.");
-                showAudioErrorDialog();
-            } catch (TextToSpeechServiceValidationException e) {
-                LOG.info("Validation failed for the input text of the speech synthesizer.");
-                showValidationFailedDialog();
-            }
+        if (this.question == null || this.question.trim().length() < 1) {
+            showValidationFailedDialog();
         } else {
-            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
-            showAudioErrorDialog();
+            //play sound of the question and all answers
+            var tts = new Speech();
+            tts.setQuestion(this.question);
+            tts.setAnswer1(this.answer1);
+            tts.setAnswer2(this.answer2);
+            tts.setAnswer3(this.answer3);
+            tts.setAnswer4(this.answer4);
+            tts.setAnswer5(this.answer5);
+
+            if (iTextToSpeechService != null) {
+                try {
+                    stopReading();
+                    iTextToSpeechService.readQuestionAndAnswers(tts);
+
+                } catch (TextToSpeechServiceException e) {
+                    LOG.error("Failed to read question and answers.");
+                    showAudioErrorDialog();
+                } catch (TextToSpeechServiceValidationException e) {
+                    LOG.info("Validation failed for the input text of the speech synthesizer.");
+                    showValidationFailedDialog();
+                }
+            } else {
+                LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+                showAudioErrorDialog();
+            }
         }
     }
 
     void readSingleAnswer(String answerText) {
-        var tts = new Speech();
-        tts.setSingleAnswer(answerText);
-        if (iTextToSpeechService != null) {
-            try {
-                stopReading();
-                iTextToSpeechService.readSingleAnswer(tts);
-
-            } catch (TextToSpeechServiceException e) {
-                LOG.error("Failed to read question and answers.");
-                showAudioErrorDialog();
-            } catch (TextToSpeechServiceValidationException e) {
-                LOG.info("Validation failed for the input text of the speech synthesizer.");
-                showValidationFailedDialog();
-            }
+        if (answerText == null || answerText.trim().length() < 1) {
+            showValidationFailedDialog();
         } else {
-            LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
-            showAudioErrorDialog();
+            var tts = new Speech();
+            tts.setSingleAnswer(answerText);
+            if (iTextToSpeechService != null) {
+                try {
+                    stopReading();
+                    iTextToSpeechService.readSingleAnswer(tts);
+
+                } catch (TextToSpeechServiceException e) {
+                    LOG.error("Failed to read question and answers.");
+                    showAudioErrorDialog();
+                } catch (TextToSpeechServiceValidationException e) {
+                    LOG.info("Validation failed for the input text of the speech synthesizer.");
+                    showValidationFailedDialog();
+                }
+            } else {
+                LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
+                showAudioErrorDialog();
+            }
         }
     }
 
