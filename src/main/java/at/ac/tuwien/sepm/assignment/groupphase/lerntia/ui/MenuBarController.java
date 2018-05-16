@@ -17,6 +17,7 @@ public class MenuBarController {
     private final ImportFileController importFileController;
     private final CreateCourseController createCourseController;
     private final SelectQuestionnaireController selectQuestionnaireController;
+    private final SelectExamController selectExamController;
 
     private final LerntiaMainController lerntiaMainController;
 
@@ -25,12 +26,14 @@ public class MenuBarController {
         ImportFileController importFileController,
         CreateCourseController createCourseController,
         SelectQuestionnaireController selectQuestionnaireController,
+        SelectExamController selectExamController,
         LerntiaMainController lerntiaMainController
     )
     {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;
+        this.selectExamController = selectExamController;
         this.lerntiaMainController = lerntiaMainController;
     }
 
@@ -47,7 +50,8 @@ public class MenuBarController {
         selectQuestionnaireController.showSelectQuestionnaireWindow();
     }
 
+    @FXML
     public void switchToExamMode(ActionEvent actionEvent) {
-        lerntiaMainController.switchToExamMode();
+        selectExamController.showSelectExamWindow();
     }
 }
