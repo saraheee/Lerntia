@@ -40,21 +40,29 @@ public class QuestionDAO implements IQuestionDAO {
     public void create(Question question) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Question creation.");
-            try (PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
-                pscreate.setString(1, question.getQuestionText());
-                pscreate.setString(2, question.getPicture());
-                pscreate.setString(3, question.getAnswer1());
-                pscreate.setString(4, question.getAnswer2());
-                pscreate.setString(5, question.getAnswer3());
-                pscreate.setString(6, question.getAnswer4());
-                pscreate.setString(7, question.getAnswer5());
-                pscreate.setString(8, question.getCorrectAnswers());
-                pscreate.setString(9, question.getOptionalFeedback());
-                pscreate.executeUpdate();
-                LOG.info("Question succesfully saved in Database");
-                try (ResultSet generatedKeys = pscreate.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    question.setId(generatedKeys.getLong(1));
+            try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
+                try {
+                    psCreate.setString(1, question.getQuestionText());
+                    psCreate.setString(2, question.getPicture());
+                    psCreate.setString(3, question.getAnswer1());
+                    psCreate.setString(4, question.getAnswer2());
+                    psCreate.setString(5, question.getAnswer3());
+                    psCreate.setString(6, question.getAnswer4());
+                    psCreate.setString(7, question.getAnswer5());
+                    psCreate.setString(8, question.getCorrectAnswers());
+                    psCreate.setString(9, question.getOptionalFeedback());
+                    psCreate.executeUpdate();
+                    LOG.info("Question succesfully saved in Database");
+                    try (ResultSet generatedKeys = psCreate.getGeneratedKeys()) {
+                        try {
+                            generatedKeys.next();
+                            question.setId(generatedKeys.getLong(1));
+                        } finally {
+                            generatedKeys.close();
+                        }
+                    }
+                } finally {
+                    psCreate.close();
                 }
             }
         } catch (SQLException e) {
@@ -65,20 +73,23 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public void update(Question question) throws PersistenceException {
-        try {
-            LOG.info("Prepare statement for question update.");
-            try (PreparedStatement psupdate = connection.prepareStatement(SQL_QUESTION_UPDATE_STATEMENT)) {
-                psupdate.setString(1, question.getQuestionText());
-                psupdate.setString(2, question.getPicture());
-                psupdate.setString(3, question.getAnswer1());
-                psupdate.setString(4, question.getAnswer2());
-                psupdate.setString(5, question.getAnswer3());
-                psupdate.setString(6, question.getAnswer4());
-                psupdate.setString(7, question.getAnswer5());
-                psupdate.setString(8, question.getCorrectAnswers());
-                psupdate.setString(9, question.getOptionalFeedback());
-                psupdate.executeUpdate();
+
+        LOG.info("Prepare statement for question update.");
+        try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTION_UPDATE_STATEMENT)) {
+            try {
+                psUpdate.setString(1, question.getQuestionText());
+                psUpdate.setString(2, question.getPicture());
+                psUpdate.setString(3, question.getAnswer1());
+                psUpdate.setString(4, question.getAnswer2());
+                psUpdate.setString(5, question.getAnswer3());
+                psUpdate.setString(6, question.getAnswer4());
+                psUpdate.setString(7, question.getAnswer5());
+                psUpdate.setString(8, question.getCorrectAnswers());
+                psUpdate.setString(9, question.getOptionalFeedback());
+                psUpdate.executeUpdate();
                 LOG.info("Question succesfully updated in Database.");
+            } finally {
+                psUpdate.close();
             }
         } catch (SQLException e) {
             LOG.error("Question UPDATE DAO error!");
@@ -90,12 +101,12 @@ public class QuestionDAO implements IQuestionDAO {
     public List<Question> search(List<Question> questionList) throws PersistenceException {
         try {
             List<Question> searchResults = new ArrayList<>();
-            Question questionparameter;
-            Question foundquestion;
-            String parameters = "";
+            Question questionParameter;
+            Question foundQuestion;
+            StringBuilder parameters = new StringBuilder();
             while (!questionList.isEmpty()) {
-                questionparameter = questionList.get(0);
-                parameters += parameters.length() == 0 ? " WHERE id= " + questionparameter.getId() : " OR id= " + questionparameter.getId();
+                questionParameter = questionList.get(0);
+                parameters.append(parameters.length() == 0 ? " WHERE id= " + questionParameter.getId() : " OR id= " + questionParameter.getId());
                 questionList.remove(0);
             }
             String searchStatement = SQL_QUESTION_SEARCH_STATEMENT + parameters;
@@ -103,18 +114,18 @@ public class QuestionDAO implements IQuestionDAO {
                 try {
                     //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
                     while (rs.next()) {
-                        foundquestion = new Question();
-                        foundquestion.setId(rs.getLong(1));
-                        foundquestion.setQuestionText(rs.getString(2));
-                        foundquestion.setPicture(rs.getString(3));
-                        foundquestion.setAnswer1(rs.getString(4));
-                        foundquestion.setAnswer2(rs.getString(5));
-                        foundquestion.setAnswer3(rs.getString(6));
-                        foundquestion.setAnswer4(rs.getString(7));
-                        foundquestion.setAnswer5(rs.getString(8));
-                        foundquestion.setCorrectAnswers(rs.getString(9));
-                        foundquestion.setOptionalFeedback(rs.getString(10));
-                        searchResults.add(foundquestion);
+                        foundQuestion = new Question();
+                        foundQuestion.setId(rs.getLong(1));
+                        foundQuestion.setQuestionText(rs.getString(2));
+                        foundQuestion.setPicture(rs.getString(3));
+                        foundQuestion.setAnswer1(rs.getString(4));
+                        foundQuestion.setAnswer2(rs.getString(5));
+                        foundQuestion.setAnswer3(rs.getString(6));
+                        foundQuestion.setAnswer4(rs.getString(7));
+                        foundQuestion.setAnswer5(rs.getString(8));
+                        foundQuestion.setCorrectAnswers(rs.getString(9));
+                        foundQuestion.setOptionalFeedback(rs.getString(10));
+                        searchResults.add(foundQuestion);
                     }
                 } finally {
                     rs.close();
@@ -130,10 +141,14 @@ public class QuestionDAO implements IQuestionDAO {
     public void delete(Question question) throws PersistenceException {
         try {
             LOG.info("Prepare statement for question deletion.");
-            try (PreparedStatement psdelete = connection.prepareStatement(SQL_QUESTION_DELETE_STATEMENT)) {
-                psdelete.setLong(1, question.getId());
-                psdelete.executeUpdate();
-                LOG.info("Question succesfully soft-deleted in Database.");
+            try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTION_DELETE_STATEMENT)) {
+                try {
+                    psDelete.setLong(1, question.getId());
+                    psDelete.executeUpdate();
+                    LOG.info("Question succesfully soft-deleted in Database.");
+                } finally {
+                    psDelete.close();
+                }
             }
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage());
@@ -148,26 +163,26 @@ public class QuestionDAO implements IQuestionDAO {
             String help;
             help = SQL_QUESTION_GET_STATEMENT + id;
             Question q;
-            try (ResultSet rsget = connection.prepareStatement(help).executeQuery()) {
+            try (ResultSet rsGet = connection.prepareStatement(help).executeQuery()) {
                 try {
                     q = new Question();
-                    if (rsget.next()) {
+                    if (rsGet.next()) {
                         q.setId(id);
-                        q.setQuestionText(rsget.getString(2));
-                        q.setPicture(rsget.getString(3));
-                        q.setAnswer1(rsget.getString(4));
-                        q.setAnswer2(rsget.getString(5));
-                        q.setAnswer3(rsget.getString(6));
-                        q.setAnswer4(rsget.getString(7));
-                        q.setAnswer5(rsget.getString(8));
-                        q.setCorrectAnswers(rsget.getString(9));
-                        q.setOptionalFeedback(rsget.getString(10));
-                        q.setDeleted(rsget.getBoolean(11));
+                        q.setQuestionText(rsGet.getString(2));
+                        q.setPicture(rsGet.getString(3));
+                        q.setAnswer1(rsGet.getString(4));
+                        q.setAnswer2(rsGet.getString(5));
+                        q.setAnswer3(rsGet.getString(6));
+                        q.setAnswer4(rsGet.getString(7));
+                        q.setAnswer5(rsGet.getString(8));
+                        q.setCorrectAnswers(rsGet.getString(9));
+                        q.setOptionalFeedback(rsGet.getString(10));
+                        q.setDeleted(rsGet.getBoolean(11));
                     }
                     LOG.info("Matching Question found.");
                     return q;
                 } finally {
-                    rsget.close();
+                    rsGet.close();
                 }
             }
         } catch (SQLException e) {
