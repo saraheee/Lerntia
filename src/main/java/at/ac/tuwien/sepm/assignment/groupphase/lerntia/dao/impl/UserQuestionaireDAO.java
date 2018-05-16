@@ -37,13 +37,16 @@ public class UserQuestionaireDAO implements IUserQuestionaireDAO {
         try {
             LOG.info("Prepare Statement for new UserQuestionaire entry.");
             PreparedStatement pscreate = connection.prepareStatement(SQL_USERQUESTIONNAIREQ_CREATE_STATEMENT);
-            pscreate.setString(1, userQuestionnaire.getMatriculationNumber());
-            pscreate.setLong(2, userQuestionnaire.getQid());
-            pscreate.setBoolean(3, userQuestionnaire.getDeleted());
-            pscreate.execute();
-            LOG.info("Statement for new UserQuestionaire entry succesfully sent.");
+            try {
+                pscreate.setString(1, userQuestionnaire.getMatriculationNumber());
+                pscreate.setLong(2, userQuestionnaire.getQid());
+                pscreate.setBoolean(3, userQuestionnaire.getDeleted());
+                pscreate.execute();
+                LOG.info("Statement for new UserQuestionaire entry succesfully sent.");
+            }finally {
+                pscreate.close();
+            }
         } catch (SQLException e) {
-            LOG.error("UserQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }

@@ -41,19 +41,25 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Creation.");
             PreparedStatement pscreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
+            try {
+                pscreate.setString(1,course.getName());
+                pscreate.setString(2,course.getMark());
+                pscreate.setString(3,course.getSemester());
+                pscreate.executeUpdate();
+                ResultSet generatedKeys = pscreate.getGeneratedKeys();
+                try {
+                    if (generatedKeys.next()){
+                        course.setId(generatedKeys.getLong(1));
+                    }
+                }finally {
+                    generatedKeys.close();
+                }
+                LOG.info("Course succesfully added to Database.");
+            }finally {
+                pscreate.close();
 
-            pscreate.setString(1,course.getName());
-            pscreate.setString(2,course.getMark());
-            pscreate.setString(3,course.getSemester());
-            pscreate.executeUpdate();
-            ResultSet generatedKeys = pscreate.getGeneratedKeys();
-
-            if (generatedKeys.next()){
-                course.setId(generatedKeys.getLong(1));
             }
-            LOG.info("Course succesfully added to Database.");
         }catch (Exception e){
-            LOG.error("Course DAO CREATE error!");
             throw new PersistenceException(e.getMessage());
         }
     }
@@ -63,23 +69,26 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Update.");
             PreparedStatement psupdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT);
-            psupdate.setString(1,course.getMark());
-            psupdate.setString(2,course.getSemester());
-            psupdate.setString(3,course.getName());
-            psupdate.setLong(4,course.getId());
+            try {
+                psupdate.setString(1, course.getMark());
 
-            psupdate.executeUpdate();
-            LOG.info("Course succefsully updated in Database.");
+                psupdate.setString(2, course.getSemester());
+                psupdate.setString(3, course.getName());
+                psupdate.setLong(4, course.getId());
+
+                psupdate.executeUpdate();
+                LOG.info("Course succefsully updated in Database.");
+            }finally {
+                psupdate.close();
+            }
         } catch (SQLException e) {
-            LOG.error("Course DAO UPDATE error!");
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Override
     public void search(Course course) throws PersistenceException {
-        //TODO check if search method is necessary
-
+        //this method is currently empty because its not yet determined if this method is even necessary for this programm.
     }
 
     @Override
@@ -87,11 +96,14 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement for Course Deletion");
             PreparedStatement psdelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT);
-            psdelete.setLong(1,course.getId());
-            psdelete.executeUpdate();
-            LOG.info("Course in question soft-deleted in Database.");
+            try {
+                psdelete.setLong(1, course.getId());
+                psdelete.executeUpdate();
+                LOG.info("Course in question soft-deleted in Database.");
+            }finally {
+                psdelete.close();
+            }
         } catch (SQLException e) {
-            LOG.error("Course DAO DELETE error");
             throw new PersistenceException(e.getMessage());
         }
     }
@@ -101,20 +113,24 @@ public class CourseDAO implements ICourseDAO {
         try {
             LOG.info("Prepare Statement to read all available Courses from the Database.");
             ArrayList<Course> list = new ArrayList<>();
-            ResultSet rsreadall = connection.prepareStatement(SQL_COURSE_READALL_STATEMENT).executeQuery();
-            Course course;
-            while (rsreadall.next()){
-                course = new Course();
-                course.setId(rsreadall.getLong(1));
-                course.setMark(rsreadall.getString(2));
-                course.setSemester(rsreadall.getString(3));
-                course.setName(rsreadall.getString(4));
-                list.add(course);
+            try (ResultSet rsreadall = connection.prepareStatement(SQL_COURSE_READALL_STATEMENT).executeQuery()) {
+                try {
+                    Course course;
+                    while (rsreadall.next()) {
+                        course = new Course();
+                        course.setId(rsreadall.getLong(1));
+                        course.setMark(rsreadall.getString(2));
+                        course.setSemester(rsreadall.getString(3));
+                        course.setName(rsreadall.getString(4));
+                        list.add(course);
+                    }
+                    LOG.info("All Courses found.");
+                    return list;
+                } finally {
+                    rsreadall.close();
+                }
             }
-            LOG.info("All Courses found.");
-            return list;
         } catch (SQLException e) {
-            LOG.error("Course DAO READALL error!");
             throw new PersistenceException(e.getMessage());
         }
 

@@ -36,12 +36,15 @@ public class UserCourseDAO implements IUserCourseDAO {
         try {
             LOG.info("Prepare Statement for new UserCourse entry.");
             PreparedStatement pscreate = connection.prepareStatement(SQL_USERCOURSE_CREATE_STATEMENT);
-            pscreate.setString(1, userCourse.getMatriculationNumber());
-            pscreate.setLong(2,userCourse.getCourseID());
-            pscreate.execute();
-            LOG.info("Statement for new UserCourse entry succesfully sent.");
+            try {
+                pscreate.setString(1, userCourse.getMatriculationNumber());
+                pscreate.setLong(2, userCourse.getCourseID());
+                pscreate.execute();
+                LOG.info("Statement for new UserCourse entry succesfully sent.");
+            }finally {
+                pscreate.close();
+            }
         } catch (SQLException e) {
-            LOG.error("UserCourse CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
