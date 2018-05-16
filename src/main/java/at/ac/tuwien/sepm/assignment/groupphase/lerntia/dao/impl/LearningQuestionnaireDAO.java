@@ -133,27 +133,23 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     public LearningQuestionnaire getSelected() throws PersistenceException {
 
         try {
-            LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");
+            LOG.info("Prepare Statement to get selected LearingQuestionnaire from the Database.");
             ArrayList<LearningQuestionnaire> list = new ArrayList<>();
             ResultSet rsreadall = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_GETSELECTED_STATEMENT).executeQuery();
+
             LearningQuestionnaire learning;
 
-            while (rsreadall.next()){
+            if (rsreadall.next()){
                 learning = new LearningQuestionnaire();
                 learning.setId(rsreadall.getLong(1));
                 learning.setName(rsreadall.getString(2));
-                list.add(learning);
-            }
-            LOG.info("All LearningQuestionnaires found.");
 
-            System.out.println("===================");
-            System.out.println(list.size());
-            System.out.println(list);
+                LOG.info("Selected LearningQuestionnaire found.");
 
-            if (list.isEmpty()) {
+                return learning;
+            } else {
                 return null;
             }
-            return list.get(0);
 
         } catch (SQLException e) {
             LOG.error("LearningQuestionnaire DAO READALL error!");
