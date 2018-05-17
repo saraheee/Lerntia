@@ -18,7 +18,7 @@ import java.util.List;
 public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id,name) VALUES (?,?)";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id) VALUES (?)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_SELECT_STATEMENT = "UPDATE LearningQuestionnaire SET selected = true where id = ?";
@@ -52,7 +52,6 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
             PreparedStatement pscreate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT);
             pscreate.setLong(1,learningQuestionnaire.getId());
-            pscreate.setString(2,learningQuestionnaire.getName());
             pscreate.executeUpdate();
 
             LOG.info("Statement for LearningQuestionnaire succesfully sent.");
@@ -88,7 +87,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             while (rsreadall.next()){
                 learning = new LearningQuestionnaire();
                 learning.setId(rsreadall.getLong(1));
-                learning.setName(rsreadall.getString(2));
+                learning.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
                 list.add(learning);
             }
             LOG.info("All LearningQuestionnaires found.");
@@ -134,7 +133,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
         try {
             LOG.info("Prepare Statement to get selected LearingQuestionnaire from the Database.");
-            ArrayList<LearningQuestionnaire> list = new ArrayList<>();
+
             ResultSet rsreadall = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_GETSELECTED_STATEMENT).executeQuery();
 
             LearningQuestionnaire learning;
@@ -142,7 +141,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             if (rsreadall.next()){
                 learning = new LearningQuestionnaire();
                 learning.setId(rsreadall.getLong(1));
-                learning.setName(rsreadall.getString(2));
+                learning.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
 
                 LOG.info("Selected LearningQuestionnaire found.");
 
