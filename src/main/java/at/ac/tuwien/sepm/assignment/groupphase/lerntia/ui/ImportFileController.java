@@ -113,6 +113,7 @@ public class ImportFileController {
             catch (ServiceException e) {
                 // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         }
         if (file != null) {
@@ -133,13 +134,16 @@ public class ImportFileController {
                     stage.close();
                 } else {
                     alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
+                    return;
                 }
             } catch (ServiceException e) {
                 // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein File ausgewählt","Achtung","Bitte wähle zuerst eine csv-Datei aus!");
+            return;
         }
     }
 
