@@ -49,12 +49,13 @@
         </HBox>
         <HBox layoutX="10.0" layoutY="757.0" prefHeight="105.0" prefWidth="1024.0" styleClass="button-box"
               stylesheets="@/css/background-division.css">
-            <ButtonBar prefHeight="98.0">
+            <ButtonBar prefHeight="98.0" fx:id="buttonBar">
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>
                     <VBox prefHeight="94.0" prefWidth="40.0"/>
                     <fx:include fx:id="checkAnswerButton" source="/fxml/elements/checkAnswerButton.fxml"/>
+                    <fx:include fx:id="handInButton" source="/fxml/elements/handInButton.fxml"/>
                 </buttons>
             </ButtonBar>
         </HBox>
