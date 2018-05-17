@@ -87,7 +87,7 @@ public class QuestionDAO implements IQuestionDAO {
                 psUpdate.setString(8, question.getCorrectAnswers());
                 psUpdate.setString(9, question.getOptionalFeedback());
                 psUpdate.executeUpdate();
-                LOG.info("Question succesfully updated in Database.");
+                LOG.info("Question successfully updated in Database.");
             } finally {
                 psUpdate.close();
             }
@@ -145,7 +145,7 @@ public class QuestionDAO implements IQuestionDAO {
                 try {
                     psDelete.setLong(1, question.getId());
                     psDelete.executeUpdate();
-                    LOG.info("Question succesfully soft-deleted in Database.");
+                    LOG.info("Question successfully soft-deleted in Database.");
                 } finally {
                     psDelete.close();
                 }
