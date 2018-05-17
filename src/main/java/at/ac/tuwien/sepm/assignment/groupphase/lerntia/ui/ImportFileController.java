@@ -130,6 +130,9 @@ public class ImportFileController {
                     alert.setContentText("Alle Fragen wurden erfolgreich importiert");
                     alert.setResizable(true);
                     alert.showAndWait();
+                    Node source = (Node) actionEvent.getSource();
+                    Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("[Lerntia] Fehlerhafter Name");
@@ -154,9 +157,6 @@ public class ImportFileController {
             alert.setResizable(true);
             alert.showAndWait();
         }
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 
     void showImportWindow() {
