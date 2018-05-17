@@ -128,6 +128,9 @@ public class ImportFileController {
 
                     qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
                     alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
+                    Node source = (Node) actionEvent.getSource();
+                    Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
                 } else {
                     alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
                 }
@@ -138,9 +141,6 @@ public class ImportFileController {
         } else {
             alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein File ausgewählt","Achtung","Bitte wähle zuerst eine csv-Datei aus!");
         }
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 
     void showImportWindow() {
