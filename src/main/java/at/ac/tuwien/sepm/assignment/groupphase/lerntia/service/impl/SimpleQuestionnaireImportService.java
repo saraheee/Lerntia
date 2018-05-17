@@ -147,7 +147,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         if (isExam){
             System.out.println("============ 04");
-            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, LocalDate.now());
+            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, false, LocalDate.now());
             System.out.println("============ 05");
             simpleExamQuestionnaireService.create(examQuestionnaire);
             System.out.println("============ 06");

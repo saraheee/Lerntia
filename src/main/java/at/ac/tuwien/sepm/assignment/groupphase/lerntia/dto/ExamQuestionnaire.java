@@ -7,9 +7,19 @@ public class ExamQuestionnaire extends Questionnaire {
 
     public ExamQuestionnaire() {}
 
-    public ExamQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, LocalDate date) {
-        super(courseID, id, name, isDeleted);
+    public ExamQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, boolean selected, LocalDate date) {
+        super(courseID, id, name, selected, isDeleted);
         this.date = date;
+    }
+
+    @Override
+    public Boolean getSelected() {
+        return super.getSelected();
+    }
+
+    @Override
+    public void setSelected(Boolean selected) {
+        super.setSelected(selected);
     }
 
     public LocalDate getDate() {
@@ -37,6 +47,7 @@ public class ExamQuestionnaire extends Questionnaire {
             ", id=" + super.getId()+
             ", date=" + date +
             ", name=" + super.getName() +
+            ", selected=" + super.getSelected() +
             "isDeleted=" + super.getDeleted() +
             '}';
     }
