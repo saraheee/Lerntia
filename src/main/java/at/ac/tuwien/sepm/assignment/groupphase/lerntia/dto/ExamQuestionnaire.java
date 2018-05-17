@@ -4,14 +4,12 @@ import java.time.LocalDate;
 
 public class ExamQuestionnaire extends Questionnaire {
     private LocalDate date;
-    private String name;
 
     public ExamQuestionnaire() {}
 
-    public ExamQuestionnaire(Long courseId, Long id, Boolean isDeleted, String name, LocalDate date) {
-        super(courseId, id, isDeleted);
+    public ExamQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, LocalDate date) {
+        super(courseID, id, name, isDeleted);
         this.date = date;
-        this.name = name;
     }
 
     public LocalDate getDate() {
@@ -22,21 +20,23 @@ public class ExamQuestionnaire extends Questionnaire {
         this.date = date;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return super.getName();
     }
 
+    @Override
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     @Override
     public String toString() {
         return "ExamQuestionnaire{" +
-            "courseId='" + super.getCourseID() + '\'' +
+            "courseID='" + super.getCourseID() + '\'' +
             ", id=" + super.getId()+
             ", date=" + date +
-            ", name=" + name +
+            ", name=" + super.getName() +
             "isDeleted=" + super.getDeleted() +
             '}';
     }

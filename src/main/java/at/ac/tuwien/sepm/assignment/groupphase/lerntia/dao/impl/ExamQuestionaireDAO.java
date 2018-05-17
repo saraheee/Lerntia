@@ -21,7 +21,7 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT="INSERT INTO ExamQuestionnaire(id,name,qdate) VALUES (?,?,?)";
+    private static final String SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT="INSERT INTO ExamQuestionnaire(id,qdate) VALUES (?,?)";
     private static final String SQL_EXAMQUESTIONNAIRE_UPDATE_STATEMENT="";
     private static final String SQL_EXAMQUESTIONNAIRE_SEARCH_STATEMENT="";
     private static final String SQL_EXAMQUESTIONNAIRE_DELETE_STATEMENT="";
@@ -53,8 +53,7 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             LOG.info("Prepare Statement for ExamQuestionnaire...");
             PreparedStatement pscreate = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT);
             pscreate.setLong(1,examQuestionnaire.getId());
-            pscreate.setString(2,examQuestionnaire.getName());
-            pscreate.setTimestamp(3,timestamp);
+            pscreate.setTimestamp(2,timestamp);
             System.out.println("======================== 3");
             pscreate.executeUpdate();
             LOG.info("Statement succesfully sent.");
@@ -89,13 +88,15 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             ArrayList<ExamQuestionnaire> list = new ArrayList<>();
             ResultSet rsreadall = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT).executeQuery();
             ExamQuestionnaire exam;
+
             while (rsreadall.next()){
                 exam = new ExamQuestionnaire();
                 exam.setId(rsreadall.getLong(1));
-                exam.setName(rsreadall.getString(2));
-                exam.setDate(rsreadall.getDate(3).toLocalDate());
+                exam.setDate(rsreadall.getDate(2).toLocalDate());
+                exam.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
                 list.add(exam);
             }
+
             LOG.info("All ExamQuestionnaire found.");
             return list;
         } catch (SQLException e) {
