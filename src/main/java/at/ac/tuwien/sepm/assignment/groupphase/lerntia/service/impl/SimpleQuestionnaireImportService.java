@@ -168,10 +168,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         if (files != null) {
             for (File child : files) {
                 String p = dir.getAbsolutePath() + File.separator + child.getName();
-                System.out.println("To "+p);
                 try {
                     Path path = Paths.get(p);
-                    System.out.println("From "+child.toPath());
                     Files.copy(child.toPath(), path);
                 } catch (IOException e) {
                     deletePictures(dir);
