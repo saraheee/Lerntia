@@ -170,10 +170,7 @@ public class LerntiaMainController {
 
         }));
         mainImage.setPickOnBounds(true);
-        mainImage.setOnMouseClicked((MouseEvent e) -> {
-            LOG.debug("Clicked on image!");
-            zoomedImageController.onZoomButtonClicked();
-        });
+        mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
 
     }
 

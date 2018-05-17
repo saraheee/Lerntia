@@ -26,8 +26,6 @@
 .question-box {
     -fx-width: 20%;
     -fx-float: left;
-    -fx-background-color: rgba(247, 250, 17, 0.02);
-
 }
 
 .answer-box {

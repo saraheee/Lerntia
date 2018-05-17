@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -74,6 +75,7 @@ public class ZoomedImageController {
                 closeZoomedImageWindows();
             }
         }));
+        imageView.setOnMouseClicked((MouseEvent e) -> closeZoomedImageWindows());
     }
 
     @FXML
