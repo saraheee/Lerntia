@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="263.0" prefWidth="439.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.CreateCourseController">
+
+<AnchorPane prefHeight="263.0" prefWidth="406.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.CreateCourseController">
 
     <children>
-        <Label layoutX="61.0" layoutY="59.0" text="ID der LVA:"/>
-        <TextField fx:id="tf_courseMark" layoutX="201.0" layoutY="54.0" prefHeight="26.0" prefWidth="150.0"/>
+        <Label layoutX="61.0" layoutY="42.0" text="LVA-Nummer:" />
+        <TextField fx:id="tf_courseMark" layoutX="201.0" layoutY="37.0" prefHeight="26.0" prefWidth="150.0" />
 
-        <Label layoutX="61.0" layoutY="91.0" text="Name der LVA:"/>
-        <TextField fx:id="tf_courseName" layoutX="201.0" layoutY="86.0" prefHeight="26.0" prefWidth="150.0"/>
+        <Label layoutX="61.0" layoutY="85.0" text="Name der LVA:" />
+        <TextField fx:id="tf_courseName" layoutX="201.0" layoutY="80.0" prefHeight="26.0" prefWidth="150.0" />
 
-        <Label layoutX="59.0" layoutY="122.0" text="Semester:"/>
-        <ChoiceBox fx:id="cb_semester" layoutX="201.0" layoutY="118.0" prefWidth="150.0"/>
+        <Label layoutX="58.0" layoutY="128.0" text="Semester:" />
+        <ChoiceBox fx:id="cb_semester" layoutX="201.0" layoutY="123.0" prefWidth="150.0" />
 
-        <Label layoutX="61.0" layoutY="155.0" text="Jahr:"/>
-        <TextField fx:id="tf_semesterYear" layoutX="201.0" layoutY="150.0" prefHeight="26.0" prefWidth="150.0"/>
+        <Label layoutX="61.0" layoutY="169.0" text="Jahr:" />
+        <TextField fx:id="tf_semesterYear" layoutX="201.0" layoutY="164.0" prefHeight="26.0" prefWidth="150.0" />
 
-        <Button layoutX="201.0" layoutY="197.0" mnemonicParsing="false" onAction="#createCourse" prefHeight="37.0"
-                prefWidth="150.0" text="Erstellen"/>
+        <Button layoutX="135.0" layoutY="207.0" mnemonicParsing="false" onAction="#createCourse" prefHeight="37.0" prefWidth="150.0" text="Erstellen" />
     </children>
 
 </AnchorPane>
