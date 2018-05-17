@@ -20,4 +20,6 @@ public interface IQuestionnaireDAO {
      * @throws PersistenceException if the method can't update the Questionnaire
      * */
     void update(Questionnaire questionnaire) throws PersistenceException;
+
+    String getQuestionnaireName(Long id) throws PersistenceException;
 }
