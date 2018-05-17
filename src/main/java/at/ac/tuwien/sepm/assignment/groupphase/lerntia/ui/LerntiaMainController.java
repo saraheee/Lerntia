@@ -7,9 +7,14 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -62,6 +67,12 @@ public class LerntiaMainController {
     @FXML
     private ZoomButtonController zoomButtonController;
 
+    @FXML
+    private ButtonBar buttonBar;
+    @FXML
+    private Button checkAnswerButton;
+    @FXML
+    private Button handInButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
@@ -90,6 +101,8 @@ public class LerntiaMainController {
     private void initialize() {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
+
+        buttonBar.getButtons().remove(handInButton);
 
         try {
             getAndShowTheFirstQuestion();
@@ -228,7 +241,6 @@ public class LerntiaMainController {
         showQuestionAndAnswers();
     }
 
-
     @FXML
     private void getAndShowNextQuestion() {
         try {
@@ -341,4 +353,11 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
+    public void switchToExamMode(){
+        buttonBar.getButtons().remove(checkAnswerButton);
+        buttonBar.getButtons().add(handInButton);
+    }
+
+    public void handIn(ActionEvent actionEvent) {
+    }
 }

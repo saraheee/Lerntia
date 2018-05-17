@@ -7,8 +7,8 @@ public class ExamQuestionnaire extends Questionnaire {
 
     public ExamQuestionnaire() {}
 
-    public ExamQuestionnaire(Long courseId, Long id, Boolean isDeleted, LocalDate date) {
-        super(courseId, id, isDeleted);
+    public ExamQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, LocalDate date) {
+        super(courseID, id, name, isDeleted);
         this.date = date;
     }
 
@@ -20,13 +20,23 @@ public class ExamQuestionnaire extends Questionnaire {
         this.date = date;
     }
 
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
 
     @Override
     public String toString() {
         return "ExamQuestionnaire{" +
-            "courseId='" + super.getCourseID() + '\'' +
+            "courseID='" + super.getCourseID() + '\'' +
             ", id=" + super.getId()+
             ", date=" + date +
+            ", name=" + super.getName() +
             "isDeleted=" + super.getDeleted() +
             '}';
     }

@@ -2,23 +2,19 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,30 +26,55 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     private final QuestionnaireImportDAO questionnaireImportDAO;
     private final SimpleQuestionService simpleQuestionService;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final SimpleExamQuestionnaireService simpleExamQuestionnaireService;
     private final SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
     public SimpleQuestionnaireImportService(
         QuestionnaireImportDAO questionnaireImportDAO,
         SimpleQuestionService simpleQuestionService,
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        SimpleExamQuestionnaireService simpleExamQuestionnaireService,
         SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService
     ) {
         this.questionnaireImportDAO = questionnaireImportDAO;
         this.simpleQuestionService = simpleQuestionService;
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.simpleExamQuestionnaireService = simpleExamQuestionnaireService;
         this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
-    public void importQuestionnaire(File file, Course course, String name) throws ServiceException {
+    public void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
 
-        List<LearningQuestionnaire> questionnaires = simpleLearningQuestionnaireService.readAll();
-        for (int i = 0; i < questionnaires.size(); i++) {
-            if (name.equals(questionnaires.get(i).getName())) {
-                throw new ServiceException("Dieser Name existiert schon!");
+
+        // TODO - fix duplicate code
+
+        if (isExam){
+            System.out.println("============ 0");
+            List<ExamQuestionnaire> questionnaires = null;
+            questionnaires = simpleExamQuestionnaireService.readAll();
+
+            for (int i = 0; i < questionnaires.size(); i++) {
+                if (name.equals(questionnaires.get(i).getName())) {
+                    throw new ServiceException("Dieser Name existiert schon!");
+                }
+            }
+
+        } else {
+            List<LearningQuestionnaire> questionnaires = null;
+            questionnaires = simpleLearningQuestionnaireService.readAll();
+
+            for (int i = 0; i < questionnaires.size(); i++) {
+                if (name.equals(questionnaires.get(i).getName())) {
+                    throw new ServiceException("Dieser Name existiert schon!");
+                }
             }
         }
+
+
+
+        System.out.println("============ 01");
 
         // get questionaire file content
 
@@ -65,6 +86,8 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
+
+        System.out.println("============ 02");
 
         ArrayList<Long> questionIDs = new ArrayList<>();
 
@@ -118,17 +141,29 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+        System.out.println("============ 03");
 
-        simpleLearningQuestionnaireService.create(learningQuestionnaire);
+        Long questionnaireID;
 
-        Long learningQuestionnaireID = learningQuestionnaire.getId();
+        if (isExam){
+            System.out.println("============ 04");
+            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, LocalDate.now());
+            System.out.println("============ 05");
+            simpleExamQuestionnaireService.create(examQuestionnaire);
+            System.out.println("============ 06");
+            questionnaireID = examQuestionnaire.getId();
+            System.out.println("============ 07");
+        } else {
+            LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+            simpleLearningQuestionnaireService.create(learningQuestionnaire);
+            questionnaireID = learningQuestionnaire.getId();
+        }
 
         for (int i = 0; i < questionIDs.size(); i++) {
 
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
 
-            questionnaireQuestion.setQid(learningQuestionnaireID);
+            questionnaireQuestion.setQid(questionnaireID);
             questionnaireQuestion.setQuestionid(questionIDs.get(i));
             questionnaireQuestion.setDeleted(false);
 
