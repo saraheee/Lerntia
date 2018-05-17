@@ -79,39 +79,21 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void validate(Course course) throws ServiceException {
 
-        // -------------------------------------------------------------------------------------------------------------
-        // mark
-        // -------------------------------------------------------------------------------------------------------------
-
-        // pls note: mark is the id of the course
-
-        // mark is not empty
-
         if (course.getMark().equals("")){
             throw new ServiceException("Die ID ist leer");
         }
 
-        // TODO - mark is not too long
-
-        // -------------------------------------------------------------------------------------------------------------
-        // name
-        // -------------------------------------------------------------------------------------------------------------
-
-        // name is not empty
+        if (course.getMark().length() > 255) {
+            throw new ServiceException("Die ID ist zu lang");
+        }
 
         if (course.getName().equals("")){
             throw new ServiceException("Der Name ist leer");
         }
 
-        // -------------------------------------------------------------------------------------------------------------
-        // semester
-        // -------------------------------------------------------------------------------------------------------------
-
-        // ends with "W" or "S"
-
         if (
-            ! course.getSemester().endsWith("W") &&
-            ! course.getSemester().endsWith("S")
+            ! course.getSemester().startsWith("W") &&
+            ! course.getSemester().startsWith("S")
         ) {
             throw new ServiceException("Das Semester sollte mit 'W' oder 'S' enden");
         }
