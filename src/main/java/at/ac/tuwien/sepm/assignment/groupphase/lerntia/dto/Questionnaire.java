@@ -5,14 +5,16 @@ public abstract class Questionnaire {
     private Long courseID;
     private Long id;
     private String name;
+    private Boolean selected;
     private Boolean isDeleted;
 
     public Questionnaire() {}
 
-    public Questionnaire(Long courseID, Long id, String name, Boolean isDeleted) {
+    public Questionnaire(Long courseID, Long id, String name, Boolean selected, Boolean isDeleted) {
         this.courseID = courseID;
         this.id = id;
         this.name = name;
+        this.selected = selected;
         this.isDeleted = isDeleted;
     }
 
@@ -46,5 +48,13 @@ public abstract class Questionnaire {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 }
