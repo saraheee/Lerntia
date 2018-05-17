@@ -4,9 +4,11 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +53,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         // TODO - fix duplicate code
 
         if (isExam){
-            System.out.println("============ 0");
             List<ExamQuestionnaire> questionnaires = null;
             questionnaires = simpleExamQuestionnaireService.readAll();
 
@@ -72,10 +73,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
         }
 
-
-
-        System.out.println("============ 01");
-
         // get questionaire file content
 
         ArrayList<String> fileContent = new ArrayList<>();
@@ -86,8 +83,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
-
-        System.out.println("============ 02");
 
         ArrayList<Long> questionIDs = new ArrayList<>();
 
@@ -113,7 +108,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             try {
                 if (!lineParts[7].equals("")) {
                     picture = lineParts[7];
-                    String path = System.getProperty("user.dir") + File.separator + name + File.separator + picture;
+                    String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + name + File.separator + picture;
                     File f = new File(path);
                     if(!f.exists()) {
                         throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
@@ -141,18 +136,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        System.out.println("============ 03");
-
         Long questionnaireID;
 
         if (isExam){
-            System.out.println("============ 04");
             ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, LocalDate.now());
-            System.out.println("============ 05");
             simpleExamQuestionnaireService.create(examQuestionnaire);
-            System.out.println("============ 06");
             questionnaireID = examQuestionnaire.getId();
-            System.out.println("============ 07");
         } else {
             LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
             simpleLearningQuestionnaireService.create(learningQuestionnaire);
@@ -173,19 +162,26 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     @Override
     public void importPictures (File file, String name) throws ServiceException {
-        File dir = new File(System.getProperty("user.dir") + File.separator + name);
+        File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
         dir.mkdir();
         File[] files = file.listFiles();
         if (files != null) {
             for (File child : files) {
-                String p = dir.getName()+"/"+child.getName();
+                String p = dir.getAbsolutePath() + File.separator + child.getName();
+                System.out.println("To "+p);
                 try {
                     Path path = Paths.get(p);
+                    System.out.println("From "+child.toPath());
                     Files.copy(child.toPath(), path);
                 } catch (IOException e) {
+                    deletePictures(dir);
                     throw new ServiceException("Bild kann nicht gelesen werden: " + p);
                 }
             }
         }
+    }
+
+    public void deletePictures(File file) {
+        FileSystemUtils.deleteRecursively(file);
     }
 }
