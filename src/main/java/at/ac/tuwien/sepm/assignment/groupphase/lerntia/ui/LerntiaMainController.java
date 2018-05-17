@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -168,6 +169,11 @@ public class LerntiaMainController {
             }
 
         }));
+        mainImage.setPickOnBounds(true);
+        mainImage.setOnMouseClicked((MouseEvent e) -> {
+            LOG.debug("Clicked on image!");
+            zoomedImageController.onZoomButtonClicked();
+        });
 
     }
 
@@ -316,7 +322,7 @@ public class LerntiaMainController {
                     Image image = new Image(imageFile.toURI().toURL().toExternalForm());
                     mainImage.setImage(image);
                     mainImage.setVisible(true);
-                    zoomButtonController.setVisible(true);
+                    //zoomButtonController.setVisible(true); //todo activate it if you want the zoom button to be visible
                     LOG.info("Image for this question is displayed: '{}'", question.getPicture());
                 }
             } catch (MalformedURLException e) {

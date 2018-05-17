@@ -7,7 +7,7 @@
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.CreateCourseController">
 
     <children>
-        <Label layoutX="61.0" layoutY="59.0" text="ID der LVA:"/>
+        <Label layoutX="61.0" layoutY="59.0" text="LVA Nummer:"/>
         <TextField fx:id="tf_courseMark" layoutX="201.0" layoutY="54.0" prefHeight="26.0" prefWidth="150.0"/>
 
         <Label layoutX="61.0" layoutY="91.0" text="Name der LVA:"/>
