@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
@@ -12,16 +13,18 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.util.ArrayList;
 
 @Component
 public class QuestionnaireDAO implements IQuestionnaireDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT = "INSERT INTO Questionnaire(courseid,id) VALUES (?,default)";
+    private static final String SQL_QUESTIONAIRE_CREATE_STATEMENT = "INSERT INTO Questionnaire(courseid,id,name) VALUES (?,default,?)";
     private static final String SQL_QUESTIONAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_SEARCH_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_DELETE_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_READALL_STATEMENT = "";
+    private static final String SQL_QUESTIONAIRE_GETNAME_STATEMENT = "SELECT name FROM Questionnaire WHERE id = ?";
     private Connection connection = null;
 
     @Autowired
@@ -38,32 +41,52 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     @Override
     public void create(Questionnaire questionnaire) throws PersistenceException {
         try {
+
             LOG.info("Prepare Statement for Questionnaire creation");
+
             PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
-            try {
-                pscreate.setLong(1, questionnaire.getCourseID());
-                pscreate.executeUpdate();
 
-                LOG.info("Statement succesfully sent for Questionnaire creation.");
+            pscreate.setLong(1,questionnaire.getCourseID());
+            pscreate.setString(2,questionnaire.getName());
+            pscreate.executeUpdate();
 
-                ResultSet generatedKeys = pscreate.getGeneratedKeys();
-                try {
-                    generatedKeys.next();
-                    questionnaire.setId(generatedKeys.getLong(1));
-                }finally {
-                    generatedKeys.close();
-                }
-            }finally {
-                pscreate.close();
-            }
+            LOG.info("Statement succesfully sent for Questionnaire creation.");
+
+            ResultSet generatedKeys = pscreate.getGeneratedKeys();
+            generatedKeys.next();
+            questionnaire.setId(generatedKeys.getLong(1));
+
         } catch (SQLException e) {
+            LOG.error("Questionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Override
     public void update(Questionnaire questionnaire) throws PersistenceException {
-        //method not yet implemented because feature regarding that method hasn't been started implementing yet
+
+    }
+
+    @Override
+    public String getQuestionnaireName(Long id) throws PersistenceException {
+
+        try {
+            LOG.info("Prepare Statement to get Questionnaire Name from the Database.");
+
+            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONAIRE_GETNAME_STATEMENT);
+            pscreate.setLong(1,id);
+            ResultSet rsreadall = pscreate.executeQuery();
+
+            if (rsreadall.next()){
+                return rsreadall.getString(1);
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            LOG.error("Questionnaire DAO getName error!");
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
 

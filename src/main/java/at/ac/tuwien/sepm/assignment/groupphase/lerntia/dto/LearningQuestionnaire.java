@@ -1,24 +1,16 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class LearningQuestionnaire extends Questionnaire {
-    private String name;
+
     private boolean selected;
 
     public LearningQuestionnaire() {}
 
-    public LearningQuestionnaire(Long courseId, Long id, Boolean isDeleted, String name, boolean selected) {
-        super(courseId, id, isDeleted);
-        this.name = name;
+    public LearningQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, boolean selected) {
+        super(courseID, id, name, isDeleted);
         this.selected = selected;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     public boolean getSelected() {
         return selected;
     }
@@ -28,11 +20,21 @@ public class LearningQuestionnaire extends Questionnaire {
     }
 
     @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
     public String toString() {
         return "ExamQuestionnaire{" +
-            "courseId='" + super.getCourseID() + '\'' +
+            "courseID='" + super.getCourseID() + '\'' +
             ", id=" + super.getId()+
-            ", name=" + name +
+            ", name=" + super.getName() +
             ", selected=" + selected +
             "isDeleted=" + super.getDeleted() +
             '}';
