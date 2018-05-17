@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,8 +44,8 @@ public class CreateCourseController {
 
     @FXML
     private void initialize() {
-        cb_semester.getItems().add("W");
-        cb_semester.getItems().add("S");
+        cb_semester.getItems().add(Semester.WS.toString());
+        cb_semester.getItems().add(Semester.SS.toString());
 
         cb_semester.getSelectionModel().selectFirst();
     }
