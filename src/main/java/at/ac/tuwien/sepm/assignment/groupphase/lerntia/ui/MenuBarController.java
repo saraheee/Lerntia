@@ -21,6 +21,7 @@ public class MenuBarController {
 
     private final LerntiaMainController lerntiaMainController;
 
+
     @Autowired
     MenuBarController(
         ImportFileController importFileController,
