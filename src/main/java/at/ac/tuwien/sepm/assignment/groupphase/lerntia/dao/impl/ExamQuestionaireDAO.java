@@ -104,4 +104,19 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             throw new PersistenceException(e.getMessage());
         }
     }
+
+    @Override
+    public void select(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+        questionaireDAO.select(examQuestionnaire);
+    }
+
+    @Override
+    public void deselect(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+        questionaireDAO.deselect(examQuestionnaire);
+    }
+
+    @Override
+    public ExamQuestionnaire getSelected() throws PersistenceException {
+        return (ExamQuestionnaire) questionaireDAO.getSelected();
+    }
 }
