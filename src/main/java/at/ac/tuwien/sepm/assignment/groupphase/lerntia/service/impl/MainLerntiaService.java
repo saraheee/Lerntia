@@ -176,4 +176,19 @@ public class MainLerntiaService implements IMainLerntiaService {
     public void recordCheckedAnswers(Question mockQuestion) throws ServiceException {
         // todo implement this when implementing learning algorithm
     }
+
+    /**
+     * Returns the Size of the ListCounter
+     */
+    @Override
+    public int getListcounter(){
+        return this.listcounter;
+    }
+
+    @Override
+    public List<Question> getQuestionList() {
+        return this.questionList;
+    }
+
+
 }
