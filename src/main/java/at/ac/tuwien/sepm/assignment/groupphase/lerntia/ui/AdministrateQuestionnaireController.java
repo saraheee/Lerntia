@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,13 +28,16 @@ public class AdministrateQuestionnaireController {
 
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
     private final SelectQuestionAdministrateController selectQuestionAdministrateController;
+    private final IMainLerntiaService lerntiaService;
     private List<LearningQuestionnaire> learningQuestionnaires;
 
     public AdministrateQuestionnaireController(
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
-        SelectQuestionAdministrateController selectQuestionAdministrateController) {
+        SelectQuestionAdministrateController selectQuestionAdministrateController,
+        IMainLerntiaService lerntiaService) {
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
         this.selectQuestionAdministrateController = selectQuestionAdministrateController;
+        this.lerntiaService = lerntiaService;
     }
 
     @FXML
@@ -57,6 +61,12 @@ public class AdministrateQuestionnaireController {
     public void selectQuestionnaire(ActionEvent actionEvent) {
         //Get the Selected Item.
         LearningQuestionnaire selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        LearningQuestionnaire studyMode = null;
+        try {
+            studyMode = simpleLearningQuestionnaireService.getSelected();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
         //Unselect all the Other Questionnaire
         for (int i = 0; i < learningQuestionnaires.size(); i++) {
@@ -75,7 +85,16 @@ public class AdministrateQuestionnaireController {
         }
         //Opens the New Window which contains a TableView and all Questions.
         selectQuestionAdministrateController.showSelectQuestionAdministrateWindow();
+        try {
+            simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
+            simpleLearningQuestionnaireService.select(studyMode);
+            lerntiaService.getFirstQuestion();
+            //Delete this Line if not Needed
+            LOG.info("Study: "+studyMode.getName()+" Selected: "+selectedLearningQuestionnaire.getName());
 
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         //Todo Close the Current window
     }
 
