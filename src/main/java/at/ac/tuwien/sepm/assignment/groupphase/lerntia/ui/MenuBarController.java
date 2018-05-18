@@ -17,16 +17,20 @@ public class MenuBarController {
     private final ImportFileController importFileController;
     private final CreateCourseController createCourseController;
     private final SelectQuestionnaireController selectQuestionnaireController;
+    private final AdministrateQuestionnaireController administrateQuestionnaireController;
+
 
     @Autowired
     MenuBarController(
         ImportFileController importFileController,
         CreateCourseController createCourseController,
-        SelectQuestionnaireController selectQuestionnaireController)
+        SelectQuestionnaireController selectQuestionnaireController,
+        AdministrateQuestionnaireController administrateQuestionnaireController)
     {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;
+        this.administrateQuestionnaireController = administrateQuestionnaireController;
     }
 
     @FXML
@@ -40,5 +44,10 @@ public class MenuBarController {
     @FXML
     public void selectQuestionnaire(ActionEvent actionEvent) {
         selectQuestionnaireController.showSelectQuestionnaireWindow();
+    }
+
+    @FXML
+    public void administrateQuestionnaire(ActionEvent actionEvent) {
+        administrateQuestionnaireController.showAdministrateQuestionnaireWindow();
     }
 }
