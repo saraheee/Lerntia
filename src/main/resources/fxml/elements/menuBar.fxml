@@ -9,21 +9,21 @@
         <MenuItem mnemonicParsing="false" text="Fragen verwalten">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/manage.png"/>
+                    <Image url="@/icons/edit.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#selectQuestionnaire" text="Fragebogen auswählen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/manage.png"/>
+                    <Image url="@/icons/select.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#createCourse" text="LVA erstellen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/manage.png"/>
+                    <Image url="@/icons/create.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
@@ -44,7 +44,7 @@
         <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/exam.png"/>
+                    <Image url="@/icons/change2.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
