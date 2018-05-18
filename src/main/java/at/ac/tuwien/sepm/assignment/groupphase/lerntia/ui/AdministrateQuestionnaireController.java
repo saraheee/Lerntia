@@ -73,7 +73,6 @@ public class AdministrateQuestionnaireController {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        LOG.info("Selected IITEM::::: "+selectedLearningQuestionnaire.getName());
         //Opens the New Window which contains a TableView and all Questions.
         selectQuestionAdministrateController.showSelectQuestionAdministrateWindow();
 
