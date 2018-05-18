@@ -104,6 +104,8 @@ public class SelectExamController {
         // show first question of new questionnaire
 
         try {
+            lerntiaMainController.setExamMode(true);
+            lerntiaMainController.switchToExamMode();
             lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
             e.printStackTrace();

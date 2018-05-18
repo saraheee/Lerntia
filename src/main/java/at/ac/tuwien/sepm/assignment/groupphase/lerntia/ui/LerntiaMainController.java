@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +40,8 @@ public class LerntiaMainController {
     private final ZoomedImageController zoomedImageController;
     private final AudioController audioController;
     private final AlertController alertController;
+
+    private final IQuestionnaireService questionnaireService;
 
     private final ILearningQuestionnaireService learningQuestionnaireService;
 
@@ -78,13 +81,16 @@ public class LerntiaMainController {
     private Question question;
     private File imageFile;
 
+    private boolean examMode;
+
     @Autowired
     public LerntiaMainController(
         IMainLerntiaService lerntiaService,
         AudioController audioController,
         AlertController alertController,
         ILearningQuestionnaireService learningQuestionnaireService,
-        ZoomedImageController zoomedImageController
+        ZoomedImageController zoomedImageController,
+        IQuestionnaireService questionnaireService
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -95,6 +101,7 @@ public class LerntiaMainController {
         this.alertController = alertController;
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.zoomedImageController = zoomedImageController;
+        this.questionnaireService = questionnaireService;
     }
 
     @FXML
@@ -249,7 +256,11 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
+
+            if ( ! isExamMode()) {
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
+            }
+
             try {
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
@@ -266,8 +277,13 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
+
+            if ( ! isExamMode()) {
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
+            }
+
             try {
+                // TODO - here we could switch to the last question
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
@@ -359,5 +375,21 @@ public class LerntiaMainController {
     }
 
     public void handIn(ActionEvent actionEvent) {
+        boolean handInConfirmation = alertController.showBigConfirmation("Abgeben", "Bist du sicher, dass du die Prüfung abgeben möchtest", "");
+
+        if (handInConfirmation == true){
+            // TODO - wait for statistics implementation
+            // TODO - determine what should happen after hand in
+        } else {
+
+        }
+    }
+
+    public boolean isExamMode() {
+        return examMode;
+    }
+
+    public void setExamMode(boolean examMode) {
+        this.examMode = examMode;
     }
 }
