@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,22 +42,20 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
         try {
-
-            System.out.println("======================== 2");
-
             LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
             questionaireDAO.create(examQuestionnaire);
             LOG.info("Entry for general Questionnaire succesfull.");
             Timestamp timestamp = Timestamp.valueOf(examQuestionnaire.getDate().atStartOfDay());
             LOG.info("Prepare Statement for ExamQuestionnaire...");
             PreparedStatement pscreate = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT);
-            pscreate.setLong(1,examQuestionnaire.getId());
-            pscreate.setTimestamp(2,timestamp);
-            System.out.println("======================== 3");
-            pscreate.executeUpdate();
-            LOG.info("Statement succesfully sent.");
-
-            System.out.println("======================== 4");
+            try {
+                pscreate.setLong(1, examQuestionnaire.getId());
+                pscreate.setTimestamp(2, timestamp);
+                pscreate.executeUpdate();
+                LOG.info("Statement succesfully sent.");
+            }finally {
+                pscreate.close();
+            }
         } catch (SQLException e) {
             LOG.error("ExamQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
@@ -68,18 +65,20 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
 
     @Override
     public void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-
+         //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 
     @Override
     public void search(ExamQuestionnaire searchparameters) throws PersistenceException{
-
+        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 
 
 
     @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{}
+    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{
+        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
+    }
 
     @Override
     public List<ExamQuestionnaire> readAll() throws PersistenceException{

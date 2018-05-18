@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class SelectQuestionnaireController {
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
-    private ChoiceBox<String> cb_questionnaire;
+    private ComboBox<String> cb_questionnaire;
 
     public SelectQuestionnaireController(
         SimpleLearningQuestionnaireService learningQuestionnaireService,

@@ -33,17 +33,4 @@ public class IMainLerntiaServiceTest {
         Assert.assertThat(42, is(42));
     }
 
-   /** private final LerntiaDAO lerntiaDAO = mock(JDBCLerntiaDAO.class);
-    private final IMainLerntiaService lerntiaService = new SimpleLerntiaService(lerntiaDAO);
-
-    public IMainLerntiaServiceTest() throws PersistenceException {
-        when(lerntiaDAO.readAnswerForQuestion(any())).thenReturn(new Answer(0L, "42"));
-    }
-
-    @Test
-    public void testSimpleLerntiaService() throws ServiceException {
-        Assert.assertThat(lerntiaService.goToExamMode().getText(), is("42!"));
-    }
-    */
-
 }
