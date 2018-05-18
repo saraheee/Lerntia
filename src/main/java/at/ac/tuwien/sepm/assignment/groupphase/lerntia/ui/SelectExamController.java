@@ -3,9 +3,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleExamQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +27,7 @@ public class SelectExamController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleExamQuestionnaireService examQuestionnaireService;
+    private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
@@ -35,8 +35,13 @@ public class SelectExamController {
     @FXML
     private ChoiceBox<String> cb_exam;
 
-    public SelectExamController(SimpleExamQuestionnaireService examQuestionnaireService, LerntiaMainController lerntiaMainController) {
+    public SelectExamController(
+        SimpleExamQuestionnaireService examQuestionnaireService,
+        IQuestionnaireService iQuestionnaireService,
+        LerntiaMainController lerntiaMainController
+    ) {
         this.examQuestionnaireService = examQuestionnaireService;
+        this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
     }
 
@@ -76,9 +81,25 @@ public class SelectExamController {
 
     public void selectExam(ActionEvent actionEvent) {
 
-        /*
+
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
+
+        // unselect all questionnaires
+
+        try {
+            iQuestionnaireService.deselectAllQuestionnaires();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        // select questionnaire
+
+        try {
+            examQuestionnaireService.select(selectedQuestionnaire);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
         // show first question of new questionnaire
 
@@ -91,6 +112,6 @@ public class SelectExamController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-        */
+
     }
 }

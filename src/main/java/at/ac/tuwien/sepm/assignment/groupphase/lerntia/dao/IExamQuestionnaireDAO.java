@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import javafx.collections.ObservableList;
 
 import java.util.List;
@@ -41,4 +42,11 @@ public interface IExamQuestionnaireDAO {
     void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     List<ExamQuestionnaire> readAll() throws PersistenceException;
+
+    void select(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
+
+    void deselect(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
+
+    ExamQuestionnaire getSelected() throws PersistenceException;
+
 }

@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import javafx.collections.ObservableList;
 import org.slf4j.Logger;
@@ -76,5 +77,37 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void select(ExamQuestionnaire examQuestionnaire) throws ServiceException {
+        try {
+            examQuestionnaireDAO.select(examQuestionnaire);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deselect(ExamQuestionnaire examQuestionnaire) throws ServiceException {
+        try {
+            examQuestionnaireDAO.deselect(examQuestionnaire);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ExamQuestionnaire getSelected() throws ServiceException {
+
+        ExamQuestionnaire examQuestionnaire = null;
+
+        try {
+            examQuestionnaire = examQuestionnaireDAO.getSelected();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+
+        return examQuestionnaire;
     }
 }

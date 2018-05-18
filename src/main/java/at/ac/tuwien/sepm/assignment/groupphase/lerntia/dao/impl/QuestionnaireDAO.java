@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestionnaireDAO implements IQuestionnaireDAO {
@@ -23,7 +25,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     private static final String SQL_QUESTIONAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_SEARCH_STATEMENT = "";
     private static final String SQL_QUESTIONAIRE_DELETE_STATEMENT = "";
-    private static final String SQL_QUESTIONAIRE_READALL_STATEMENT = "";
+    private static final String SQL_QUESTIONAIRE_READALL_STATEMENT = "SELECT * FROM Questionnaire WHERE isDeleted = false";
     private static final String SQL_QUESTIONAIRE_GETNAME_STATEMENT = "SELECT name FROM Questionnaire WHERE id = ?";
 
     private static final String SQL_QUESTIONNAIRE_SELECT_STATEMENT = "UPDATE Questionnaire SET selected = true where id = ?";

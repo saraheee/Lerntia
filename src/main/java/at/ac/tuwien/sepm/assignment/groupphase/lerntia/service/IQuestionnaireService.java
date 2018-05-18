@@ -20,4 +20,6 @@ public interface IQuestionnaireService {
      * @throws ServiceException if the method can't update the Questionnaire
      * */
     void update(Questionnaire questionnaire) throws ServiceException;
+
+    void deselectAllQuestionnaires() throws ServiceException;
 }

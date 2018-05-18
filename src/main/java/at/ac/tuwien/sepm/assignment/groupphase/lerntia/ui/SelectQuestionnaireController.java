@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +27,7 @@ public class SelectQuestionnaireController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
+    private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
 
     private List<LearningQuestionnaire> learningQuestionnaireList;
@@ -33,8 +35,13 @@ public class SelectQuestionnaireController {
     @FXML
     private ChoiceBox<String> cb_questionnaire;
 
-    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService, LerntiaMainController lerntiaMainController) {
+    public SelectQuestionnaireController(
+        SimpleLearningQuestionnaireService learningQuestionnaireService,
+        IQuestionnaireService iQuestionnaireService,
+        LerntiaMainController lerntiaMainController
+    ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
+        this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
     }
 
@@ -79,12 +86,10 @@ public class SelectQuestionnaireController {
 
         // unselect all questionnaires
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
-            try {
-                learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
-            } catch (ServiceException e) {
-                e.printStackTrace();
-            }
+        try {
+            iQuestionnaireService.deselectAllQuestionnaires();
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
 
         // select questionnaire
