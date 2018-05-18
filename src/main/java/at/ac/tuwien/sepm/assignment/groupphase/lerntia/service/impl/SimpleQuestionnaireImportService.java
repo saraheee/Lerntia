@@ -154,8 +154,11 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionnaireID = examQuestionnaire.getId();
             System.out.println("============ 07");
         } else {
+            System.out.println("===============00 2");
             LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+            System.out.println("===============00 3");
             simpleLearningQuestionnaireService.create(learningQuestionnaire);
+            System.out.println("===============00 4");
             questionnaireID = learningQuestionnaire.getId();
         }
 
@@ -176,13 +179,15 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         File dir = new File(System.getProperty("user.dir") + File.separator + name);
         dir.mkdir();
         File[] files = file.listFiles();
-        for (File child : files) {
-            try {
+        if (files != null) {
+            for (File child : files) {
                 String p = dir.getName()+"/"+child.getName();
-                Path path = Paths.get(p);
-                Files.copy(child.toPath(), path);
-            } catch (IOException e) {
-                throw new ServiceException("Bild kann nicht gelesen werden");
+                try {
+                    Path path = Paths.get(p);
+                    Files.copy(child.toPath(), path);
+                } catch (IOException e) {
+                    throw new ServiceException("Bild kann nicht gelesen werden: " + p);
+                }
             }
         }
     }
