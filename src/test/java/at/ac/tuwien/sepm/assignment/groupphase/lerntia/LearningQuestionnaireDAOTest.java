@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,13 +62,14 @@ public class LearningQuestionnaireDAOTest {
     public void createNewExamQuestionnaire() throws PersistenceException {
         try {
             Course tgi = new Course();
-            tgi.setSemester("2015S");
+            tgi.setSemester(Semester.SS+"15");
             tgi.setMark("123.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Success chapter");
             //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
+            //chapter1.setSemester(Semester.SS+"15");
             chapter1.setCourseID(tgi.getId());
             learningQuestionnaireDAO.create(chapter1);
             Long expected = Long.valueOf(2);
@@ -83,7 +85,7 @@ public class LearningQuestionnaireDAOTest {
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Error chapter");
             //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
+            //chapter1.setSemester(Semester.SS+"15");
             learningQuestionnaireDAO.create(chapter1);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());

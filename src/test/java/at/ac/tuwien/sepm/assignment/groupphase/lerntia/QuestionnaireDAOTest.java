@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,8 +55,9 @@ public class QuestionnaireDAOTest {
     public void createNewQuestionnaire() throws PersistenceException {
         try {
             Course tgi = new Course();
-            tgi.setSemester("2018S");
+            tgi.setSemester(Semester.SS+"18");
             tgi.setMark("999.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Chapter 1");
@@ -76,7 +78,7 @@ public class QuestionnaireDAOTest {
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Chapter 1");
             //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2018S");
+            //chapter1.setSemester(Semester.SS+"18");
             questionnaireDAO.create(chapter1);
 
 

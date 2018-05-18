@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -80,32 +81,38 @@ public class SimpleCourseService implements ICourseService {
     public void validate(Course course) throws ServiceException {
 
         if (course.getMark().equals("")){
-            throw new ServiceException("Die ID ist leer");
+            throw new ServiceException("Die LVA-Nummer ist leer");
         }
 
         if (course.getMark().length() > 255) {
-            throw new ServiceException("Die ID ist zu lang");
+            throw new ServiceException("Die LVA-Nummer ist zu lang");
         }
 
         if (course.getName().equals("")){
             throw new ServiceException("Der Name ist leer");
         }
 
-        if (
-            ! course.getSemester().startsWith("W") &&
-            ! course.getSemester().startsWith("S")
-        ) {
-            throw new ServiceException("Das Semester sollte mit 'W' oder 'S' enden");
+        if (course.getName().length() > 255) {
+            throw new ServiceException("Der Name ist zu lang");
         }
 
-        // year is a number with 4 digits
-
-        String yearStr;
-        int yearInt;
+        if (
+            ! course.getSemester().startsWith(Semester.WS.toString()) &&
+            ! course.getSemester().startsWith(Semester.SS.toString())
+        ) {
+            throw new ServiceException("Das Semester sollte mit 'WS' oder 'SS' beginnen");
+        }
 
         try{
-            yearStr = course.getSemester().substring(0,3);
-            yearInt = Integer.parseInt(yearStr);
+            String yearStr = course.getSemester().substring(2);
+            if (yearStr.length() > 4) {
+                throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
+            }
+            if (yearStr.length() > 2) { // has 4 digits
+                yearStr = yearStr.substring(2); // only the last 2 digits are important
+            }
+            int yearInt = Integer.parseInt(yearStr);
+            course.setSemester(course.getSemester().substring(0,2)+yearInt);
         } catch(NumberFormatException e) {
             throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
         }
