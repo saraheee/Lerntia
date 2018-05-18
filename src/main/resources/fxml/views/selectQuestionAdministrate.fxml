@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
+
+<children>
+
+    <Button layoutX="640.0" layoutY="453.0" mnemonicParsing="false" onAction="#selectQuestion" prefHeight="37.0" prefWidth="113.0" text="Auswählen" />
+      <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="432.0" prefWidth="739.0">
+        <columns>
+          <TableColumn fx:id="tc_id" prefWidth="68.0" text="Nr" />
+          <TableColumn fx:id="tc_question" prefWidth="540.0" text="Frage" />
+        </columns>
+      </TableView>
+      <Button layoutX="517.0" layoutY="453.0" mnemonicParsing="false" onAction="#backButton" prefHeight="37.0" prefWidth="113.0" text="Zurück" />
+</children>
+
+</AnchorPane>

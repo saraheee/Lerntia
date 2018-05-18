@@ -43,6 +43,7 @@ public class SelectQuestionnaireController {
 
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
+
         } catch (ServiceException e) {
             e.printStackTrace();
         }

@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -55,7 +56,7 @@ public class SelectQuestionAdministrateController {
         tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
         ObservableList<Question> content = this.getContent();
         tv_questionTable.getItems().addAll(content);
-
+        tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
     /**
      * Loads the Data into the TableView
