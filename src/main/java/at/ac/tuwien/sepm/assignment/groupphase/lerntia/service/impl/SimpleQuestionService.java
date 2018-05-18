@@ -37,7 +37,7 @@ public class SimpleQuestionService implements IQuestionService {
             validate(question);
             questionDAO.create(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -48,7 +48,7 @@ public class SimpleQuestionService implements IQuestionService {
             validate(question);
             questionDAO.update(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -58,7 +58,7 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             return questionDAO.search(questionList);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -68,7 +68,7 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             questionDAO.delete(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -78,7 +78,7 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             return questionDAO.get(id);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -149,7 +149,7 @@ public class SimpleQuestionService implements IQuestionService {
 
             // answer is not "" and longer than 200 chars
             if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > maxLengthAnswer )) {
-                throw new ServiceException("The Answer is too long and cannot be displayed in the user interface");
+                throw new ServiceException("Answer "  + i + " is too long and cannot be displayed in the user interface");
             }
         }
 
@@ -174,7 +174,7 @@ public class SimpleQuestionService implements IQuestionService {
             // index is to high
             if (currentCorrectAnswerIndex > 5){
                 // TODO - better error text
-                throw new ServiceException("There can only be 5 correct answers. However a number with a higher index has been maked as correct");
+                throw new ServiceException("There can only be 5 correct answers. However a number with a higher index has been marked as correct");
             }
 
             // check if the corresponding answer does in fact exist

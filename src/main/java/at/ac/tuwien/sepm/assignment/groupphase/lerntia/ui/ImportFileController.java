@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import javafx.collections.FXCollections;
@@ -35,7 +37,6 @@ import java.util.List;
 public class ImportFileController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     private final SimpleCourseService cservice;
     private final SimpleQuestionnaireImportService qservice;
     private final AlertController alertController;
@@ -67,7 +68,6 @@ public class ImportFileController {
 
     @FXML
     private void initialize() throws ServiceException {
-
         coursedata = cservice.readAll();
         courses = FXCollections.observableArrayList(coursedata);
 
