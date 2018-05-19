@@ -120,6 +120,7 @@ public class AdministrateQuestionnaireController {
         } catch (IOException e) {
             LOG.error("Failed to open a window for administrating a questionnaire. " + e.getMessage());
         }
+        //Todo Close the Current Window
     }
 
 }

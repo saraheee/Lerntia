@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,10 +37,12 @@ public class SelectQuestionAdministrateController {
     @FXML public TableColumn<Question, String> tc_answer3;
     @FXML public TableColumn<Question, String> tc_answer4;
     @FXML public TableColumn<Question, String> tc_answer5;
+    @FXML public TableColumn<Question, Long> tc_detailsID;
 
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 
 
     public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
@@ -59,7 +62,13 @@ public class SelectQuestionAdministrateController {
         }
         //Fill the First Table.
         tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
+        tc_detailsID.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
         tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
+        tc_answer1.setCellValueFactory(new PropertyValueFactory<Question, String>("answer1"));
+        tc_answer2.setCellValueFactory(new PropertyValueFactory<Question, String>("answer2"));
+        tc_answer3.setCellValueFactory(new PropertyValueFactory<Question, String>("answer3"));
+        tc_answer4.setCellValueFactory(new PropertyValueFactory<Question, String>("answer4"));
+        tc_answer5.setCellValueFactory(new PropertyValueFactory<Question, String>("answer5"));
         ObservableList<Question> content = this.getContent();
         tv_questionTable.getItems().addAll(content);
 
@@ -84,7 +93,22 @@ public class SelectQuestionAdministrateController {
 
     @FXML
     public void selectQuestion(ActionEvent actionEvent) {
-        //Stays Empty
+        ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+        if(selectedItems.size() == 0){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Fehler!");
+            alert.setHeaderText("Bitte min. 1 Frage auswählen.");
+            alert.setContentText(null);
+            alert.showAndWait();
+        }
+
+        //Delete the Current content of the Table
+        for(int i = 0;i<tv_details.getItems().size();i++){
+            tv_details.getItems().clear();
+        }
+
+        //Load the new content intu the Table
+        tv_details.getItems().addAll(selectedItems);
     }
 
     /**
