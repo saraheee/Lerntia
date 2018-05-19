@@ -27,16 +27,20 @@ import java.lang.invoke.MethodHandles;
 @Controller
 public class SelectQuestionAdministrateController {
 
-    @FXML
-    public TableView<Question> tv_questionTable;
-    @FXML
-    public TableColumn<Question, Long> tc_id;
-    @FXML
-    public TableColumn<Question, String> tc_question;
+    @FXML public TableView<Question> tv_questionTable;
+    @FXML public TableColumn<Question, Long> tc_id;
+    @FXML public TableColumn<Question, String> tc_question;
+    @FXML public TableView<Question> tv_details;
+    @FXML public TableColumn<Question, String> tc_answer1;
+    @FXML public TableColumn<Question, String> tc_answer2;
+    @FXML public TableColumn<Question, String> tc_answer3;
+    @FXML public TableColumn<Question, String> tc_answer4;
+    @FXML public TableColumn<Question, String> tc_answer5;
 
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 
     public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
         this.lerntiaService = lerntiaService;
@@ -47,16 +51,21 @@ public class SelectQuestionAdministrateController {
         /**
          * The following line must stay there. It Refreshs the LerntiaService.
          */
+
         try {
             lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+        //Fill the First Table.
         tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
         tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
         ObservableList<Question> content = this.getContent();
         tv_questionTable.getItems().addAll(content);
+
+        //Allow the First table more the one Selection and close the Selection for the secound one.
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tv_details.getSelectionModel().setSelectionMode(null);
     }
     /**
      * Loads the Data into the TableView
@@ -94,7 +103,7 @@ public class SelectQuestionAdministrateController {
             stage.setTitle("[Lerntia] Fragebogen verwalten");
             stage.setScene(new Scene(fxmlLoader.load()));
             stage.show();
-            LOG.debug("Successfully opened a window for administrating a questionnaire.");
+            LOG.debug("Successfully opened a window for administrating the questions.");
         } catch (IOException e) {
             LOG.error("Failed to open a window for administrating a questionnaire. " + e.getMessage());
         }
@@ -103,5 +112,20 @@ public class SelectQuestionAdministrateController {
     @FXML
     public void backButton(ActionEvent actionEvent) {
         //Todo Close the Current window and Open the Last one.
+    }
+
+    @FXML
+    public void editQuestion(ActionEvent actionEvent) {
+        //TODO Editing Questions.
+    }
+
+    @FXML
+    public void deleteQuestions(ActionEvent actionEvent) {
+        //TODO Deleting Questions
+    }
+
+    @FXML
+    public void markForExam(ActionEvent actionEvent) {
+        //Todo Mark for Exam
     }
 }
