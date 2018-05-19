@@ -21,11 +21,10 @@ public class QuestionDAOTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
     private IQuestionDAO questionDAO;
-
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
-    public void setUp(JDBCConnectionManager jdbcConnectionManager) {
+    public void setUp() {
         try {
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));

@@ -51,7 +51,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         // TODO - fix duplicate code
 
         if (isExam){
-            System.out.println("============ 0");
             List<ExamQuestionnaire> questionnaires = null;
             questionnaires = simpleExamQuestionnaireService.readAll();
 
@@ -72,10 +71,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
         }
 
-
-
-        System.out.println("============ 01");
-
         // get questionaire file content
 
         ArrayList<String> fileContent = new ArrayList<>();
@@ -86,8 +81,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
-
-        System.out.println("============ 02");
 
         ArrayList<Long> questionIDs = new ArrayList<>();
 
@@ -141,24 +134,15 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        System.out.println("============ 03");
-
         Long questionnaireID;
 
         if (isExam){
-            System.out.println("============ 04");
             ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, false, LocalDate.now());
-            System.out.println("============ 05");
             simpleExamQuestionnaireService.create(examQuestionnaire);
-            System.out.println("============ 06");
             questionnaireID = examQuestionnaire.getId();
-            System.out.println("============ 07");
         } else {
-            System.out.println("===============00 2");
             LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
-            System.out.println("===============00 3");
             simpleLearningQuestionnaireService.create(learningQuestionnaire);
-            System.out.println("===============00 4");
             questionnaireID = learningQuestionnaire.getId();
         }
 

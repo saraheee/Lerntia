@@ -101,7 +101,6 @@ public class CourseDAOTest {
             courseDAO.create(tgi);
             Course tgidelete =new Course();
             tgidelete.setMark(tgi.getMark());
-            System.out.println(tgi.getId());
             tgidelete.setId(tgi.getId());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
@@ -124,9 +123,10 @@ public class CourseDAOTest {
         }
     }
 
-
     @Test
     public void countSizeofReadAll() throws PersistenceException{
+
+        int currentNumber = courseDAO.readAll().size();
 
         Course ECV = new Course();
         ECV.setSemester("2015S");
@@ -135,11 +135,11 @@ public class CourseDAOTest {
         courseDAO.create(ECV);
 
         List list = courseDAO.readAll();
-        assertEquals(3,list.size());
+        assertEquals(currentNumber+1,list.size());
         courseDAO.delete(ECV);
 
         List list2 = courseDAO.readAll();
-        assertEquals(2,list2.size());
+        assertEquals(currentNumber,list2.size());
     }
 
     @Test

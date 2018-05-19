@@ -20,6 +20,7 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ExamQuestionnaireDAOTest {
 
@@ -64,16 +65,28 @@ public class ExamQuestionnaireDAOTest {
     @Test
     public void createNewExamQuestionnaire() throws PersistenceException {
         try {
+            Long expected = Long.valueOf(0);
+
             Course course = new Course();
             course.setSemester("2018W");
             course.setMark("123.14232");
             courseDAO.create(course);
+
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
             chapter1.setCourseID(course.getId());
+            chapter1.setName("TILExam");
             examQuestionnaireDAO.create(chapter1);
-            Long expected = Long.valueOf(1);
-            Assert.assertEquals(expected, chapter1.getId());
+
+            expected = chapter1.getId() + 1;
+
+            ExamQuestionnaire chapter2 = new ExamQuestionnaire();
+            chapter2.setDate(LocalDate.now());
+            chapter2.setCourseID(course.getId());
+            chapter2.setName("TILExam2");
+            examQuestionnaireDAO.create(chapter2);
+
+            Assert.assertEquals(expected, chapter2.getId());
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());
         }
@@ -84,8 +97,6 @@ public class ExamQuestionnaireDAOTest {
         try {
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
-            //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
             examQuestionnaireDAO.create(chapter1);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());
