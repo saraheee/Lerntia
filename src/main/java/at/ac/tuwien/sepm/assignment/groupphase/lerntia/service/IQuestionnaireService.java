@@ -22,4 +22,6 @@ public interface IQuestionnaireService {
     void update(Questionnaire questionnaire) throws ServiceException;
 
     void deselectAllQuestionnaires() throws ServiceException;
+
+    Long getHighestID() throws ServiceException;
 }
