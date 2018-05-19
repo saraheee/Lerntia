@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,8 +69,9 @@ public class QuestionnaireQuestionDAOTest {
     public void createNewQuestionnaireQuestion(){
         try {
             Course tgi = new Course();
-            tgi.setSemester("2015S");
+            tgi.setSemester(Semester.SS+"15");
             tgi.setMark("123.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
@@ -112,8 +114,9 @@ public class QuestionnaireQuestionDAOTest {
     public void checkpersistenceQuestionnaireQuestionDAO(){
         try {
             Course course = new Course();
-            course.setSemester("2013S");
+            course.setSemester(Semester.SS+"13");
             course.setMark("123.555");
+            course.setName("name");
             courseDAO.create(course);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
@@ -163,8 +166,9 @@ public class QuestionnaireQuestionDAOTest {
             Long secondquestionID = Long.valueOf(0);
 
             Course tgi = new Course();
-            tgi.setSemester("2010S");
+            tgi.setSemester(Semester.SS+"10");
             tgi.setMark("123.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
@@ -218,8 +222,9 @@ public class QuestionnaireQuestionDAOTest {
 
         try {
             Course tgi = new Course();
-            tgi.setSemester("2015S");
+            tgi.setSemester(Semester.SS+"15");
             tgi.setMark("123.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();

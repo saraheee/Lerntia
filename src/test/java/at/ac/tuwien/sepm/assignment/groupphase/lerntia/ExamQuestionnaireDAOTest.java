@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -68,8 +69,9 @@ public class ExamQuestionnaireDAOTest {
             Long expected = Long.valueOf(0);
 
             Course course = new Course();
-            course.setSemester("2018W");
+            course.setSemester(Semester.WS+"18");
             course.setMark("123.14232");
+            course.setName("asdf");
             courseDAO.create(course);
 
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
@@ -97,6 +99,8 @@ public class ExamQuestionnaireDAOTest {
         try {
             ExamQuestionnaire chapter1 = new ExamQuestionnaire();
             chapter1.setDate(LocalDate.now());
+            //chapter1.setCmark("123.349");
+            //chapter1.setSemester(Semester.SS+"15");
             examQuestionnaireDAO.create(chapter1);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());

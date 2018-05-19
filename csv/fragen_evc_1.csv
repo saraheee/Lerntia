@@ -1,35 +1,35 @@
-Fuer die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.2 ist, welche Kombinationen von beta und gamma sind gueltig?;beta = 0.1, gamma = 0.9;beta = 0.3, gamma = 0.5;beta = 0.5, gamma = 0.5;beta = 0.4, gamma = 0.4;Keine der genannten Antworten.;24;
-Fuer die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.5 ist, welche Kombinationen von beta und gamma sind gueltig?;beta = 0.5, gamma = 0.1;beta = 0.3, gamma = 0.3;beta = 0.5, gamma = 0.2;beta = 0.4, gamma = 0.2;Keine der genannten Antworten.;5;
-Fuer die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.8 ist, welche Kombinationen von beta und gamma sind gueltig?;beta = 0.1, gamma = 0.1;beta = 0.1, gamma = 0.0;beta = 0.1, gamma = 0.2;beta = 0.0, gamma = 0.1;Keine der genannten Antworten.;1;
-Welcher Effekt entsteht, wenn man von einem Bild das Laplacegefilterte Bild abzieht?;Bild wird schaerfer;Bild wird unscharf;Bild wird heller;Bild wird invertiert;Keine der genannten Antworten.;1;
-Welche Arten von Fotorezeptorzellen gibt es beim menschlichen Auge?;Staebchen;Zaepfchen;Schuppen;Poren;Keine der genannten Antworten.;12;
+Für die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.2 ist, welche Kombinationen von beta und gamma sind gültig?;beta = 0.1, gamma = 0.9;beta = 0.3, gamma = 0.5;beta = 0.5, gamma = 0.5;beta = 0.4, gamma = 0.4;Keine der genannten Antworten.;24;
+Für die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.5 ist, welche Kombinationen von beta und gamma sind gültig?;beta = 0.5, gamma = 0.1;beta = 0.3, gamma = 0.3;beta = 0.5, gamma = 0.2;beta = 0.4, gamma = 0.2;Keine der genannten Antworten.;5;
+Für die baryzentrischen Koordinaten alpha, beta, gamma, wenn alpha = 0.8 ist, welche Kombinationen von beta und gamma sind gültig?;beta = 0.1, gamma = 0.1;beta = 0.1, gamma = 0.0;beta = 0.1, gamma = 0.2;beta = 0.0, gamma = 0.1;Keine der genannten Antworten.;1;
+Welcher Effekt entsteht, wenn man von einem Bild das Laplacegefilterte Bild abzieht?;Bild wird schärfer;Bild wird unscharf;Bild wird heller;Bild wird invertiert;Keine der genannten Antworten.;1;
+Welche Arten von Fotorezeptorzellen gibt es beim menschlichen Auge?;Stäbchen;Zäpfchen;Schuppen;Poren;Keine der genannten Antworten.;12;
 Welche grundlegenden Arten von Pixelsensoren gibt es?; CCD; CMOS; FOV; DOF;Keine der genannten Antworten.;12;
 [Bild 8] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;1;8n.png
 [Bild 9] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;2;9n.png
 [Bild 10] Um welche Art von Matrix handelt es sich hierbei?; Translationsmatrix; Rotationsmatrix; Skalierungsmatrix;Projektionsmatrix;Keine der genannten Antworten.;3;10n.png
 [Bild 11] Um welche Art von Matrixtransformation kann es sich hierbei handeln?;Translation;Rotation;Skalierung;Projektion ;Keine der genannten Antworten.;23;11n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 1 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;1;12n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 2 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;2;12n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 3 in der Viewing-Pipeline?; Weltkoordinaten; Pixelkoordinaten; Projektion und Homogenisierung; View-Transformation;Keine der genannten Antworten.;3;12n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 4 in der Viewing-Pipeline?; Weltkoordinaten; Normalisierte Geraetekoordinaten; Pixelkoordinaten; Objektkoordinaten;Keine der genannten Antworten.;2;12n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 5 in der Viewing-Pipeline?; Viewport-Transformation; Schattierung; Pixelkoordinaten; RGB-Farbraum;Keine der genannten Antworten.;1;12n.png
-[Bild 12] Welcher ist der richtige Begriff fuer Position 6 in der Viewing-Pipeline?; Ray-Tracing; Octree-Berechnung; Pixelkoordinaten; Modellkoordinaten;Keine der genannten Antworten.;3;12n.png
-[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird fuer die Speicherung aller Pixelwerte in unkomprimierter Form benoetigt?; 49 Byte; 98 Byte; 7 Byte; 56 Byte;Keine der genannten Antworten.;1;18n.png
-[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird bei einer Lauflaengenkodierung aller Pixelwerte benoetigt, wenn fuer jedes Element der Lauflaengenkodierung 8 Bit verwendet werden?; 8 Byte; 98 Byte; 392 Byte; 56 Byte;Keine der genannten Antworten.;2;18n.png
-Die Farbkoordinaten des HLS-Farbmodells setzen sich zusammen aus Werten fuer:; Farbton;Saettigung; Helligkeit; Kontrast;Keine der genannten Antworten.;123;
-Die Wellenlaengen welcher Farben sind laenger als jene von Blau?; Violett; Rot;Gruen; Gelb;Keine der genannten Antworten.;234;
-Die Wellenlaengen welcher Farben sind laenger als jene von Gruen?; Blau; Violett; Rot;Orange;Keine der genannten Antworten.;34;
-Die Wellenlaengen welcher Farben sind laenger als jene von Rot?; Blau; Violett; Gelb;Gruen;Keine der genannten Antworten.;5;
-Die Frequenzen welcher Farben sind hoeher als jene von Gruen?; Violett; Blau; Rot;Orange;Keine der genannten Antworten.;12;
-Die Frequenzen welcher Farben sind hoeher als jene von Rot?; Violett; Blau;Gruen;Gelb;Keine der genannten Antworten.;1234;
-Die Frequenzen welcher Farben sind hoeher als jene von Violett?;Blau;Gelb;Gruen;Rot;Keine der genannten Antworten.;5;
-JPEG ist ein Kompressionsverfahren fuer Vektor-Bildformate;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+[Bild 12] Welcher ist der richtige Begriff für Position 1 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;1;12n.png
+[Bild 12] Welcher ist der richtige Begriff für Position 2 in der Viewing-Pipeline?; Weltkoordinaten; View-Transformation; Clipping; Ray-Tracing;Keine der genannten Antworten.;2;12n.png
+[Bild 12] Welcher ist der richtige Begriff für Position 3 in der Viewing-Pipeline?; Weltkoordinaten; Pixelkoordinaten; Projektion und Homogenisierung; View-Transformation;Keine der genannten Antworten.;3;12n.png
+[Bild 12] Welcher ist der richtige Begriff für Position 4 in der Viewing-Pipeline?; Weltkoordinaten; Normalisierte Gerätekoordinaten; Pixelkoordinaten; Objektkoordinaten;Keine der genannten Antworten.;2;12n.png
+[Bild 12] Welcher ist der richtige Begriff für Position 5 in der Viewing-Pipeline?; Viewport-Transformation; Schattierung; Pixelkoordinaten; RGB-Farbraum;Keine der genannten Antworten.;1;12n.png
+[Bild 12] Welcher ist der richtige Begriff für Position 6 in der Viewing-Pipeline?; Ray-Tracing; Octree-Berechnung; Pixelkoordinaten; Modellkoordinaten;Keine der genannten Antworten.;3;12n.png
+[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird für die Speicherung aller Pixelwerte in unkomprimierter Form benoetigt?; 49 Byte; 98 Byte; 7 Byte; 56 Byte;Keine der genannten Antworten.;1;18n.png
+[Bild 18] Gegeben ist folgendes 7x7 Grauwertbild, wobei die weiszen Pixel den Grauwert 255 und die schwarzen den Grauwert 0 aufweisen. Wieviel Speicherplatz wird bei einer Lauflängenkodierung aller Pixelwerte benoetigt, wenn für jedes Element der Lauflängenkodierung 8 Bit verwendet werden?; 8 Byte; 98 Byte; 392 Byte; 56 Byte;Keine der genannten Antworten.;2;18n.png
+Die Farbkoordinaten des HLS-Farbmodells setzen sich zusammen aus Werten für:; Farbton;Sättigung; Helligkeit; Kontrast;Keine der genannten Antworten.;123;
+Die Wellenlängen welcher Farben sind länger als jene von Blau?; Violett; Rot;Grün; Gelb;Keine der genannten Antworten.;234;
+Die Wellenlängen welcher Farben sind länger als jene von Grün?; Blau; Violett; Rot;Orange;Keine der genannten Antworten.;34;
+Die Wellenlängen welcher Farben sind länger als jene von Rot?; Blau; Violett; Gelb;Grün;Keine der genannten Antworten.;5;
+Die Frequenzen welcher Farben sind hoeher als jene von Grün?; Violett; Blau; Rot;Orange;Keine der genannten Antworten.;12;
+Die Frequenzen welcher Farben sind hoeher als jene von Rot?; Violett; Blau;Grün;Gelb;Keine der genannten Antworten.;1234;
+Die Frequenzen welcher Farben sind hoeher als jene von Violett?;Blau;Gelb;Grün;Rot;Keine der genannten Antworten.;5;
+JPEG ist ein Kompressionsverfahren für Vektor-Bildformate;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Bei JPEG wird nur die Grauwertinformation verlustbehaftet komprimiert, die Farbinformation bleibt komplett erhalten;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Lempel Ziv ist ein verlustfreies Kompressionsverfahren;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Bei JPEG sind die Werte in der Quantisierungsmatrix fuer niedrige Frequenzen kleiner als die fuer hohe Frequenzen;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Das RGB-Farbmodell kommt z.B. bei Monitoren zum Einsatz und weist Rot, Gruen und Blau jeweils einer Koordinate zu, wobei [0,0,0] Weisz entspricht.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+Bei JPEG sind die Werte in der Quantisierungsmatrix für niedrige Frequenzen kleiner als die für hohe Frequenzen;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Das RGB-Farbmodell kommt z.B. bei Monitoren zum Einsatz und weist Rot, Grün und Blau jeweils einer Koordinate zu, wobei [0,0,0] Weisz entspricht.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Das CMY-Farbmodell bei Druckern basiert auf dem Prinzip der additiven Farbmischung der Grundfarben Cyan, Magenta, und Gelb.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Der Raum der darstellbaren Farben eines Geraetes wird auch Spectrum genannt.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+Der Raum der darstellbaren Farben eines Gerätes wird auch Spectrum genannt.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Das menschliche Auge reagiert am empfindlichsten auf blaues Licht.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Die lineare Faltungsoperation * ist assoziativ, d.h. A*(B*C)=(A*B)*C;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Lineare Filter sind immer Tiefpassfilter;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
@@ -40,24 +40,24 @@ Bei der Histogrammequalisierung geht es darum, die Anzahl der unterschiedlichen 
 Die Punktoperation I'(u,v) = I(u,v)-1 nennt man Invertierung;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Durch die Punktoperation I'(u,v) = 0,5*I(u,v) wird der Kontrast im Bild eines Gesichts verringert;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Der DDA-Algorithmus verwendet im Gegensatz zum Bresenham-Algorithmus nur Integer-Operationen beim Rasterisieren von Linien;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Sei A ein Eckpunkt eines Dreiecks, und alpha die zugehoerige baryzentrische Koordinate: Je naeher ein Punkt P innerhalb eines Dreiecks dem Eckpunkt A kommt, desto groeszer wird alpha.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Sei A ein Eckpunkt eines Dreiecks, und alpha die zugehoerige baryzentrische Koordinate: Je näher ein Punkt P innerhalb eines Dreiecks dem Eckpunkt A kommt, desto groeszer wird alpha.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Von den baryzentrischen Koordinaten alpha, beta, gamma sind alpha und beta gegeben. Wie berechnet sich gamma?;gamma = 1 - alpha - beta;gamma = 1 + alpha + beta;gamma = 1 / (alpha + beta);gamma = 1 / alpha + 1 / beta;Keine der genannten Antworten.;1;
 Die Matrixschreibweise hat den Vorteil, dass durch Kombination von Grundmatrizen komplexe Transformationen mit nur einer Matrix dargestellt werden koennen.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Die Matrizenmultiplikation ist assoziativ, d.h. die Reihenfolge der Ausfuehrung der Multiplikationen spielt keine Rolle und veraendert das Ergebnis nicht.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Die Matrizenmultiplikation ist assoziativ, d.h. die Reihenfolge der Ausführung der Multiplikationen spielt keine Rolle und verändert das Ergebnis nicht.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Mittels 3x3 Matrizen lassen sich alle geometrischen Transformationen von 3D Objekten darstellen.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Fuer einen homogenen 2D-Punkt (x, y, h) berechnet sich die tatsaechliche x-Koordinate x' durch x' =x / h.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Für einen homogenen 2D-Punkt (x, y, h) berechnet sich die tatsächliche x-Koordinate x' durch x' =x / h.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 In einem 200x200 groszen Bild, das mit einem Bayer Pattern aufgenommen wurde, gibt es genau gleich viele rote und blaue Pixel;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Bayer Pattern: um fuer alle Pixel die rote, gruene und blaue Farbinformation zu erhalten, muss ein Demosaicing durchgefuehrt werden;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Die duenne Linsengleichung (Thin Lens Equation) beschreibt die Projektionseigenschaften einer Lochkamera;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Die fokale Laenge einer Kamera beeinflusst deren Sichtfeld (Field of View);WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Bayer Pattern: um für alle Pixel die rote, grüne und blaue Farbinformation zu erhalten, muss ein Demosaicing durchgeführt werden;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Die dünne Linsengleichung (Thin Lens Equation) beschreibt die Projektionseigenschaften einer Lochkamera;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+Die fokale Länge einer Kamera beeinflusst deren Sichtfeld (Field of View);WAHR;FALSCH;;;Keine der genannten Antworten.;1;
 Die Anzahl von Grauwertstufen eines Bildes nennt man radiometrische Aufloesung;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Je groeszer der Durchmesser der Blende einer Kamera, desto groeszer ist der Tiefenschaerfebereich (Depth of Field);WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Octrees erlauben ein schnelles Durchsuchen bestimmter raeumlicher Positionen eines Objektes.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Bei geometrischen Transformationen muessen Octrees oft komplett neu generiert werden.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-Die Genauigkeit der Objektdarstellung in Quad- und Octrees ist generell abhaengig von der Baumtiefe.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
-[Bild 59] Gegeben ist ein 5x5 Grauwertbild. Welches ist das Ergebnis fuer die 3 fett umrandeten Pixel bei Anwendung eines 3x3 Medianfilters auf das Bild?;| 50 | 100 | 90 |;| 90 | 90 | 90 |;| 100 | 50 | 90 |;| 100 | 90 | 90 |;Keine der genannten Antworten.;4;59n.png
+Je groeszer der Durchmesser der Blende einer Kamera, desto groeszer ist der Tiefenschärfebereich (Depth of Field);WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+Octrees erlauben ein schnelles Durchsuchen bestimmter räumlicher Positionen eines Objektes.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Bei geometrischen Transformationen müssen Octrees oft komplett neu generiert werden.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+Die Genauigkeit der Objektdarstellung in Quad- und Octrees ist generell abhängig von der Baumtiefe.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;
+[Bild 59] Gegeben ist ein 5x5 Grauwertbild. Welches ist das Ergebnis für die 3 fett umrandeten Pixel bei Anwendung eines 3x3 Medianfilters auf das Bild?;| 50 | 100 | 90 |;| 90 | 90 | 90 |;| 100 | 50 | 90 |;| 100 | 90 | 90 |;Keine der genannten Antworten.;4;59n.png
 Durch die hierarchische Objektdarstellung von Octrees lassen sich einzelne Teile im Octree sehr einfach transformieren.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
-Die Matrizenmultiplikation ist kommutativ, d.h. die Reihenfolge der Matrizen kann vertauscht werden, ohne dass sich das Ergebnis veraendert.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
+Die Matrizenmultiplikation ist kommutativ, d.h. die Reihenfolge der Matrizen kann vertauscht werden, ohne dass sich das Ergebnis verändert.;WAHR;FALSCH;;;Keine der genannten Antworten.;2;
 Wie heiszt das Theorem, das besagt, dass man ein Signal f(t) exakt wiedergewinnen kann, wenn man f(t) mit einer Rate abtastet, die groeszer als das Doppelte seiner hoechsten Frequenzkomponente ist?;Bayer;Shannon-Nyquist;Laplace;Fourier;Keine der genannten Antworten.;2;
-Was ist der Ausgabewert der plenoptischen Funktion?;Lichtintensitaet;Farbe;Wellenlaenge;Brechungsindex;Keine der genannten Antworten.;1;
+Was ist der Ausgabewert der plenoptischen Funktion?;Lichtintensität;Farbe;Wellenlänge;Brechungsindex;Keine der genannten Antworten.;1;
 Das CIE 1931 XYZ Farbmodell umfasst auch Farben, die der Mensch nicht sehen kann.;WAHR;FALSCH;;;Keine der genannten Antworten.;1;

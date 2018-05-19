@@ -13,6 +13,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +66,9 @@ public class LearningQuestionnaireDAOTest {
             Long expected = Long.valueOf(0);
 
             Course tgi = new Course();
-            tgi.setSemester("2015S");
+            tgi.setSemester(Semester.SS+"15");
             tgi.setMark("123.349");
+            tgi.setName("TGI");
             courseDAO.create(tgi);
 
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
