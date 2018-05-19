@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,8 +73,6 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     public void search(ExamQuestionnaire searchparameters) throws PersistenceException{
         //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
-
-
 
     @Override
     public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException{

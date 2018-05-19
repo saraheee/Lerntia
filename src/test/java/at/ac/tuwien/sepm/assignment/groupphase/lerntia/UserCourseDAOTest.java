@@ -11,6 +11,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserCourse;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,13 +74,13 @@ public class UserCourseDAOTest {
             Fabio.setMatriculationNumber("01526912");
             userDAO.create(Fabio);
             Course tgi = new Course();
-            tgi.setSemester("2019W");
+            tgi.setSemester(Semester.WS+"19");
             tgi.setMark(mark);
             courseDAO.create(tgi);
             UserCourse FabioTGI = new UserCourse();
             FabioTGI.setCmark(mark);
             FabioTGI.setMatriculationNumber("01526912");
-            FabioTGI.setSemester("2019W");
+            FabioTGI.setSemester(Semester.WS+"19");
             FabioTGI.setCourseID(tgi.getId());
 
             userCourseDAO.create(FabioTGI);
@@ -94,7 +95,7 @@ public class UserCourseDAOTest {
             UserCourse FabioTGI = new UserCourse();
             FabioTGI.setCmark("123.123");
             FabioTGI.setMatriculationNumber("01526912");
-            FabioTGI.setSemester("2019W");
+            FabioTGI.setSemester(Semester.WS+"19");
 
             userCourseDAO.create(FabioTGI);
         } catch (PersistenceException e) {

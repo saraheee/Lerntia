@@ -106,41 +106,46 @@ public class ImportFileController {
     @FXML
     public void importFile(ActionEvent actionEvent) {
 
+        String name = tf_questionnaire.getText().trim();
+
+        if (name.equals("")) {
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
+            return;
+        }
+
         if (directory != null) {
             try {
-                qservice.importPictures(directory, tf_questionnaire.getText());
+                qservice.importPictures(directory, name);
             }
             catch (ServiceException e) {
                 // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         }
         if (file != null) {
             try {
-                String name = tf_questionnaire.getText();
+                String course = cb_course.getSelectionModel().getSelectedItem();
 
-                if (!name.equals("")) {
+                int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
+                Course selectedCourse = courses.get(cb_courseIndex);
 
-                    String course = cb_course.getSelectionModel().getSelectedItem();
-
-                    int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
-                    Course selectedCourse = courses.get(cb_courseIndex);
-
-                    qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
-                    alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
-                } else {
-                    alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
-                }
+                qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
+                Node source = (Node) actionEvent.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
             } catch (ServiceException e) {
                 // TODO - e.getMessage()
+                qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         } else {
+            qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
             alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein File ausgewählt","Achtung","Bitte wähle zuerst eine csv-Datei aus!");
+            return;
         }
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 
     void showImportWindow() {
