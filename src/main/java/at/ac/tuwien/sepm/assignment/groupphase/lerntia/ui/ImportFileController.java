@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
@@ -11,14 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,7 @@ public class ImportFileController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final SimpleCourseService cservice;
     private final SimpleQuestionnaireImportService qservice;
+    private final WindowController windowController;
     private File file;
     private File directory;
     private List<Course> coursedata = new ArrayList<>();
@@ -54,9 +51,12 @@ public class ImportFileController {
     private ComboBox<String> cb_course;
 
     @Autowired
-    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService) {
+    public ImportFileController(SimpleCourseService simpleCourseService,
+                                SimpleQuestionnaireImportService simpleQuestionnaireImportService,
+                                WindowController windowController) {
         cservice = simpleCourseService;
         qservice = simpleQuestionnaireImportService;
+        this.windowController = windowController;
     }
 
     @FXML
@@ -159,17 +159,8 @@ public class ImportFileController {
 
     void showImportWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/importFile.fxml"));
-        var stage = new Stage();
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] Import Infos");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for importing questions.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for importing questions. " + e.getMessage());
-        }
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        windowController.openNewWindow("Fragebogen importieren", fxmlLoader);
+
     }
 }

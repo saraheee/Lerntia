@@ -36,13 +36,15 @@ public class SelectQuestionAdministrateController {
 
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
+    private final WindowController windowController;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private Stage stage;
 
 
-
-    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController) {
+    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController, WindowController windowController) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
+        this.windowController = windowController;
     }
 
     public void initialize(){
@@ -85,23 +87,11 @@ public class SelectQuestionAdministrateController {
     /**
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
-     * The Code is taken from SelectQuestionnaireController
      */
     public void showSelectQuestionAdministrateWindow(){
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
-        var stage = new Stage();
-
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] Fragebogen verwalten");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for administrating the questions.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for administrating a questionnaire. " + e.getMessage());
-        }
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
     }
 
     @FXML

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-
-<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css"
+         xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
     <Menu mnemonicParsing="false" text="Menü">
         <MenuItem mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
             <graphic>
@@ -32,21 +30,20 @@
         <MenuItem mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/csv-import.png" />
+                    <Image url="@/icons/csv-import.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#exportQuestions" text="Fragen nach CSV exportieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/csv-export.png" />
+                    <Image url="@/icons/csv-export.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/exam.png" />
                     <Image url="@/icons/transfer2.png"/>
                 </ImageView>
             </graphic>
@@ -56,7 +53,7 @@
         <MenuItem mnemonicParsing="false" onAction="#showAboutSection" text="Über Lerntia">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/about.png" />
+                    <Image url="@/icons/about.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
