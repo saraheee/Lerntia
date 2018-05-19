@@ -8,7 +8,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.util.List;
 
 public class LearningQuestionnaireDAOTest {
 
@@ -27,7 +31,8 @@ public class LearningQuestionnaireDAOTest {
     private IQuestionnaireDAO questionnaireDAO;
     private ILearningQuestionnaireDAO learningQuestionnaireDAO;
     private ICourseDAO courseDAO;
-    private JDBCConnectionManager jdbcConnectionManager;
+
+    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {
@@ -46,8 +51,6 @@ public class LearningQuestionnaireDAOTest {
         this.learningQuestionnaireDAO = learningQuestionnaireDAO;
     }
 
-
-
     private void ICourseDAO(CourseDAO courseDAO) {
         this.courseDAO=courseDAO;
     }
@@ -56,34 +59,39 @@ public class LearningQuestionnaireDAOTest {
         this.questionnaireDAO = questionnaireDAO;
     }
 
-
     @Test
-    public void createNewExamQuestionnaire() throws PersistenceException {
+    public void createNewLearningQuestionnaire() throws PersistenceException {
         try {
+            Long expected = Long.valueOf(0);
+
             Course tgi = new Course();
             tgi.setSemester("2015S");
             tgi.setMark("123.349");
             courseDAO.create(tgi);
+
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Success chapter");
-            //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
             chapter1.setCourseID(tgi.getId());
             learningQuestionnaireDAO.create(chapter1);
-            Long expected = Long.valueOf(2);
-            Assert.assertEquals(expected, chapter1.getId());
+
+            expected = chapter1.getId() + 1;
+
+            LearningQuestionnaire chapter2 = new LearningQuestionnaire();
+            chapter2.setName("Success chapter2");
+            chapter2.setCourseID(tgi.getId());
+            learningQuestionnaireDAO.create(chapter2);
+
+            Assert.assertEquals(expected, chapter2.getId());
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Test(expected = Exception.class)
-    public void createNewExamQuestionnaireError() throws PersistenceException{
+    public void createNewLearningQuestionnaireError() throws PersistenceException{
         try {
             LearningQuestionnaire chapter1 = new LearningQuestionnaire();
             chapter1.setName("Error chapter");
-            //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
             learningQuestionnaireDAO.create(chapter1);
         }catch (PersistenceException e){
             throw new PersistenceException(e.getMessage());

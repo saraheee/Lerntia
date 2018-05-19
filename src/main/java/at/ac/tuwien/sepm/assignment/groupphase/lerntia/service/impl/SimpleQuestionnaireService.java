@@ -60,4 +60,28 @@ public class SimpleQuestionnaireService implements IQuestionnaireService {
             iExamQuestionnaireService.deselect(examQuestionnaireList.get(i));
         }
     }
+
+    @Override
+    public Long getHighestID() throws ServiceException {
+
+        Long highestID = Long.valueOf(0);
+
+        List<LearningQuestionnaire> learningQuestionnaireList = iLearningQuestionnaire.readAll();
+
+        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+            if (learningQuestionnaireList.get(i).getId() > highestID){
+                highestID = learningQuestionnaireList.get(i).getId();
+            }
+        }
+
+        List<ExamQuestionnaire> examQuestionnaireList = iExamQuestionnaireService.readAll();
+
+        for (int i = 0; i < examQuestionnaireList.size(); i++){
+            if (examQuestionnaireList.get(i).getId() > highestID){
+                highestID = examQuestionnaireList.get(i).getId();
+            }
+        }
+
+        return highestID;
+    }
 }

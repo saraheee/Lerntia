@@ -28,11 +28,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws ServiceException {
         try {
-            System.out.println("======================== 1");
-
             examQuestionnaireDAO.create(examQuestionnaire);
-
-            System.out.println("======================== 10");
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
