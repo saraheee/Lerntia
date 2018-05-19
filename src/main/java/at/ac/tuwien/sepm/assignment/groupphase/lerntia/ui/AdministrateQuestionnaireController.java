@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
@@ -120,7 +119,6 @@ public class AdministrateQuestionnaireController {
         } catch (IOException e) {
             LOG.error("Failed to open a window for administrating a questionnaire. " + e.getMessage());
         }
-        //Todo Close the Current Window
     }
 
 }
