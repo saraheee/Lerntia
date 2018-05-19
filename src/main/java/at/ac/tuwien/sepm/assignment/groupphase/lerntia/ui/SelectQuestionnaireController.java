@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class SelectQuestionnaireController {
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
-    private ChoiceBox<String> cb_questionnaire;
+    private ComboBox<String> cb_questionnaire;
 
     public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService, LerntiaMainController lerntiaMainController) {
         this.learningQuestionnaireService = learningQuestionnaireService;
@@ -48,7 +48,7 @@ public class SelectQuestionnaireController {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
             cb_questionnaire.getItems().add(learningQuestionnaireList.get(i).getName());
         }
 
@@ -80,7 +80,7 @@ public class SelectQuestionnaireController {
 
         // unselect all questionnaires
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
             try {
                 learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
             } catch (ServiceException e) {

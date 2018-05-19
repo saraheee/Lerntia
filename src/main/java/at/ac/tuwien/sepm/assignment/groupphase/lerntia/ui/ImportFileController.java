@@ -2,10 +2,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireImportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -52,10 +51,10 @@ public class ImportFileController {
     @FXML
     private TextField tf_questionnaire;
     @FXML
-    private ChoiceBox<String> cb_course;
+    private ComboBox<String> cb_course;
 
     @Autowired
-    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService) throws PersistenceException {
+    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService) {
         cservice = simpleCourseService;
         qservice = simpleQuestionnaireImportService;
     }
@@ -102,8 +101,7 @@ public class ImportFileController {
         if (directory != null) {
             try {
                 qservice.importPictures(directory, tf_questionnaire.getText());
-            }
-            catch (ServiceException e) {
+            } catch (ServiceException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("[Lerntia] Import fehlgeschlagen");
                 alert.setHeaderText("Fehler");
