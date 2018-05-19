@@ -7,15 +7,12 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearni
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.stage.Modality;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -28,15 +25,22 @@ public class AdministrateQuestionnaireController {
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
     private final SelectQuestionAdministrateController selectQuestionAdministrateController;
     private final IMainLerntiaService lerntiaService;
+    private final WindowController windowController;
+    private Stage stage;
+
+    @FXML
+    public ComboBox cb_questionnaire;
     private List<LearningQuestionnaire> learningQuestionnaires;
 
     public AdministrateQuestionnaireController(
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
         SelectQuestionAdministrateController selectQuestionAdministrateController,
-        IMainLerntiaService lerntiaService) {
+        IMainLerntiaService lerntiaService,
+        WindowController windowController) {
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
         this.selectQuestionAdministrateController = selectQuestionAdministrateController;
         this.lerntiaService = lerntiaService;
+        this.windowController = windowController;
     }
 
     @FXML
@@ -51,10 +55,6 @@ public class AdministrateQuestionnaireController {
             cb_questionnaire.getItems().add(learningQuestionnaires.get(i).getName());
         }
     }
-
-
-    @FXML
-    public ChoiceBox cb_questionnaire;
 
     @FXML
     public void selectQuestionnaire(ActionEvent actionEvent) {
@@ -89,36 +89,23 @@ public class AdministrateQuestionnaireController {
             simpleLearningQuestionnaireService.select(studyMode);
             lerntiaService.getFirstQuestion();
             //Delete this Line if not Needed
-            LOG.info("Study: "+studyMode.getName()+" Selected: "+selectedLearningQuestionnaire.getName());
+            LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
 
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        //Todo Close the Current window
+        stage.close();
     }
-
 
 
     /**
      * Opens the first Window in the AdministrateQuestionnare operation.
-     * Opens a window in which the user is allowed to Chooces a Questionnare.
-     * The Code is taken from SelectQuestionnaireController
+     * Opens a window in which the user is allowed to choose a Questionnare.
      */
-    public void showAdministrateQuestionnaireWindow(){
+    public void showAdministrateQuestionnaireWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/administrateQuestionnaire.fxml"));
-        var stage = new Stage();
-
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] Fragebogen verwalten");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for administrating a questionnaire.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for administrating a questionnaire. " + e.getMessage());
-        }
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
     }
 
 }

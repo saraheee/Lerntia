@@ -1,11 +1,9 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
-import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -111,8 +109,6 @@ public final class MainApplication extends Application implements Runnable {
         } catch (IllegalThreadStateException e) {
             LOG.debug("Interrupting textToSpeech thread: " + e.getMessage());
         }
-
-    // todo check if it really is ok just delete this   JDBCConnectionManager.closeConnection();
         context.close();
     }
 

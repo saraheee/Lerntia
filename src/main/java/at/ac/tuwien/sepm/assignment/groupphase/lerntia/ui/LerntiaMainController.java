@@ -6,7 +6,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.MainLerntiaService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -310,8 +309,7 @@ public class LerntiaMainController {
                     String imagePath =
                         System.getProperty("user.dir") + File.separator +
                             selectedLearningQuestionnaire.getName() + File.separator +
-                            question.getPicture()
-                        ;
+                            question.getPicture();
 
                     LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                     File imageFile = new File(imagePath);
@@ -339,7 +337,7 @@ public class LerntiaMainController {
         answerController.setAnswerText(answerText);
     }
 
-    public void stopAudio(){
+    public void stopAudio() {
         LOG.debug("Stop Audio");
         audioButtonController.stopReading();
     }

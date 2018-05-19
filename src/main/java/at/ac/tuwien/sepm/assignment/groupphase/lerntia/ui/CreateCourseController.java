@@ -2,23 +2,20 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Controller
@@ -27,6 +24,7 @@ public class CreateCourseController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleCourseService courseService;
+    private final WindowController windowController;
 
     @FXML
     private TextField tf_courseName;
@@ -37,8 +35,10 @@ public class CreateCourseController {
     @FXML
     private TextField tf_semesterYear;
 
-    public CreateCourseController(SimpleCourseService courseService){
+    @Autowired
+    public CreateCourseController(SimpleCourseService courseService, WindowController windowController) {
         this.courseService = courseService;
+        this.windowController = windowController;
     }
 
     @FXML
@@ -52,19 +52,8 @@ public class CreateCourseController {
     void showCreateCourseWindow() {
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/createCourse.fxml"));
-        var stage = new Stage();
-
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] LVA erstellen");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for creating a course.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for creating a course. " + e.getMessage());
-        }
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        windowController.openNewWindow("LVA erstellen", fxmlLoader);
     }
 
     public void createCourse(ActionEvent actionEvent) {
@@ -76,7 +65,7 @@ public class CreateCourseController {
             String semester = cb_semester.getSelectionModel().getSelectedItem();
             String semesterYear = tf_semesterYear.getText().trim();
 
-            Course course = new Course(mark, semesterYear+semester, name, false);
+            Course course = new Course(mark, semesterYear + semester, name, false);
 
             courseService.validate(course);
             courseService.create(course);
