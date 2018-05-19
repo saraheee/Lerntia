@@ -13,6 +13,8 @@ public class Question {
     private String optionalFeedback;
     private Boolean isDeleted;
 
+    private String checkedAnswers;
+
     public Question() {}
 
     public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3, String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
@@ -132,5 +134,13 @@ public class Question {
             ", optionalFeedback='" + optionalFeedback + '\'' +
             ", isDeleted=" + isDeleted +
             '}';
+    }
+
+    public String getCheckedAnswers() {
+        return checkedAnswers;
+    }
+
+    public void setCheckedAnswers(String checkedAnswers) {
+        this.checkedAnswers = checkedAnswers;
     }
 }

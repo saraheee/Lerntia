@@ -22,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,22 +197,7 @@ public class LerntiaMainController {
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
-        String checkedAnswers = "";
-        if (answer1Controller.isSelected()) {
-            checkedAnswers += "1";
-        }
-        if (answer2Controller.isSelected()) {
-            checkedAnswers += "2";
-        }
-        if (answer3Controller.isSelected()) {
-            checkedAnswers += "3";
-        }
-        if (answer4Controller.isSelected()) {
-            checkedAnswers += "4";
-        }
-        if (answer5Controller.isSelected()) {
-            checkedAnswers += "5";
-        }
+        String checkedAnswers = getCheckedAnswers();
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
         //LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
@@ -253,6 +239,13 @@ public class LerntiaMainController {
     @FXML
     private void getAndShowNextQuestion() {
         try {
+            // save checked answers
+
+            String checkedAnswers = getCheckedAnswers();
+            question.setCheckedAnswers(checkedAnswers);
+
+            // get next questions
+
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
@@ -308,6 +301,19 @@ public class LerntiaMainController {
         setAnswerText(answer3Controller, question.getAnswer3());
         setAnswerText(answer4Controller, question.getAnswer4());
         setAnswerText(answer5Controller, question.getAnswer5());
+
+        var checkedAnswers = question.getCheckedAnswers();
+
+        try {
+            answer1Controller.setSelected(checkedAnswers.contains("1"));
+            answer2Controller.setSelected(checkedAnswers.contains("2"));
+            answer3Controller.setSelected(checkedAnswers.contains("3"));
+            answer4Controller.setSelected(checkedAnswers.contains("4"));
+            answer5Controller.setSelected(checkedAnswers.contains("5"));
+        } catch (NullPointerException e){
+            // nothing has been selected if the question is shown for the first time.
+            // this can be ignored.
+        }
 
         audioController.setAnswer1(answer1Controller.getAnswerText());
         audioController.setAnswer2(answer2Controller.getAnswerText());
@@ -393,5 +399,25 @@ public class LerntiaMainController {
 
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
+    }
+
+    private String getCheckedAnswers(){
+        String checkedAnswers = "";
+        if (answer1Controller.isSelected()) {
+            checkedAnswers += "1";
+        }
+        if (answer2Controller.isSelected()) {
+            checkedAnswers += "2";
+        }
+        if (answer3Controller.isSelected()) {
+            checkedAnswers += "3";
+        }
+        if (answer4Controller.isSelected()) {
+            checkedAnswers += "4";
+        }
+        if (answer5Controller.isSelected()) {
+            checkedAnswers += "5";
+        }
+        return checkedAnswers;
     }
 }
