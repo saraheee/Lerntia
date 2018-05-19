@@ -10,14 +10,25 @@
 
 <children>
 
-    <Button layoutX="640.0" layoutY="453.0" mnemonicParsing="false" onAction="#selectQuestion" prefHeight="37.0" prefWidth="113.0" text="Auswählen" />
-      <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="432.0" prefWidth="739.0">
+    <Button layoutX="673.0" layoutY="411.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0" prefWidth="113.0" text="Bearbeiten" />
+      <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="288.0" prefWidth="739.0">
         <columns>
           <TableColumn fx:id="tc_id" prefWidth="68.0" text="Nr" />
           <TableColumn fx:id="tc_question" prefWidth="670.0" text="Frage" />
         </columns>
       </TableView>
-      <Button layoutX="517.0" layoutY="453.0" mnemonicParsing="false" onAction="#backButton" prefHeight="37.0" prefWidth="113.0" text="Zurück" />
+      <Button layoutX="673.0" layoutY="546.0" mnemonicParsing="false" onAction="#backButton" prefHeight="37.0" prefWidth="113.0" text="Zurück" />
+      <Button layoutX="673.0" layoutY="455.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0" prefWidth="113.0" text="Löschen" />
+      <TableView fx:id="tv_details" layoutX="14.0" layoutY="313.0" prefHeight="270.0" prefWidth="651.0">
+        <columns>
+          <TableColumn fx:id="tc_answer1" prefWidth="75.0" text="Antwort 1" />
+          <TableColumn fx:id="tc_answer2" prefWidth="117.0" text="Antwort 2" />
+            <TableColumn fx:id="tc_answer3" prefWidth="125.0" text="Antwort 3" />
+            <TableColumn fx:id="tc_answer4" prefWidth="137.0" text="Antwort 4" />
+            <TableColumn fx:id="tc_answer5" prefWidth="196.0" text="Antwort 5" />
+        </columns>
+      </TableView>
+      <Button layoutX="673.0" layoutY="503.0" mnemonicParsing="false" onAction="#markForExam" prefHeight="37.0" prefWidth="113.0" text="Für P Merken" />
 </children>
 
 </AnchorPane>
