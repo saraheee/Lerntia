@@ -37,7 +37,6 @@ public class AboutSectionController {
             stage.show();
 
             about.setText(ABOUTTEXT);
-            LOG.debug("about: " + ABOUTTEXT);
             LOG.debug("Successfully opened a window for showing the about section.");
 
         } catch (IOException e) {
