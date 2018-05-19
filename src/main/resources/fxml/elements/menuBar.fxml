@@ -34,7 +34,7 @@
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" text="Fragen nach CSV exportieren">
+        <MenuItem mnemonicParsing="false" onAction="#exportQuestions" text="Fragen nach CSV exportieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/csv-export.png"/>
