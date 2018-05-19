@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,7 +47,7 @@ public class SelectQuestionnaireController {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
             cb_questionnaire.getItems().add(learningQuestionnaireList.get(i).getName());
         }
 
@@ -80,7 +79,7 @@ public class SelectQuestionnaireController {
 
         // unselect all questionnaires
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++){
+        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
             try {
                 learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
             } catch (ServiceException e) {
