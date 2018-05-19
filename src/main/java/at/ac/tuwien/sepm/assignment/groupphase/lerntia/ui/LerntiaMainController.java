@@ -335,7 +335,7 @@ public class LerntiaMainController {
                 }
                 if (selectedLearningQuestionnaire != null) {
                     String imagePath =
-                        System.getProperty("user.dir") + File.separator +
+                        System.getProperty("user.dir") + File.separator + "img" + File.separator +
                             selectedLearningQuestionnaire.getName() + File.separator +
                             question.getPicture()
                         ;
