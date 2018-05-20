@@ -31,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
+import java.util.List;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -240,12 +241,9 @@ public class LerntiaMainController {
     private void getAndShowNextQuestion() {
         try {
             // save checked answers
-
-            String checkedAnswers = getCheckedAnswers();
-            question.setCheckedAnswers(checkedAnswers);
+            saveAnswerState();
 
             // get next questions
-
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
@@ -267,6 +265,10 @@ public class LerntiaMainController {
     @FXML
     private void getAndShowPreviousQuestion() {
         try {
+            // save checked answers
+            saveAnswerState();
+
+            // get next questions
             question = lerntiaService.getPreviousQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
@@ -383,14 +385,53 @@ public class LerntiaMainController {
     }
 
     public void handIn(ActionEvent actionEvent) {
+
+        // the state of the current question has to be saved here as well.
+        saveAnswerState();
+
         boolean handInConfirmation = alertController.showBigConfirmation("Abgeben", "Bist du sicher, dass du die Prüfung abgeben möchtest", "");
 
         if (handInConfirmation == true){
-            // TODO - wait for statistics implementation
-            // TODO - determine what should happen after hand in
-        } else {
-
+            evaluateExam();
         }
+    }
+
+    public void evaluateExam(){
+
+        List<Question> questionList = null;
+        try {
+            questionList = lerntiaService.getQuestions();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        var report = "";
+
+        for (var i = 0; i < questionList.size(); i++){
+
+            System.out.println(questionList.get(i).getQuestionText());
+
+            boolean answersCorrect = false;
+
+            try {
+                var checkedAnswers = questionList.get(i).getCheckedAnswers();
+                answersCorrect = checkedAnswers.equals(questionList.get(i).getCorrectAnswers());
+            } catch (NullPointerException e){
+                // TODO - mindestens eine frage nicht beantwortet.
+                // oder gilt das dann als falsch?
+            }
+
+            report += questionList.get(i).getQuestionText();
+            if (answersCorrect){
+                report += " richtig";
+            } else {
+                report += " falsch";
+            }
+            report += "\n";
+        }
+
+        alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis", "Fragen", report);
+
     }
 
     public boolean isExamMode() {
@@ -419,5 +460,10 @@ public class LerntiaMainController {
             checkedAnswers += "5";
         }
         return checkedAnswers;
+    }
+
+    private void saveAnswerState(){
+        String checkedAnswers = getCheckedAnswers();
+        question.setCheckedAnswers(checkedAnswers);
     }
 }
