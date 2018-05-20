@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -64,8 +65,8 @@ public class AlertController {
         } else {
             imageView = new ImageView(INFO);
         }
-        imageView.setFitWidth(64);
-        imageView.setFitHeight(64);
+        imageView.setFitWidth(84);
+        imageView.setFitHeight(84);
 
         var stackPane = new StackPane(imageView);
         stackPane.setAlignment(Pos.CENTER);
@@ -86,7 +87,10 @@ public class AlertController {
         } else {
             dialogPane.getButtonTypes().setAll(ButtonType.OK);
         }
-        alert.showAndWait();
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        stage.showAndWait();
+        LOG.trace("Showing a big alert with title: " + title);
     }
 
 
@@ -118,7 +122,7 @@ public class AlertController {
         grid.setPadding(new Insets(5));
 
         ImageView imageView;
-        if(wrongAnswer) {
+        if (wrongAnswer) {
             imageView = new ImageView(WRONG);
             wrongAnswer = false;
         } else {
@@ -142,7 +146,11 @@ public class AlertController {
 
         dialogPane.setHeader(grid);
         dialogPane.getButtonTypes().setAll(ButtonType.OK);
-        alert.showAndWait();
+
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        stage.showAndWait();
+        LOG.trace("Showing an answer alert with title: " + title);
     }
 
 
