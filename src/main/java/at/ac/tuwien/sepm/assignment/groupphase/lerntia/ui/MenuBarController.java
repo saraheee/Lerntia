@@ -65,6 +65,9 @@ public class MenuBarController {
     @FXML
     private void exportQuestions(ActionEvent actionEvent) {
         //TODO: remove alert, when it's implemented
-        alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Nicht verfügbar", "Diese Funktionalität ist noch nicht verfügbar.", "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
+        alertController.showBigAlert(Alert.AlertType.INFORMATION,
+            "Nicht verfügbar",
+            "Diese Funktionalität ist noch nicht verfügbar.",
+            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
     }
 }

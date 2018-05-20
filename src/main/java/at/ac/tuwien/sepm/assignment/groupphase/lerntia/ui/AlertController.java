@@ -28,6 +28,9 @@ public class AlertController {
     private Image ERROR = new Image(getClass().getResourceAsStream("/icons/error.png"));
     private Image WARNING = new Image(getClass().getResourceAsStream("/icons/warning.png"));
     private Image CONFIRMATION = new Image(getClass().getResourceAsStream("/icons/confirmation.png"));
+    private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
+    private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
+    private boolean wrongAnswer = false;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
         var alert = new Alert(alertType);
@@ -38,7 +41,7 @@ public class AlertController {
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
-        dialogPane.getStyleClass().add( "dialogue-content");
+        dialogPane.getStyleClass().add("dialogue-content");
 
         var grid = new GridPane();
         var graphicColumn = new ColumnConstraints();
@@ -52,11 +55,11 @@ public class AlertController {
         grid.setPadding(new Insets(5));
 
         ImageView imageView;
-        if(alertType == Alert.AlertType.ERROR) {
+        if (alertType == Alert.AlertType.ERROR) {
             imageView = new ImageView(ERROR);
         } else if (alertType == Alert.AlertType.WARNING) {
             imageView = new ImageView(WARNING);
-        } else if(alertType == Alert.AlertType.CONFIRMATION) {
+        } else if (alertType == Alert.AlertType.CONFIRMATION) {
             imageView = new ImageView(CONFIRMATION);
         } else {
             imageView = new ImageView(INFO);
@@ -78,11 +81,67 @@ public class AlertController {
         grid.add(headerLabel, 1, 0);
 
         dialogPane.setHeader(grid);
-        if(alertType == Alert.AlertType.CONFIRMATION) {
+        if (alertType == Alert.AlertType.CONFIRMATION) {
             dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
         } else {
             dialogPane.getButtonTypes().setAll(ButtonType.OK);
         }
+        alert.showAndWait();
+    }
+
+
+    public void showWrongAnswerAlert(String title, String header, String content) {
+        wrongAnswer = true;
+        showCorrectAnswerAlert(title, header, content);
+    }
+
+    public void showCorrectAnswerAlert(String title, String header, String content) {
+        var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
+        alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        ImageView imageView;
+        if(wrongAnswer) {
+            imageView = new ImageView(WRONG);
+            wrongAnswer = false;
+        } else {
+            imageView = new ImageView(CORRECT);
+        }
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        headerLabel.getStyleClass().add("dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.getButtonTypes().setAll(ButtonType.OK);
         alert.showAndWait();
     }
 
