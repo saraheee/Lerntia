@@ -24,7 +24,7 @@
 .button {
     -fx-font-size: 36px;
     -fx-font-family: "Lora-Bold";
-    -fx-background-color: rgba(51, 0, 102, 0.09);
+    -fx-background-color: rgba(51, 0, 102, 0.05);
     -fx-padding: 10px 40px;
 }
 
@@ -36,6 +36,18 @@
     -fx-background-color: rgba(0, 50, 250, 0.2);
 }
 
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
 .button:default {
-    -fx-background-color: rgba(51, 0, 102, 0.1);
+    -fx-background-color: rgba(51, 0, 102, 0.15);
+}
+
+.button:default:hover {
+    -fx-background-color: rgba(51, 0, 152, 0.2);
+}
+
+.button:selected {
+    -fx-background-color: #3e8e41;
 }

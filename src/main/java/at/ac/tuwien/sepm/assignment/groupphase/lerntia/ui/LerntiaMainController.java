@@ -194,13 +194,15 @@ public class LerntiaMainController {
         }
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        //LOG.debug("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+        LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Antworten richtig!", "Alle Antworten sind richtig.", "Die nächste Frage wird angezeigt.");
+            alertController.showCorrectAnswerAlert("Antworten richtig!", "Alle Antworten sind richtig.",
+                "Die nächste Frage wird angezeigt.");
         } else {
-            alertController.showBigAlert(Alert.AlertType.WARNING, "Antworten nicht richtig.", "Richtige Antworten: " +
-                question.getCorrectAnswers(), "Die nächste Frage wird angezeigt.");
+            alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Richtige Antworten: " +
+                question.getCorrectAnswers().replaceAll("(.)", "$1, ")
+                    .substring(0, question.getCorrectAnswers().length() * 3 - 2), "Die nächste Frage wird angezeigt.");
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
@@ -212,8 +214,8 @@ public class LerntiaMainController {
             lerntiaService.recordCheckedAnswers(mockQuestion);
         } catch (ServiceException e) {
             LOG.error("Could not check whether the answer was correct");
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen", "Das Resultat konnte nicht zur" +
-                " Serviceschicht geschickt werden", e.getLocalizedMessage());
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
         }
         getAndShowNextQuestion();
     }
@@ -239,7 +241,8 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen", "Du bist am Ende angelangt.", "Statistiken: ");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
             try {
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
@@ -256,7 +259,8 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen", "Du bist am Anfang.", "Statistiken: ");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
+                "Du bist am Anfang.", "");
             try {
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
