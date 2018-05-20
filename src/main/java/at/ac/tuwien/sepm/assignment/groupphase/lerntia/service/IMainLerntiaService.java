@@ -5,6 +5,8 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
+import java.util.List;
+
 /**
  * This is the main service of the application. It does not directly access DAOs but rather other services.
  * It is the general home for business logic.
@@ -44,4 +46,6 @@ public interface IMainLerntiaService {
      *    - other implementation-specific reasons
      * */
     void recordCheckedAnswers(Question mockQuestion) throws ServiceException;
+
+    List<Question> getQuestions() throws ServiceException;
 }
