@@ -18,7 +18,7 @@ import java.util.List;
 public class QuestionDAO implements IQuestionDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SQL_QUESTION_CREATE_STATEMENT = "INSERT INTO Question(id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback) VALUES (default,?,?,?,?,?,?,?,?,?)";
-    private static final String SQL_QUESTION_UPDATE_STATEMENT = "UPDATE Question SET questionText = ?, picture = ?, answer1 = ?, answer2 = ?, answer3 = ?, answer4 = ?, answer5 = ?, correctAnswers = ?, optionalFeedback = ? ";
+    private static final String SQL_QUESTION_UPDATE_STATEMENT = "UPDATE Question SET questionText = ?, picture = ?, answer1 = ?, answer2 = ?, answer3 = ?, answer4 = ?, answer5 = ?, correctAnswers = ?, optionalFeedback = ? WHERE id = ?";
     private static final String SQL_QUESTION_SEARCH_STATEMENT = "SELECT * FROM QUESTION";
     private static final String SQL_QUESTION_DELETE_STATEMENT = "UPDATE Question SET isDeleted = TRUE WHERE id = ?";
     private static final String SQL_QUESTION_READALL_STATEMENT = "";
@@ -86,6 +86,7 @@ public class QuestionDAO implements IQuestionDAO {
                 psUpdate.setString(7, question.getAnswer5());
                 psUpdate.setString(8, question.getCorrectAnswers());
                 psUpdate.setString(9, question.getOptionalFeedback());
+                psUpdate.setLong(10,question.getId());
                 psUpdate.executeUpdate();
                 LOG.info("Question successfully updated in Database.");
             } finally {

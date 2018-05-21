@@ -136,6 +136,14 @@ public class Question {
             '}';
     }
 
+    public String fineToString(){
+        String res = "";
+        res += " Frage: "+questionText+"\n Antowrt1: "+answer2+"\n Antowrt2: "+answer2+
+            "\n Antowrt3: "+answer3+"\n Antowrt4: "+answer4+"\n Antowrt5: "+answer5+"\n Korrekte Antwort: "+correctAnswers+
+            "\nFeedback: "+optionalFeedback;
+        return res;
+    }
+
     public String getCheckedAnswers() {
         return checkedAnswers;
     }
