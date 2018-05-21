@@ -2,23 +2,21 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,28 +28,47 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     private final QuestionnaireImportDAO questionnaireImportDAO;
     private final SimpleQuestionService simpleQuestionService;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final SimpleExamQuestionnaireService simpleExamQuestionnaireService;
     private final SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
     public SimpleQuestionnaireImportService(
         QuestionnaireImportDAO questionnaireImportDAO,
         SimpleQuestionService simpleQuestionService,
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        SimpleExamQuestionnaireService simpleExamQuestionnaireService,
         SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService
     ) {
         this.questionnaireImportDAO = questionnaireImportDAO;
         this.simpleQuestionService = simpleQuestionService;
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.simpleExamQuestionnaireService = simpleExamQuestionnaireService;
         this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
-    public void importQuestionnaire(File file, Course course, String name) throws ServiceException {
+    public void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException {
 
         String pathStr = file.getAbsolutePath();
 
-        List<LearningQuestionnaire> questionnaires = simpleLearningQuestionnaireService.readAll();
-        for (int i = 0; i < questionnaires.size(); i++) {
-            if (name.equals(questionnaires.get(i).getName())) {
-                throw new ServiceException("Dieser Name existiert schon!");
+        // TODO - fix duplicate code
+
+        if (isExam){
+            List<ExamQuestionnaire> questionnaires = null;
+            questionnaires = simpleExamQuestionnaireService.readAll();
+
+            for (int i = 0; i < questionnaires.size(); i++) {
+                if (name.equals(questionnaires.get(i).getName())) {
+                    throw new ServiceException("Dieser Name existiert schon!");
+                }
+            }
+
+        } else {
+            List<LearningQuestionnaire> questionnaires = null;
+            questionnaires = simpleLearningQuestionnaireService.readAll();
+
+            for (int i = 0; i < questionnaires.size(); i++) {
+                if (name.equals(questionnaires.get(i).getName())) {
+                    throw new ServiceException("Dieser Name existiert schon!");
+                }
             }
         }
 
@@ -90,7 +107,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             try {
                 if (!lineParts[7].equals("")) {
                     picture = lineParts[7];
-                    String path = System.getProperty("user.dir") + File.separator + name + File.separator + picture;
+                    String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + name + File.separator + picture;
                     File f = new File(path);
                     if(!f.exists()) {
                         throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
@@ -118,17 +135,23 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionIDs.add(q.getId());
         }
 
-        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+        Long questionnaireID;
 
-        simpleLearningQuestionnaireService.create(learningQuestionnaire);
-
-        Long learningQuestionnaireID = learningQuestionnaire.getId();
+        if (isExam){
+            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, false, LocalDate.now());
+            simpleExamQuestionnaireService.create(examQuestionnaire);
+            questionnaireID = examQuestionnaire.getId();
+        } else {
+            LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+            simpleLearningQuestionnaireService.create(learningQuestionnaire);
+            questionnaireID = learningQuestionnaire.getId();
+        }
 
         for (int i = 0; i < questionIDs.size(); i++) {
 
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
 
-            questionnaireQuestion.setQid(learningQuestionnaireID);
+            questionnaireQuestion.setQid(questionnaireID);
             questionnaireQuestion.setQuestionid(questionIDs.get(i));
             questionnaireQuestion.setDeleted(false);
 
@@ -138,19 +161,33 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     @Override
     public void importPictures (File file, String name) throws ServiceException {
-        File dir = new File(System.getProperty("user.dir") + File.separator + name);
+
+        Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
+        File imgDir = new File(String.valueOf(imgPath));
+
+        if (!Files.exists(imgPath)) {
+            LOG.info("Image directory not found - will be created");
+            imgDir.mkdir();
+        }
+
+        File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
         dir.mkdir();
         File[] files = file.listFiles();
         if (files != null) {
             for (File child : files) {
-                String p = dir.getName()+"/"+child.getName();
+                String p = dir.getAbsolutePath() + File.separator + child.getName();
                 try {
                     Path path = Paths.get(p);
                     Files.copy(child.toPath(), path);
                 } catch (IOException e) {
+                    deletePictures(dir);
                     throw new ServiceException("Bild kann nicht gelesen werden: " + p);
                 }
             }
         }
+    }
+
+    public void deletePictures(File file) {
+        FileSystemUtils.deleteRecursively(file);
     }
 }

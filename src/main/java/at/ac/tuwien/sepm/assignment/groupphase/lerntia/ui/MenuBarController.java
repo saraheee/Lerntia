@@ -18,6 +18,10 @@ public class MenuBarController {
     private final ImportFileController importFileController;
     private final CreateCourseController createCourseController;
     private final SelectQuestionnaireController selectQuestionnaireController;
+    private final SelectExamController selectExamController;
+
+    private final LerntiaMainController lerntiaMainController;
+
     private final AdministrateQuestionnaireController administrateQuestionnaireController;
     private final AboutSectionController showAboutSectionController;
     private final AlertController alertController;
@@ -27,13 +31,18 @@ public class MenuBarController {
         ImportFileController importFileController,
         CreateCourseController createCourseController,
         SelectQuestionnaireController selectQuestionnaireController,
+        SelectExamController selectExamController,
+        LerntiaMainController lerntiaMainController,
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
-        AlertController alertController)
+        AlertController alertController
+    )
     {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;
+        this.selectExamController = selectExamController;
+        this.lerntiaMainController = lerntiaMainController;
         this.administrateQuestionnaireController = administrateQuestionnaireController;
         this.showAboutSectionController = showAboutSectionController;
         this.alertController = alertController;
@@ -50,6 +59,11 @@ public class MenuBarController {
     @FXML
     public void selectQuestionnaire(ActionEvent actionEvent) {
         selectQuestionnaireController.showSelectQuestionnaireWindow();
+    }
+
+    @FXML
+    public void switchToExamMode(ActionEvent actionEvent) {
+        selectExamController.showSelectExamWindow();
     }
 
     @FXML

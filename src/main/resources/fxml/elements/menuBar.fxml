@@ -41,7 +41,7 @@
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" text="In den Prüfungsmodus wechseln">
+        <MenuItem mnemonicParsing="false" onAction="#switchToExamMode" text="In den Prüfungsmodus wechseln">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/transfer2.png"/>

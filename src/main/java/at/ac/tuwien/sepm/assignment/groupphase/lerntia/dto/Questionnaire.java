@@ -2,24 +2,28 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 
 public abstract class Questionnaire {
-    private Long courseId;
+    private Long courseID;
     private Long id;
+    private String name;
+    private Boolean selected;
     private Boolean isDeleted;
 
     public Questionnaire() {}
 
-    public Questionnaire(Long courseId, Long id, Boolean isDeleted) {
-        this.courseId = courseId;
+    public Questionnaire(Long courseID, Long id, String name, Boolean selected, Boolean isDeleted) {
+        this.courseID = courseID;
         this.id = id;
+        this.name = name;
+        this.selected = selected;
         this.isDeleted = isDeleted;
     }
 
     public Long getCourseID() {
-        return courseId;
+        return courseID;
     }
 
     public void setCourseID(Long courseID) {
-        this.courseId = courseId;
+        this.courseID = courseID;
     }
 
     public Long getId() {
@@ -36,5 +40,21 @@ public abstract class Questionnaire {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 }

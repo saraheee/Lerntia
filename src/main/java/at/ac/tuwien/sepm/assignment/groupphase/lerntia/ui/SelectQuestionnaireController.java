@@ -3,12 +3,13 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +24,23 @@ public class SelectQuestionnaireController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
+    private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
 
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
-    private ComboBox<String> cb_questionnaire;
+    private ChoiceBox<String> cb_questionnaire;
 
-    public SelectQuestionnaireController(SimpleLearningQuestionnaireService learningQuestionnaireService,
-                                         LerntiaMainController lerntiaMainController, WindowController windowController) {
+    public SelectQuestionnaireController(
+        SimpleLearningQuestionnaireService learningQuestionnaireService,
+        IQuestionnaireService iQuestionnaireService,
+        LerntiaMainController lerntiaMainController,
+        WindowController windowController
+    ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
+        this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
     }
@@ -43,7 +50,6 @@ public class SelectQuestionnaireController {
 
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
-
         } catch (ServiceException e) {
             e.printStackTrace();
         }
@@ -70,12 +76,10 @@ public class SelectQuestionnaireController {
 
         // unselect all questionnaires
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
-            try {
-                learningQuestionnaireService.deselect(learningQuestionnaireList.get(i));
-            } catch (ServiceException e) {
-                e.printStackTrace();
-            }
+        try {
+            iQuestionnaireService.deselectAllQuestionnaires();
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
 
         // select questionnaire
