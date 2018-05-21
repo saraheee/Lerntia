@@ -29,10 +29,10 @@ public class WindowController {
         try {
             stage.setScene(new Scene(fxmlLoader.load()));
             LOG.debug("Successfully opened a new window with title: " + title);
+            stage.show();
         } catch (IOException e) {
             LOG.error("Failed to open a new window with title: " + title);
         }
-        stage.show();
         return stage;
     }
 

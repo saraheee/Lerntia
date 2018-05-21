@@ -11,8 +11,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireSer
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -23,7 +21,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -398,7 +395,8 @@ public class LerntiaMainController {
         // the state of the current question has to be saved here as well.
         saveAnswerState();
 
-        boolean handInConfirmation = alertController.showBigConfirmation("Abgeben", "Bist du sicher, dass du die Prüfung abgeben möchtest", "");
+        boolean handInConfirmation = alertController.showBigConfirmationAlert("Prüfung abgeben",
+            "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
         if (handInConfirmation == true){
             evaluateExam();
