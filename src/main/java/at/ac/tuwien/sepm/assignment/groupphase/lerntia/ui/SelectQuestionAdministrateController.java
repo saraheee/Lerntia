@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import javafx.collections.FXCollections;
@@ -9,9 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 @Controller
 public class SelectQuestionAdministrateController {
@@ -37,14 +38,20 @@ public class SelectQuestionAdministrateController {
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
+    private final IQuestionDAO questionDAO;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Stage stage;
 
 
-    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService, LerntiaMainController lerntiaMainController, WindowController windowController) {
+    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService,
+                                                LerntiaMainController lerntiaMainController,
+                                                WindowController windowController,
+                                                IQuestionDAO questionDAO)
+    {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
+        this.questionDAO = questionDAO;
     }
 
     public void initialize(){
@@ -58,7 +65,7 @@ public class SelectQuestionAdministrateController {
             e.printStackTrace();
         }
         //Fill the First Table.
-        tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
+        //tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
         tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
         tc_answer1.setCellValueFactory(new PropertyValueFactory<Question, String>("answer1"));
         tc_answer2.setCellValueFactory(new PropertyValueFactory<Question, String>("answer2"));
@@ -101,11 +108,53 @@ public class SelectQuestionAdministrateController {
 
     @FXML
     public void deleteQuestions(ActionEvent actionEvent) {
+        LOG.info("Delete Button Clicked");
+        ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+        if(selectedItems.size() == 0){
+            //Nothing is selected -> Show a warning window
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Fragen löschen");
+            warningAlert.setHeaderText("Min 1.Frage auswählen");
+            warningAlert.setContentText(null);
+            warningAlert.show();
+            return;
+        }
+
+        //If min. 1 question is selected.
+        Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        infoAlert.setTitle("Fragen löschen");
+        infoAlert.setHeaderText("Sollen die ausgewählten Fragen gelöscht werden?");
+        String allQuestions = "";
+        for(int i = 0;i<selectedItems.size();i++){
+            Question q = selectedItems.get(i);
+            allQuestions+= "\nFrage Nummer "+(i+1)+" : "+" BLA: "+q.getId()+q.getQuestionText();
+        }
+        infoAlert.setContentText(allQuestions);
+        Optional<ButtonType> result = infoAlert.showAndWait();
+        if(result.get() == ButtonType.OK){
+            LOG.info("LookHere: Es wird gelöscht");
+            for(int i = 0;i<selectedItems.size();i++){
+                try {
+                    questionDAO.delete(selectedItems.get(i));
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            LOG.info("LookHere2: Löschvorgang abgebrochen");
+        }
+
+
         //TODO Deleting Questions
     }
 
     @FXML
     public void markForExam(ActionEvent actionEvent) {
         //Todo Mark for Exam
+    }
+
+    @FXML
+    public void saveQuestion(ActionEvent actionEvent) {
+        //Todo saving the Operation
     }
 }
