@@ -5,6 +5,13 @@ import java.util.ArrayList;
 
 public interface IQuestionnaireImportDAO {
 
-    public ArrayList<String> getContents(String filePath ) throws IOException;
+    /**
+     * Get the contents of a File
+     *
+     * @param filePath the path to the File to be read
+     * @return a list of Strings representing the rows of the File
+     * @throws IOException if the File at filePath cannot be read
+     * */
+    public ArrayList<String> getContents(String filePath) throws IOException;
 
 }

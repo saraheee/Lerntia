@@ -13,7 +13,6 @@ public interface ITextToSpeechService {
      */
     void playWelcomeText() throws TextToSpeechServiceException;
 
-
     /**
      * Reads a question and all answers with an audio player
      *
@@ -37,12 +36,10 @@ public interface ITextToSpeechService {
      */
     void stopSpeaking();
 
-
     /**
      * Sets a certain voice for speaking
      *
      * @param textToSpeech the new textToSpeech object with the voice properties
      */
     void setVoice(Speech textToSpeech);
-
 }

@@ -195,5 +195,4 @@ public class MainLerntiaService implements IMainLerntiaService {
         return this.questionList;
     }
 
-
 }

@@ -29,7 +29,6 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
     private Connection connection;
 
-
     @Autowired
     public QuestionnaireQuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
@@ -40,6 +39,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             throw e;
         }
     }
+
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
         try {
@@ -122,7 +122,6 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage());
         }
-
     }
 
     @Override

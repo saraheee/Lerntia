@@ -25,5 +25,4 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
         return fileContent;
     }
-
 }

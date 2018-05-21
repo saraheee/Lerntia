@@ -25,7 +25,6 @@ public class SimpleQuestionService implements IQuestionService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private QuestionDAO questionDAO;
 
-
     @Autowired
     public SimpleQuestionService(QuestionDAO questionDAO){
             this.questionDAO = questionDAO;

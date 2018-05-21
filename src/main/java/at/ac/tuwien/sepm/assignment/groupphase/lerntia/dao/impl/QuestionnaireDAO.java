@@ -115,7 +115,6 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             LOG.error("Learningquestionnaire selection DAO error!");
             throw new PersistenceException(e.getMessage());
         }
-
     }
 
     @Override
@@ -159,8 +158,5 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             LOG.error("Questionnaire DAO getSelected error!");
             throw new PersistenceException(e.getMessage());
         }
-
     }
-
-
 }
