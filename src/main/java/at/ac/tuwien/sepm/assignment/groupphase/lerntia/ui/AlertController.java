@@ -1,11 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
-import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 
 @Controller
 public class AlertController {
@@ -35,6 +35,7 @@ public class AlertController {
     private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
     private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
     private boolean wrongAnswer = false;
+    private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
         var alert = new Alert(alertType);
@@ -58,13 +59,10 @@ public class AlertController {
         grid.getColumnConstraints().setAll(graphicColumn, textColumn);
         grid.setPadding(new Insets(5));
 
-        ImageView imageView;
         if (alertType == Alert.AlertType.ERROR) {
             imageView = new ImageView(ERROR);
         } else if (alertType == Alert.AlertType.WARNING) {
             imageView = new ImageView(WARNING);
-        } else if (alertType == Alert.AlertType.CONFIRMATION) {
-            imageView = new ImageView(CONFIRMATION);
         } else {
             imageView = new ImageView(INFO);
         }
@@ -85,11 +83,8 @@ public class AlertController {
         grid.add(headerLabel, 1, 0);
 
         dialogPane.setHeader(grid);
-        if (alertType == Alert.AlertType.CONFIRMATION) {
-            dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-        } else {
-            dialogPane.getButtonTypes().setAll(ButtonType.OK);
-        }
+        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
         stage.showAndWait();
@@ -165,40 +160,70 @@ public class AlertController {
         alert.showAndWait();
     }
 
-    public boolean showConfirmation( String title, String header, String content ) {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    public boolean showStandardConfirmationAlert(String title, String header, String content) {
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
 
-        Optional<ButtonType> result = alert.showAndWait();
-
-        return (result.get() == ButtonType.OK);
+        var result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    public boolean showBigConfirmation( String title, String header, String content ) {
-
+    public boolean showBigConfirmationAlert(String title, String header, String content) {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setResizable(true);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
 
-        var dialogPane = new DialogPane();
+        var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
-        dialogPane.getStyleClass().add("dialogue");
+        dialogPane.getStyleClass().add("dialogue-content");
 
-        dialogPane.setHeader(new Text(" " + header + " "));
-        dialogPane.setContent(new Text(" " + content + " "));
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
 
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        imageView = new ImageView(CONFIRMATION);
+        imageView.setFitWidth(84);
+        imageView.setFitHeight(84);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        headerLabel.getStyleClass().add("dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
         dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-        alert.setDialogPane(dialogPane);
-        var optional = alert.showAndWait();
 
-        if (optional.isPresent() && optional.get() == ButtonType.YES) {
-            return true;
-        } else {
-            return false;
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+
+        ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
+        for (var type : dialogPane.getButtonTypes()) {
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> {
+                result.set(type);
+            });
         }
+        stage.showAndWait();
+        LOG.trace("Showing a big confirmation alert with title: " + title);
+        return result.get() == ButtonType.YES;
     }
 }
