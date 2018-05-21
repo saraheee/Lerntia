@@ -95,21 +95,11 @@ public class SelectQuestionAdministrateController {
      * Loads the Data into the TableView
      */
     public void refresh(){
+        //Clear the Table and Load the new Data
+        tv_questionTable.getItems().clear();
+        tv_questionTable.getItems().addAll(getContent());
         try {
-            LOG.info("Selected: "+simpleLearningQuestionnaireService.getSelected().getName());
-            LearningQuestionnaire studyMode = simpleLearningQuestionnaireService.getSelected();
-            simpleLearningQuestionnaireService.deselect(studyMode);
-            simpleLearningQuestionnaireService.select(administrateMode);
-            LOG.info("Selected: "+simpleLearningQuestionnaireService.getSelected().getName());
-            //Clear the Table and Load the new Data
-            tv_questionTable.getItems().clear();
-            tv_questionTable.getItems().addAll(getContent());
-            simpleLearningQuestionnaireService.deselect(administrateMode);
-            simpleLearningQuestionnaireService.select(studyMode);
-           lerntiaMainController.getAndShowTheFirstQuestion();
-            //Back to the Normal selection
-        } catch (ServiceException e) {
-            e.printStackTrace();
+            lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
             e.printStackTrace();
         }
@@ -179,13 +169,23 @@ public class SelectQuestionAdministrateController {
             }
 
             LOG.info("Delete Complete - Start Refreshing");
-            refresh();
+            //Close Window and Open informationen Window
+            stage.close();
+            Alert deleteInfo = new Alert(Alert.AlertType.INFORMATION);
+            deleteInfo.setTitle(null);
+            deleteInfo.setHeaderText("Fragen wurden gelöscht");
+            deleteInfo.setContentText(null);
+            deleteInfo.show();
+            //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
+
+            try {
+                lerntiaMainController.getAndShowTheFirstQuestion();
+            } catch (ControllerException e) {
+                e.printStackTrace();
+            }
         }else{
-            LOG.info("LookHere2: Löschvorgang abgebrochen");
+            LOG.info("Cancled Delete Operation");
         }
-
-
-        //TODO Deleting Questions
     }
 
     @FXML
