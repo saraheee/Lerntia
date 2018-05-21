@@ -1,0 +1,12 @@
+.about-label {
+    -fx-font-size: 32px;
+    -fx-font-family: "Lora-Regular";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.about-text {
+    -fx-font-size: 16px;
+    -fx-font-family: "Lora-Regular";
+    -fx-text-fill: #333333;
+}

@@ -181,4 +181,19 @@ public class MainLerntiaService implements IMainLerntiaService {
     public List<Question> getQuestions() throws ServiceException {
         return questionList;
     }
+
+    /**
+     * Returns the Size of the ListCounter
+     */
+    @Override
+    public int getListcounter(){
+        return this.listcounter;
+    }
+
+    @Override
+    public List<Question> getQuestionList() {
+        return this.questionList;
+    }
+
+
 }

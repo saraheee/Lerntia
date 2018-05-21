@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0"
+            prefWidth="705.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AboutSectionController">
+    <ImageView fitHeight="85.0" fitWidth="76.0" layoutX="78.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@/icons/main.png"/>
+    </ImageView>
+    <Label layoutX="274.0" layoutY="119.0" styleClass="about-label" stylesheets="@/css/about.css" text="Über Lerntia"/>
+    <Label fx:id="about" layoutX="88.0" layoutY="227.0" styleClass="about-text" stylesheets="@/css/about.css"
+           text="Label" wrapText="true"/>
+</AnchorPane>

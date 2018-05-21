@@ -26,6 +26,7 @@ public class ZoomedImageController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final AlertController alertController;
+    private final WindowController windowController;
     private File imageFile;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private double screenWidth = screenSize.getWidth();
@@ -33,8 +34,9 @@ public class ZoomedImageController {
     private Scene imageScene;
 
     @Autowired
-    public ZoomedImageController(AlertController alertController) {
+    public ZoomedImageController(AlertController alertController, WindowController windowController) {
         this.alertController = alertController;
+        this.windowController = windowController;
     }
 
     @FXML
@@ -51,10 +53,6 @@ public class ZoomedImageController {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        var stage = new Stage();
-        stage.centerOnScreen();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("[Lerntia] Bild");
         var imageView = new ImageView();
         if (image != null) {
             imageView.setImage(image);
@@ -65,8 +63,7 @@ public class ZoomedImageController {
         var pane = new BorderPane();
         pane.setCenter(imageView);
         imageScene = new Scene(pane);
-        stage.setScene(imageScene);
-        stage.show();
+        windowController.openNewWindow("Bild", imageScene);
         LOG.debug("Successfully opened a window for the zoomed image");
 
         Platform.runLater(() -> imageScene.setOnKeyPressed(e -> {
