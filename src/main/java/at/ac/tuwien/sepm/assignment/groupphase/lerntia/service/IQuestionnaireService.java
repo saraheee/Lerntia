@@ -21,7 +21,10 @@ public interface IQuestionnaireService {
      * */
     void update(Questionnaire questionnaire) throws ServiceException;
 
+    /**
+     * Deselect every Questionnaire
+     *
+     * @throws ServiceException if the Questionnaires cannot be deselected
+     * */
     void deselectAllQuestionnaires() throws ServiceException;
-
-    Long getHighestID() throws ServiceException;
 }

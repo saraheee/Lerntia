@@ -153,7 +153,6 @@ public class QuestionDAO implements IQuestionDAO {
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage());
         }
-
     }
 
     @Override

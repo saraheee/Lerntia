@@ -104,6 +104,4 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
         return selectedLearningQuestionnaire;
     }
-
-
 }

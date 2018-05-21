@@ -15,7 +15,6 @@ public interface IMainLerntiaService {
 
     Question getFirstQuestion() throws ServiceException;
 
-
     /**
      * Return the next question (in order) form the selected questionnaire
      *
