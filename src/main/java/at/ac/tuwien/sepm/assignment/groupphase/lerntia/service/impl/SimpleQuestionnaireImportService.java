@@ -49,7 +49,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         String pathStr = file.getAbsolutePath();
 
-
         // TODO - fix duplicate code
 
         if (isExam){
@@ -162,6 +161,15 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     @Override
     public void importPictures (File file, String name) throws ServiceException {
+
+        Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
+        File imgDir = new File(String.valueOf(imgPath));
+
+        if (!Files.exists(imgPath)) {
+            LOG.info("Image directory not found - will be created");
+            imgDir.mkdir();
+        }
+
         File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
         dir.mkdir();
         File[] files = file.listFiles();
