@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
@@ -47,6 +48,7 @@ public class LerntiaMainController {
     private final IQuestionnaireService questionnaireService;
 
     private final ILearningQuestionnaireService learningQuestionnaireService;
+    private final IExamResultsWriterService iExamResultsWriterService;
 
     @FXML
     private HBox mainWindow;
@@ -93,7 +95,8 @@ public class LerntiaMainController {
         AlertController alertController,
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
-        IQuestionnaireService questionnaireService
+        IQuestionnaireService questionnaireService,
+        IExamResultsWriterService iExamResultsWriterService
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -105,6 +108,7 @@ public class LerntiaMainController {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.zoomedImageController = zoomedImageController;
         this.questionnaireService = questionnaireService;
+        this.iExamResultsWriterService = iExamResultsWriterService;
     }
 
     @FXML
@@ -405,32 +409,9 @@ public class LerntiaMainController {
             e.printStackTrace();
         }
 
-        var report = "";
+        // TODO - fragen wo die pdf datei gespeichert werden soll
 
-        for (var i = 0; i < questionList.size(); i++){
-
-            System.out.println(questionList.get(i).getQuestionText());
-
-            boolean answersCorrect = false;
-
-            try {
-                var checkedAnswers = questionList.get(i).getCheckedAnswers();
-                answersCorrect = checkedAnswers.equals(questionList.get(i).getCorrectAnswers());
-            } catch (NullPointerException e){
-                // TODO - mindestens eine frage nicht beantwortet.
-                // oder gilt das dann als falsch?
-            }
-
-            report += questionList.get(i).getQuestionText();
-            if (answersCorrect){
-                report += " richtig";
-            } else {
-                report += " falsch";
-            }
-            report += "\n";
-        }
-
-        alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis", "Fragen", report);
+        iExamResultsWriterService.writeExamResults(questionList, "");
 
     }
 
