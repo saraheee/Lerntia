@@ -208,12 +208,33 @@ public class LerntiaMainController {
         LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
-            alertController.showCorrectAnswerAlert("Antworten richtig!", "Alle Antworten sind richtig.",
-                "Die nächste Frage wird angezeigt.");
+            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                alertController.showCorrectAnswerAlert("Antwort richtig!", "Die Antwort ist richtig.\n"+getMethod(question.getCorrectAnswers()),
+                    question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+            }
+            else {
+                String answers = "Alle richtigen Antworten sind:\n";
+                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                }
+                alertController.showCorrectAnswerAlert("Antworten richtig!", answers,
+                    question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+            }
+
         } else {
-            alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Richtige Antworten: " +
-                question.getCorrectAnswers().replaceAll("(.)", "$1, ")
-                    .substring(0, question.getCorrectAnswers().length() * 3 - 2), "Die nächste Frage wird angezeigt.");
+            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die richtige Antwort ist\n" + getMethod(question.getCorrectAnswers()), question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+            }
+            else {
+                String answers = "Die richtigen Antworten sind:\n";
+                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i+1)))) {
+                        answers += "Auch: ";
+                    }
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                }
+                alertController.showWrongAnswerAlert("Antworten nicht richtig.", answers, question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+            }
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
@@ -451,5 +472,16 @@ public class LerntiaMainController {
     private void saveAnswerState(){
         String checkedAnswers = getCheckedAnswers();
         question.setCheckedAnswers(checkedAnswers);
+    }
+
+    private String getMethod(String str) {
+        switch (str) {
+            case "1":   return question.getAnswer1()+"\n";
+            case "2":   return question.getAnswer2()+"\n";
+            case "3":   return question.getAnswer3()+"\n";
+            case "4":   return question.getAnswer4()+"\n";
+            case "5":   return question.getAnswer5()+"\n";
+            default:    return "";
+        }
     }
 }
