@@ -25,6 +25,14 @@
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.4);
+}
+
 .button:default {
     -fx-background-color: rgba(0, 250, 50, 0.4);
+}
+
+.button:default:hover {
+    -fx-background-color: rgba(0, 250, 50, 0.55);
 }

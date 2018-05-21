@@ -41,6 +41,7 @@ public class ImportFileController {
     private final SimpleQuestionnaireImportService qservice;
     private final AlertController alertController;
 
+    private final WindowController windowController;
     private File file;
     private File directory;
     private List<Course> coursedata = new ArrayList<>();
@@ -60,9 +61,15 @@ public class ImportFileController {
     private CheckBox questionnaireIsExam;
 
     @Autowired
-    public ImportFileController(SimpleCourseService simpleCourseService, SimpleQuestionnaireImportService simpleQuestionnaireImportService, AlertController alertController) throws PersistenceException {
+    public ImportFileController(
+        SimpleCourseService simpleCourseService,
+        SimpleQuestionnaireImportService simpleQuestionnaireImportService,
+        WindowController windowController,
+        AlertController alertController
+    ) {
         cservice = simpleCourseService;
         qservice = simpleQuestionnaireImportService;
+        this.windowController = windowController;
         this.alertController = alertController;
     }
 
@@ -150,17 +157,8 @@ public class ImportFileController {
 
     void showImportWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/importFile.fxml"));
-        var stage = new Stage();
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] Import Infos");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for importing questions.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for importing questions. " + e.getMessage());
-        }
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        windowController.openNewWindow("Fragebogen importieren", fxmlLoader);
+
     }
 }

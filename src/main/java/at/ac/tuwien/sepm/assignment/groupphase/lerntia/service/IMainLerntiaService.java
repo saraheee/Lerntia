@@ -48,4 +48,14 @@ public interface IMainLerntiaService {
     void recordCheckedAnswers(Question mockQuestion) throws ServiceException;
 
     List<Question> getQuestions() throws ServiceException;
+
+    /**
+     * Returns the Size of the ListCounter
+     */
+    public int getListcounter();
+
+    /**
+     * Returns the QuistionList
+     */
+    public List<Question> getQuestionList();
 }
