@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ImportFileController">
-    <children>
-        <Button layoutX="201.0" layoutY="137.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="26.0" prefWidth="150.0" text="csv auswählen..." />
-        <Button layoutX="132.0" layoutY="262.0" mnemonicParsing="false" onAction="#importFile" prefHeight="37.0" prefWidth="113.0" text="Importieren" />
-        <Text fx:id="t_filename" layoutX="28.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keine Datei ausgewählt" />
-        <Label layoutX="28.0" layoutY="93.0" text="Name des Fragebogens:" />
-        <Label layoutX="28.0" layoutY="42.0" text="Lehrveranstaltung:" />
-        <TextField fx:id="tf_questionnaire" layoutX="201.0" layoutY="88.0" prefHeight="26.0" prefWidth="150.0" />
-        <ChoiceBox fx:id="cb_course" layoutX="201.0" layoutY="38.0" prefWidth="150.0" />
-        <Button layoutX="201.0" layoutY="188.0" mnemonicParsing="false" onAction="#selectDirectory" prefHeight="26.0" prefWidth="150.0" text="Bilder auswählen..." />
-        <Text fx:id="t_directoryname" layoutX="27.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kein Ordner ausgewählt" />
-        <CheckBox fx:id="questionnaireIsExam" layoutX="71.0" layoutY="234.0" mnemonicParsing="false" text="Es handelt sich um eine Prüfung" />
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0"
+            prefWidth="376.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ImportFileController">
+    <Label layoutX="28.0" layoutY="42.0" text="Lehrveranstaltung:"/>
+    <ComboBox fx:id="cb_course" layoutX="201.0" layoutY="38.0" prefWidth="150.0"/>
+    <Label layoutX="28.0" layoutY="93.0" text="Name des Fragebogens:"/>
+    <TextField fx:id="tf_questionnaire" layoutX="201.0" layoutY="88.0" prefHeight="26.0" prefWidth="150.0"/>
+    <Text fx:id="t_filename" layoutX="28.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Keine Datei ausgewählt"/>
+    <Button layoutX="201.0" layoutY="137.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="26.0"
+            prefWidth="150.0" text="csv auswählen..."/>
+    <Text fx:id="t_directoryname" layoutX="28.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Kein Ordner ausgewählt"/>
+    <Button layoutX="201.0" layoutY="188.0" mnemonicParsing="false" onAction="#selectDirectory" prefHeight="26.0"
+            prefWidth="150.0" text="Bilder auswählen..."/>
+    <CheckBox fx:id="questionnaireIsExam" layoutX="71.0" layoutY="234.0" mnemonicParsing="false"
+              text="Es handelt sich um eine Prüfung"/>
+    <Button layoutX="116.0" layoutY="262.0" mnemonicParsing="false" onAction="#importFile" prefHeight="37.0"
+            prefWidth="129.0" text="Importieren"/>
 </AnchorPane>
