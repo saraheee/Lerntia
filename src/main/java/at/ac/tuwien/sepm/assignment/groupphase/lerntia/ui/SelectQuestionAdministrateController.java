@@ -22,6 +22,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.h2.command.ddl.AlterTableAddConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -135,26 +136,17 @@ public class SelectQuestionAdministrateController {
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
         if(selectedItems.size() == 0){
             //Nothing is selected -> Show a warning window
-            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
-            warningAlert.setTitle("Fragen löschen");
-            warningAlert.setHeaderText("Min 1.Frage auswählen");
-            warningAlert.setContentText(null);
-            warningAlert.show();
+            AlertController alertController = new AlertController();
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen", "Bitte wählen Sie " +
+                "min. 1 Frage aus", null);
             return;
         }
 
         //If min. 1 question is selected.
-        Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        infoAlert.setTitle("Fragen löschen");
-        infoAlert.setHeaderText("Sollen die ausgewählte/n Frage/n gelöscht werden?");
-        String allQuestions = "";
-        for(int i = 0;i<selectedItems.size();i++){
-            Question q = selectedItems.get(i);
-            allQuestions+= "Es wurden: "+selectedItems.size()+" ausgewählt";
-        }
-        infoAlert.setContentText(allQuestions);
-        Optional<ButtonType> result = infoAlert.showAndWait();
-        if(result.get() == ButtonType.OK){
+        AlertController alertController = new AlertController();
+        boolean press = alertController.showStandardConfirmationAlert("Fragen löschen",
+            "Sollen die ausgewählte/n Frage/n gelöscht werden?","Es wurden: "+selectedItems.size()+" ausgewählt");
+        if(press){
             LOG.info("LookHere: Es wird gelöscht");
             for(int i = 0;i<selectedItems.size();i++){
                 try {
@@ -171,13 +163,10 @@ public class SelectQuestionAdministrateController {
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open informationen Window
             stage.close();
-            Alert deleteInfo = new Alert(Alert.AlertType.INFORMATION);
-            deleteInfo.setTitle(null);
-            deleteInfo.setHeaderText("Fragen wurden gelöscht");
-            deleteInfo.setContentText(null);
-            deleteInfo.show();
-            //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Löschvorgang abgeschlossen","Fragen wurden gelöscht",null);
 
+
+            //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
