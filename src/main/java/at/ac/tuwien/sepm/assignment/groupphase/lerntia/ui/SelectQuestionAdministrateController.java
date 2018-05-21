@@ -146,11 +146,11 @@ public class SelectQuestionAdministrateController {
         //If min. 1 question is selected.
         Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
         infoAlert.setTitle("Fragen löschen");
-        infoAlert.setHeaderText("Sollen die ausgewählten Fragen gelöscht werden?");
+        infoAlert.setHeaderText("Sollen die ausgewählte/n Frage/n gelöscht werden?");
         String allQuestions = "";
         for(int i = 0;i<selectedItems.size();i++){
             Question q = selectedItems.get(i);
-            allQuestions+= "\nFrage Nummer "+(i+1)+" : "+" BLA: "+q.getId()+q.getQuestionText();
+            allQuestions+= "Es wurden: "+selectedItems.size()+" ausgewählt";
         }
         infoAlert.setContentText(allQuestions);
         Optional<ButtonType> result = infoAlert.showAndWait();
