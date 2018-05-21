@@ -116,6 +116,8 @@ public class MainLerntiaService implements IMainLerntiaService {
         Question question;
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(lQ.getId());
+        //Todo Delete the next Line.
+        LOG.info("LOOOK: "+lQ.getName()+" - "+ lQ.getId()+" tmp:  -" +questionnaireQuestion.getQid());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
         while (!questionnaireQuestionsList.isEmpty()){
             question = new Question();
