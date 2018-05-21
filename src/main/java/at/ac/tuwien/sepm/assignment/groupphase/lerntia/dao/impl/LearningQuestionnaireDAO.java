@@ -18,16 +18,12 @@ import java.util.List;
 public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id,name) VALUES (?,?)";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id) VALUES (?)";
     private static final String SQL_LEARNINGQUESTIONNAIRE_UPDATE_STATEMENT = "";
     private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
-    private static final String SQL_LEARNINGQUESTIONNAIRE_SELECT_STATEMENT = "UPDATE LearningQuestionnaire SET selected = true where id = ?";
-    private static final String SQL_LEARNINGQUESTIONNAIRE_DESELECT_STATEMENT = "UPDATE LearningQuestionnaire SET selected = false where id = ?";
-    private static final String SQL_LEARNINGQUESTIONNAIRE_GETSELECTED_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE selected = true";
 
     private Connection connection;
     private QuestionnaireDAO questionaireDAO;
-
 
     @Autowired
     public LearningQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
@@ -52,17 +48,19 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             LOG.info("Prepare Statement for LearningQuestionnaire...");
 
             PreparedStatement pscreate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT);
+
             try {
                 pscreate.setLong(1, learningQuestionnaire.getId());
-                pscreate.setString(2, learningQuestionnaire.getName());
                 pscreate.executeUpdate();
                 LOG.info("Statement for LearningQuestionnaire succesfully sent.");
             }finally {
                 pscreate.close();
             }
         } catch (SQLException e) {
+            LOG.error("LearningQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
+        //TODO after questionaireDAO create for the learningquestionaire
     }
 
     @Override
@@ -91,7 +89,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
                     while (rsreadall.next()) {
                         learning = new LearningQuestionnaire();
                         learning.setId(rsreadall.getLong(1));
-                        learning.setName(rsreadall.getString(2));
+                        learning.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
                         list.add(learning);
                     }
                     LOG.info("All LearningQuestionnaires found.");
@@ -101,70 +99,24 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
                 }
             }
         } catch (SQLException e) {
+            LOG.error("LearningQuestionnaire DAO READALL error!");
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Override
     public void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
-
-        try {
-            LOG.info("Prepare statement for learningquestionnaire selectione.");
-            PreparedStatement psupdate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_SELECT_STATEMENT);
-            try {
-                psupdate.setLong(1, learningQuestionnaire.getId());
-                psupdate.executeUpdate();
-                LOG.info("Learningquestionnaire succesfully selected in Database.");
-            }finally {
-                psupdate.close();
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
-        }
-
+        questionaireDAO.select(learningQuestionnaire);
     }
 
     @Override
     public void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
-        try {
-            LOG.info("Prepare statement for learningquestionnaire selectione.");
-            PreparedStatement psupdate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_DESELECT_STATEMENT);
-            try {
-                psupdate.setLong(1, learningQuestionnaire.getId());
-                psupdate.executeUpdate();
-                LOG.info("Learningquestionnaire succesfully deselected in Database.");
-            }finally {
-                psupdate.close();
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
-        }
+        questionaireDAO.deselect(learningQuestionnaire);
     }
 
     @Override
     public LearningQuestionnaire getSelected() throws PersistenceException {
-
-        try {
-            LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");
-            LearningQuestionnaire selectedlearningQuestionnaire = new LearningQuestionnaire();
-            try (ResultSet rsgetselected = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_GETSELECTED_STATEMENT).executeQuery()) {
-                try {
-                    LearningQuestionnaire learning;
-                    if (rsgetselected.next()) {
-                        selectedlearningQuestionnaire.setId(rsgetselected.getLong(1));
-                        selectedlearningQuestionnaire.setName(rsgetselected.getString(2));
-                    }
-                    LOG.info("Selected Learning Questionnaire found.");
-                    return selectedlearningQuestionnaire;
-
-                }finally {
-                    rsgetselected.close();
-                }
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
-        }
-
+        return (LearningQuestionnaire) questionaireDAO.getSelected();
     }
 
 }

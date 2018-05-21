@@ -4,18 +4,26 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
+import java.util.List;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -36,7 +45,10 @@ public class LerntiaMainController {
     private final AudioController audioController;
     private final AlertController alertController;
 
+    private final IQuestionnaireService questionnaireService;
+
     private final ILearningQuestionnaireService learningQuestionnaireService;
+    private final IExamResultsWriterService iExamResultsWriterService;
 
     @FXML
     private HBox mainWindow;
@@ -63,10 +75,18 @@ public class LerntiaMainController {
     @FXML
     private ZoomButtonController zoomButtonController;
 
+    @FXML
+    private ButtonBar buttonBar;
+    @FXML
+    private Button checkAnswerButton;
+    @FXML
+    private Button handInButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
     private File imageFile;
+
+    private boolean examMode;
 
     @Autowired
     public LerntiaMainController(
@@ -74,7 +94,9 @@ public class LerntiaMainController {
         AudioController audioController,
         AlertController alertController,
         ILearningQuestionnaireService learningQuestionnaireService,
-        ZoomedImageController zoomedImageController
+        ZoomedImageController zoomedImageController,
+        IQuestionnaireService questionnaireService,
+        IExamResultsWriterService iExamResultsWriterService
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -85,12 +107,16 @@ public class LerntiaMainController {
         this.alertController = alertController;
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.zoomedImageController = zoomedImageController;
+        this.questionnaireService = questionnaireService;
+        this.iExamResultsWriterService = iExamResultsWriterService;
     }
 
     @FXML
     private void initialize() {
         mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
+
+        buttonBar.getButtons().remove(handInButton);
 
         try {
             getAndShowTheFirstQuestion();
@@ -176,22 +202,7 @@ public class LerntiaMainController {
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
-        String checkedAnswers = "";
-        if (answer1Controller.isSelected()) {
-            checkedAnswers += "1";
-        }
-        if (answer2Controller.isSelected()) {
-            checkedAnswers += "2";
-        }
-        if (answer3Controller.isSelected()) {
-            checkedAnswers += "3";
-        }
-        if (answer4Controller.isSelected()) {
-            checkedAnswers += "4";
-        }
-        if (answer5Controller.isSelected()) {
-            checkedAnswers += "5";
-        }
+        String checkedAnswers = getCheckedAnswers();
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
         LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
@@ -236,13 +247,21 @@ public class LerntiaMainController {
     @FXML
     private void getAndShowNextQuestion() {
         try {
+            // save checked answers
+            saveAnswerState();
+
+            // get next questions
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
+
+            if ( ! isExamMode()) {
+                alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
+                    "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
+            }
+
             try {
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
@@ -254,14 +273,23 @@ public class LerntiaMainController {
     @FXML
     private void getAndShowPreviousQuestion() {
         try {
+            // save checked answers
+            saveAnswerState();
+
+            // get next questions
             question = lerntiaService.getPreviousQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
-                "Du bist am Anfang.", "");
+
+            if ( ! isExamMode()) {
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
+                    "Du bist am Anfang.", "");
+            }
+
             try {
+                // TODO - here we could switch to the last question
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
@@ -284,6 +312,19 @@ public class LerntiaMainController {
         setAnswerText(answer3Controller, question.getAnswer3());
         setAnswerText(answer4Controller, question.getAnswer4());
         setAnswerText(answer5Controller, question.getAnswer5());
+
+        var checkedAnswers = question.getCheckedAnswers();
+
+        try {
+            answer1Controller.setSelected(checkedAnswers.contains("1"));
+            answer2Controller.setSelected(checkedAnswers.contains("2"));
+            answer3Controller.setSelected(checkedAnswers.contains("3"));
+            answer4Controller.setSelected(checkedAnswers.contains("4"));
+            answer5Controller.setSelected(checkedAnswers.contains("5"));
+        } catch (NullPointerException e){
+            // nothing has been selected if the question is shown for the first time.
+            // this can be ignored.
+        }
 
         audioController.setAnswer1(answer1Controller.getAnswerText());
         audioController.setAnswer2(answer2Controller.getAnswerText());
@@ -311,9 +352,10 @@ public class LerntiaMainController {
                 }
                 if (selectedLearningQuestionnaire != null) {
                     String imagePath =
-                        System.getProperty("user.dir") + File.separator +
+                        System.getProperty("user.dir") + File.separator + "img" + File.separator +
                             selectedLearningQuestionnaire.getName() + File.separator +
-                            question.getPicture();
+                            question.getPicture()
+                        ;
 
                     LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                     File imageFile = new File(imagePath);
@@ -344,5 +386,70 @@ public class LerntiaMainController {
     public void stopAudio() {
         LOG.debug("Stop Audio");
         audioButtonController.stopReading();
+    }
+
+    public void switchToExamMode(){
+        buttonBar.getButtons().remove(checkAnswerButton);
+        buttonBar.getButtons().add(handInButton);
+    }
+
+    public void handIn(ActionEvent actionEvent) {
+
+        // the state of the current question has to be saved here as well.
+        saveAnswerState();
+
+        boolean handInConfirmation = alertController.showBigConfirmation("Abgeben", "Bist du sicher, dass du die Prüfung abgeben möchtest", "");
+
+        if (handInConfirmation == true){
+            evaluateExam();
+        }
+    }
+
+    public void evaluateExam(){
+
+        List<Question> questionList = null;
+        try {
+            questionList = lerntiaService.getQuestions();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        // TODO - fragen wo die pdf datei gespeichert werden soll
+
+        iExamResultsWriterService.writeExamResults(questionList, "");
+
+    }
+
+    public boolean isExamMode() {
+        return examMode;
+    }
+
+    public void setExamMode(boolean examMode) {
+        this.examMode = examMode;
+    }
+
+    private String getCheckedAnswers(){
+        String checkedAnswers = "";
+        if (answer1Controller.isSelected()) {
+            checkedAnswers += "1";
+        }
+        if (answer2Controller.isSelected()) {
+            checkedAnswers += "2";
+        }
+        if (answer3Controller.isSelected()) {
+            checkedAnswers += "3";
+        }
+        if (answer4Controller.isSelected()) {
+            checkedAnswers += "4";
+        }
+        if (answer5Controller.isSelected()) {
+            checkedAnswers += "5";
+        }
+        return checkedAnswers;
+    }
+
+    private void saveAnswerState(){
+        String checkedAnswers = getCheckedAnswers();
+        question.setCheckedAnswers(checkedAnswers);
     }
 }

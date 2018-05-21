@@ -2,7 +2,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import javafx.collections.ObservableList;
+
+import java.util.List;
 
 public interface IExamQuestionnaireService {
 
@@ -38,5 +41,11 @@ public interface IExamQuestionnaireService {
      * */
     void delete(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
-    ObservableList readAll() throws ServiceException;
+    List<ExamQuestionnaire> readAll() throws ServiceException;
+
+    void select(ExamQuestionnaire examQuestionnaire) throws ServiceException;
+
+    void deselect(ExamQuestionnaire examQuestionnaire) throws ServiceException;
+
+    ExamQuestionnaire getSelected() throws ServiceException;
 }

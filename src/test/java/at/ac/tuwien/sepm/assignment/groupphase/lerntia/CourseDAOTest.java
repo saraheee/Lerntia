@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class CourseDAOTest {
     public void createNewCourse() throws PersistenceException {
         try {
             Course course = new Course();
-            course.setSemester("2018W");
+            course.setSemester(Semester.WS+"18");
             course.setName("ECG");
             course.setMark("124.119");
             courseDAO.create(course);
@@ -59,7 +60,7 @@ public class CourseDAOTest {
     public void createNewCourseError() throws PersistenceException {
         try {
             Course tgi = new Course();
-            tgi.setSemester("2018W");
+            tgi.setSemester(Semester.SS+"18");
             tgi.setName("TGI");
             tgi.setMark(null);
             courseDAO.create(tgi);
@@ -72,14 +73,14 @@ public class CourseDAOTest {
     public void updateExistingUserandReadUser()throws PersistenceException{
         try {
             Course course = new Course();
-            course.setSemester("2017S");
+            course.setSemester(Semester.SS+"17");
             course.setMark("151.999");
             course.setName("Akustik 2");
             courseDAO.create(course);
 
             Course courseUpdated = new Course();
             courseUpdated.setId(course.getId());
-            courseUpdated.setSemester("2018W");
+            courseUpdated.setSemester(Semester.WS+"18");
             courseUpdated.setMark("151.999");
             courseUpdated.setName("Akustik 2");
 
@@ -95,13 +96,12 @@ public class CourseDAOTest {
     public void deleteCourse() throws PersistenceException {
         try {
             Course tgi = new Course();
-            tgi.setSemester("2018S");
+            tgi.setSemester(Semester.SS+"18");
             tgi.setMark("123.349");
             tgi.setName("TGI");
             courseDAO.create(tgi);
             Course tgidelete =new Course();
             tgidelete.setMark(tgi.getMark());
-            System.out.println(tgi.getId());
             tgidelete.setId(tgi.getId());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
@@ -113,7 +113,7 @@ public class CourseDAOTest {
     public void deleteCourseError() throws PersistenceException{
         try {
             Course tgi = new Course();
-            tgi.setSemester("2018S");
+            tgi.setSemester(Semester.SS+"18");
             tgi.setMark("111.222");
             tgi.setName("Informatik 1");
             courseDAO.create(tgi);
@@ -124,35 +124,36 @@ public class CourseDAOTest {
         }
     }
 
-
     @Test
     public void countSizeofReadAll() throws PersistenceException{
 
+        int currentNumber = courseDAO.readAll().size();
+
         Course ECV = new Course();
-        ECV.setSemester("2015S");
+        ECV.setSemester(Semester.SS+"15");
         ECV.setMark("123.111");
         ECV.setName("ECV");
         courseDAO.create(ECV);
 
         List list = courseDAO.readAll();
-        assertEquals(3,list.size());
+        assertEquals(currentNumber+1,list.size());
         courseDAO.delete(ECV);
 
         List list2 = courseDAO.readAll();
-        assertEquals(2,list2.size());
+        assertEquals(currentNumber,list2.size());
     }
 
     @Test
     public void keyTest() throws PersistenceException{
 
         Course PK1 = new Course();
-        PK1.setSemester("2016W");
+        PK1.setSemester(Semester.WS+"16");
         PK1.setMark("112.659asdf");
         PK1.setName("Programmieren 1");
         courseDAO.create(PK1);
 
         Course tgi = new Course();
-        tgi.setSemester("2016W");
+        tgi.setSemester(Semester.WS+"16");
         tgi.setMark("126.349asdf");
         tgi.setName("TGI");
         courseDAO.create(tgi);

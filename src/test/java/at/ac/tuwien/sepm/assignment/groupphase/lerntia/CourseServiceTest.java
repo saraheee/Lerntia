@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class CourseServiceTest {
 
     @Test
     public void validateCorrectCourse() throws ServiceException {
-        Course course = new Course("asdf", "2018S", "asdf", false);
+        Course course = new Course("asdf", Semester.SS+"18", "asdf", false);
         courseService.validate(course);
     }
 
@@ -50,7 +51,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateNoMark() throws ServiceException {
-        Course course = new Course("", "2018S", "asdf", false);
+        Course course = new Course("", Semester.SS+"18", "asdf", false);
         courseService.validate(course);
     }
 
@@ -58,7 +59,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateNoName() throws ServiceException {
-        Course course = new Course("asdf", "2018S", "", false);
+        Course course = new Course("asdf", Semester.SS+"18", "", false);
         courseService.validate(course);
     }
 
@@ -66,7 +67,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateSemesterDoesntEndWithWOrS() throws ServiceException {
-        Course course = new Course("asdf", "2018F", "asdf", false);
+        Course course = new Course("asdf", "FF18", "asdf", false);
         courseService.validate(course);
     }
 
@@ -74,7 +75,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateYearIsNotAnInteger() throws ServiceException {
-        Course course = new Course("asdf", "asdfS", "asdf", false);
+        Course course = new Course("asdf", Semester.SS+"asdf", "asdf", false);
         courseService.validate(course);
     }
 
@@ -82,7 +83,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateYearIsNotFourDigits() throws ServiceException {
-        Course course = new Course("asdf", "18S", "asdf", false);
+        Course course = new Course("asdf", Semester.SS+"12345", "asdf", false);
         courseService.validate(course);
     }
 

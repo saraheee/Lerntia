@@ -1,7 +1,11 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
+
+import java.util.List;
 
 public interface IQuestionnaireDAO {
 
@@ -20,4 +24,12 @@ public interface IQuestionnaireDAO {
      * @throws PersistenceException if the method can't update the Questionnaire
      * */
     void update(Questionnaire questionnaire) throws PersistenceException;
+
+    String getQuestionnaireName(Long id) throws PersistenceException;
+
+    void select(Questionnaire questionnaire) throws PersistenceException;
+
+    void deselect(Questionnaire questionnaire) throws PersistenceException;
+
+    Questionnaire getSelected() throws PersistenceException;
 }

@@ -1,21 +1,26 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireImportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +39,8 @@ public class ImportFileController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final SimpleCourseService cservice;
     private final SimpleQuestionnaireImportService qservice;
+    private final AlertController alertController;
+
     private final WindowController windowController;
     private File file;
     private File directory;
@@ -48,15 +56,21 @@ public class ImportFileController {
     @FXML
     private TextField tf_questionnaire;
     @FXML
-    private ComboBox<String> cb_course;
+    private ChoiceBox<String> cb_course;
+    @FXML
+    private CheckBox questionnaireIsExam;
 
     @Autowired
-    public ImportFileController(SimpleCourseService simpleCourseService,
-                                SimpleQuestionnaireImportService simpleQuestionnaireImportService,
-                                WindowController windowController) {
+    public ImportFileController(
+        SimpleCourseService simpleCourseService,
+        SimpleQuestionnaireImportService simpleQuestionnaireImportService,
+        WindowController windowController,
+        AlertController alertController
+    ) {
         cservice = simpleCourseService;
         qservice = simpleQuestionnaireImportService;
         this.windowController = windowController;
+        this.alertController = alertController;
     }
 
     @FXML
@@ -98,63 +112,47 @@ public class ImportFileController {
 
     @FXML
     public void importFile(ActionEvent actionEvent) {
+
+        String name = tf_questionnaire.getText().trim();
+
+        if (name.equals("")) {
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Fehlerhafter Name","Warnung","Bitte gib einen gültigen Namen an!");
+            return;
+        }
+
         if (directory != null) {
             try {
-                qservice.importPictures(directory, tf_questionnaire.getText());
-            } catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
+                qservice.importPictures(directory, name);
+            }
+            catch (ServiceException e) {
+                // TODO - e.getMessage()
+                alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         }
         if (file != null) {
             try {
-                String name = tf_questionnaire.getText();
+                String course = cb_course.getSelectionModel().getSelectedItem();
 
-                if (!name.equals("")) {
+                int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
+                Course selectedCourse = courses.get(cb_courseIndex);
 
-                    String course = cb_course.getSelectionModel().getSelectedItem();
-
-                    int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
-                    Course selectedCourse = courses.get(cb_courseIndex);
-
-                    qservice.importQuestionnaire(file, selectedCourse, name);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("[Lerntia] Import erfolgreich");
-                    alert.setHeaderText("Erfolgreich");
-                    alert.setContentText("Alle Fragen wurden erfolgreich importiert");
-                    alert.setResizable(true);
-                    alert.showAndWait();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("[Lerntia] Fehlerhafter Name");
-                    alert.setHeaderText("Warnung");
-                    alert.setContentText("Bitte gib einen gültigen Namen an!");
-                    alert.setResizable(true);
-                    alert.showAndWait();
-                }
+                qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Import erfolgreich","Erfolgreich","Alle Fragen wurden erfolgreich importiert");
+                Node source = (Node) actionEvent.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
             } catch (ServiceException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("[Lerntia] Import fehlgeschlagen");
-                alert.setHeaderText("Fehler");
-                alert.setContentText(e.getMessage());
-                alert.setResizable(true);
-                alert.showAndWait();
+                // TODO - e.getMessage()
+                qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
+                alertController.showStandardAlert(Alert.AlertType.ERROR,"Import fehlgeschlagen","Fehler",e.getMessage());
+                return;
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("[Lerntia] Kein File ausgewählt");
-            alert.setHeaderText("Achtung");
-            alert.setContentText("Bitte wähle zuerst eine csv-Datei aus!");
-            alert.setResizable(true);
-            alert.showAndWait();
+            qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
+            alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein File ausgewählt","Achtung","Bitte wähle zuerst eine csv-Datei aus!");
+            return;
         }
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 
     void showImportWindow() {
