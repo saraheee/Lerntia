@@ -34,7 +34,7 @@ public class SelectQuestionnaireController {
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
     @FXML
-    private ComboBox<String> cb_questionnaire;
+    private ChoiceBox<String> cb_questionnaire;
 
     public SelectQuestionnaireController(
         SimpleLearningQuestionnaireService learningQuestionnaireService,
