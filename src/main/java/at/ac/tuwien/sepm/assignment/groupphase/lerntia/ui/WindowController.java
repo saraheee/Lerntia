@@ -32,6 +32,7 @@ public class WindowController {
             stage.show();
         } catch (IOException e) {
             LOG.error("Failed to open a new window with title: " + title);
+            e.printStackTrace();
         }
         return stage;
     }

@@ -1,35 +1,26 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireQuestionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.h2.command.ddl.AlterTableAddConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 
 @Controller
 public class SelectQuestionAdministrateController {
@@ -47,26 +38,28 @@ public class SelectQuestionAdministrateController {
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
     private final IQuestionService questionDAO;
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
+    private final EditQuestionsController editQuestionsController;
 
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Stage stage;
     private LearningQuestionnaire administrateMode;
 
-    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService,
-                                                LerntiaMainController lerntiaMainController,
-                                                WindowController windowController,
-                                                IQuestionService questionDAO,
-                                                SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
-                                                IQuestionnaireQuestionService questionnaireQuestionService)
+    public SelectQuestionAdministrateController(
+        IMainLerntiaService lerntiaService,
+        LerntiaMainController lerntiaMainController,
+        WindowController windowController,
+        IQuestionService questionDAO,
+        EditQuestionsController editQuestionsController,
+        IQuestionnaireQuestionService questionnaireQuestionService
+    )
     {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.questionDAO = questionDAO;
-        this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
     }
 
@@ -127,6 +120,28 @@ public class SelectQuestionAdministrateController {
 
     @FXML
     public void editQuestion(ActionEvent actionEvent) {
+
+        AlertController alertController = new AlertController();
+        //Check if there is at Least and not more than one element is Selected
+        ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+        if(selectedItems.size() < 1){
+            alertController.showStandardAlert(Alert.AlertType.WARNING,"Bearbeitungs Fehler",
+                "Bitte wählen Sie min. 1 Frage zum bearbeiten aus",null);
+                return;
+        }
+
+        if(selectedItems.size() > 1){
+            alertController.showStandardAlert(Alert.AlertType.WARNING,"Bearbeitungs Fehler",
+                "Das Bearbeiten von mehr als 1 Frage glechzeitig ist nicht möglich",
+                "Bitte genau eine Frage auswählen");
+                return;
+        }
+        Question selectedQuestion = selectedItems.get(0);
+        LOG.info(selectedQuestion.toString());
+
+        //Open the New Question.
+        stage.close();
+        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0));
         //TODO Editing Questions.
     }
 
