@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 @Controller
 public class AlertController {
@@ -153,7 +156,6 @@ public class AlertController {
         LOG.trace("Showing an answer alert with title: " + title);
     }
 
-
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
         var alert = new Alert(alertType);
         alert.setHeaderText(header);
@@ -163,5 +165,40 @@ public class AlertController {
         alert.showAndWait();
     }
 
+    public boolean showConfirmation( String title, String header, String content ) {
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        return (result.get() == ButtonType.OK);
+    }
+
+    public boolean showBigConfirmation( String title, String header, String content ) {
+
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setResizable(true);
+        alert.setTitle(LERNTIA + title);
+
+        var dialogPane = new DialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue");
+
+        dialogPane.setHeader(new Text(" " + header + " "));
+        dialogPane.setContent(new Text(" " + content + " "));
+
+        dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        alert.setDialogPane(dialogPane);
+        var optional = alert.showAndWait();
+
+        if (optional.isPresent() && optional.get() == ButtonType.YES) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

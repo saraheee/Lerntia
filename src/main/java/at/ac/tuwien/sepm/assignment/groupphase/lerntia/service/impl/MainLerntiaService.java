@@ -177,6 +177,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         // todo implement this when implementing learning algorithm
     }
 
+    @Override
+    public List<Question> getQuestions() throws ServiceException {
+        return questionList;
+    }
+
     /**
      * Returns the Size of the ListCounter
      */
