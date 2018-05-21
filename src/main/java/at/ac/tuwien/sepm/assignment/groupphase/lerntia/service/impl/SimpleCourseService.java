@@ -112,6 +112,9 @@ public class SimpleCourseService implements ICourseService {
                 yearStr = yearStr.substring(2); // only the last 2 digits are important
             }
             int yearInt = Integer.parseInt(yearStr);
+            if (yearInt < 0) {
+                throw new ServiceException("Das Jahr sollte nicht negativ sein");
+            }
             course.setSemester(course.getSemester().substring(0,2)+yearInt);
         } catch(NumberFormatException e) {
             throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
