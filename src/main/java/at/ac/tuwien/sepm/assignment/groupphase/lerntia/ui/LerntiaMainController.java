@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -414,7 +415,13 @@ public class LerntiaMainController {
 
         // TODO - fragen wo die pdf datei gespeichert werden soll
 
-        iExamResultsWriterService.writeExamResults(questionList, "");
+        try {
+            iExamResultsWriterService.writeExamResults(questionList, "");
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
 
     }
 
