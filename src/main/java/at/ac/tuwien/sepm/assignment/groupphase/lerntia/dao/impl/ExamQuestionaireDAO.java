@@ -61,7 +61,6 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
             LOG.error("ExamQuestionnaire CREATE DAO error!");
             throw new PersistenceException(e.getMessage());
         }
-
     }
 
     @Override

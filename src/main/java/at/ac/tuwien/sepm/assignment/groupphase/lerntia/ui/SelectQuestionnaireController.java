@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class SelectQuestionnaireController {
     private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
+    private final AlertController alertController;
 
     private List<LearningQuestionnaire> learningQuestionnaireList;
 
@@ -37,12 +39,14 @@ public class SelectQuestionnaireController {
         SimpleLearningQuestionnaireService learningQuestionnaireService,
         IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
-        WindowController windowController
+        WindowController windowController,
+        AlertController alertController
     ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
+        this.alertController = alertController;
     }
 
     @FXML
@@ -51,7 +55,8 @@ public class SelectQuestionnaireController {
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebögen lesen fehlgeschlagen",
+                "Error", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
         }
 
         for (int i = 0; i < learningQuestionnaireList.size(); i++) {
@@ -79,7 +84,8 @@ public class SelectQuestionnaireController {
         try {
             iQuestionnaireService.deselectAllQuestionnaires();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
+                "Error", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
         }
 
         // select questionnaire
@@ -87,7 +93,8 @@ public class SelectQuestionnaireController {
         try {
             learningQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen auswählen fehlgeschlagen",
+                "Error", "Der Fragebogen konnte nicht ausgewählt werden!");
         }
 
         // show first question of new questionnaire
@@ -95,7 +102,8 @@ public class SelectQuestionnaireController {
         try {
             lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen anzeigen fehlgeschlagen",
+                "Error", "Der ausgewählte Fragebogen kann nicht angezeigt werden");
         }
 
         Node source = (Node) actionEvent.getSource();

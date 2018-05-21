@@ -46,8 +46,21 @@ public interface IQuestionService {
      * */
     Question get(long id) throws ServiceException;
 
-    ArrayList<String> getAllAnswers(Question question);
+    /**
+     * Get all answers of the corresponding Question
+     *
+     * @param question the Question for which the answers should be retrieved
+     * @return a list of all the answers of the corresponding Question
+     * @throws ServiceException if the answers cannot be retrieved
+     * */
+    ArrayList<String> getAllAnswers(Question question) throws ServiceException;
 
+    /**
+     * Validate a Question
+     *
+     * @param question the Question to be validated
+     * @throws ServiceException if the Question failed the validation
+     * */
     void validate(Question question) throws ServiceException;
 
 }

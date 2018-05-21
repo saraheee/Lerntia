@@ -14,6 +14,5 @@ public interface IUserQuestionaireDAO {
      * */
     void create(UserQuestionnaire userQuestionnaire) throws PersistenceException;
 
-
     // from stories unclear what methods will be needed for this DAO - todo discuss at the next team meeting
 }

@@ -133,6 +133,5 @@ public class CourseDAO implements ICourseDAO {
         } catch (SQLException e) {
             throw new PersistenceException(e.getMessage());
         }
-
     }
 }

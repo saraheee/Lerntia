@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class SelectExamController {
     private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
+    private final AlertController alertController;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
@@ -37,12 +39,15 @@ public class SelectExamController {
         SimpleExamQuestionnaireService examQuestionnaireService,
         IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
-        WindowController windowController
-    ) {
+        WindowController windowController,
+        AlertController alertController
+    )
+    {
         this.examQuestionnaireService = examQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
+        this.alertController = alertController;
     }
 
     @FXML
@@ -51,7 +56,8 @@ public class SelectExamController {
         try {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungen lesen fehlgeschlagen",
+                "Error", "Die Prüfungen konnten nicht aus der Datenbank gelesen werden!");
         }
 
         for (int i = 0; i < examQuestionnaireList.size(); i++) {
@@ -71,7 +77,6 @@ public class SelectExamController {
 
     public void selectExam(ActionEvent actionEvent) {
 
-
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 
@@ -80,7 +85,8 @@ public class SelectExamController {
         try {
             iQuestionnaireService.deselectAllQuestionnaires();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
+                "Error", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
         }
 
         // select questionnaire
@@ -88,7 +94,8 @@ public class SelectExamController {
         try {
             examQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
+                "Error", "Die Prüfung konnte nicht ausgewählt werden!");
         }
 
         // show first question of new questionnaire
@@ -98,12 +105,12 @@ public class SelectExamController {
             lerntiaMainController.switchToExamMode();
             lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
+                "Error", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         }
 
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-
     }
 }

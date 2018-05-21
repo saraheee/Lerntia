@@ -48,10 +48,27 @@ public interface ILearningQuestionnaireDAO {
      * */
     List<LearningQuestionnaire> readAll() throws PersistenceException;
 
-
+    /**
+     * Select an LearningQuestionnaire to be used
+     *
+     * @param learningQuestionnaire the LearningQuestionnaire to be selected
+     * @throws PersistenceException if the LearningQuestionnaire cannot be selected in the Database
+     * */
     void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
 
+    /**
+     * Deselect an LearningQuestionnaire that was previously used
+     *
+     * @param learningQuestionnaire the LearningQuestionnaire to be deselected
+     * @throws PersistenceException if the LearningQuestionnaire cannot be deselected in the Database
+     * */
     void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
 
+    /**
+     * Get the selected LearningQuestionnaire from the Database
+     *
+     * @return the selected LearningQuestionnaire
+     * @throws PersistenceException if the selected LearningQuestionnaire cannot be retrieved from the Database
+     * */
     LearningQuestionnaire getSelected() throws PersistenceException;
 }
