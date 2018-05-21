@@ -23,5 +23,10 @@
       <Button layoutX="954.0" layoutY="633.0" mnemonicParsing="false" onAction="#editButton" prefHeight="37.0" prefWidth="113.0" text="Bearbeiten" />
       <ImageView fx:id="iv_image" fitHeight="343.0" fitWidth="473.0" layoutX="588.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true" />
       <Button layoutX="831.0" layoutY="633.0" mnemonicParsing="false" onAction="#imageButton" prefHeight="37.0" prefWidth="113.0" text="Img Auswählen" />
+      <Label layoutX="588.0" layoutY="20.0" text="Richtige Antwort" />
+      <Label layoutX="588.0" layoutY="49.0" text="Bitte nur die Nummer der Antwort/en ohne Leerzeichen eingeben:" />
+      <TextField fx:id="tf_currectAnswer" layoutX="713.0" layoutY="16.0" />
+      <Label layoutX="588.0" layoutY="102.0" text="Optionales Feedback" />
+      <TextField fx:id="tf_optionalFeedback" layoutX="713.0" layoutY="70.0" prefHeight="90.0" prefWidth="272.0" />
    </children>
 </AnchorPane>
