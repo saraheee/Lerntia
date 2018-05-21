@@ -1,12 +1,17 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireQuestionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,8 +45,9 @@ public class SelectQuestionAdministrateController {
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
-    private final IQuestionDAO questionDAO;
+    private final IQuestionService questionDAO;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final IQuestionnaireQuestionService questionnaireQuestionService;
 
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -51,14 +57,16 @@ public class SelectQuestionAdministrateController {
     public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService,
                                                 LerntiaMainController lerntiaMainController,
                                                 WindowController windowController,
-                                                IQuestionDAO questionDAO,
-                                                SimpleLearningQuestionnaireService simpleLearningQuestionnaireService)
+                                                IQuestionService questionDAO,
+                                                SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+                                                IQuestionnaireQuestionService questionnaireQuestionService)
     {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.questionDAO = questionDAO;
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.questionnaireQuestionService = questionnaireQuestionService;
     }
 
     public void initialize(){
@@ -87,8 +95,24 @@ public class SelectQuestionAdministrateController {
      * Loads the Data into the TableView
      */
     public void refresh(){
-        LOG.info("Table is Refreshing");
-        tv_questionTable.getItems().addAll(getContent());
+        try {
+            LOG.info("Selected: "+simpleLearningQuestionnaireService.getSelected().getName());
+            LearningQuestionnaire studyMode = simpleLearningQuestionnaireService.getSelected();
+            simpleLearningQuestionnaireService.deselect(studyMode);
+            simpleLearningQuestionnaireService.select(administrateMode);
+            LOG.info("Selected: "+simpleLearningQuestionnaireService.getSelected().getName());
+            //Clear the Table and Load the new Data
+            tv_questionTable.getItems().clear();
+            tv_questionTable.getItems().addAll(getContent());
+            simpleLearningQuestionnaireService.deselect(administrateMode);
+            simpleLearningQuestionnaireService.select(studyMode);
+           lerntiaMainController.getAndShowTheFirstQuestion();
+            //Back to the Normal selection
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<Question> getContent(){
@@ -145,22 +169,17 @@ public class SelectQuestionAdministrateController {
             for(int i = 0;i<selectedItems.size();i++){
                 try {
                     questionDAO.delete(selectedItems.get(i));
-                } catch (PersistenceException e) {
+                    QuestionnaireQuestion qq = new QuestionnaireQuestion();
+                    qq.setQid(administrateMode.getId());
+                    qq.setQuestionid(selectedItems.get(i).getId());
+                    questionnaireQuestionService.delete(qq);
+                } catch (ServiceException e) {
                     e.printStackTrace();
                 }
             }
 
-
-            try {
-                LearningQuestionnaire studyMode = simpleLearningQuestionnaireService.getSelected();
-                simpleLearningQuestionnaireService.deselect(studyMode);
-                simpleLearningQuestionnaireService.select(administrateMode);
-                refresh();
-                simpleLearningQuestionnaireService.deselect(administrateMode);
-                simpleLearningQuestionnaireService.select(studyMode);
-            } catch (ServiceException e) {
-                e.printStackTrace();
-            }
+            LOG.info("Delete Complete - Start Refreshing");
+            refresh();
         }else{
             LOG.info("LookHere2: Löschvorgang abgebrochen");
         }
