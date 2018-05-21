@@ -83,7 +83,7 @@ public class AdministrateQuestionnaireController {
             e.printStackTrace();
         }
         //Opens the New Window which contains a TableView and all Questions.
-        selectQuestionAdministrateController.showSelectQuestionAdministrateWindow();
+        selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
         try {
             simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
             simpleLearningQuestionnaireService.select(studyMode);

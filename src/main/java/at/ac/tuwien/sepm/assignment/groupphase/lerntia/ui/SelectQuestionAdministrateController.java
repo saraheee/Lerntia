@@ -3,8 +3,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,19 +41,24 @@ public class SelectQuestionAdministrateController {
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
     private final IQuestionDAO questionDAO;
+    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+
+
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Stage stage;
-
+    private LearningQuestionnaire administrateMode;
 
     public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService,
                                                 LerntiaMainController lerntiaMainController,
                                                 WindowController windowController,
-                                                IQuestionDAO questionDAO)
+                                                IQuestionDAO questionDAO,
+                                                SimpleLearningQuestionnaireService simpleLearningQuestionnaireService)
     {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.questionDAO = questionDAO;
+        this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
     }
 
     public void initialize(){
@@ -80,6 +87,7 @@ public class SelectQuestionAdministrateController {
      * Loads the Data into the TableView
      */
     public void refresh(){
+        LOG.info("Table is Refreshing");
         tv_questionTable.getItems().addAll(getContent());
     }
 
@@ -95,10 +103,11 @@ public class SelectQuestionAdministrateController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showSelectQuestionAdministrateWindow(){
+    public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode){
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+        this.administrateMode = administrateMode;
     }
 
     @FXML
@@ -139,6 +148,18 @@ public class SelectQuestionAdministrateController {
                 } catch (PersistenceException e) {
                     e.printStackTrace();
                 }
+            }
+
+
+            try {
+                LearningQuestionnaire studyMode = simpleLearningQuestionnaireService.getSelected();
+                simpleLearningQuestionnaireService.deselect(studyMode);
+                simpleLearningQuestionnaireService.select(administrateMode);
+                refresh();
+                simpleLearningQuestionnaireService.deselect(administrateMode);
+                simpleLearningQuestionnaireService.select(studyMode);
+            } catch (ServiceException e) {
+                e.printStackTrace();
             }
         }else{
             LOG.info("LookHere2: Löschvorgang abgebrochen");
