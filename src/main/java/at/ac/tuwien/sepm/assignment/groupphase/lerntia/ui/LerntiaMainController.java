@@ -205,7 +205,7 @@ public class LerntiaMainController {
         String checkedAnswers = getCheckedAnswers();
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+        //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
             alertController.showCorrectAnswerAlert("Antworten richtig!", "Alle Antworten sind richtig.",
