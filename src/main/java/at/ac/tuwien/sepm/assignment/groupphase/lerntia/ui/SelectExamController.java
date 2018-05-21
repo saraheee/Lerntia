@@ -9,15 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.stage.Modality;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -29,20 +26,23 @@ public class SelectExamController {
     private final SimpleExamQuestionnaireService examQuestionnaireService;
     private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
+    private final WindowController windowController;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
     @FXML
-    private ChoiceBox<String> cb_exam;
+    private ComboBox<String> cb_exam;
 
     public SelectExamController(
         SimpleExamQuestionnaireService examQuestionnaireService,
         IQuestionnaireService iQuestionnaireService,
-        LerntiaMainController lerntiaMainController
+        LerntiaMainController lerntiaMainController,
+        WindowController windowController
     ) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
+        this.windowController = windowController;
     }
 
     @FXML
@@ -54,7 +54,7 @@ public class SelectExamController {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < examQuestionnaireList.size(); i++){
+        for (int i = 0; i < examQuestionnaireList.size(); i++) {
             cb_exam.getItems().add(examQuestionnaireList.get(i).getName());
         }
 
@@ -64,19 +64,9 @@ public class SelectExamController {
     void showSelectExamWindow() {
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
-        var stage = new Stage();
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
 
-        try {
-            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-            stage.centerOnScreen();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("[Lerntia] Fragebogen auswählen");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-            LOG.debug("Successfully opened a window for selection a questionnaire.");
-        } catch (IOException e) {
-            LOG.error("Failed to open a window for selecting a questionnaire. " + e.getMessage());
-        }
+        windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
     }
 
     public void selectExam(ActionEvent actionEvent) {
