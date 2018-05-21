@@ -241,7 +241,7 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine weiteren Fragen",
+            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
                 "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
             try {
                 getAndShowTheFirstQuestion();

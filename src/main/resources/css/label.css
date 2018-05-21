@@ -24,3 +24,34 @@
 .button:focused {
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
+
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: lightgrey;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -6, 0, 0);
+}
+
+.check-box:hover .box {
+    -fx-border-color: lightgray;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(gaussian, white, 20, -6, 0, 0);
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #333333;
+}
+
+.check-box:selected .box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, white, 10, -3, 0, 0);
+}
+
+.check-box:selected:hover .box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, white, 20, -6, 0, 0);
+}
