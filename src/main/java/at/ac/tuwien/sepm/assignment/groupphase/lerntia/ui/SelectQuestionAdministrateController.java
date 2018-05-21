@@ -86,7 +86,7 @@ public class SelectQuestionAdministrateController {
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
     /**
-     * Loads the Data into the TableView
+     * Refreshs the Data and the lertiaMainController
      */
     public void refresh(){
         //Clear the Table and Load the new Data
@@ -99,6 +99,10 @@ public class SelectQuestionAdministrateController {
         }
     }
 
+    /**
+     *
+     * @return the Content for the Table in form ob a ObservableList<Question>
+     */
     public ObservableList<Question> getContent(){
         ObservableList<Question> content = FXCollections.observableArrayList();
         for(int i = 0;i<lerntiaService.getQuestionList().size();i++){
@@ -162,7 +166,6 @@ public class SelectQuestionAdministrateController {
         boolean press = alertController.showStandardConfirmationAlert("Fragen löschen",
             "Sollen die ausgewählte/n Frage/n gelöscht werden?","Es wurden: "+selectedItems.size()+" ausgewählt");
         if(press){
-            LOG.info("LookHere: Es wird gelöscht");
             for(int i = 0;i<selectedItems.size();i++){
                 try {
                     questionDAO.delete(selectedItems.get(i));
@@ -179,16 +182,12 @@ public class SelectQuestionAdministrateController {
             //Close Window and Open informationen Window
             stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Löschvorgang abgeschlossen","Fragen wurden gelöscht",null);
-
-
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
             }
-        }else{
-            LOG.info("Cancled Delete Operation");
         }
     }
 
