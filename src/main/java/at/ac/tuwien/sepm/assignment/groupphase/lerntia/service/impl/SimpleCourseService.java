@@ -30,7 +30,9 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void create(Course course) throws ServiceException {
         try {
+            LOG.info("Create new Course: {}",course);
             courseDAO.create(course);
+            LOG.info("New course created: {}",course);
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
@@ -40,7 +42,9 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void update(Course course) throws ServiceException {
         try {
+            LOG.info("Update existing Course with new values, {}",course);
             courseDAO.update(course);
+            LOG.info("Course succesfully updated.");
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());        }
@@ -49,7 +53,9 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void search(Course course) throws ServiceException {
         try {
+            LOG.info("Search for Course: {}",course);
             courseDAO.search(course);
+            LOG.info("Course has been found");
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
@@ -59,7 +65,9 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void delete(Course course) throws ServiceException {
         try {
+            LOG.info("Delete course: {}",course);
             courseDAO.delete(course);
+            LOG.info("Course succesfully deleted.");
         } catch (PersistenceException e) {
             LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
@@ -68,7 +76,7 @@ public class SimpleCourseService implements ICourseService {
 
     @Override
     public List<Course> readAll() throws ServiceException {
-
+        LOG.info("Retrieving all existing Courses....");
         List<Course> courses = null;
         try {
             courses = courseDAO.readAll();
@@ -80,13 +88,13 @@ public class SimpleCourseService implements ICourseService {
         if (courses.isEmpty()){
             throw new ServiceException("Es wurden noch keine LVAs angelegt");
         }
-
+        LOG.info("All courses retrieved.");
         return courses;
     }
 
     @Override
     public void validate(Course course) throws ServiceException {
-
+        LOG.info("Check if all mandatory values are valid.");
         if (course.getMark().equals("")){
             throw new ServiceException("Die LVA-Nummer ist leer");
         }
@@ -120,9 +128,11 @@ public class SimpleCourseService implements ICourseService {
             if (yearInt < 0) {
                 throw new ServiceException("Das Jahr sollte nicht negativ sein");
             }
-            course.setSemester(course.getSemester().substring(0,2)+yearStr.substring(2,4));
+            course.setSemester(course.getSemester().substring(0,2)+yearInt);
+            LOG.info("All course values are valid.");
         } catch(NumberFormatException e) {
             throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
         }
     }
+
 }
