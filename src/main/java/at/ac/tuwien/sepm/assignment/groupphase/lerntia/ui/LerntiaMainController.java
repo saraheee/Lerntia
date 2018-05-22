@@ -206,21 +206,19 @@ public class LerntiaMainController {
 
         if (answersCorrect) {
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showCorrectAnswerAlert("Antwort richtig!", "Die Antwort ist richtig.\n"+getMethod(question.getCorrectAnswers()),
-                    question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers+" ist richtig.",getMethod(question.getCorrectAnswers())+"\n"+question.getOptionalFeedback());
             }
             else {
                 String answers = "Alle richtigen Antworten sind:\n";
                 for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
                     answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
                 }
-                alertController.showCorrectAnswerAlert("Antworten richtig!", answers,
-                    question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+                alertController.showCorrectAnswerAlert("Antworten richtig!", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
             }
 
         } else {
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die richtige Antwort ist\n" + getMethod(question.getCorrectAnswers()), question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+                alertController.showWrongAnswerAlert("Antwort nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers())  + question.getOptionalFeedback());
             }
             else {
                 String answers = "Die richtigen Antworten sind:\n";
@@ -230,7 +228,7 @@ public class LerntiaMainController {
                     }
                     answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
                 }
-                alertController.showWrongAnswerAlert("Antworten nicht richtig.", answers, question.getOptionalFeedback()+"\n"+"Die nächste Frage wird angezeigt.");
+                alertController.showWrongAnswerAlert("Antworten nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
             }
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
