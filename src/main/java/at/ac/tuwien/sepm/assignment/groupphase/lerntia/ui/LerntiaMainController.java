@@ -328,7 +328,7 @@ public class LerntiaMainController {
 
         qLabelController.setQuestionText(question.getQuestionText());
         audioController.setQuestion(qLabelController.getQuestionText());
-
+        resetAnswerController();
         setAnswerText(answer1Controller, question.getAnswer1());
         setAnswerText(answer2Controller, question.getAnswer2());
         setAnswerText(answer3Controller, question.getAnswer3());
@@ -375,7 +375,7 @@ public class LerntiaMainController {
                             selectedLearningQuestionnaire.getName() + File.separator +
                             question.getPicture();
 
-                    LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
+                    LOG.debug("Image path: " + imagePath);
                     File imageFile = new File(imagePath);
                     zoomedImageController.setImageFile(imageFile);
                     Image image = new Image(imageFile.toURI().toURL().toExternalForm());
@@ -390,12 +390,20 @@ public class LerntiaMainController {
         }
     }
 
+    private void resetAnswerController() {
+        answer1Controller.setAnswerText("");
+        answer2Controller.setAnswerText("");
+        answer3Controller.setAnswerText("");
+        answer4Controller.setAnswerText("");
+        answer5Controller.setAnswerText("");
+    }
+
     // this method should be called if the DB does not contain any questions that could be displayed
     private void showNoQuestionsAvailable() {
         zoomButtonController.setVisible(false);
 
-        qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragenbogen schon in der Datenbank importiert?");
-        audioController.setQuestion("Keine Fragen gefunden. Sind die Fragenbogen schon in der Datenbank importiert?");
+        qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
+        audioController.setQuestion("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
 
         setAnswerText(answer1Controller, null);
         setAnswerText(answer2Controller, null);

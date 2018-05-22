@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -30,12 +29,12 @@ public class AdministrateQuestionnaireController {
     private final WindowController windowController;
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
-    private Stage stage;
-
     @FXML
     public ComboBox cb_questionnaire;
+    private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
     private LearningQuestionnaire selectedLearningQuestionnaire;
+    private List learningQuestionnaireList;
 
     @Autowired
     public AdministrateQuestionnaireController(
@@ -68,47 +67,56 @@ public class AdministrateQuestionnaireController {
     }
 
     @FXML
-    public void selectQuestionnaire(ActionEvent actionEvent) {
+    public void selectQuestionnaire() {
+        try {
+            learningQuestionnaireList = simpleLearningQuestionnaireService.readAll();
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Lesen der Fragebögen fehlgeschlagen",
+                "Fehler beim Lesen der Fragebögen!", "");
+        }
+        //Check if there are questionnaires
+        if (learningQuestionnaireList.isEmpty()) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
+                "Fehler!", "Es ist noch kein Fragebogen vorhanden!");
+            stage.close();
+            return;
+        }
         //Get the Selected Item.
-        if(cb_questionnaire.getSelectionModel().getSelectedIndex() > 0) {
-            selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
-            editQuestionsController.setQuestionnaire(selectedLearningQuestionnaire);
-            LearningQuestionnaire studyMode = null;
-            try {
-                studyMode = simpleLearningQuestionnaireService.getSelected();
-            } catch (ServiceException e) {
-                LOG.error("Selected Questionnaire can't be retrieved.");
-            }
+        selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        editQuestionsController.setQuestionnaire(selectedLearningQuestionnaire);
+        LearningQuestionnaire studyMode = null;
+        try {
+            studyMode = simpleLearningQuestionnaireService.getSelected();
+        } catch (ServiceException e) {
+            LOG.error("Selected Questionnaire can't be retrieved.");
+        }
 
-            LOG.info("Unselect all the Other Questionnaire");
-            for (int i = 0; i < learningQuestionnaires.size(); i++) {
-                try {
-                    simpleLearningQuestionnaireService.deselect(learningQuestionnaires.get(i));
-                } catch (ServiceException e) {
-                    LOG.error("Failed to deselect a questionnaire.");
-                }
-            }
-
-            LOG.info("Select the Questionnaire");
+        LOG.info("Unselect all the Other Questionnaire");
+        for (int i = 0; i < learningQuestionnaires.size(); i++) {
             try {
-                simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
+                simpleLearningQuestionnaireService.deselect(learningQuestionnaires.get(i));
             } catch (ServiceException e) {
-                LOG.error("Can't select Questionnaire");
+                LOG.error("Failed to deselect a questionnaire.");
             }
-            LOG.info("Open the New Window which contains a TableView and all Questions.");
-            selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
-            try {
-                simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
-                simpleLearningQuestionnaireService.select(studyMode);
-                lerntiaService.loadQuestionnaireAndGetFirstQuestion();
-                //Delete this Line if not Needed
-                LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+        }
 
-            } catch (ServiceException e) {
-                LOG.error("Failed to open the Question managing window.");
-            }
-        } else {
-            alertController.showStandardAlert(Alert.AlertType.WARNING,"Kein Fragebogen", "Fehler!", "Kein Fragebogen vorhanden!");
+        LOG.info("Select the Questionnaire");
+        try {
+            simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
+        } catch (ServiceException e) {
+            LOG.error("Can't select Questionnaire");
+        }
+        LOG.info("Open the New Window which contains a TableView and all Questions.");
+        selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
+        try {
+            simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
+            simpleLearningQuestionnaireService.select(studyMode);
+            lerntiaService.loadQuestionnaireAndGetFirstQuestion();
+            //Delete this Line if not Needed
+            LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+
+        } catch (ServiceException e) {
+            LOG.error("Failed to open the Question managing window.");
         }
         stage.close();
     }
