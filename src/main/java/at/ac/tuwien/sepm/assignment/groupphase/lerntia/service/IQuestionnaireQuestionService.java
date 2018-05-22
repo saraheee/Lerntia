@@ -1,12 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import java.util.List;
-
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
-
-import java.awt.*;
 
 public interface IQuestionnaireQuestionService {
 

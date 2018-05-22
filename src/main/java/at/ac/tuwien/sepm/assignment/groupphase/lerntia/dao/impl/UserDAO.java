@@ -51,7 +51,7 @@ public class UserDAO implements IUserDAO {
                 pscreate.close();
             }
         }catch (Exception e){
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserDAO CREATE error: item couldn't be created, check if all mandatory values have been added, or if the connection to the Database is valid.");
         }
     }
 
@@ -70,7 +70,7 @@ public class UserDAO implements IUserDAO {
                 psupdate.close();
             }
         }catch (Exception e){
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserDAO UPDATE error: item couldn't be updated, check if all mandatory values have been added or if the connection to the Database is valid.");
         }
     }
 
@@ -96,7 +96,7 @@ public class UserDAO implements IUserDAO {
                 psread.close();
             }
         }catch (Exception e){
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserDAO READ error: item coulnd't be found, check if there is a user of ir the connection to the Database is valid.");
         }
     }
 
@@ -115,7 +115,7 @@ public class UserDAO implements IUserDAO {
                 psdelete.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserDAO DELETE error: item couldn't be deleted, check if the connection to the Database is valid.");
         }
     }
 }

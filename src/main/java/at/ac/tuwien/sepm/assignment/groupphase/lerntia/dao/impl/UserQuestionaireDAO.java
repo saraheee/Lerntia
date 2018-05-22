@@ -47,7 +47,7 @@ public class UserQuestionaireDAO implements IUserQuestionaireDAO {
                 pscreate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserQuestionaireDAO CREATE error: item couldn't been created, check if all mandatory values have been added and if the connection to the Database is valid.");
         }
     }
 }
