@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 import java.util.List;
