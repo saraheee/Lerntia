@@ -208,4 +208,14 @@ public class SimpleQuestionService implements IQuestionService {
             LOG.error("cannot find image");
         }
     }
+
+    @Override
+    public List<Question> searchForQuestions(Question questionInput) throws ServiceException {
+            try {
+                return questionDAO.searchForQuestions(questionInput);
+            } catch (PersistenceException e) {
+                LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
+                throw new ServiceException(e.getMessage());
+            }
+    }
 }
