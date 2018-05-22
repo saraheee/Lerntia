@@ -4,7 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import java.lang.String?>
 <CheckBox fx:id="answer" mnemonicParsing="false" stylesheets="@/css/label.css"
-          text="&lt;Antwort&gt;"
+          text="Keine Antwort vorhanden"
           wrapText="true" xmlns="http://javafx.com/javafx/8.0.121"
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AnswerController">
