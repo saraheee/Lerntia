@@ -119,7 +119,7 @@ public class LerntiaMainController {
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-            zoomButtonController.setVisible(false);
+            showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
         }
     }
@@ -296,6 +296,9 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
+      //  mainWindowRight.autosize(); // to resize the frame structure back to default values
+        mainWindowLeft.autosize();
+
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");
@@ -367,10 +370,24 @@ public class LerntiaMainController {
         }
     }
 
+    // this method should be called if the DB does not contain any questions that could be displayed
+    private void showNoQuestionsAvailable() {
+        zoomButtonController.setVisible(false);
+
+        qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragenbogen schon in der Datenbank importiert?");
+        audioController.setQuestion("Keine Fragen gefunden. Sind die Fragenbogen schon in der Datenbank importiert?");
+
+        setAnswerText(answer1Controller, null);
+        setAnswerText(answer2Controller, null);
+        setAnswerText(answer3Controller, null);
+        setAnswerText(answer4Controller, null);
+        setAnswerText(answer5Controller, null);
+    }
+
     private void setAnswerText(AnswerController answerController, String answerText) {
         answerController.setSelected(false);
         // if answer is not provided the whole box will be invisible
-        if (answerText == null) {
+        if (answerText == null || answerText.trim().isEmpty()) {
             answerController.setVisible(false);
             return;
         }
