@@ -12,15 +12,21 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
     @Override
     public ArrayList<String> getContents(String filePath) throws IOException {
 
+        // A BufferedReader Object is created using path that is the argument of this method
+
         FileReader fr = new FileReader(filePath);
-        ArrayList<String> fileContent;
-        try (BufferedReader br = new BufferedReader(fr)) {
-            fileContent = new ArrayList<>();
-            String line;
-            while ((line = br.readLine()) != null) {
-                fileContent.add(line);
-            }
+        BufferedReader br = new BufferedReader(fr);
+
+        ArrayList<String> fileContent = new ArrayList<>();
+
+        String line;
+
+        // Every line is read from the file and added to the ArrayList
+
+        while((line = br.readLine()) != null) {
+            fileContent.add(line);
         }
+
         return fileContent;
     }
 }

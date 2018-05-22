@@ -117,6 +117,18 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                 picture = "";
             }
 
+            // index 8 is the optional feedback
+            String feedback = "";
+            try {
+                if (!lineParts[8].equals("")) {
+                    feedback = lineParts[8];
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                // there is no feedback
+                feedback = "";
+            }
+
             Question q = new Question();
             q.setId((long) 0);
             q.setQuestionText(lineParts[0]);
@@ -127,7 +139,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             q.setAnswer4(lineParts[4]);
             q.setAnswer5(lineParts[5]);
             q.setCorrectAnswers(lineParts[6]);
-            q.setOptionalFeedback("");
+            q.setOptionalFeedback(feedback);
             q.setDeleted(false);
             simpleQuestionService.create(q);
 

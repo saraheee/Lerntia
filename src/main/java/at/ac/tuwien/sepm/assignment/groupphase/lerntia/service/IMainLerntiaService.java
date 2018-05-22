@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface IMainLerntiaService {
 
+    Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException;
+
     Question getFirstQuestion() throws ServiceException;
 
     /**
