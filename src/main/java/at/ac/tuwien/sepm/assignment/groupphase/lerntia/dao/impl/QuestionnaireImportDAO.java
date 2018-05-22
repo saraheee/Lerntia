@@ -13,16 +13,14 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
     public ArrayList<String> getContents(String filePath) throws IOException {
 
         FileReader fr = new FileReader(filePath);
-        BufferedReader br = new BufferedReader(fr);
-
-        ArrayList<String> fileContent = new ArrayList<>();
-
-        String line;
-
-        while((line = br.readLine()) != null) {
-            fileContent.add(line);
+        ArrayList<String> fileContent;
+        try (BufferedReader br = new BufferedReader(fr)) {
+            fileContent = new ArrayList<>();
+            String line;
+            while ((line = br.readLine()) != null) {
+                fileContent.add(line);
+            }
         }
-
         return fileContent;
     }
 }

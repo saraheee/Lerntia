@@ -3,7 +3,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
-import org.h2.engine.GeneratedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,9 @@ import java.util.List;
 public class CourseDAO implements ICourseDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     private static final String SQL_COURSE_CREATE_STATEMENT="INSERT INTO Course(id,name,mark,semester,isDeleted) VALUES (default ,?,?,?,false)";
     private static final String SQL_COURSE_UPDATE_STATEMENT="UPDATE Course set mark = ?, semester=? , name=? WHERE id =?" ;
-    //private static final String SQL_COURSE_SEARCH_STATEMENT="";
     private static final String SQL_COURSE_DELETE_STATEMENT="UPDATE Course set isDeleted=true  WHERE id = ?";
     private static final String SQL_COURSE_READALL_STATEMENT="SELECT * from Course where isDeleted = false ";
 
@@ -39,7 +38,7 @@ public class CourseDAO implements ICourseDAO {
     @Override
     public void create(Course course) throws PersistenceException {
         try {
-            LOG.info("Prepare Statement for Course Creation.");
+            LOG.info("Prepare Statement for new Course Creation.");
             PreparedStatement pscreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
             try {
                 pscreate.setString(1,course.getName());
@@ -58,8 +57,8 @@ public class CourseDAO implements ICourseDAO {
             }finally {
                 pscreate.close();
             }
-        }catch (Exception e){
-            throw new PersistenceException(e.getMessage());
+        }catch (SQLException e){
+            throw new PersistenceException("CourseDAO CREATE error: New Course couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
         }
     }
 
@@ -70,24 +69,23 @@ public class CourseDAO implements ICourseDAO {
             PreparedStatement psupdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT);
             try {
                 psupdate.setString(1, course.getMark());
-
                 psupdate.setString(2, course.getSemester());
                 psupdate.setString(3, course.getName());
                 psupdate.setLong(4, course.getId());
-
                 psupdate.executeUpdate();
                 LOG.info("Course succefsully updated in Database.");
             }finally {
                 psupdate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("CourseDAO UPDATE error: Selected Course couldn't be updated, check if all mandatory values have been inserted or if connection to the Database is valid.");
         }
     }
 
     @Override
     public void search(Course course) throws PersistenceException {
         //this method is currently empty because its not yet determined if this method is even necessary for this programm.
+        //If so the method will be deleted
     }
 
     @Override
@@ -103,7 +101,7 @@ public class CourseDAO implements ICourseDAO {
                 psdelete.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("CourseDAO DELETE error: Selected Course couldn't be deleted, check if the connection to the Database is valid.");
         }
     }
 
@@ -113,7 +111,6 @@ public class CourseDAO implements ICourseDAO {
             LOG.info("Prepare Statement to read all available Courses from the Database.");
             ArrayList<Course> list = new ArrayList<>();
             try (ResultSet rsreadall = connection.prepareStatement(SQL_COURSE_READALL_STATEMENT).executeQuery()) {
-                try {
                     Course course;
                     while (rsreadall.next()) {
                         course = new Course();
@@ -125,12 +122,9 @@ public class CourseDAO implements ICourseDAO {
                     }
                     LOG.info("All Courses found.");
                     return list;
-                } finally {
-                    rsreadall.close();
-                }
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("CourseDAO READALL error: not all courses could have been found, check if connection to the Database is valid.");
         }
     }
 }
