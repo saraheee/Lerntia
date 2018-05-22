@@ -25,7 +25,6 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT ="INSERT INTO Questionnairequestion(qid,questionid,isDeleted) VALUES (?,?,?)";
     private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion set isDeleted=true where qid=? and questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion set qid=?, questionid=? where qid=? and questionid=?";
-    private static final String SQL_QUESTIONNAIREQUESTION_READALL_STATEMENT = "";
     private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
     private Connection connection;
 
@@ -55,7 +54,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 pscreate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("QuestionnaireQuestionDAO CREATE error: item couldn't have been created, check if all mandatory values have been added and if the connection to the Database is valid.");
         }
     }
 
@@ -67,7 +66,6 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             QuestionnaireQuestion questionnaireQuestion;
             String searchStatement= SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT+searchparameters.getQid();
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
-                try {
                     while (rs.next()) {
                         questionnaireQuestion = new QuestionnaireQuestion();
                         questionnaireQuestion.setQid(rs.getLong(1));
@@ -77,12 +75,9 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                     }
                     LOG.info("All QuestionnaireQuestion matching the searchparameters found.");
                     return searchresults;
-                }finally {
-                    rs.close();
-                }
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchparameters are valid and if the connection to the database is valid.");
         }
     }
 
@@ -100,7 +95,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 psdelete.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("QuestionnaireQuestionDAO DELETE error: couldn't delete item in question, check if the connection to the Database is valid.");
         }
     }
 
@@ -120,7 +115,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 psupdate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("QuestionnaireQuestionDAO UPDATE error: item couldn't be updated, check if mandatory values have been added or if the connection to the Database is valid.");
         }
     }
 

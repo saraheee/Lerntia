@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.hsqldb.persist.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,10 +73,9 @@ public class ImportFileController {
 
     @FXML
     private void initialize() throws ServiceException {
+        LOG.debug("Initialize ImportFileController");
         coursedata = cservice.readAll();
-
         courses = FXCollections.observableArrayList(coursedata);
-
         choices.removeAll(choices);
         for (int i = 0; i < courses.size(); i++) {
             choices.add(courses.get(i).getName());
@@ -87,6 +87,7 @@ public class ImportFileController {
 
     @FXML
     public void selectFile(ActionEvent actionEvent) {
+        LOG.info("Open new FileChooser.");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("[Lerntia] Verzeichnis");
         fileChooser.setInitialDirectory(new File(CSVPATH));
@@ -100,6 +101,7 @@ public class ImportFileController {
 
     @FXML
     public void selectDirectory(ActionEvent actionEvent) {
+        LOG.info("Open new DirectoryChooser.");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("[Lerntia] Bildordner");
         directoryChooser.setInitialDirectory(new File(IMGPATH));
@@ -112,7 +114,7 @@ public class ImportFileController {
 
     @FXML
     public void importFile(ActionEvent actionEvent) {
-
+        LOG.info("Import file.");
         String name = tf_questionnaire.getText().trim();
 
         if (name.equals("")) {

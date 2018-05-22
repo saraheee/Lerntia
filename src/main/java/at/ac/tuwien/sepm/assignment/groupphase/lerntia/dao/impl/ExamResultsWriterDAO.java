@@ -23,8 +23,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     @Override
     public void writeExamResults(List<Question> questions, String path) throws PersistenceException {
 
-        // A document object is created in which the report will be saved
-
+        LOG.info("Create new Document for new report");
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
@@ -34,10 +33,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden");
         }
         document.open();
-
-        // Prepare the report
-
         Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+
+        LOG.info("Prepare report");
 
         PdfPTable table = new PdfPTable(2);
 
@@ -61,14 +59,13 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             table.addCell((answersCorrect) ? "Richtig" : "Falsch");
         }
 
-        // The table is added to the document which is closed afterwards
+        LOG.info("The table is added to the document which is closed afterwards");
 
         try {
             document.add(table);
         } catch (DocumentException e) {
             throw new PersistenceException("Die Ergebnisse konnte nicht in das Dokument eingefügt werden");
         }
-
         document.close();
     }
 }

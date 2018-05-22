@@ -67,6 +67,7 @@ public class EditQuestionsController {
 
 
     public void initialize() {
+        LOG.debug("Initialize EditQuestionsController");
         tf_question.setText("Frage");
         tf_answer1.setText("Antwort 1");
         tf_answer2.setText("Antwort 2");
@@ -84,6 +85,7 @@ public class EditQuestionsController {
      * Opens a window in which the user can See all the Questions .
      */
     public void showEditQuestionsControllerWindow(Question selectedQuestion) {
+        LOG.info("Open Edit Questions Controller Window.");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editQuestion.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage bearbeiten", fxmlLoader);

@@ -5,8 +5,6 @@ import org.h2.tools.RunScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
@@ -18,7 +16,6 @@ public class JDBCConnectionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
-    //private static final String TEST_CONNECTION_URL = "jdbc:h2:file:database./lerntiaTestDB";
     private static final String INITIAL_RESOURCE = "classpath:sql/createAndInsert.sql";
     private static final String TEST_CONNECTION_URL = "jdbc:h2:~/lerntiaTestDB";
     private static final String TEST_RESOURCE = "classpath:sql/testCreate.sql";
