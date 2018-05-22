@@ -45,7 +45,7 @@ public class UserCourseDAO implements IUserCourseDAO {
                 pscreate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserCourseDAO CREATE error: item couldn't have been created, check if all mandatory values have been added or if the connection to the Database is valid.");
         }
     }
 }
