@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ public class SimpleCourseService implements ICourseService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
+
+    ConfigReader configReaderCourse = new ConfigReader("course");
 
     public SimpleCourseService(ICourseDAO courseDAO){
         this.courseDAO = courseDAO;
@@ -74,6 +77,10 @@ public class SimpleCourseService implements ICourseService {
             throw new ServiceException(e.getMessage());
         }
 
+        if (courses.isEmpty()){
+            throw new ServiceException("Es wurden noch keine LVAs angelegt");
+        }
+
         return courses;
     }
 
@@ -84,7 +91,7 @@ public class SimpleCourseService implements ICourseService {
             throw new ServiceException("Die LVA-Nummer ist leer");
         }
 
-        if (course.getMark().length() > 255) {
+        if (course.getMark().length() > configReaderCourse.getValueInt("maxLengthCourseMark")) {
             throw new ServiceException("Die LVA-Nummer ist zu lang");
         }
 
@@ -92,7 +99,7 @@ public class SimpleCourseService implements ICourseService {
             throw new ServiceException("Der Name ist leer");
         }
 
-        if (course.getName().length() > 255) {
+        if (course.getName().length() > configReaderCourse.getValueInt("maxLengthCourseName")) {
             throw new ServiceException("Der Name ist zu lang");
         }
 
@@ -105,13 +112,17 @@ public class SimpleCourseService implements ICourseService {
 
         try{
             String yearStr = course.getSemester().substring(2);
-            if (yearStr.length() > 4) {
-                throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
+
+            if (yearStr.length() != 4) {
+                throw new ServiceException("Das Jahr sollte eine Zahl mit 4 Ziffern sein");
             }
-            if (yearStr.length() > 2) { // has 4 digits
-                yearStr = yearStr.substring(2); // only the last 2 digits are important
-            }
+
             int yearInt = Integer.parseInt(yearStr);
+
+            if (yearInt < 0){
+                throw new ServiceException("Das Jahr darf keine negative Zahl sein");
+            }
+
             course.setSemester(course.getSemester().substring(0,2)+yearInt);
         } catch(NumberFormatException e) {
             throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");

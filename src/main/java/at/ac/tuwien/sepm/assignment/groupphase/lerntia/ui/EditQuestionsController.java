@@ -99,8 +99,7 @@ public class EditQuestionsController {
         tf_answer5.setText(selectedQuestion.getAnswer5());
         tf_correctAnswer.setText(selectedQuestion.getCorrectAnswers());
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
-        tf_optionalFeedback.setText(selectedQuestion.toString());
-        if (selectedQuestion.getPicture().trim().length() > 0) {
+        if (selectedQuestion.getPicture() != null && selectedQuestion.getPicture().trim().length() > 0) {
             noImageLabel.setVisible(false);
             loadImage(PATH + selectedQuestion.getPicture(), iv_image);
         } else {
@@ -110,6 +109,10 @@ public class EditQuestionsController {
 
     public void setQuestionnaire(LearningQuestionnaire learningQuestionnaire) {
         this.learningQuestionnaire = learningQuestionnaire;
+    }
+
+    public LearningQuestionnaire getQuestionnaire() {
+        return this.learningQuestionnaire;
     }
 
     @FXML
@@ -166,6 +169,7 @@ public class EditQuestionsController {
             var img = new Image(file.toURI().toURL().toExternalForm());
             view.setImage(img);
             centerImage();
+            noImageLabel.setVisible(false);
             LOG.trace("Successfully loaded the image.");
         } catch (MalformedURLException e) {
             LOG.error("Failed to load the image with path: " + PATH);

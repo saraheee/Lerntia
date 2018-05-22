@@ -13,10 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -25,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
+
 
 @Controller
 public class SelectQuestionAdministrateController {
@@ -53,6 +52,19 @@ public class SelectQuestionAdministrateController {
     public TableColumn<Question, String> tc_answer4;
     @FXML
     public TableColumn<Question, String> tc_answer5;
+    //For the Searching Operation
+    @FXML
+    public TextField tf_searchQuestion;
+    @FXML
+    public TextField tf_searchAnswer1;
+    @FXML
+    public TextField tf_searchAnswer2;
+    @FXML
+    public TextField tf_searchAnswer3;
+    @FXML
+    public TextField tf_searchAnswer4;
+    @FXML
+    public TextField tf_searchAnswer5;
     private Stage stage;
     private LearningQuestionnaire administrateMode;
 
@@ -207,7 +219,48 @@ public class SelectQuestionAdministrateController {
     }
 
     @FXML
-    public void saveQuestion(ActionEvent actionEvent) {
-        //Todo saving the Operation
+    public void searchQuestion(ActionEvent actionEvent) {
+        this.stage.close();
+        var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
+        //Todo - Searching for Questions/Answers
+    }
+
+    /**
+     * Is a Helping Function used for the Search operation
+     *
+     * @param actionEvent
+     */
+    @FXML
+    public void onSearchButtonClicked(ActionEvent actionEvent) {
+        Question questionInput = new Question();
+        questionInput.setQuestionText(tf_searchQuestion.getText());
+        questionInput.setAnswer1(tf_searchAnswer1.getText());
+        questionInput.setAnswer2(tf_searchAnswer2.getText());
+        questionInput.setAnswer3(tf_searchAnswer3.getText());
+        questionInput.setAnswer4(tf_searchAnswer4.getText());
+        questionInput.setAnswer5(tf_searchAnswer5.getText());
+        ObservableList<Question> newContent = FXCollections.observableArrayList();
+        try {
+            //Get the List and Load it into the TableView
+            List<Question> searchedQuestions = questionDAO.searchForQuestions(questionInput);
+            newContent.addAll(searchedQuestions);
+            for (int i = 0; i < tv_questionTable.getItems().size(); i++) {
+                tv_questionTable.getItems().clear();
+            }
+
+            LOG.info("HABIBI: " + getContent().size() + " HBUBUB: " + newContent.size());
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        //Open the prev. Window and close the Current one
+        this.stage.close();
+        var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
+        fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+        this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+        tv_questionTable.getItems().clear();
+        tv_questionTable.getItems().addAll(newContent);
     }
 }
