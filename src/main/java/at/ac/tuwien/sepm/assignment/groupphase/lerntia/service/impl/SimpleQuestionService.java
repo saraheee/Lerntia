@@ -25,6 +25,8 @@ public class SimpleQuestionService implements IQuestionService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private QuestionDAO questionDAO;
 
+    private ConfigReader configReaderQuestions = new ConfigReader("questions");
+
     @Autowired
     public SimpleQuestionService(QuestionDAO questionDAO){
             this.questionDAO = questionDAO;
@@ -98,8 +100,6 @@ public class SimpleQuestionService implements IQuestionService {
 
     @Override
     public void validate(Question question) throws ServiceException {
-
-        ConfigReader configReaderQuestions = new ConfigReader("questions");
 
         var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
         var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
@@ -209,5 +209,15 @@ public class SimpleQuestionService implements IQuestionService {
         } catch (FileNotFoundException e) {
             LOG.error("cannot find image");
         }
+    }
+
+    @Override
+    public List<Question> searchForQuestions(Question questionInput) throws ServiceException {
+            try {
+                return questionDAO.searchForQuestions(questionInput);
+            } catch (PersistenceException e) {
+                LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
+                throw new ServiceException(e.getMessage());
+            }
     }
 }
