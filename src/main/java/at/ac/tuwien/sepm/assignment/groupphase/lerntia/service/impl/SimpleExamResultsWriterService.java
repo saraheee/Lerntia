@@ -28,7 +28,7 @@ public class SimpleExamResultsWriterService implements IExamResultsWriterService
         try {
             iExamResultsWriterDAO.writeExamResults(questions, path);
         } catch (PersistenceException e) {
-            throw new ServiceException("TODO");
+            throw new ServiceException("Das Resultat konnte nicht gespeichert werden");
         }
     }
 }
