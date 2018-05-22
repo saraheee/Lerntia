@@ -443,7 +443,7 @@ public class LerntiaMainController {
             e.printStackTrace();
         }
 
-        // TODO - fragen wo die pdf datei gespeichert werden soll
+        // TODO - ask the user where the report should be saved
 
         try {
             iExamResultsWriterService.writeExamResults(questionList, "");
