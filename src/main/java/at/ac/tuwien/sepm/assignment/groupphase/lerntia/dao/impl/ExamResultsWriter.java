@@ -34,7 +34,7 @@ public class ExamResultsWriter implements IExamResultsWriterDAO {
         document.open();
         Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
 
-        // prepare report
+        LOG.info("Prepare report");
 
         PdfPTable table = new PdfPTable(2);
 
