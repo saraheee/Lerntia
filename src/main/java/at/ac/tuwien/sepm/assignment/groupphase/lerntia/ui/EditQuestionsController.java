@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -29,7 +28,6 @@ public class EditQuestionsController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static String PATH;
-    private final LerntiaMainController lerntiaMainController;
     private final IQuestionService questionService;
     private final WindowController windowController;
     private final AlertController alertController;
@@ -59,10 +57,9 @@ public class EditQuestionsController {
     private String imageName;
 
     @Autowired
-    public EditQuestionsController(LerntiaMainController lerntiaMainController, IQuestionService questionDAO,
+    public EditQuestionsController(LerntiaMainController lerntiaMainController, IQuestionService questionService,
                                    WindowController windowController, AlertController alertController) {
-        this.lerntiaMainController = lerntiaMainController;
-        this.questionService = questionDAO;
+        this.questionService = questionService;
         this.windowController = windowController;
         this.alertController = alertController;
     }
@@ -115,11 +112,11 @@ public class EditQuestionsController {
     }
 
     @FXML
-    public void editButton(ActionEvent actionEvent) {
+    public void editButton() {
         LOG.info("Edit Button Clicked");
         if (notEmpty(tf_question.getText()) && notEmpty(tf_answer1.getText()) && notEmpty(tf_answer2.getText())
             && notEmpty(tf_correctAnswer.getText())) {
-            Question newData = new Question();
+            var newData = new Question();
             newData.setQuestionText(tf_question.getText());
             newData.setAnswer1(tf_answer1.getText());
             newData.setAnswer2(tf_answer2.getText());
