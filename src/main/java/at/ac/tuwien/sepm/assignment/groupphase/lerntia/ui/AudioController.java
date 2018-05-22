@@ -57,7 +57,7 @@ public class AudioController {
             tts.setAnswer3(this.answer3);
             tts.setAnswer4(this.answer4);
             tts.setAnswer5(this.answer5);
-
+            resetAnswers();
             if (iTextToSpeechService != null) {
                 try {
                     stopReading();
@@ -75,6 +75,15 @@ public class AudioController {
                 showAudioErrorDialog();
             }
         }
+    }
+
+    private void resetAnswers() {
+        this.question = null;
+        this.answer1 = null;
+        this.answer2 = null;
+        this.answer3 = null;
+        this.answer4 = null;
+        this.answer5 = null;
     }
 
     void readSingleAnswer(String answerText) {
