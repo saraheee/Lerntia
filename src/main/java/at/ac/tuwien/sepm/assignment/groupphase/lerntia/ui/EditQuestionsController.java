@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -31,7 +30,7 @@ public class EditQuestionsController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static String PATH;
     private final LerntiaMainController lerntiaMainController;
-    private final IQuestionService questionDAO;
+    private final IQuestionService questionService;
     private final WindowController windowController;
     private final AlertController alertController;
     @FXML
@@ -63,7 +62,7 @@ public class EditQuestionsController {
     public EditQuestionsController(LerntiaMainController lerntiaMainController, IQuestionService questionDAO,
                                    WindowController windowController, AlertController alertController) {
         this.lerntiaMainController = lerntiaMainController;
-        this.questionDAO = questionDAO;
+        this.questionService = questionDAO;
         this.windowController = windowController;
         this.alertController = alertController;
     }
@@ -107,61 +106,70 @@ public class EditQuestionsController {
         }
     }
 
-    public void setQuestionnaire(LearningQuestionnaire learningQuestionnaire) {
-        this.learningQuestionnaire = learningQuestionnaire;
-    }
-
     public LearningQuestionnaire getQuestionnaire() {
         return this.learningQuestionnaire;
+    }
+
+    public void setQuestionnaire(LearningQuestionnaire learningQuestionnaire) {
+        this.learningQuestionnaire = learningQuestionnaire;
     }
 
     @FXML
     public void editButton(ActionEvent actionEvent) {
         LOG.info("Edit Button Clicked");
-        Question newData = new Question();
-        newData.setQuestionText(tf_question.getText());
-        newData.setAnswer1(tf_answer1.getText());
-        newData.setAnswer2(tf_answer2.getText());
-        newData.setAnswer3(tf_answer3.getText());
-        newData.setAnswer4(tf_answer4.getText());
-        newData.setAnswer5(tf_answer5.getText());
-        newData.setCorrectAnswers(tf_correctAnswer.getText());
-        newData.setOptionalFeedback(tf_optionalFeedback.getText());
-        newData.setId(selectedQuestion.getId());
-        newData.setPicture(imageName);
-        try {
-            questionDAO.update(newData);
-            LOG.info("Editing Completed - Refreshing learning view");
-            lerntiaMainController.getAndShowTheFirstQuestion();
+        if (notEmpty(tf_question.getText()) && notEmpty(tf_answer1.getText()) && notEmpty(tf_answer2.getText())
+            && notEmpty(tf_correctAnswer.getText())) {
+            Question newData = new Question();
+            newData.setQuestionText(tf_question.getText());
+            newData.setAnswer1(tf_answer1.getText());
+            newData.setAnswer2(tf_answer2.getText());
+            newData.setAnswer3(tf_answer3.getText());
+            newData.setAnswer4(tf_answer4.getText());
+            newData.setAnswer5(tf_answer5.getText());
+            newData.setCorrectAnswers(tf_correctAnswer.getText());
+            newData.setOptionalFeedback(tf_optionalFeedback.getText());
+            newData.setId(selectedQuestion.getId());
+            newData.setPicture(imageName);
 
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler", "Die Bearbeitung ist fehlgeschlagen!", null);
-        } catch (ControllerException e) {
-            LOG.debug("Bearbeitung fehlgeschlagen: " + e.getMessage());
-            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler", "Die Bearbeitung ist fehlgeschlagen!", null);
+            try {
+                questionService.update(newData);
+                LOG.info("Editing Completed - Refreshing learning view");
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Erfolgreich bearbeitet",
+                    "Die Frage wurde erfolgreich bearbeitet.", null);
+                this.stage.close();
+            } catch (ServiceException e) {
+                alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
+                    "Die Bearbeitung ist fehlgeschlagen!", null);
+            }
+        } else {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
+                "Mindestens eines der Pflichtfelder ist leer.", null);
         }
-        this.stage.close();
-        alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Erfolgreich bearbeitet", "Die Frage wurde erfolgreich bearbeitet.", null);
+    }
+
+    private boolean notEmpty(String text) {
+        return (text != null && text.trim().length() > 0);
     }
 
     @FXML
     public void imageButton() {
         var fileChooser = new FileChooser();
+        fileChooser.setTitle("[Lerntia] Bild auswählen");
         fileChooser.setInitialDirectory(new File(PATH));
-        var extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
-        var extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
-        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+        var extFilter = new FileChooser.ExtensionFilter("PNG and JPG files (*.jpg, *.png)", "*.PNG", "*.JPG");
+        fileChooser.getExtensionFilters().add(extFilter);
 
-        var file = fileChooser.showOpenDialog(null);
+        var stage = new Stage();
+        var file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             imageName = file.getName();
             loadImage(PATH + imageName, iv_image);
             LOG.debug("Selected image: " + imageName);
+            noImageLabel.setVisible(false);
         } else {
             LOG.debug("Canceled image selection.");
         }
     }
-
 
     private void loadImage(String PATH, ImageView view) {
         var file = new File(PATH);
@@ -169,14 +177,12 @@ public class EditQuestionsController {
             var img = new Image(file.toURI().toURL().toExternalForm());
             view.setImage(img);
             centerImage();
-            noImageLabel.setVisible(false);
             LOG.trace("Successfully loaded the image.");
         } catch (MalformedURLException e) {
             LOG.error("Failed to load the image with path: " + PATH);
-
+            noImageLabel.setVisible(true);
         }
     }
-
 
     private void centerImage() {
         var img = iv_image.getImage();

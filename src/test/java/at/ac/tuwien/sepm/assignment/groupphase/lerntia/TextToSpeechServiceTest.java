@@ -83,6 +83,7 @@ public class TextToSpeechServiceTest {
         var configReaderSpeech = new ConfigReader("speech");
         final var BREAK = configReaderSpeech.getValue("break");
         final var ANSWER = configReaderSpeech.getValue("answerPrefix");
+        configReaderSpeech.close();
         var service = new SimpleTextToSpeechService();
         var speech = new Speech();
 

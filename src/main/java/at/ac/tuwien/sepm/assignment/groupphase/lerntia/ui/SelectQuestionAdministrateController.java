@@ -214,11 +214,6 @@ public class SelectQuestionAdministrateController {
     }
 
     @FXML
-    public void markForExam(ActionEvent actionEvent) {
-        //Todo Mark for Exam
-    }
-
-    @FXML
     public void searchQuestion(ActionEvent actionEvent) {
         this.stage.close();
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
@@ -250,7 +245,7 @@ public class SelectQuestionAdministrateController {
                 tv_questionTable.getItems().clear();
             }
 
-            LOG.info("HABIBI: " + getContent().size() + " HBUBUB: " + newContent.size());
+            LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
             e.printStackTrace();
         }
