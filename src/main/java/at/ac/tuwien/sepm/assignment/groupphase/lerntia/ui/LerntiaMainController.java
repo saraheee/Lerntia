@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -276,7 +275,7 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
 
-            if ( ! isExamMode()) {
+            if (!isExamMode()) {
                 alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
                     "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
             }
@@ -302,7 +301,7 @@ public class LerntiaMainController {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
 
-            if ( ! isExamMode()) {
+            if (!isExamMode()) {
                 alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
                     "Du bist am Anfang.", "");
             }
@@ -317,7 +316,7 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
-      //  mainWindowRight.autosize(); // to resize the frame structure back to default values
+        //  mainWindowRight.autosize(); // to resize the frame structure back to default values
         mainWindowLeft.autosize();
 
         if (question == null) {
@@ -343,7 +342,7 @@ public class LerntiaMainController {
             answer3Controller.setSelected(checkedAnswers.contains("3"));
             answer4Controller.setSelected(checkedAnswers.contains("4"));
             answer5Controller.setSelected(checkedAnswers.contains("5"));
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // nothing has been selected if the question is shown for the first time.
             // this can be ignored.
         }
@@ -373,8 +372,7 @@ public class LerntiaMainController {
                     String imagePath =
                         System.getProperty("user.dir") + File.separator + "img" + File.separator +
                             selectedLearningQuestionnaire.getName() + File.separator +
-                            question.getPicture()
-                        ;
+                            question.getPicture();
 
                     LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                     File imageFile = new File(imagePath);
@@ -421,7 +419,7 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
-    public void switchToExamMode(){
+    public void switchToExamMode() {
         buttonBar.getButtons().remove(checkAnswerButton);
         buttonBar.getButtons().add(handInButton);
     }
@@ -434,12 +432,12 @@ public class LerntiaMainController {
         boolean handInConfirmation = alertController.showBigConfirmationAlert("Prüfung abgeben",
             "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
-        if (handInConfirmation){
+        if (handInConfirmation) {
             evaluateExam();
         }
     }
 
-    public void evaluateExam(){
+    public void evaluateExam() {
 
         List<Question> questionList = null;
         try {
@@ -466,7 +464,7 @@ public class LerntiaMainController {
         this.examMode = examMode;
     }
 
-    private String getCheckedAnswers(){
+    private String getCheckedAnswers() {
         String checkedAnswers = "";
         if (answer1Controller.isSelected()) {
             checkedAnswers += "1";
@@ -486,7 +484,7 @@ public class LerntiaMainController {
         return checkedAnswers;
     }
 
-    private void saveAnswerState(){
+    private void saveAnswerState() {
         String checkedAnswers = getCheckedAnswers();
         question.setCheckedAnswers(checkedAnswers);
     }
