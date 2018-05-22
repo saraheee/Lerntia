@@ -448,7 +448,9 @@ public class LerntiaMainController {
         try {
             questionList = lerntiaService.getQuestions();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Die Prüfung kann nicht verarbeitet werden",
+                "Error", "Die Prüfung kann nicht verarbeitet werden");
+            return;
         }
 
         // TODO - ask the user where the report should be saved
@@ -456,9 +458,10 @@ public class LerntiaMainController {
         try {
             iExamResultsWriterService.writeExamResults(questionList, "");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
+                "Error", e.getMessage());
+            return;
         }
-
     }
 
     public boolean isExamMode() {
