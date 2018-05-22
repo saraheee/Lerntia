@@ -3,7 +3,7 @@
 
 <?import javafx.scene.control.Label?>
 <Label fx:id="question" stylesheets="@/css/label.css" styleClass="question-label"
-       text="&lt;Frage&gt;"
+       text="Keine Frage vorhanden"
        wrapText="true" xmlns="http://javafx.com/javafx/8.0.121"
        xmlns:fx="http://javafx.com/fxml/1"
        fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.QuestionController"/>
