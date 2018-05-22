@@ -68,6 +68,18 @@ public class SelectQuestionnaireController {
 
     void showSelectQuestionnaireWindow() {
 
+        try {
+            learningQuestionnaireList = learningQuestionnaireService.readAll();
+        } catch (ServiceException e) {
+            // TODO - finish exception handling
+        }
+
+        if (learningQuestionnaireList.isEmpty()){
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
+                "Error", "Es ist noch kein Fragebogen vorhanden");
+            return;
+        }
+
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionnaire.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
