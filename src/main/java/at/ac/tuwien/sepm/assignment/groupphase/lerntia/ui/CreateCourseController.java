@@ -73,6 +73,9 @@ public class CreateCourseController {
             courseService.validate(course);
             courseService.create(course);
 
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "LVA erstellen erfolgreich", "Erfolg",
+                "LVA erfolgreich angelegt.");
+
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
