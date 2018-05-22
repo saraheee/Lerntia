@@ -249,7 +249,7 @@ public class LerntiaMainController {
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
-            question = lerntiaService.getFirstQuestion();
+            question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
             //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
@@ -273,14 +273,13 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
 
-            if (!isExamMode()) {
-                alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                    "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
-            }
+            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
 
             try {
-                getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
+                question = lerntiaService.getFirstQuestion();
+                showQuestionAndAnswers();
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }
@@ -299,17 +298,17 @@ public class LerntiaMainController {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
 
-            if (!isExamMode()) {
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
-                    "Du bist am Anfang.", "");
-            }
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
+                "Du bist am Anfang.", "");
 
+            // TODO - code can probably be deleted.
+            /*
             try {
-                // TODO - here we could switch to the last question
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
 
