@@ -43,7 +43,7 @@ public class CourseServiceTest {
 
     @Test
     public void validateCorrectCourse() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"18", "asdf", false);
+        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
         courseService.validate(course);
     }
 
@@ -63,7 +63,7 @@ public class CourseServiceTest {
         courseService.validate(course);
     }
 
-    // semester does not end with "W" or "S"
+    // semester format not correct
 
     @Test(expected = ServiceException.class)
     public void validateSemesterDoesntEndWithWOrS() throws ServiceException {
@@ -84,6 +84,14 @@ public class CourseServiceTest {
     @Test(expected = ServiceException.class)
     public void validateYearIsNotFourDigits() throws ServiceException {
         Course course = new Course("asdf", Semester.SS+"12345", "asdf", false);
+        courseService.validate(course);
+    }
+
+    // year is negative
+
+    @Test(expected = ServiceException.class)
+    public void validateYearIsNegative() throws ServiceException {
+        Course course = new Course("asdf", Semester.SS+"-123", "asdf", false);
         courseService.validate(course);
     }
 

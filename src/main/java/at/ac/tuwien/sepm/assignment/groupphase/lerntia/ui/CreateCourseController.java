@@ -78,10 +78,8 @@ public class CreateCourseController {
             stage.close();
 
         } catch (ServiceException e) {
-
             alertController.showStandardAlert(Alert.AlertType.ERROR, "LVA erstellen fehlgeschlagen", "Fehler",
-                "Die LVA konnte nicht erstellt werden.");
-
+                e.getLocalizedMessage());
         }
     }
 }
