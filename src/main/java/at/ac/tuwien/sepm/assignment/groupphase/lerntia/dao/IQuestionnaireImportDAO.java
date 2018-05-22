@@ -12,6 +12,6 @@ public interface IQuestionnaireImportDAO {
      * @return a list of Strings representing the rows of the File
      * @throws IOException if the File at filePath cannot be read
      * */
-    public ArrayList<String> getContents(String filePath) throws IOException;
+     ArrayList<String> getContents(String filePath) throws IOException;
 
 }
