@@ -159,7 +159,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public Question getFirstQuestion() throws ServiceException {
+    public Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException {
         LearningQuestionnaire currentLQ = null;
         currentLQ = learningQuestionnaireService.getSelected();
 
@@ -170,6 +170,17 @@ public class MainLerntiaService implements IMainLerntiaService {
         getQuestionsFromLearningQuestionnaire(currentLQ);
         currentQuestionIndex = -1;
         return getNextQuestionFromList();
+    }
+
+    @Override
+    public Question getFirstQuestion() throws ServiceException {
+        try {
+            currentQuestion = questionList.get(0);
+            currentQuestionIndex = 0;
+            return currentQuestion;
+        }catch (IndexOutOfBoundsException e){
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     @Override
