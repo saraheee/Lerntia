@@ -91,7 +91,7 @@ public class SelectQuestionAdministrateController {
          * The following line must stay there. It Refreshs the LerntiaService.
          */
         try {
-            lerntiaService.getFirstQuestion();
+            lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
             e.printStackTrace();
         }

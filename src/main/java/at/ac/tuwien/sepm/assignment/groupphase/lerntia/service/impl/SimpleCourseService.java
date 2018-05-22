@@ -122,13 +122,10 @@ public class SimpleCourseService implements ICourseService {
             if (yearStr.length() != 4) {
                 throw new ServiceException("Das Jahr sollte eine Zahl mit 4 Ziffern sein");
             }
-
             int yearInt = Integer.parseInt(yearStr);
-
-            if (yearInt < 0){
-                throw new ServiceException("Das Jahr darf keine negative Zahl sein");
+            if (yearInt < 0) {
+                throw new ServiceException("Das Jahr sollte nicht negativ sein");
             }
-
             course.setSemester(course.getSemester().substring(0,2)+yearInt);
             LOG.info("All course values are valid.");
         } catch(NumberFormatException e) {
