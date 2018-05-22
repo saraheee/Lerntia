@@ -92,7 +92,7 @@ WHERE NOT EXISTS (SELECT * FROM PUser);
 INSERT INTO Course
    SELECT * FROM (
       SELECT * FROM Course WHERE FALSE
-        UNION SELECT 1, '1', '4', 'TIL', false
+        UNION SELECT 1, '1', 'SS18', 'TIL', false
   )
 WHERE NOT EXISTS (SELECT * FROM Course);
 
