@@ -71,12 +71,13 @@ public class SelectQuestionnaireController {
         try {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            // TODO - finish exception handling
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Lesen der Fragebögen fehlgeschlagen",
+                "Fehler beim Lesen der Fragebögen!", "");
         }
 
         if (learningQuestionnaireList.isEmpty()){
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
-                "Error", "Es ist noch kein Fragebogen vorhanden");
+                "Fehler!", "Es ist noch kein Fragebogen vorhanden");
             return;
         }
 
@@ -97,7 +98,7 @@ public class SelectQuestionnaireController {
             iQuestionnaireService.deselectAllQuestionnaires();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Error", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
+                "Fehler!", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
         }
 
         // select questionnaire
