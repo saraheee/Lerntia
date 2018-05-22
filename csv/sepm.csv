@@ -1,5 +1,5 @@
 Programmieren macht Spaß!;Wahr;Falsch;;;;1;;
 Wähle die Namen der 3-Schichten-Architektur!;Persistenzschicht;Schinkenschicht;Logikschicht;Käseschicht;Präsentationsschicht;135;;Die Persistenzschicht greift auf die Datenbank zu, die Logikschicht beinhaltet alle Verarbeitungsmechanismen und die Präsentationsschicht ist für die Benutzerschnittstelle verantwortlich.
-Wie lautet der Name dieser Software?;LEPO;Lerntia;Reset;;;2;
+Wie lautet der Name dieser Software?;LEPO;Lerntia;Reset;;;2;main.png;;
 Bitte wähle Antwort Nummer 1 und 2!;Antwort Eins;Antwort Zwei;Antwort Drei;Antwort Vier;Antwort Fünf;12;;;
 Bitte wähle Antwort Nummer 2 und 3!;Antwort Eins;Antwort Zwei;Antwort Drei;Antwort Vier;Antwort Fünf;23;;;
