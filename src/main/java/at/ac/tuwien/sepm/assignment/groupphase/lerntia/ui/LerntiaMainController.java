@@ -122,7 +122,7 @@ public class LerntiaMainController {
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
-            showNoQuestionsAvailable();
+            //showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
         }
     }
