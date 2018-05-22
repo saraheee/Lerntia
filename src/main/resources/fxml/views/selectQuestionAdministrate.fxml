@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -9,9 +8,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="580.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
+
+<AnchorPane prefHeight="580.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
     <children>
 
         <Button layoutX="808.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0" prefWidth="113.0" text="Bearbeiten" />
@@ -28,15 +26,12 @@
         </TableView>
         <Button layoutX="655.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0" prefWidth="113.0" text="Löschen" />
         <Button layoutX="504.0" layoutY="515.0" mnemonicParsing="false" onAction="#markForExam" prefHeight="37.0" prefWidth="113.0" text="Merken" />
-        <Button layoutX="956.0" layoutY="515.0" mnemonicParsing="false" onAction="#saveQuestion" prefHeight="37.0" prefWidth="113.0" text="Speichern" />
     </children>
-    <Button layoutX="504.0" layoutY="515.0" mnemonicParsing="false" onAction="#markForExam" prefHeight="37.0"
-            prefWidth="113.0" text="Merken"/>
-    <Button layoutX="655.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0"
-            prefWidth="113.0" text="Löschen"/>
+   <children>
+       <Button layoutX="504.0" layoutY="515.0" mnemonicParsing="false" onAction="#markForExam" prefHeight="37.0" prefWidth="113.0" text="Merken" />
+       <Button layoutX="655.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0" prefWidth="113.0" text="Löschen" />
 
-    <Button layoutX="808.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0"
-            prefWidth="113.0" text="Bearbeiten"/>
-    <Button layoutX="956.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0"
-            prefWidth="113.0" text="Speichern"/>
+       <Button layoutX="808.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0" prefWidth="113.0" text="Bearbeiten" />
+       <Button layoutX="938.0" layoutY="515.0" mnemonicParsing="false" onAction="#searchQuestion" prefHeight="37.0" prefWidth="131.0" text="Nach Fragen suchen" />
+   </children>
 </AnchorPane>

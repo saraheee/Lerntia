@@ -49,4 +49,11 @@ public interface IQuestionDAO {
      * @throws PersistenceException if the method can't get the Question
      * */
     Question get(long id) throws PersistenceException;
+
+    /**
+     *
+     * @param questionInput contains a part of a Question that is used to finde the Questions
+     * @return list which contains all the Question that contain a part of the questionInput
+     */
+    List<Question> searchForQuestions(Question questionInput) throws PersistenceException;
 }

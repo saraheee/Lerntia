@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
+   <children>
+      <TextField fx:id="tf_searchQuestion" layoutX="15.0" layoutY="15.0" prefHeight="60.0" prefWidth="299.0" promptText="Frage" />
+      <TextField fx:id="tf_searchAnswer1" layoutX="15.0" layoutY="90.0" prefHeight="60.0" prefWidth="299.0" promptText="Antwort 1" />
+      <TextField fx:id="tf_searchAnswer3" layoutX="15.0" layoutY="240.0" prefHeight="60.0" prefWidth="300.0" promptText="Antwort 3" />
+      <TextField fx:id="tf_searchAnswer2" layoutX="15.0" layoutY="165.0" prefHeight="60.0" prefWidth="299.0" promptText="Antwort 2" />
+      <TextField fx:id="tf_searchAnswer4" layoutX="15.0" layoutY="315.0" prefHeight="60.0" prefWidth="300.0" promptText="Antwort 4" />
+      <TextField fx:id="tf_searchAnswer5" layoutX="15.0" layoutY="390.0" prefHeight="60.0" prefWidth="299.0" promptText="Antwort 5" />
+      <Button layoutX="471.0" layoutY="402.0" mnemonicParsing="false" onAction="#onSearchButtonClicked" prefHeight="37.0" prefWidth="113.0" text="Suchen" />
+   </children>
+</AnchorPane>
