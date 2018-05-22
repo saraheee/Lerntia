@@ -338,9 +338,6 @@ public class LerntiaMainController {
             LOG.debug("No image to be displayed for this question");
         } else {
             try {
-                //String imagePath = System.getProperty("user.dir") + File.separator + "ss18_sepm_qse_08" + File.separator
-                //    + "img" + File.separator + question.getPicture();
-
                 LearningQuestionnaire selectedLearningQuestionnaire = null;
 
                 try {
@@ -399,7 +396,7 @@ public class LerntiaMainController {
         boolean handInConfirmation = alertController.showBigConfirmationAlert("Prüfung abgeben",
             "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
-        if (handInConfirmation == true){
+        if (handInConfirmation){
             evaluateExam();
         }
     }
@@ -417,9 +414,7 @@ public class LerntiaMainController {
 
         try {
             iExamResultsWriterService.writeExamResults(questionList, "");
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
+        } catch (ServiceException | PersistenceException e) {
             e.printStackTrace();
         }
 

@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -19,6 +20,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
     private final ILearningQuestionnaireDAO iLearningQuestionnaireDAO;
 
+    @Autowired
     public SimpleLearningQuestionnaireService(ILearningQuestionnaireDAO iLearningQuestionnaireDAO){
         this.iLearningQuestionnaireDAO = iLearningQuestionnaireDAO;
     }
