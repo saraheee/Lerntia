@@ -57,8 +57,9 @@ public class EditQuestionsController {
     private String imageName;
 
     @Autowired
-    public EditQuestionsController(LerntiaMainController lerntiaMainController, IQuestionService questionService,
-                                   WindowController windowController, AlertController alertController) {
+    public EditQuestionsController(IQuestionService questionService,
+                                   WindowController windowController,
+                                   AlertController alertController) {
         this.questionService = questionService;
         this.windowController = windowController;
         this.alertController = alertController;
@@ -153,7 +154,7 @@ public class EditQuestionsController {
         var fileChooser = new FileChooser();
         fileChooser.setTitle("[Lerntia] Bild auswählen");
         fileChooser.setInitialDirectory(new File(PATH));
-        var extFilter = new FileChooser.ExtensionFilter("PNG and JPG files (*.jpg, *.png)", "*.PNG", "*.JPG");
+        var extFilter = new FileChooser.ExtensionFilter("PNG und JPG Files (*.png, *.jpg)", "*.PNG", "*.JPG");
         fileChooser.getExtensionFilters().add(extFilter);
 
         var stage = new Stage();
