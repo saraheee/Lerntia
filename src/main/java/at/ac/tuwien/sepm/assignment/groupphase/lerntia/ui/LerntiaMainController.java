@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -77,6 +76,10 @@ public class LerntiaMainController {
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
+    @FXML
+    private Button previousQuestionButton;
+    @FXML
+    private Button nextQuestionButton;
     @FXML
     private Button handInButton;
 
@@ -206,12 +209,31 @@ public class LerntiaMainController {
         //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
 
         if (answersCorrect) {
-            alertController.showCorrectAnswerAlert("Antworten richtig!", "Alle Antworten sind richtig.",
-                "Die nächste Frage wird angezeigt.");
+            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers+" ist richtig.",getMethod(question.getCorrectAnswers())+"\n"+question.getOptionalFeedback());
+            }
+            else {
+                String answers = "Alle richtigen Antworten sind:\n";
+                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                }
+                alertController.showCorrectAnswerAlert("Antworten richtig!", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
+            }
+
         } else {
-            alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Richtige Antworten: " +
-                question.getCorrectAnswers().replaceAll("(.)", "$1, ")
-                    .substring(0, question.getCorrectAnswers().length() * 3 - 2), "Die nächste Frage wird angezeigt.");
+            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                alertController.showWrongAnswerAlert("Antwort nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers())  + question.getOptionalFeedback());
+            }
+            else {
+                String answers = "Die richtigen Antworten sind:\n";
+                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i+1)))) {
+                        answers += "Auch: ";
+                    }
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                }
+                alertController.showWrongAnswerAlert("Antworten nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
+            }
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
@@ -231,7 +253,7 @@ public class LerntiaMainController {
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
-            question = lerntiaService.getFirstQuestion();
+            question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
             //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
@@ -255,14 +277,13 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
 
-            if ( ! isExamMode()) {
-                alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                    "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
-            }
+            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
 
             try {
-                getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
+                question = lerntiaService.getFirstQuestion();
+                showQuestionAndAnswers();
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }
@@ -281,22 +302,22 @@ public class LerntiaMainController {
             LOG.warn("No previous question to be displayed.");
             // todo add statistics after that is implemented
 
-            if ( ! isExamMode()) {
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
-                    "Du bist am Anfang.", "");
-            }
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
+                "Du bist am Anfang.", "");
 
+            // TODO - code can probably be deleted.
+            /*
             try {
-                // TODO - here we could switch to the last question
                 getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
 
     private void showQuestionAndAnswers() {
-      //  mainWindowRight.autosize(); // to resize the frame structure back to default values
+        //  mainWindowRight.autosize(); // to resize the frame structure back to default values
         mainWindowLeft.autosize();
 
         if (question == null) {
@@ -322,7 +343,7 @@ public class LerntiaMainController {
             answer3Controller.setSelected(checkedAnswers.contains("3"));
             answer4Controller.setSelected(checkedAnswers.contains("4"));
             answer5Controller.setSelected(checkedAnswers.contains("5"));
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // nothing has been selected if the question is shown for the first time.
             // this can be ignored.
         }
@@ -352,8 +373,7 @@ public class LerntiaMainController {
                     String imagePath =
                         System.getProperty("user.dir") + File.separator + "img" + File.separator +
                             selectedLearningQuestionnaire.getName() + File.separator +
-                            question.getPicture()
-                        ;
+                            question.getPicture();
 
                     LOG.debug("Image path: " + imagePath); // todo revisit this path after discussing the format in which images are to be saved in
                     File imageFile = new File(imagePath);
@@ -382,6 +402,10 @@ public class LerntiaMainController {
         setAnswerText(answer3Controller, null);
         setAnswerText(answer4Controller, null);
         setAnswerText(answer5Controller, null);
+
+        buttonBar.getButtons().remove(previousQuestionButton);
+        buttonBar.getButtons().remove(nextQuestionButton);
+        buttonBar.getButtons().remove(checkAnswerButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
@@ -400,7 +424,7 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
-    public void switchToExamMode(){
+    public void switchToExamMode() {
         buttonBar.getButtons().remove(checkAnswerButton);
         buttonBar.getButtons().add(handInButton);
     }
@@ -413,28 +437,31 @@ public class LerntiaMainController {
         boolean handInConfirmation = alertController.showBigConfirmationAlert("Prüfung abgeben",
             "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
-        if (handInConfirmation){
+        if (handInConfirmation) {
             evaluateExam();
         }
     }
 
-    public void evaluateExam(){
+    public void evaluateExam() {
 
         List<Question> questionList = null;
         try {
             questionList = lerntiaService.getQuestions();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Die Prüfung kann nicht verarbeitet werden",
+                "Error", "Die Prüfung kann nicht verarbeitet werden");
+            return;
         }
 
-        // TODO - fragen wo die pdf datei gespeichert werden soll
+        // TODO - ask the user where the report should be saved
 
         try {
             iExamResultsWriterService.writeExamResults(questionList, "");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
+                "Error", e.getMessage());
+            return;
         }
-
     }
 
     public boolean isExamMode() {
@@ -445,7 +472,7 @@ public class LerntiaMainController {
         this.examMode = examMode;
     }
 
-    private String getCheckedAnswers(){
+    private String getCheckedAnswers() {
         String checkedAnswers = "";
         if (answer1Controller.isSelected()) {
             checkedAnswers += "1";
@@ -465,8 +492,19 @@ public class LerntiaMainController {
         return checkedAnswers;
     }
 
-    private void saveAnswerState(){
+    private void saveAnswerState() {
         String checkedAnswers = getCheckedAnswers();
         question.setCheckedAnswers(checkedAnswers);
+    }
+
+    private String getMethod(String str) {
+        switch (str) {
+            case "1":   return question.getAnswer1()+"\n";
+            case "2":   return question.getAnswer2()+"\n";
+            case "3":   return question.getAnswer3()+"\n";
+            case "4":   return question.getAnswer4()+"\n";
+            case "5":   return question.getAnswer5()+"\n";
+            default:    return "";
+        }
     }
 }

@@ -72,7 +72,10 @@ public class CreateCourseController {
             courseService.validate(course);
             LOG.info("Send the new course to the next Layer for creation");
             courseService.create(course);
-            LOG.info("Close course creation window.");
+
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "LVA erstellen erfolgreich", "Erfolg",
+                "LVA erfolgreich angelegt.");
+
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
