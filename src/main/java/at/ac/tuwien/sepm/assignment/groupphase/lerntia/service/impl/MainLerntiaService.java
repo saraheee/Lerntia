@@ -1,27 +1,24 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import org.hsqldb.persist.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Component
 public class MainLerntiaService implements IMainLerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final int SLEEP_SECONDS = 2;
 
     private boolean learningMode = true;
     private List<LearningQuestionnaire> allLQs;
@@ -58,33 +55,10 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.userQuestionaireService = userQuestionaireService;
     }
 
-    /*
-    private ICourseDAO courseDAO;
-    private IUserDAO userDAO;
-    private IQuestionnaireDAO questionnaireDAO;
-    private IExamQuestionnaireDAO examQuestionaireDAO;
-    private ILearningQuestionnaireDAO learningQuestionnaireDAO;
-    private IQuestionDAO questionDAO;
-    private IQuestionnaireQuestionDAO questionnaireQuestionDAO;
-    private IUserCourseDAO userCourseDAO;
-    private IUserQuestionaireDAO userQuestionaireDAO;
 
-
-    @Autowired
-    public MainLerntiaService(CourseDAO courseDAO, UserDAO userDAO, QuestionnaireDAO questionnaireDAO, ExamQuestionaireDAO examQuestionaireDAO, LearningQuestionnaireDAO learningQuestionnaireDAO, QuestionDAO questionDAO, QuestionnaireQuestionDAO questionnaireQuestionDAO, UserCourseDAO userCourseDAO, UserQuestionaireDAO userQuestionaireDAO){
-        this.courseDAO = courseDAO;
-        this.userDAO = userDAO;
-        this.questionnaireDAO = questionnaireDAO;
-        this.examQuestionaireDAO = examQuestionaireDAO;
-        this.learningQuestionnaireDAO =learningQuestionnaireDAO;
-        this.questionDAO = questionDAO;
-        this.questionnaireQuestionDAO = questionnaireQuestionDAO;
-        this.userCourseDAO = userCourseDAO;
-        this.userQuestionaireDAO = userQuestionaireDAO;
-    }
-    */
 
     private void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException{
+        LOG.info("Get questions from an Exam Questionnaire.");
         listcounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
         questionList = new ArrayList<>();
@@ -100,15 +74,18 @@ public class MainLerntiaService implements IMainLerntiaService {
             question.setId(questionnaireQuestion.getQuestionid());
             searchparameters.add(question);
             questionnaireQuestionsList.remove(0);
-            LOG.info("ExamQuestionnaire Question found.");
         }
+        LOG.info("All Exam Questionnaire Questions info found.");
+        LOG.info("Send required question search parameters to retrieve");
         questionList = questionService.search(searchparameters);
         for (Question q:questionList) {
             listcounter++;
         }
+        LOG.info("All Exam Questions set.");
     }
 
     private void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException{
+        LOG.info("Get all questions from a Learning Questionnaire.");
         listcounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
         questionList = new ArrayList<>();
@@ -117,28 +94,33 @@ public class MainLerntiaService implements IMainLerntiaService {
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(lQ.getId());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
+        LOG.info("All info regarding Questions found.");
         while (!questionnaireQuestionsList.isEmpty()){
             question = new Question();
             questionnaireQuestion = questionnaireQuestionsList.get(0);
             question.setId(questionnaireQuestion.getQuestionid());
             searchparameters.add(question);
             questionnaireQuestionsList.remove(0);
-            LOG.info("LearningQuestionnaire Question found.");
         }
+        LOG.info("All questions from the selected LearningQuestionnaire found.");
+        LOG.info("Search for questions in the Database.");
         questionList = questionService.search(searchparameters);
         for (Question q:questionList) {
             listcounter++;
         }
+        LOG.info("All Questins from the LearningQuestionnaire set.");
     }
 
 
     @Override
     public Question getNextQuestionFromList() throws ServiceException{
         try {
+            LOG.info("Get next Question from Questionnaire.");
             if (!(currentQuestionIndex + 1 > listcounter)) {
                 currentQuestion = new Question();
                 currentQuestion = questionList.get(++currentQuestionIndex);
             }
+            LOG.info("Next question.");
             return currentQuestion;
         }catch (IndexOutOfBoundsException e){
             throw new ServiceException(e.getMessage());
@@ -148,10 +130,12 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getPreviousQuestionFromList()throws ServiceException {
         try {
+            LOG.info("Get previous Question from Questionnaire");
             if (!(currentQuestionIndex - 1 < 0)) {
                 currentQuestion = new Question();
                 currentQuestion = questionList.get(--currentQuestionIndex);
             }
+            LOG.info("Previous Question.");
             return currentQuestion;
         }catch (IndexOutOfBoundsException e){
             throw new ServiceException(e.getMessage());
@@ -162,23 +146,24 @@ public class MainLerntiaService implements IMainLerntiaService {
     public Question getFirstQuestion() throws ServiceException {
         LearningQuestionnaire currentLQ = null;
         currentLQ = learningQuestionnaireService.getSelected();
-
         if (currentLQ == null){
-            throw new ServiceException("Es wurde noch kein Fragebogen ausgewählt");
+            throw new ServiceException("No Questionnaire has been selected yet.");
         }
 
         getQuestionsFromLearningQuestionnaire(currentLQ);
         currentQuestionIndex = -1;
+        LOG.info("First question found.");
         return getNextQuestionFromList();
     }
 
     @Override
     public void recordCheckedAnswers(Question mockQuestion) throws ServiceException {
-        // todo implement this when implementing learning algorithm
+        // todo implement this when implementing learning algorithm - learning algorithm in another branch currently
     }
 
     @Override
     public List<Question> getQuestions() throws ServiceException {
+        LOG.info("Get all questions.");
         return questionList;
     }
 
