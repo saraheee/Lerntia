@@ -92,7 +92,7 @@ public class AudioController {
                     LOG.error("Failed to read question and answers.");
                     showAudioErrorDialog();
                 } catch (TextToSpeechServiceValidationException e) {
-                    LOG.info("Validation failed for the input text of the speech synthesizer.");
+                    LOG.error("Validation failed for the input text of the speech synthesizer.");
                     showValidationFailedDialog();
                 }
             } else {
