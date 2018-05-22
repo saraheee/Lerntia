@@ -19,6 +19,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class ImportFileController {
     @FXML
     private void initialize() throws ServiceException {
         coursedata = cservice.readAll();
+
         courses = FXCollections.observableArrayList(coursedata);
 
         choices.removeAll(choices);
@@ -154,9 +156,18 @@ public class ImportFileController {
     }
 
     void showImportWindow() {
+
+        // make sure there is at least one course before opening the window.
+
+        try {
+            coursedata = cservice.readAll();
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Import Fenster kann nicht angezeigt werden","Fehler", e.getMessage());
+            return;
+        }
+
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/importFile.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         windowController.openNewWindow("Fragebogen importieren", fxmlLoader);
-
     }
 }

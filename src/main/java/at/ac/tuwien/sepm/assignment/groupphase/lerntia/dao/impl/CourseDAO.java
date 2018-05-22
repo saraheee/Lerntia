@@ -57,7 +57,6 @@ public class CourseDAO implements ICourseDAO {
                 LOG.info("Course succesfully added to Database.");
             }finally {
                 pscreate.close();
-
             }
         }catch (Exception e){
             throw new PersistenceException(e.getMessage());
