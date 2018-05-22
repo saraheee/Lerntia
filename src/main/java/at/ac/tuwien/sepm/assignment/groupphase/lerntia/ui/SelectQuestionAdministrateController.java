@@ -226,6 +226,7 @@ public class SelectQuestionAdministrateController {
         questionInput.setAnswer4(tf_searchAnswer4.getText());
         questionInput.setAnswer5(tf_searchAnswer5.getText());
         ObservableList<Question> newContent = FXCollections.observableArrayList();
+
         try {
             //Get the List and Load it into the TableView
             List<Question> searchedQuestions = questionDAO.searchForQuestions(questionInput);
