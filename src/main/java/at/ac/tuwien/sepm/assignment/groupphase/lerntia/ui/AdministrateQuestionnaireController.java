@@ -11,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
@@ -26,21 +27,26 @@ public class AdministrateQuestionnaireController {
     private final SelectQuestionAdministrateController selectQuestionAdministrateController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
+    private final EditQuestionsController editQuestionsController;
     private Stage stage;
 
     @FXML
     public ComboBox cb_questionnaire;
     private List<LearningQuestionnaire> learningQuestionnaires;
+    private LearningQuestionnaire selectedLearningQuestionnaire;
 
+    @Autowired
     public AdministrateQuestionnaireController(
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
         SelectQuestionAdministrateController selectQuestionAdministrateController,
         IMainLerntiaService lerntiaService,
-        WindowController windowController) {
+        WindowController windowController,
+        EditQuestionsController editQuestionsController) {
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
         this.selectQuestionAdministrateController = selectQuestionAdministrateController;
         this.lerntiaService = lerntiaService;
         this.windowController = windowController;
+        this.editQuestionsController = editQuestionsController;
     }
 
     @FXML
@@ -54,12 +60,14 @@ public class AdministrateQuestionnaireController {
         for (int i = 0; i < learningQuestionnaires.size(); i++) {
             cb_questionnaire.getItems().add(learningQuestionnaires.get(i).getName());
         }
+        cb_questionnaire.getSelectionModel().selectFirst();
     }
 
     @FXML
     public void selectQuestionnaire(ActionEvent actionEvent) {
         //Get the Selected Item.
-        LearningQuestionnaire selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        editQuestionsController.setQuestionnaire(selectedLearningQuestionnaire);
         LearningQuestionnaire studyMode = null;
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
@@ -97,6 +105,9 @@ public class AdministrateQuestionnaireController {
         stage.close();
     }
 
+    public LearningQuestionnaire getSelectedQuestionnaire() {
+        return this.selectedLearningQuestionnaire;
+    }
 
     /**
      * Opens the first Window in the AdministrateQuestionnare operation.

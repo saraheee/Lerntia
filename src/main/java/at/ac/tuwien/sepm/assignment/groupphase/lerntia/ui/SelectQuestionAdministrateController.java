@@ -13,11 +13,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
@@ -25,49 +29,55 @@ import java.lang.invoke.MethodHandles;
 @Controller
 public class SelectQuestionAdministrateController {
 
-    @FXML public TableView<Question> tv_questionTable;
-    @FXML public TableColumn<Question, Long> tc_id;
-    @FXML public TableColumn<Question, String> tc_question;
-    @FXML public TableColumn<Question, String> tc_answer1;
-    @FXML public TableColumn<Question, String> tc_answer2;
-    @FXML public TableColumn<Question, String> tc_answer3;
-    @FXML public TableColumn<Question, String> tc_answer4;
-    @FXML public TableColumn<Question, String> tc_answer5;
-
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
     private final IQuestionService questionDAO;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final EditQuestionsController editQuestionsController;
-
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final AlertController alertController;
+    @FXML
+    public TableView<Question> tv_questionTable;
+    @FXML
+    public TableColumn<Question, Long> tc_id;
+    @FXML
+    public TableColumn<Question, String> tc_question;
+    @FXML
+    public TableColumn<Question, String> tc_answer1;
+    @FXML
+    public TableColumn<Question, String> tc_answer2;
+    @FXML
+    public TableColumn<Question, String> tc_answer3;
+    @FXML
+    public TableColumn<Question, String> tc_answer4;
+    @FXML
+    public TableColumn<Question, String> tc_answer5;
     private Stage stage;
     private LearningQuestionnaire administrateMode;
 
+    @Autowired
     public SelectQuestionAdministrateController(
         IMainLerntiaService lerntiaService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
         IQuestionService questionDAO,
         EditQuestionsController editQuestionsController,
-        IQuestionnaireQuestionService questionnaireQuestionService
-    )
-    {
+        IQuestionnaireQuestionService questionnaireQuestionService,
+        AlertController alertController) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.questionDAO = questionDAO;
         this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
+        this.alertController = alertController;
     }
 
-    public void initialize(){
-        /**
+    public void initialize() {
+        /*
          * The following line must stay there. It Refreshs the LerntiaService.
          */
-
         try {
             lerntiaService.getFirstQuestion();
         } catch (ServiceException e) {
@@ -85,10 +95,11 @@ public class SelectQuestionAdministrateController {
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
     /**
      * Refreshs the Data and the lertiaMainController
      */
-    public void refresh(){
+    public void refresh() {
         //Clear the Table and Load the new Data
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(getContent());
@@ -100,12 +111,11 @@ public class SelectQuestionAdministrateController {
     }
 
     /**
-     *
-     * @return the Content for the Table in form ob a ObservableList<Question>
+     * @return the Content for the Table in form of a ObservableList<Question>
      */
-    public ObservableList<Question> getContent(){
+    public ObservableList<Question> getContent() {
         ObservableList<Question> content = FXCollections.observableArrayList();
-        for(int i = 0;i<lerntiaService.getQuestionList().size();i++){
+        for (int i = 0; i < lerntiaService.getQuestionList().size(); i++) {
             content.add(lerntiaService.getQuestionList().get(i));
         }
         return content;
@@ -115,7 +125,7 @@ public class SelectQuestionAdministrateController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode){
+    public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode) {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
@@ -125,20 +135,19 @@ public class SelectQuestionAdministrateController {
     @FXML
     public void editQuestion(ActionEvent actionEvent) {
 
-        AlertController alertController = new AlertController();
         //Check if there is at Least and not more than one element is Selected
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
-        if(selectedItems.size() < 1){
-            alertController.showStandardAlert(Alert.AlertType.WARNING,"Bearbeitungs Fehler",
-                "Bitte wählen Sie min. 1 Frage zum bearbeiten aus",null);
-                return;
+        if (selectedItems.size() < 1) {
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler",
+                "Bitte mindestens eine Frage zum Bearbeiten auswählen!", null);
+            return;
         }
 
-        if(selectedItems.size() > 1){
-            alertController.showStandardAlert(Alert.AlertType.WARNING,"Bearbeitungs Fehler",
-                "Das Bearbeiten von mehr als 1 Frage glechzeitig ist nicht möglich",
-                "Bitte genau eine Frage auswählen");
-                return;
+        if (selectedItems.size() > 1) {
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler",
+                "Das Bearbeiten von mehr als einer Frage glechzeitig ist nicht möglich.",
+                "Bitte genau eine Frage auswählen!");
+            return;
         }
         Question selectedQuestion = selectedItems.get(0);
         LOG.info(selectedQuestion.toString());
@@ -153,20 +162,20 @@ public class SelectQuestionAdministrateController {
     public void deleteQuestions(ActionEvent actionEvent) {
         LOG.info("Delete Button Clicked");
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
-        if(selectedItems.size() == 0){
+        if (selectedItems.size() == 0) {
             //Nothing is selected -> Show a warning window
             AlertController alertController = new AlertController();
-            alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen", "Bitte wählen Sie " +
-                "min. 1 Frage aus", null);
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen",
+                "Bitte mindestens eine Frage auswählen!", null);
             return;
         }
 
         //If min. 1 question is selected.
         AlertController alertController = new AlertController();
         boolean press = alertController.showStandardConfirmationAlert("Fragen löschen",
-            "Sollen die ausgewählte/n Frage/n gelöscht werden?","Es wurden: "+selectedItems.size()+" ausgewählt");
-        if(press){
-            for(int i = 0;i<selectedItems.size();i++){
+            "Sollen die ausgewählten Fragen wirklich gelöscht werden?", "Es wurden " + selectedItems.size() + " Fragen ausgewählt.");
+        if (press) {
+            for (int i = 0; i < selectedItems.size(); i++) {
                 try {
                     questionDAO.delete(selectedItems.get(i));
                     QuestionnaireQuestion qq = new QuestionnaireQuestion();
@@ -181,7 +190,8 @@ public class SelectQuestionAdministrateController {
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open informationen Window
             stage.close();
-            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Löschvorgang abgeschlossen","Fragen wurden gelöscht",null);
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
+                "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
