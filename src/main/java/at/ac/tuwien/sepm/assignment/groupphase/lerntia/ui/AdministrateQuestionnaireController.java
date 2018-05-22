@@ -54,7 +54,7 @@ public class AdministrateQuestionnaireController {
         try {
             this.learningQuestionnaires = simpleLearningQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to initialize AdministrateQuestionnaireController");
         }
 
         for (int i = 0; i < learningQuestionnaires.size(); i++) {
@@ -72,25 +72,25 @@ public class AdministrateQuestionnaireController {
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Selected Questionnaire can't be retrieved.");
         }
 
-        //Unselect all the Other Questionnaire
+        LOG.info("Unselect all the Other Questionnaire");
         for (int i = 0; i < learningQuestionnaires.size(); i++) {
             try {
                 simpleLearningQuestionnaireService.deselect(learningQuestionnaires.get(i));
             } catch (ServiceException e) {
-                e.printStackTrace();
+                LOG.error("Failed to deselect a questionnaire.");
             }
         }
 
-        //Select the Questionnaire
+        LOG.info("Select the Questionnaire");
         try {
             simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Can't select Questionnaire");
         }
-        //Opens the New Window which contains a TableView and all Questions.
+        LOG.info("Open the New Window which contains a TableView and all Questions.");
         selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
         try {
             simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
@@ -100,7 +100,7 @@ public class AdministrateQuestionnaireController {
             LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
 
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to open the Question managing window.");
         }
         stage.close();
     }

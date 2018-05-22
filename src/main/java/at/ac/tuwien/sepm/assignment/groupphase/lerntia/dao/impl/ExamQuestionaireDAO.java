@@ -3,16 +3,13 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
-import javafx.collections.ObservableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +19,6 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT="INSERT INTO ExamQuestionnaire(id,qdate) VALUES (?,?)";
-    private static final String SQL_EXAMQUESTIONNAIRE_UPDATE_STATEMENT="";
-    private static final String SQL_EXAMQUESTIONNAIRE_SEARCH_STATEMENT="";
-    private static final String SQL_EXAMQUESTIONNAIRE_DELETE_STATEMENT="";
     private static final String SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM ExamQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
     private QuestionnaireDAO questionaireDAO;
     private Connection connection;
@@ -34,6 +28,7 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
         try {
             this.questionaireDAO = questionnaireDAO;
             connection = jdbcConnectionManager.getConnection();
+            LOG.info("Connection for the ExamQuestionnaireDAO created.");
         } catch (PersistenceException e) {
             LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");
             throw e;
@@ -58,8 +53,7 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
                 pscreate.close();
             }
         } catch (SQLException e) {
-            LOG.error("ExamQuestionnaire CREATE DAO error!");
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("ExamQuestionnaireDAO CREATE error: ExamQuestionnaire couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
         }
     }
 
@@ -83,37 +77,38 @@ public class ExamQuestionaireDAO implements IExamQuestionnaireDAO {
         try {
             LOG.info("Prepare Statement to read all ExamQuestionnaires from the Database.");
             ArrayList<ExamQuestionnaire> list = new ArrayList<>();
-            ResultSet rsreadall = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT).executeQuery();
-            ExamQuestionnaire exam;
-
-            while (rsreadall.next()){
-                exam = new ExamQuestionnaire();
-                exam.setId(rsreadall.getLong(1));
-                exam.setDate(rsreadall.getDate(2).toLocalDate());
-                exam.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
-                list.add(exam);
+            try (ResultSet rsreadall = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT).executeQuery()) {
+                ExamQuestionnaire exam;
+                while (rsreadall.next()) {
+                    exam = new ExamQuestionnaire();
+                    exam.setId(rsreadall.getLong(1));
+                    exam.setDate(rsreadall.getDate(2).toLocalDate());
+                    exam.setName(questionaireDAO.getQuestionnaireName(rsreadall.getLong(1)));
+                    list.add(exam);
+                }
             }
-
             LOG.info("All ExamQuestionnaire found.");
             return list;
         } catch (SQLException e) {
-            LOG.error("ExamQuestionnaire DAO READALL error!");
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("ExamQuestionnaireDAO READALL error: readall method couldn't find all ExamQuestionnaires, check if connection to the Database is valid.");
         }
     }
 
     @Override
     public void select(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+        LOG.info("Select the Questionnaire in question");
         questionaireDAO.select(examQuestionnaire);
     }
 
     @Override
     public void deselect(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+        LOG.info("Deselect the Questionnaire in Question");
         questionaireDAO.deselect(examQuestionnaire);
     }
 
     @Override
     public ExamQuestionnaire getSelected() throws PersistenceException {
+        LOG.info("Get selected Questionnaire from Database");
         return (ExamQuestionnaire) questionaireDAO.getSelected();
     }
 }

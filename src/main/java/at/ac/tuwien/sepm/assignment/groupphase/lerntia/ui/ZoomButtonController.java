@@ -2,13 +2,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import java.io.File;
 import java.lang.invoke.MethodHandles;
 
 @Controller
