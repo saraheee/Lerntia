@@ -414,7 +414,7 @@ public class LerntiaMainController {
 
         try {
             iExamResultsWriterService.writeExamResults(questionList, "");
-        } catch (ServiceException | PersistenceException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
         }
 
