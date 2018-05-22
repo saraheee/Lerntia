@@ -4,10 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -103,6 +100,7 @@ public class AlertController {
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Weiter");
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
