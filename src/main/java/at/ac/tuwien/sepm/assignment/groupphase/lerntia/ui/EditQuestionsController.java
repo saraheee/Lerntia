@@ -78,7 +78,6 @@ public class EditQuestionsController {
         tf_answer5.setText(selectedQuestion.getAnswer5());
         tf_currectAnswer.setText(selectedQuestion.getCorrectAnswers());
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
-        tf_optionalFeedback.setText(selectedQuestion.toString());
         //Todo Load the Current Image
     }
 
