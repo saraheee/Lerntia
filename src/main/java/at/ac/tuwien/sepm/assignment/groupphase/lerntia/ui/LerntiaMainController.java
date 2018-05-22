@@ -77,6 +77,10 @@ public class LerntiaMainController {
     @FXML
     private Button checkAnswerButton;
     @FXML
+    private Button previousQuestionButton;
+    @FXML
+    private Button nextQuestionButton;
+    @FXML
     private Button handInButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
@@ -398,6 +402,10 @@ public class LerntiaMainController {
         setAnswerText(answer3Controller, null);
         setAnswerText(answer4Controller, null);
         setAnswerText(answer5Controller, null);
+
+        buttonBar.getButtons().remove(previousQuestionButton);
+        buttonBar.getButtons().remove(nextQuestionButton);
+        buttonBar.getButtons().remove(checkAnswerButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
