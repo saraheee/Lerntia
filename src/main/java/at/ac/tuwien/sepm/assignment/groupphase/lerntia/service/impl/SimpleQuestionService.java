@@ -193,16 +193,18 @@ public class SimpleQuestionService implements IQuestionService {
         // TODO - more image validation?
         FileInputStream input = null;
         try {
-            input = new FileInputStream(question.getPicture());
-            Image image = new Image(input);
+            if(question.getPicture() != null) {
+                input = new FileInputStream(question.getPicture());
+                Image image = new Image(input);
 
-            if (image.getHeight() < maxHeightPicture) {
-                LOG.error("image has too small height");
-                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
-            }
-            if (image.getWidth() < maxWidthPicture) {
-                LOG.error("image has too small width");
-                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
+                if (image.getHeight() < maxHeightPicture) {
+                    LOG.error("image has too small height");
+                    throw new ServiceException("Das Bild muss mindestens 200x200 Pixel haben");
+                }
+                if (image.getWidth() < maxWidthPicture) {
+                    LOG.error("image has too small width");
+                    throw new ServiceException("Das Bild muss mindestens 200x200 Pixel haben");
+                }
             }
         } catch (FileNotFoundException e) {
             LOG.error("cannot find image");
