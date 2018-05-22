@@ -23,6 +23,8 @@ public class QuestionDAO implements IQuestionDAO {
     private static final String SQL_QUESTION_DELETE_STATEMENT = "UPDATE Question SET isDeleted = TRUE WHERE id = ?";
     private static final String SQL_QUESTION_READALL_STATEMENT = "";
     private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
+    private static final String SQL_QUESTION_SEARCH_UPPER_STATEMENT = "SELECT * FROM QUESTION Where UPPER(questionText) LIKE UPPER(?) AND UPPER(answer1) LIKE UPPER(?) AND UPPER(answer2) LIKE UPPER(?) AND UPPER(answer3) LIKE UPPER(?) AND UPPER(answer4) LIKE UPPER(?)" +
+        "AND UPPER(answer5) LIKE UPPER(?) AND isDeleted = FALSE";
     private Connection connection;
 
     @Autowired
@@ -189,5 +191,45 @@ public class QuestionDAO implements IQuestionDAO {
             LOG.error("Question GET DAO error!");
             throw new PersistenceException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Question> searchForQuestions(Question questionInput) throws PersistenceException {
+        List<Question> results = new ArrayList<>();
+            LOG.info("Search a Questions which contains a part of a input String");
+            try{
+                PreparedStatement ps = connection.prepareStatement(SQL_QUESTION_SEARCH_UPPER_STATEMENT);
+                ps.setString(1,"%"+questionInput.getQuestionText()+"%");
+                ps.setString(2,"%"+questionInput.getAnswer1()+"%");
+                ps.setString(3,"%"+questionInput.getAnswer2()+"%");
+                ps.setString(4,"%"+questionInput.getAnswer3()+"%");
+                ps.setString(5,"%"+questionInput.getAnswer4()+"%");
+                ps.setString(6,"%"+questionInput.getAnswer5()+"%");
+
+                ResultSet rs = ps.executeQuery();
+                try{
+                    while(rs.next()){
+                        Question q = new Question();
+                        q.setId(rs.getLong(1));
+                        q.setQuestionText(rs.getString(2));
+                        q.setPicture(rs.getString(3));
+                        q.setAnswer1(rs.getString(4));
+                        q.setAnswer2(rs.getString(5));
+                        q.setAnswer3(rs.getString(6));
+                        q.setAnswer4(rs.getString(7));
+                        q.setAnswer5(rs.getString(8));
+                        q.setCorrectAnswers(rs.getString(9));
+                        q.setOptionalFeedback(rs.getString(10));
+                        results.add(q);
+                    }
+                    return results;
+                }finally {
+                    rs.close();
+                }
+
+            } catch (SQLException e) {
+                LOG.error("Search for Questions error!");
+                throw new PersistenceException(e.getMessage());
+            }
     }
 }

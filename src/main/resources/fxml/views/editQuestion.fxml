@@ -12,11 +12,11 @@
     <TextField fx:id="tf_answer2" layoutX="132.0" layoutY="260.0" prefHeight="90.0" prefWidth="455.0"/>
     <Label layoutX="50.0" layoutY="295.0" text="Antwort 2*"/>
     <TextField fx:id="tf_answer3" layoutX="132.0" layoutY="380.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="415.0" text="Antwort 3*"/>
+    <Label layoutX="50.0" layoutY="415.0" text="Antwort 3"/>
     <TextField fx:id="tf_answer4" layoutX="132.0" layoutY="500.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="535.0" text="Antwort 4*"/>
+    <Label layoutX="50.0" layoutY="535.0" text="Antwort 4"/>
     <TextField fx:id="tf_answer5" layoutX="132.0" layoutY="620.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="659.0" text="Antwort 5*"/>
+    <Label layoutX="50.0" layoutY="659.0" text="Antwort 5"/>
     <TextField fx:id="tf_answer1" layoutX="132.0" layoutY="140.0" prefHeight="90.0" prefWidth="455.0"/>
     <Label layoutX="625.0" layoutY="49.0" text="Richtige Antworten*"/>
     <TextField fx:id="tf_correctAnswer" layoutX="750.0" layoutY="45.0" prefHeight="25.0" prefWidth="328.0"/>
