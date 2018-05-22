@@ -19,7 +19,7 @@ public class JDBCConnectionManager {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CONNECTION_URL = "jdbc:h2:tcp://localhost/~/lerntia";
     //private static final String TEST_CONNECTION_URL = "jdbc:h2:file:database./lerntiaTestDB";
-    private static final String INITIAL_RESOURCE = "classpath:sql/create.sql";
+    private static final String INITIAL_RESOURCE = "classpath:sql/createAndInsert.sql";
     private static final String TEST_CONNECTION_URL = "jdbc:h2:~/lerntiaTestDB";
     private static final String TEST_RESOURCE = "classpath:sql/testCreate.sql";
 

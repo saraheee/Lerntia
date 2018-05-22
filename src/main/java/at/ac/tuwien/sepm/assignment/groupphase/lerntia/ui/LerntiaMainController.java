@@ -296,6 +296,8 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
+        mainWindow.autosize(); // to resize the frame structure back to default values
+
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");
