@@ -210,29 +210,27 @@ public class LerntiaMainController {
 
         if (answersCorrect) {
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers+" ist richtig.",getMethod(question.getCorrectAnswers())+"\n"+question.getOptionalFeedback());
-            }
-            else {
+                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
+            } else {
                 String answers = "Alle richtigen Antworten sind:\n";
                 for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
                 }
-                alertController.showCorrectAnswerAlert("Antworten richtig!", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
+                alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
             }
 
         } else {
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showWrongAnswerAlert("Antwort nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers())  + question.getOptionalFeedback());
-            }
-            else {
+                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
+            } else {
                 String answers = "Die richtigen Antworten sind:\n";
                 for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i+1)))) {
+                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
                         answers += "Auch: ";
                     }
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i+1));
+                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
                 }
-                alertController.showWrongAnswerAlert("Antworten nicht richtig.", question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
+                alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
             }
         }
         // send checked answers to service (in order to use it for statistics and learning algorithm)
@@ -507,12 +505,18 @@ public class LerntiaMainController {
 
     private String getMethod(String str) {
         switch (str) {
-            case "1":   return question.getAnswer1()+"\n";
-            case "2":   return question.getAnswer2()+"\n";
-            case "3":   return question.getAnswer3()+"\n";
-            case "4":   return question.getAnswer4()+"\n";
-            case "5":   return question.getAnswer5()+"\n";
-            default:    return "";
+            case "1":
+                return question.getAnswer1() + "\n";
+            case "2":
+                return question.getAnswer2() + "\n";
+            case "3":
+                return question.getAnswer3() + "\n";
+            case "4":
+                return question.getAnswer4() + "\n";
+            case "5":
+                return question.getAnswer5() + "\n";
+            default:
+                return "";
         }
     }
 }
