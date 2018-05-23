@@ -100,6 +100,7 @@ public class EditQuestionsController {
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
         if (selectedQuestion.getPicture() != null && selectedQuestion.getPicture().trim().length() > 0) {
             noImageLabel.setVisible(false);
+            imageName = selectedQuestion.getPicture();
             loadImage(PATH + selectedQuestion.getPicture(), iv_image);
         } else {
             noImageLabel.setVisible(true);
@@ -130,6 +131,7 @@ public class EditQuestionsController {
             newData.setOptionalFeedback(tf_optionalFeedback.getText());
             newData.setId(selectedQuestion.getId());
             newData.setPicture(imageName);
+            LOG.debug("image name: " + imageName);
 
             try {
                 questionService.update(newData);
