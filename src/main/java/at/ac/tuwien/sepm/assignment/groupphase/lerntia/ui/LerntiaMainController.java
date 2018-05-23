@@ -32,6 +32,7 @@ import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import static org.springframework.util.Assert.notNull;
 
 @Controller
@@ -111,8 +112,17 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
+/*        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
+        LOG.debug("Main window left's width set to: {}", mainWindow.widthProperty().divide(100).multiply(25));*/
+        LOG.debug("Main window's min width set to: {}", mainWindow.getMinWidth());
+        LOG.debug("Main window's width set to: {}", mainWindow.getWidth());
+        LOG.debug("Main window's PREF width set to: {}", mainWindow.getPrefWidth());
+        LOG.debug("Main window LEFT's min width set to: {}", mainWindowLeft.getMinWidth());
+        LOG.debug("Main window LEFT's width set to: {}", mainWindowLeft.getWidth());
+        LOG.debug("Main window LEFT's PREF width set to: {}", mainWindowLeft.getPrefWidth());
+        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());
+
 
         buttonBar.getButtons().remove(handInButton);
 
@@ -296,7 +306,6 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
-      //  mainWindowRight.autosize(); // to resize the frame structure back to default values
         mainWindowLeft.autosize();
 
         if (question == null) {
