@@ -14,7 +14,7 @@ public interface IQuestionnaireQuestionDAO {
      * @throws PersistenceException if the method can't save the entry
      * */
     void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException;
-    
+
     /**
      * Searches for specific QuestionnaireQuestions with given parameters
      *
@@ -41,13 +41,5 @@ public interface IQuestionnaireQuestionDAO {
      * @throws PersistenceException if the method can't update the QuestionnaireQuestion
      * */
     void update(QuestionnaireQuestion questionnaireQuestion, long newQid,long newQuestionid) throws PersistenceException;
-
-    /**
-     * Read All QuesstionnaireQuestions from the Database
-     *
-     * @return List of all QuestionnaireQuestions
-     * @throws PersistenceException if the method can't read all elements from the Database
-     * */
-    List<QuestionnaireQuestion> readAll() throws PersistenceException;
 
 }
