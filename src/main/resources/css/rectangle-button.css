@@ -30,9 +30,17 @@
 }
 
 .button:default {
-    -fx-background-color: rgba(0, 250, 50, 0.4);
+    -fx-background-color: rgba(0, 250, 50, 0.25);
 }
 
 .button:default:hover {
+    -fx-background-color: rgba(0, 250, 50, 0.55);
+}
+
+.button:default:focused {
+    -fx-background-color: rgba(0, 250, 50, 0.45);
+}
+
+.button:default:focused:hover {
     -fx-background-color: rgba(0, 250, 50, 0.55);
 }
