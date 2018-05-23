@@ -118,10 +118,4 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             throw new PersistenceException("QuestionnaireQuestionDAO UPDATE error: item couldn't be updated, check if mandatory values have been added or if the connection to the Database is valid.");
         }
     }
-
-    @Override
-    public List<QuestionnaireQuestion> readAll() throws PersistenceException {
-        //currently no implementation of this method due to the indiciciveness of if it is necessary to have such a method. currently left empty
-        return null;
-    }
 }
