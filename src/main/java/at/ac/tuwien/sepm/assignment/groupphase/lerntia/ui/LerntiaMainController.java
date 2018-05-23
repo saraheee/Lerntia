@@ -70,9 +70,6 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private ZoomButtonController zoomButtonController;
-
-    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
@@ -355,7 +352,6 @@ public class LerntiaMainController {
         // show image in the main window or hide the zoom button if there is no image to be shown
         if (question.getPicture() == null || question.getPicture().trim().isEmpty()) {
             mainImage.setVisible(false);
-            zoomButtonController.setVisible(false);
             zoomedImageController.setImageFile(null);
             LOG.debug("No image to be displayed for this question");
         } else {
@@ -379,7 +375,6 @@ public class LerntiaMainController {
                     Image image = new Image(imageFile.toURI().toURL().toExternalForm());
                     mainImage.setImage(image);
                     mainImage.setVisible(true);
-                    //zoomButtonController.setVisible(true); //todo activate it if you want the zoom button to be visible
                     LOG.info("Image for this question is displayed: '{}'", question.getPicture());
                 }
             } catch (MalformedURLException e) {
@@ -398,8 +393,6 @@ public class LerntiaMainController {
 
     // this method should be called if the DB does not contain any questions that could be displayed
     private void showNoQuestionsAvailable() {
-        zoomButtonController.setVisible(false);
-
         qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
         audioController.setQuestion("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
 
