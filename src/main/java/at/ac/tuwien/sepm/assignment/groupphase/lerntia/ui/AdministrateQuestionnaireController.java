@@ -113,7 +113,9 @@ public class AdministrateQuestionnaireController {
             simpleLearningQuestionnaireService.select(studyMode);
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
             //Delete this Line if not Needed
-            LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+            if (studyMode != null) {
+                LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+            }
 
         } catch (ServiceException e) {
             LOG.error("Failed to open the Question managing window.");
