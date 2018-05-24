@@ -33,11 +33,11 @@
 }
 
 .button:focused {
-    -fx-background-color: rgba(0, 50, 250, 0.2);
+    -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
 .button:focused:hover {
-    -fx-background-color: rgba(0, 50, 250, 0.3);
+    -fx-background-color: rgba(0, 50, 250, 0.2);
 }
 
 .button:default {
@@ -53,12 +53,12 @@
 }
 
 .button:default:focused {
-    -fx-background-color: rgba(0, 50, 250, 0.2);
+    -fx-background-color: rgba(0, 50, 250, 0.3);
     -fx-effect: dropshadow(gaussian, white, 50, -6, 0, 0);
 }
 
 .button:default:focused:hover {
-    -fx-background-color: rgba(0, 50, 250, 0.3);
+    -fx-background-color: rgba(0, 50, 250, 0.2);
 }
 
 .button:selected {
