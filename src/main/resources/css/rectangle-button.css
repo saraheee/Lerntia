@@ -19,6 +19,7 @@
 
 .button:hover {
     -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-font-size: 30px;
 }
 
 .button:focused {
@@ -35,6 +36,7 @@
 
 .button:default:hover {
     -fx-background-color: rgba(0, 250, 50, 0.55);
+    -fx-font-size: 30px;
 }
 
 .button:default:focused {
@@ -43,4 +45,20 @@
 
 .button:default:focused:hover {
     -fx-background-color: rgba(0, 250, 50, 0.55);
+}
+
+.button:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:focused:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
 }
