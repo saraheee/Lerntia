@@ -19,14 +19,32 @@
 
 .button:hover {
     -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-font-size: 30px;
 }
 
 .button:focused {
+    -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-font-size: 30px;
+}
+
+.button:selected {
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
-.button:focused:hover {
+.button:selected:hover {
     -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:focused:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.02);
 }
 
 .check-box .box {
