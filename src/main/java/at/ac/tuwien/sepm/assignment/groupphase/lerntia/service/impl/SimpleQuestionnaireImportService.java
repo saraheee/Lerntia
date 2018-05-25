@@ -11,10 +11,10 @@ import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.lang.invoke.MethodHandles;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +50,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         // TODO - fix duplicate code
 
-        if (isExam){
+        if (isExam) {
             List<ExamQuestionnaire> questionnaires = null;
             questionnaires = simpleExamQuestionnaireService.readAll();
 
-            for (int i = 0; i < questionnaires.size(); i++) {
-                if (name.equals(questionnaires.get(i).getName())) {
+            for (ExamQuestionnaire questionnaire : questionnaires) {
+                if (name.equals(questionnaire.getName())) {
                     throw new ServiceException("Dieser Name existiert schon!");
                 }
             }
@@ -64,30 +64,30 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             List<LearningQuestionnaire> questionnaires = null;
             questionnaires = simpleLearningQuestionnaireService.readAll();
 
-            for (int i = 0; i < questionnaires.size(); i++) {
-                if (name.equals(questionnaires.get(i).getName())) {
+            for (LearningQuestionnaire questionnaire : questionnaires) {
+                if (name.equals(questionnaire.getName())) {
                     throw new ServiceException("Dieser Name existiert schon!");
                 }
             }
         }
 
-        // get questionaire file content
+        // get questionnaire file content
 
         ArrayList<String> fileContent = new ArrayList<>();
 
         try {
             fileContent = questionnaireImportDAO.getContents(pathStr);
         } catch (IOException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
 
         ArrayList<Long> questionIDs = new ArrayList<>();
 
-        for (int i = 0; i < fileContent.size(); i++) {
+        for (String aFileContent : fileContent) {
 
             // split the rows, the seperator is ";"
-            String[] lineParts = fileContent.get(i).split(";");
+            String[] lineParts = aFileContent.split(";");
 
             // check if there are too many columns
             if (lineParts.length > 9) {
@@ -108,7 +108,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                     picture = lineParts[7];
                     String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + name + File.separator + picture;
                     File f = new File(path);
-                    if(!f.exists()) {
+                    if (!f.exists()) {
                         throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
                     }
                 }
@@ -123,8 +123,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                 if (!lineParts[8].equals("")) {
                     feedback = lineParts[8];
                 }
-            }
-            catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 // there is no feedback
                 feedback = "";
             }
@@ -148,7 +147,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         Long questionnaireID;
 
-        if (isExam){
+        if (isExam) {
             ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, false, LocalDate.now());
             simpleExamQuestionnaireService.create(examQuestionnaire);
             questionnaireID = examQuestionnaire.getId();
@@ -158,12 +157,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             questionnaireID = learningQuestionnaire.getId();
         }
 
-        for (int i = 0; i < questionIDs.size(); i++) {
+        for (Long questionID : questionIDs) {
 
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
 
             questionnaireQuestion.setQid(questionnaireID);
-            questionnaireQuestion.setQuestionid(questionIDs.get(i));
+            questionnaireQuestion.setQuestionid(questionID);
             questionnaireQuestion.setDeleted(false);
 
             simpleQuestionnaireQuestionService.create(questionnaireQuestion);
@@ -171,7 +170,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     }
 
     @Override
-    public void importPictures (File file, String name) throws ServiceException {
+    public void importPictures(File file, String name) throws ServiceException {
 
         Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
         File imgDir = new File(String.valueOf(imgPath));

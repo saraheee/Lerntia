@@ -43,7 +43,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.error("Failed to initialize speech synthesizer!");
             throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
         }
-        if(playWelcomeText) {
+        if (playWelcomeText) {
             playText(WELCOME);
         }
     }
@@ -140,6 +140,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     @Override
     public void setVoice(Speech textToSpeech) {
         maryTTS.setVoice(textToSpeech.getVoice());
+    }
+
+    @Override
+    public boolean noCurrentAudio() {
+        return audioPlayer == null || audioPlayer.finishedAudio;
     }
 
     public String getText(Speech textToSpeech) throws TextToSpeechServiceValidationException {

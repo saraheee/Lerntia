@@ -28,7 +28,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.create(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -38,7 +38,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.update(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -48,7 +48,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.search(searchparameters);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -58,7 +58,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.delete(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
