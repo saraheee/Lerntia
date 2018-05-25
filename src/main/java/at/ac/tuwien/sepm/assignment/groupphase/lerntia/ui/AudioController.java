@@ -77,6 +77,7 @@ public class AudioController {
     }
 
     void readSingleAnswer(String answerText) {
+        audioButton.defaultButtonProperty().setValue(false);
         if (answerText == null || answerText.trim().length() < 1) {
             showValidationFailedDialog();
         } else {
@@ -151,4 +152,9 @@ public class AudioController {
     }
 
 
+    void checkAudioEnd() {
+        if (iTextToSpeechService.noCurrentAudio()) {
+            audioButton.defaultButtonProperty().setValue(false);
+        }
+    }
 }

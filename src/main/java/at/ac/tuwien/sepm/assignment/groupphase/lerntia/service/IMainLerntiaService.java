@@ -51,7 +51,7 @@ public interface IMainLerntiaService {
     /**
      * Returns the Size of the ListCounter
      */
-    public int getListcounter();
+    public int getListCounter();
 
     /**
      * Returns the QuistionList

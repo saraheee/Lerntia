@@ -4,7 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserQuestionnaire;
 
 
-public interface IUserQuestionaireDAO {
+public interface IUserQuestionnaireDAO {
 
     /**
      * Create a new User and save it to the Database
