@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class QuestionDAO implements IQuestionDAO {
     private static final String SQL_QUESTION_SEARCH_STATEMENT = "SELECT * FROM QUESTION";
     private static final String SQL_QUESTION_DELETE_STATEMENT = "UPDATE Question SET isDeleted = TRUE WHERE id = ?";
     private static final String SQL_QUESTION_GET_STATEMENT = "SELECT * FROM question where id=";
-    private static final String SQL_QUESTION_SEARCH_UPPER_STATEMENT = "SELECT * FROM QUESTION Where UPPER(questionText) LIKE UPPER(?) AND UPPER(answer1) LIKE UPPER(?) AND UPPER(answer2) LIKE UPPER(?) AND UPPER(answer3) LIKE UPPER(?) AND UPPER(answer4) LIKE UPPER(?)" +
+    private static final String SQL_QUESTION_SEARCH_UPPER_STATEMENT = "SELECT * FROM QUESTION WHERE UPPER(questionText) LIKE UPPER(?) AND UPPER(answer1) LIKE UPPER(?) AND UPPER(answer2) LIKE UPPER(?) AND UPPER(answer3) LIKE UPPER(?) AND UPPER(answer4) LIKE UPPER(?)" +
         "AND UPPER(answer5) LIKE UPPER(?) AND isDeleted = FALSE";
 
     private Connection connection;
@@ -54,7 +55,7 @@ public class QuestionDAO implements IQuestionDAO {
                 psCreate.setString(8, question.getCorrectAnswers());
                 psCreate.setString(9, question.getOptionalFeedback());
                 psCreate.executeUpdate();
-                LOG.info("Question succesfully saved in Database");
+                LOG.info("Question successfully saved in Database");
                 try (ResultSet generatedKeys = psCreate.getGeneratedKeys()) {
                     generatedKeys.next();
                     question.setId(generatedKeys.getLong(1));
@@ -69,18 +70,18 @@ public class QuestionDAO implements IQuestionDAO {
     public void update(Question question) throws PersistenceException {
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTION_UPDATE_STATEMENT)) {
             LOG.info("Prepare statement for question update.");
-                psUpdate.setString(1, question.getQuestionText());
-                psUpdate.setString(2, question.getPicture());
-                psUpdate.setString(3, question.getAnswer1());
-                psUpdate.setString(4, question.getAnswer2());
-                psUpdate.setString(5, question.getAnswer3());
-                psUpdate.setString(6, question.getAnswer4());
-                psUpdate.setString(7, question.getAnswer5());
-                psUpdate.setString(8, question.getCorrectAnswers());
-                psUpdate.setString(9, question.getOptionalFeedback());
-                psUpdate.setLong(10,question.getId());
-                psUpdate.executeUpdate();
-                LOG.info("Question successfully updated in Database.");
+            psUpdate.setString(1, question.getQuestionText());
+            psUpdate.setString(2, question.getPicture());
+            psUpdate.setString(3, question.getAnswer1());
+            psUpdate.setString(4, question.getAnswer2());
+            psUpdate.setString(5, question.getAnswer3());
+            psUpdate.setString(6, question.getAnswer4());
+            psUpdate.setString(7, question.getAnswer5());
+            psUpdate.setString(8, question.getCorrectAnswers());
+            psUpdate.setString(9, question.getOptionalFeedback());
+            psUpdate.setLong(10, question.getId());
+            psUpdate.executeUpdate();
+            LOG.info("Question successfully updated in Database.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO UPDATE error: question couldn't be updated, check if the mandatory values have been added or if the connection to the Database is valid.");
         }
@@ -103,21 +104,21 @@ public class QuestionDAO implements IQuestionDAO {
             String searchStatement = SQL_QUESTION_SEARCH_STATEMENT + parameters;
             LOG.info("Prepare Statement for Question search.");
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
-                    //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
-                    while (rs.next()) {
-                        foundQuestion = new Question();
-                        foundQuestion.setId(rs.getLong(1));
-                        foundQuestion.setQuestionText(rs.getString(2));
-                        foundQuestion.setPicture(rs.getString(3));
-                        foundQuestion.setAnswer1(rs.getString(4));
-                        foundQuestion.setAnswer2(rs.getString(5));
-                        foundQuestion.setAnswer3(rs.getString(6));
-                        foundQuestion.setAnswer4(rs.getString(7));
-                        foundQuestion.setAnswer5(rs.getString(8));
-                        foundQuestion.setCorrectAnswers(rs.getString(9));
-                        foundQuestion.setOptionalFeedback(rs.getString(10));
-                        searchResults.add(foundQuestion);
-                    }
+                //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
+                while (rs.next()) {
+                    foundQuestion = new Question();
+                    foundQuestion.setId(rs.getLong(1));
+                    foundQuestion.setQuestionText(rs.getString(2));
+                    foundQuestion.setPicture(rs.getString(3));
+                    foundQuestion.setAnswer1(rs.getString(4));
+                    foundQuestion.setAnswer2(rs.getString(5));
+                    foundQuestion.setAnswer3(rs.getString(6));
+                    foundQuestion.setAnswer4(rs.getString(7));
+                    foundQuestion.setAnswer5(rs.getString(8));
+                    foundQuestion.setCorrectAnswers(rs.getString(9));
+                    foundQuestion.setOptionalFeedback(rs.getString(10));
+                    searchResults.add(foundQuestion);
+                }
             }
             LOG.info("All Questions matching the parameters found.");
             return searchResults;
@@ -131,9 +132,9 @@ public class QuestionDAO implements IQuestionDAO {
         try {
             LOG.info("Prepare statement for question deletion.");
             try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTION_DELETE_STATEMENT)) {
-                    psDelete.setLong(1, question.getId());
-                    psDelete.executeUpdate();
-                    LOG.info("Question successfully soft-deleted in Database.");
+                psDelete.setLong(1, question.getId());
+                psDelete.executeUpdate();
+                LOG.info("Question successfully soft-deleted in Database.");
             }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO DELETE error: question couldn't be deleted, check if the connection to the Database is valid.");
@@ -148,22 +149,22 @@ public class QuestionDAO implements IQuestionDAO {
             help = SQL_QUESTION_GET_STATEMENT + id;
             Question q;
             try (ResultSet rsGet = connection.prepareStatement(help).executeQuery()) {
-                    q = new Question();
-                    if (rsGet.next()) {
-                        q.setId(id);
-                        q.setQuestionText(rsGet.getString(2));
-                        q.setPicture(rsGet.getString(3));
-                        q.setAnswer1(rsGet.getString(4));
-                        q.setAnswer2(rsGet.getString(5));
-                        q.setAnswer3(rsGet.getString(6));
-                        q.setAnswer4(rsGet.getString(7));
-                        q.setAnswer5(rsGet.getString(8));
-                        q.setCorrectAnswers(rsGet.getString(9));
-                        q.setOptionalFeedback(rsGet.getString(10));
-                        q.setDeleted(rsGet.getBoolean(11));
-                    }
-                    LOG.info("Matching Question found.");
-                    return q;
+                q = new Question();
+                if (rsGet.next()) {
+                    q.setId(id);
+                    q.setQuestionText(rsGet.getString(2));
+                    q.setPicture(rsGet.getString(3));
+                    q.setAnswer1(rsGet.getString(4));
+                    q.setAnswer2(rsGet.getString(5));
+                    q.setAnswer3(rsGet.getString(6));
+                    q.setAnswer4(rsGet.getString(7));
+                    q.setAnswer5(rsGet.getString(8));
+                    q.setCorrectAnswers(rsGet.getString(9));
+                    q.setOptionalFeedback(rsGet.getString(10));
+                    q.setDeleted(rsGet.getBoolean(11));
+                }
+                LOG.info("Matching Question found.");
+                return q;
             }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO GET error : matching question coulnd't be found, check if proper value given or if the connection to the Database is valid.");
@@ -174,7 +175,7 @@ public class QuestionDAO implements IQuestionDAO {
     public List<Question> searchForQuestions(Question questionInput) throws PersistenceException {
         List<Question> results = new ArrayList<>();
         LOG.info("Search a Questions which contains a part of a input String");
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUESTION_SEARCH_UPPER_STATEMENT);
             try {
                 ps.setString(1, "%" + questionInput.getQuestionText() + "%");
@@ -204,9 +205,9 @@ public class QuestionDAO implements IQuestionDAO {
                 } finally {
                     rs.close();
                 }
-            }finally {
+            } finally {
                 ps.close();
-        }
+            }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO SEARCHFORQUESTION error: method didn't work, check if proper values have been added or if the connection to the Database is valid.");
         }

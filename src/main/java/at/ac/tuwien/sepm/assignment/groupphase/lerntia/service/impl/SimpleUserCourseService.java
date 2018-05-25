@@ -17,7 +17,7 @@ public class SimpleUserCourseService implements IUserCourseService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IUserCourseDAO iUserCourseDAO;
 
-    public SimpleUserCourseService(IUserCourseDAO iUserCourseDAO){
+    public SimpleUserCourseService(IUserCourseDAO iUserCourseDAO) {
         this.iUserCourseDAO = iUserCourseDAO;
     }
 
@@ -26,7 +26,7 @@ public class SimpleUserCourseService implements IUserCourseService {
         try {
             iUserCourseDAO.create(userCourse);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }

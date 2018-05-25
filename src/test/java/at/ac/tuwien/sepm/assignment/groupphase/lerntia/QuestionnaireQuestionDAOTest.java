@@ -38,7 +38,7 @@ public class QuestionnaireQuestionDAOTest {
             this.IQuestionnaireQuestionDAO(new QuestionnaireQuestionDAO(jdbcConnectionManager));
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.IExamQuestionnaireDAO(new ExamQuestionaireDAO((QuestionnaireDAO) questionnaireDAO,jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
@@ -46,19 +46,19 @@ public class QuestionnaireQuestionDAOTest {
     }
 
     private void IQuestionDAO(QuestionDAO questionDAO) {
-        this.questionDAO=questionDAO;
+        this.questionDAO = questionDAO;
     }
 
     private void ICourseDAO(CourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IExamQuestionnaireDAO(ExamQuestionaireDAO examQuestionaireDAO) {
-        this.examQuestionnaireDAO=examQuestionaireDAO;
+    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+        this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
     private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
-        this.questionnaireDAO=questionnaireDAO;
+        this.questionnaireDAO = questionnaireDAO;
     }
 
     private void IQuestionnaireQuestionDAO(QuestionnaireQuestionDAO questionnaireQuestionDAO) {
@@ -66,10 +66,10 @@ public class QuestionnaireQuestionDAOTest {
     }
 
     @Test
-    public void createNewQuestionnaireQuestion(){
+    public void createNewQuestionnaireQuestion() {
         try {
             Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"15");
+            tgi.setSemester(Semester.SS + "15");
             tgi.setMark("123.349");
             tgi.setName("TGI");
             courseDAO.create(tgi);
@@ -86,7 +86,7 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(3),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(3), firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
@@ -104,17 +104,17 @@ public class QuestionnaireQuestionDAOTest {
             firstquestionfirstchapter.setQid(Long.valueOf(1));
             firstquestionfirstchapter.setQuestionid(Long.valueOf(34));
             questionnaireQuestionDAO.create(firstquestionfirstchapter);
-            Assert.assertEquals(Long.valueOf(1),firstquestionfirstchapter.getQid());
+            Assert.assertEquals(Long.valueOf(1), firstquestionfirstchapter.getQid());
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Test
-    public void checkpersistenceQuestionnaireQuestionDAO(){
+    public void checkpersistenceQuestionnaireQuestionDAO() {
         try {
             Course course = new Course();
-            course.setSemester(Semester.SS+"13");
+            course.setSemester(Semester.SS + "13");
             course.setMark("123.555");
             course.setName("name");
             courseDAO.create(course);
@@ -131,7 +131,7 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(6),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(6), firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
@@ -144,7 +144,7 @@ public class QuestionnaireQuestionDAOTest {
             secondquestion.setAnswer2("Monday");
             secondquestion.setCorrectAnswers("1");
             questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(7),secondquestion.getId());
+            Assert.assertEquals(Long.valueOf(7), secondquestion.getId());
 
             QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
             secondquestionfirstchapter.setQid(chapter1.getId());
@@ -159,14 +159,14 @@ public class QuestionnaireQuestionDAOTest {
     // we expect that 2 questions will be found
 
     @Test
-    public void searchQuestionnaireQuestions(){
+    public void searchQuestionnaireQuestions() {
         try {
             Long examQuestionnaireID = Long.valueOf(0);
             Long firstquestionID = Long.valueOf(0);
             Long secondquestionID = Long.valueOf(0);
 
             Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"10");
+            tgi.setSemester(Semester.SS + "10");
             tgi.setMark("123.349");
             tgi.setName("TGI");
             courseDAO.create(tgi);
@@ -199,7 +199,7 @@ public class QuestionnaireQuestionDAOTest {
             secondquestion.setAnswer2("Monday");
             secondquestion.setCorrectAnswers("12");
             questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(firstquestionID+1),secondquestion.getId());
+            Assert.assertEquals(Long.valueOf(firstquestionID + 1), secondquestion.getId());
 
             secondquestionID = secondquestion.getId();
 
@@ -211,7 +211,7 @@ public class QuestionnaireQuestionDAOTest {
             searchparameters.setQid(examQuestionnaireID);
 
             List list = questionnaireQuestionDAO.search(searchparameters);
-            Assert.assertEquals(2,list.size());
+            Assert.assertEquals(2, list.size());
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
@@ -222,7 +222,7 @@ public class QuestionnaireQuestionDAOTest {
 
         try {
             Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"15");
+            tgi.setSemester(Semester.SS + "15");
             tgi.setMark("123.349");
             tgi.setName("TGI");
             courseDAO.create(tgi);
@@ -239,7 +239,7 @@ public class QuestionnaireQuestionDAOTest {
             firstquestion.setAnswer2("yes");
             firstquestion.setCorrectAnswers("1");
             questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+            Assert.assertEquals(Long.valueOf(1), firstquestion.getId());
 
             QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
             firstquestionfirstchapter.setQid(chapter1.getId());
@@ -252,7 +252,7 @@ public class QuestionnaireQuestionDAOTest {
             secondquestion.setAnswer2("Monday");
             secondquestion.setCorrectAnswers("12");
             questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(2),secondquestion.getId());
+            Assert.assertEquals(Long.valueOf(2), secondquestion.getId());
 
             QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
             secondquestionfirstchapter.setQid(chapter1.getId());

@@ -1,8 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
-import java.lang.invoke.MethodHandles;
-import java.util.List;
-
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireQuestionDAO;
@@ -12,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestionService {
@@ -30,7 +28,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             iQuestionnaireQuestionDAO.create(questionnaireQuestion);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -40,7 +38,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             iQuestionnaireQuestionDAO.delete(questionnaireQuestion);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -50,7 +48,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionid);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -65,7 +63,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             return iQuestionnaireQuestionDAO.search(searchparameters);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }

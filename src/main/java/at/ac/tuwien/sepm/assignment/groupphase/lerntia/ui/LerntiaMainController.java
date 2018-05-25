@@ -125,6 +125,7 @@ public class LerntiaMainController {
     }
 
     public void update(Scene scene) {
+        audioController.checkAudioEnd();
         Platform.runLater(() -> scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.A) {
                 LOG.debug("A key was pressed");
