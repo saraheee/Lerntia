@@ -125,7 +125,6 @@ public class LerntiaMainController {
     }
 
     public void update(Scene scene) {
-        audioController.checkAudioEnd();
         Platform.runLater(() -> scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.A) {
                 LOG.debug("A key was pressed");
@@ -137,14 +136,20 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
+                audioController.stopReading();
+                audioController.deselectAudioButton();
                 getAndShowNextQuestion();
             }
             if (e.getCode() == KeyCode.P) {
                 LOG.debug("P key was pressed");
+                audioController.stopReading();
+                audioController.deselectAudioButton();
                 getAndShowPreviousQuestion();
             }
             if (e.getCode() == KeyCode.C) {
                 LOG.debug("C key was pressed");
+                audioController.stopReading();
+                audioController.deselectAudioButton();
                 checkIfQuestionWasCorrect();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
