@@ -46,32 +46,35 @@ public class CreateCourseController {
 
     @FXML
     private void initialize() {
+        LOG.debug("Initialize for CreateCourseController");
         cb_semester.getItems().add(Semester.WS.toString());
         cb_semester.getItems().add(Semester.SS.toString());
-
         cb_semester.getSelectionModel().selectFirst();
     }
 
     void showCreateCourseWindow() {
-
+        LOG.info("Show Create Course window.");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/createCourse.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         windowController.openNewWindow("LVA erstellen", fxmlLoader);
     }
 
     public void createCourse(ActionEvent actionEvent) {
-
         try {
-
+            LOG.info("Create Course Button clicked.");
             String mark = tf_courseMark.getText().trim();
             String name = tf_courseName.getText().trim();
             String semester = cb_semester.getSelectionModel().getSelectedItem();
             String semesterYear = tf_semesterYear.getText().trim();
 
             Course course = new Course(mark, semester + semesterYear, name, false);
-
+            LOG.info("Validate inserted course values");
             courseService.validate(course);
+            LOG.info("Send the new course to the next Layer for creation");
             courseService.create(course);
+
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "LVA erstellen erfolgreich", "Erfolg",
+                "LVA erfolgreich angelegt.");
 
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
