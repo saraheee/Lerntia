@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class LerntiaMainController {
     private final IExamResultsWriterService iExamResultsWriterService;
 
     @FXML
-    private HBox mainWindow;
+    private GridPane mainWindow;
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -113,14 +114,14 @@ public class LerntiaMainController {
     private void initialize() {
 /*        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
         mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-        LOG.debug("Main window left's width set to: {}", mainWindow.widthProperty().divide(100).multiply(25));*/
+        LOG.debug("Main window left's width set to: {}", mainWindow.widthProperty().divide(100).multiply(25));
         LOG.debug("Main window's min width set to: {}", mainWindow.getMinWidth());
         LOG.debug("Main window's width set to: {}", mainWindow.getWidth());
         LOG.debug("Main window's PREF width set to: {}", mainWindow.getPrefWidth());
         LOG.debug("Main window LEFT's min width set to: {}", mainWindowLeft.getMinWidth());
         LOG.debug("Main window LEFT's width set to: {}", mainWindowLeft.getWidth());
         LOG.debug("Main window LEFT's PREF width set to: {}", mainWindowLeft.getPrefWidth());
-        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());
+        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());*/
 
 
         buttonBar.getButtons().remove(handInButton);
@@ -327,9 +328,6 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
-        //  mainWindowRight.autosize(); // to resize the frame structure back to default values
-        mainWindowLeft.autosize();
-
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");

@@ -3,10 +3,10 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<HBox fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
     <VBox fx:id="mainWindowLeft" prefHeight="768.0" prefWidth="445.0" styleClass="main-left"
-          stylesheets="@/css/background-division.css">
+          stylesheets="@/css/background-division.css" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS">
         <VBox prefHeight="44.0" prefWidth="453.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
@@ -22,7 +22,8 @@
             </HBox>
         </VBox>
     </VBox>
-    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css">
+    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css"
+          GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS">
         <HBox prefHeight="30.0"/>
         <HBox prefHeight="286.0" styleClass="question-box">
             <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml"/>
@@ -61,4 +62,8 @@
         </HBox>
         <VBox prefHeight="100.0" prefWidth="22.0"/>
     </VBox>
-</HBox>
+    <columnConstraints>
+        <ColumnConstraints percentWidth = "30.0" />
+        <ColumnConstraints percentWidth = "70.0" />
+    </columnConstraints>
+</GridPane>
