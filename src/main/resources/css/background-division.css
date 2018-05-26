@@ -1,10 +1,7 @@
 
-* {
-    -fx-box-sizing: border-box;
-}
 
 .main-left {
-    -fx-width: 25%;
+    -fx-width: 30%;
     -fx-float: left;
     -fx-background-color: white;
 }
@@ -17,8 +14,8 @@
 }
 
 .main-right {
-    -fx-width: 75%;
-    -fx-float: left;
+    -fx-width: 70%;
+    -fx-float: right;
     -fx-background-color: rgba(0, 50, 250, 0.005);
 }
 
