@@ -30,6 +30,7 @@ public class ZoomedImageController {
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private double screenWidth = screenSize.getWidth();
     private double screenHeight = screenSize.getHeight();
+    private double eps = (screenHeight / 100) * 10;
     private Scene imageScene;
 
     @Autowired
@@ -43,7 +44,7 @@ public class ZoomedImageController {
         LOG.debug("Zoom button clicked");
         if (imageFile == null || !imageFile.exists()) {
             LOG.debug("Zooming was selected, but there was no image to be shown.");
-            alertController.showBigAlert(Alert.AlertType.WARNING, "Bild nicht gefunden", "Diese Frage hat kein verbundenes Bild", "");
+            alertController.showBigAlert(Alert.AlertType.WARNING, "Kein Bild gefunden", "Diese Frage hat kein verbundenes Bild.", "");
             return;
         }
         Image image = null;
@@ -56,8 +57,8 @@ public class ZoomedImageController {
         if (image != null) {
             imageView.setImage(image);
             imageView.setPreserveRatio(true);
-            imageView.setFitWidth(Math.min(image.getWidth(), screenWidth));
-            imageView.setFitHeight(Math.min(image.getHeight(), screenHeight));
+            imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - eps));
+            imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
         }
         var pane = new BorderPane();
         pane.setCenter(imageView);
