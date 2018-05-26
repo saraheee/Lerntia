@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
@@ -21,7 +21,6 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 
 public class ExamQuestionnaireDAOTest {
 
@@ -38,7 +37,7 @@ public class ExamQuestionnaireDAOTest {
         try {
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
-            this.IExamQuestionaireDAO(new ExamQuestionaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
@@ -51,8 +50,8 @@ public class ExamQuestionnaireDAOTest {
         connection.rollback();
     }
 
-    private void IExamQuestionaireDAO(ExamQuestionaireDAO examQuestionaireDAO) {
-        this.examQuestionnaireDAO = examQuestionaireDAO;
+    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+        this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
     private void ICourseDAO(CourseDAO courseDAO) {

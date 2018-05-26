@@ -9,25 +9,25 @@
     <Label layoutX="50.0" layoutY="58.0" text="Frage*"/>
     <TextField fx:id="tf_question" layoutX="132.0" layoutY="20.0" prefHeight="90.0" prefWidth="455.0"/>
     <Label layoutX="50.0" layoutY="175.0" text="Antwort 1*"/>
-    <TextField fx:id="tf_answer2" layoutX="132.0" layoutY="260.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="295.0" text="Antwort 2*"/>
-    <TextField fx:id="tf_answer3" layoutX="132.0" layoutY="380.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="415.0" text="Antwort 3"/>
-    <TextField fx:id="tf_answer4" layoutX="132.0" layoutY="500.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="535.0" text="Antwort 4"/>
-    <TextField fx:id="tf_answer5" layoutX="132.0" layoutY="620.0" prefHeight="90.0" prefWidth="455.0"/>
-    <Label layoutX="50.0" layoutY="659.0" text="Antwort 5"/>
     <TextField fx:id="tf_answer1" layoutX="132.0" layoutY="140.0" prefHeight="90.0" prefWidth="455.0"/>
+    <Label layoutX="50.0" layoutY="295.0" text="Antwort 2*"/>
+    <TextField fx:id="tf_answer2" layoutX="132.0" layoutY="260.0" prefHeight="90.0" prefWidth="455.0"/>
+    <Label layoutX="50.0" layoutY="415.0" text="Antwort 3"/>
+    <TextField fx:id="tf_answer3" layoutX="132.0" layoutY="380.0" prefHeight="90.0" prefWidth="455.0"/>
+    <Label layoutX="50.0" layoutY="535.0" text="Antwort 4"/>
+    <TextField fx:id="tf_answer4" layoutX="132.0" layoutY="500.0" prefHeight="90.0" prefWidth="455.0"/>
+    <Label layoutX="50.0" layoutY="659.0" text="Antwort 5"/>
+    <TextField fx:id="tf_answer5" layoutX="132.0" layoutY="620.0" prefHeight="90.0" prefWidth="455.0"/>
     <Label layoutX="625.0" layoutY="49.0" text="Richtige Antworten*"/>
     <TextField fx:id="tf_correctAnswer" layoutX="750.0" layoutY="45.0" prefHeight="25.0" prefWidth="328.0"/>
     <Label layoutX="757.0" layoutY="75.0" text="Bitte nur die Antwortnummern ohne Leerzeichen eingeben."/>
     <Label layoutX="623.0" layoutY="177.0" text="Optionales Feedback"/>
     <TextField fx:id="tf_optionalFeedback" layoutX="750.0" layoutY="141.0" prefHeight="90.0" prefWidth="328.0"/>
+    <Label fx:id="noImageLabel" layoutX="888.0" layoutY="426.0" text="Kein Bild"/>
     <ImageView fx:id="iv_image" fitHeight="343.0" fitWidth="439.0" layoutX="691.0" layoutY="263.0" pickOnBounds="true"
                preserveRatio="true"/>
     <Button layoutX="848.0" layoutY="620.0" mnemonicParsing="false" onAction="#imageButton" prefHeight="25.0"
             prefWidth="125.0" text=" Bild hochladen"/>
     <Button layoutX="1032.0" layoutY="692.0" mnemonicParsing="false" onAction="#editButton" prefHeight="37.0"
             prefWidth="113.0" text="Speichern"/>
-    <Label fx:id="noImageLabel" layoutX="888.0" layoutY="426.0" text="Kein Bild"/>
 </AnchorPane>
