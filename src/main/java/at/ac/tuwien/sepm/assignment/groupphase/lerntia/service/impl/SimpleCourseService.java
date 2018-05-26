@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -21,18 +20,20 @@ public class SimpleCourseService implements ICourseService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
 
-    ConfigReader configReaderCourse = new ConfigReader("course");
+    private ConfigReader configReaderCourse = new ConfigReader("course");
 
-    public SimpleCourseService(ICourseDAO courseDAO){
+    public SimpleCourseService(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
     @Override
     public void create(Course course) throws ServiceException {
         try {
+            LOG.info("Create new Course: {}", course);
             courseDAO.create(course);
+            LOG.info("New course created: {}", course);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -40,18 +41,23 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void update(Course course) throws ServiceException {
         try {
+            LOG.info("Update existing Course with new values, {}", course);
             courseDAO.update(course);
+            LOG.info("Course successfully updated.");
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());        }
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     @Override
     public void search(Course course) throws ServiceException {
         try {
+            LOG.info("Search for Course: {}", course);
             courseDAO.search(course);
+            LOG.info("Course has been found");
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
@@ -59,35 +65,37 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void delete(Course course) throws ServiceException {
         try {
+            LOG.info("Delete course: {}", course);
             courseDAO.delete(course);
+            LOG.info("Course successfully deleted.");
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
     public List<Course> readAll() throws ServiceException {
-
-        List<Course> courses = null;
+        LOG.info("Retrieving all existing Courses....");
+        List<Course> courses;
         try {
             courses = courseDAO.readAll();
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
         }
 
-        if (courses.isEmpty()){
+        if (courses.isEmpty()) {
             throw new ServiceException("Es wurden noch keine LVAs angelegt");
         }
-
+        LOG.info("All courses retrieved.");
         return courses;
     }
 
     @Override
     public void validate(Course course) throws ServiceException {
-
-        if (course.getMark().equals("")){
+        LOG.info("Check if all mandatory values are valid.");
+        if (course.getMark().equals("")) {
             throw new ServiceException("Die LVA-Nummer ist leer");
         }
 
@@ -95,7 +103,7 @@ public class SimpleCourseService implements ICourseService {
             throw new ServiceException("Die LVA-Nummer ist zu lang");
         }
 
-        if (course.getName().equals("")){
+        if (course.getName().equals("")) {
             throw new ServiceException("Der Name ist leer");
         }
 
@@ -104,28 +112,27 @@ public class SimpleCourseService implements ICourseService {
         }
 
         if (
-            ! course.getSemester().startsWith(Semester.WS.toString()) &&
-            ! course.getSemester().startsWith(Semester.SS.toString())
-        ) {
+            !course.getSemester().startsWith(Semester.WS.toString()) &&
+                !course.getSemester().startsWith(Semester.SS.toString())
+            ) {
             throw new ServiceException("Das Semester sollte mit 'WS' oder 'SS' beginnen");
         }
 
-        try{
+        try {
             String yearStr = course.getSemester().substring(2);
 
             if (yearStr.length() != 4) {
                 throw new ServiceException("Das Jahr sollte eine Zahl mit 4 Ziffern sein");
             }
-
             int yearInt = Integer.parseInt(yearStr);
-
-            if (yearInt < 0){
-                throw new ServiceException("Das Jahr darf keine negative Zahl sein");
+            if (yearInt < 0) {
+                throw new ServiceException("Das Jahr sollte nicht negativ sein");
             }
-
-            course.setSemester(course.getSemester().substring(0,2)+yearInt);
-        } catch(NumberFormatException e) {
+            course.setSemester(course.getSemester().substring(0, 2) + yearStr.substring(2, 4));
+            LOG.info("All course values are valid.");
+        } catch (NumberFormatException e) {
             throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
         }
     }
+
 }

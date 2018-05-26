@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,7 +17,7 @@ import java.lang.invoke.MethodHandles;
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class AudioController {
+public class AudioController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -35,9 +34,8 @@ public class AudioController {
     private String answer5;
 
     @Autowired
-    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, AlertController alertController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, AlertController alertController) {
         notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
-        notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(alertController, "'alertController' should not be null");
         this.iTextToSpeechService = iTextToSpeechService;
         this.alertController = alertController;
@@ -57,7 +55,6 @@ public class AudioController {
             tts.setAnswer3(this.answer3);
             tts.setAnswer4(this.answer4);
             tts.setAnswer5(this.answer5);
-
             if (iTextToSpeechService != null) {
                 try {
                     stopReading();
@@ -78,6 +75,7 @@ public class AudioController {
     }
 
     void readSingleAnswer(String answerText) {
+        audioButton.defaultButtonProperty().setValue(false);
         if (answerText == null || answerText.trim().length() < 1) {
             showValidationFailedDialog();
         } else {
@@ -92,7 +90,7 @@ public class AudioController {
                     LOG.error("Failed to read question and answers.");
                     showAudioErrorDialog();
                 } catch (TextToSpeechServiceValidationException e) {
-                    LOG.info("Validation failed for the input text of the speech synthesizer.");
+                    LOG.error("Validation failed for the input text of the speech synthesizer.");
                     showValidationFailedDialog();
                 }
             } else {
@@ -108,12 +106,12 @@ public class AudioController {
 
     void setSelected() {
         if (audioButton.isDefaultButton()) {
-            audioButton.defaultButtonProperty().setValue(false);
+            deselectAudioButton();
             //stop sound
             stopReading();
         } else {
-            audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
+            selectAudioButton();
         }
     }
 
@@ -123,7 +121,7 @@ public class AudioController {
     }
 
     private void showValidationFailedDialog() {
-        alertController.showBigAlert(Alert.AlertType.ERROR, "Validierung fehlgeschlagen",
+        alertController.showBigAlert(Alert.AlertType.ERROR, "Kein Text gefunden",
             "Kein Text zum Lesen vorhanden.", "");
     }
 
@@ -151,5 +149,23 @@ public class AudioController {
         this.answer5 = answer;
     }
 
+    private void selectAudioButton() {
+        audioButton.defaultButtonProperty().setValue(true);
+        var audioThread = new Thread(this);
+        audioThread.start();
+    }
 
+    void deselectAudioButton() {
+        audioButton.defaultButtonProperty().setValue(false);
+    }
+
+    @Override
+    public void run() {
+        while (audioButton != null && audioButton.isDefaultButton()) {
+            if (iTextToSpeechService.noCurrentAudio()) {
+                deselectAudioButton();
+                LOG.debug("Deselected the audio button.");
+            }
+        }
+    }
 }

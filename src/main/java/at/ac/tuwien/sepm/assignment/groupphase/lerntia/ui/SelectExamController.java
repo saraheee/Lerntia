@@ -69,9 +69,20 @@ public class SelectExamController {
 
     void showSelectExamWindow() {
 
+        try {
+            examQuestionnaireList = examQuestionnaireService.readAll();
+        } catch (ServiceException e) {
+            // TODO - finish exception handling
+        }
+
+        if (examQuestionnaireList.isEmpty()){
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs Auswahl kann nicht angezeigt werden",
+                "Error", "Es ist noch keine Prüfung vorhanden");
+            return;
+        }
+
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-
         windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
     }
 

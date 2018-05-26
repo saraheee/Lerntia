@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.invoke.MethodHandles;
@@ -159,6 +157,11 @@ public class SimpleQuestionService implements IQuestionService {
         String correctAnswers = question.getCorrectAnswers();
         var currentCorrectAnswerIndex = 0;
 
+        //check if the correct answers can be parsed to an integer
+        if(!isInteger(correctAnswers)) {
+            throw new ServiceException("The Answers contain invalid characters.");
+        }
+
         // go through the correct answers string one char at a time and check if the value is valid
 
         for (var i = 0; i < correctAnswers.length(); i++){
@@ -220,4 +223,14 @@ public class SimpleQuestionService implements IQuestionService {
                 throw new ServiceException(e.getMessage());
             }
     }
+
+    private static boolean isInteger(String text) {
+        try {
+            Integer.parseInt(text);
+        } catch(NumberFormatException | NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
 }
