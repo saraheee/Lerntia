@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -27,7 +28,7 @@ public class QuestionDAOTest {
     public void setUp() {
         try {
             connection = jdbcConnectionManager.getTestConnection();
-            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));
+            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
         }

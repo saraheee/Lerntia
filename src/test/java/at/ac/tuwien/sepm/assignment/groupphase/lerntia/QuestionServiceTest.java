@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
@@ -29,7 +30,7 @@ public class QuestionServiceTest {
     public void setUp(){
         configReaderQuestions = new ConfigReader("questions");
         try {
-            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager)));
+            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))));
         } catch (PersistenceException e) {
             e.printStackTrace();
         }

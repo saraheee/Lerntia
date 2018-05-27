@@ -136,7 +136,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                 newValue = 200.0;
             }
 
-            valueMap.put(question.getId(),oldValue*newValue);
+            valueMap.put(question.getId(),newValue);
             changeAlgorithmValues();
         }catch (Exception e){
             throw new ServiceException(e.getMessage());
@@ -230,9 +230,9 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
         Integer failurevalue = failureMap.get(question.getId());
         Double newValue;
         if (failurevalue>succesvalue){
-            newValue = oldValue  + (failurevalue-succesvalue);
+            newValue = oldValue  - (failurevalue-succesvalue);
         } else {
-            newValue = oldValue + 1;
+            newValue = oldValue - 1;
         }
 
         if (newValue <= 0.0){
@@ -241,7 +241,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             newValue = 200.0;
         }
 
-        valueMap.put(question.getId(),oldValue*newValue);
+        valueMap.put(question.getId(),newValue);
         changeAlgorithmValues();
     }
 
