@@ -178,7 +178,7 @@ public class SelectQuestionAdministrateController {
 
         //Open the New Question.
         stage.close();
-        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0));
+        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0),this);
         //TODO Editing Questions.
     }
 
@@ -272,5 +272,9 @@ public class SelectQuestionAdministrateController {
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(newContent);
+    }
+
+    public LearningQuestionnaire getAdministrateMode(){
+        return this.administrateMode;
     }
 }
