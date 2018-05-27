@@ -39,7 +39,7 @@ public class QuestionnaireQuestionDAOTest {
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
             this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
-            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));
+            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
         }
