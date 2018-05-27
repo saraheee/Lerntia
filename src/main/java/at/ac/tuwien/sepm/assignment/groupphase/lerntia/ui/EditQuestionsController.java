@@ -146,15 +146,12 @@ public class EditQuestionsController {
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Erfolgreich bearbeitet",
                     "Die Frage wurde erfolgreich bearbeitet.", null);
                 this.stage.close();
-                //Show the First Q
-                try {
-                    lerntiaMainController.getAndShowTheFirstQuestion();
-                } catch (ControllerException e) {
-                    e.printStackTrace();
-                }
+                lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ServiceException e) {
                 alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);
+            } catch (ControllerException e) {
+                e.printStackTrace();
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
