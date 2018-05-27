@@ -1,18 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
@@ -22,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
-import java.util.List;
 
 
 public class QuestionnaireDAOTest {

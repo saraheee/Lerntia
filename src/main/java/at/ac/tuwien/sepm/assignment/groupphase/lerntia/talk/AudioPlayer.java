@@ -2,9 +2,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk;
 
 import marytts.util.data.audio.MonoAudioInputStream;
 import marytts.util.data.audio.StereoAudioInputStream;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,15 +17,12 @@ import java.util.logging.Logger;
  */
 public class AudioPlayer extends Thread {
 
-    public static final int MONO = 0;
-    public static final int STEREO = 3;
-    public static final int LEFT_ONLY = 1;
-    public static final int RIGHT_ONLY = 2;
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    public boolean finishedAudio = false;
     private AudioInputStream ais;
     private LineListener lineListener;
     private SourceDataLine line;
     private int outputMode;
-
     private Status status = Status.WAITING;
     private boolean exitRequested = false;
     private float gain = 1.0f;
@@ -35,7 +34,7 @@ public class AudioPlayer extends Thread {
     }
 
     /**
-     * @param audio
+     * @param audio the audio to set
      */
     public void setAudio(AudioInputStream audio) {
         if (status == Status.PLAYING) {
@@ -55,23 +54,16 @@ public class AudioPlayer extends Thread {
     }
 
     /**
-     * @return The SourceDataLine
-     */
-    public SourceDataLine getLine() {
-        return line;
-    }
-
-    /**
      * Returns the GainValue
      */
-    public float getGainValue() {
+    private float getGainValue() {
         return gain;
     }
 
     /**
      * Sets Gain value. Line should be opened before calling this method. Linear scale 0.0 <--> 1.0 Threshold Coef. : 1/2 to avoid saturation.
      *
-     * @param fGain
+     * @param fGain the gain value to set
      */
     public void setGain(float fGain) {
         gain = fGain;
@@ -86,7 +78,8 @@ public class AudioPlayer extends Thread {
     public void run() {
 
         status = Status.PLAYING;
-        AudioFormat audioFormat = ais.getFormat();
+        finishedAudio = false;
+        var audioFormat = ais.getFormat();
         if (audioFormat.getChannels() == 1) {
             if (outputMode != 0) {
                 ais = new StereoAudioInputStream(ais, outputMode);
@@ -107,10 +100,10 @@ public class AudioPlayer extends Thread {
 
         try {
             if (line == null) {
-                boolean bIsSupportedDirectly = AudioSystem.isLineSupported(info);
+                var bIsSupportedDirectly = AudioSystem.isLineSupported(info);
                 if (!bIsSupportedDirectly) {
-                    AudioFormat sourceFormat = audioFormat;
-                    AudioFormat targetFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), sourceFormat.getSampleSizeInBits(),
+                    var sourceFormat = audioFormat;
+                    var targetFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), sourceFormat.getSampleSizeInBits(),
                         sourceFormat.getChannels(), sourceFormat.getChannels() * (sourceFormat.getSampleSizeInBits() / 8), sourceFormat.getSampleRate(),
                         sourceFormat.isBigEndian());
 
@@ -148,6 +141,8 @@ public class AudioPlayer extends Thread {
             line.drain();
         }
         line.close();
+        finishedAudio = true;
+        LOG.debug("Finished playing!");
     }
 
     /**

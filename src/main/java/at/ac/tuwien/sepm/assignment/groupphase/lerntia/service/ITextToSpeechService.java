@@ -42,4 +42,11 @@ public interface ITextToSpeechService {
      * @param textToSpeech the new textToSpeech object with the voice properties
      */
     void setVoice(Speech textToSpeech);
+
+    /**
+     * Checks if the read process has already ended
+     *
+     * @return true if the audio has already ended, else false
+     */
+    boolean noCurrentAudio();
 }
