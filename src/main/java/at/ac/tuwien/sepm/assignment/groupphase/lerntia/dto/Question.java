@@ -21,6 +21,7 @@ public class Question {
     public Question() {}
 
     public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3, String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
+        this.containPicture.setDisable(false);
         this.containPicture = new CheckBox();
         this.containPicture.setSelected(false);
         this.id = id;
