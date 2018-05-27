@@ -16,15 +16,14 @@ import java.sql.SQLException;
 @Component
 public class UserCourseDAO implements IUserCourseDAO {
 
-    private Connection connection;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private static final String SQL_USERCOURSE_CREATE_STATEMENT ="INSERT INTO PUserCourse(matriculationNumber,courseid,isDeleted) VALUES (?,?,false )";
+    private static final String SQL_USERCOURSE_CREATE_STATEMENT = "INSERT INTO PUserCourse(matriculationNumber,courseid,isDeleted) VALUES (?,?,FALSE )";
+    private Connection connection;
 
     public UserCourseDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Connection for UserCourseDAO succesfully found.");
+            LOG.info("Connection for UserCourseDAO successfully found.");
         } catch (PersistenceException e) {
             LOG.error("Couldn't find connection for UserCourseDAO!");
             throw e;
@@ -35,17 +34,17 @@ public class UserCourseDAO implements IUserCourseDAO {
     public void create(UserCourse userCourse) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for new UserCourse entry.");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_USERCOURSE_CREATE_STATEMENT);
+            PreparedStatement psCreate = connection.prepareStatement(SQL_USERCOURSE_CREATE_STATEMENT);
             try {
-                pscreate.setString(1, userCourse.getMatriculationNumber());
-                pscreate.setLong(2, userCourse.getCourseID());
-                pscreate.execute();
-                LOG.info("Statement for new UserCourse entry succesfully sent.");
-            }finally {
-                pscreate.close();
+                psCreate.setString(1, userCourse.getMatriculationNumber());
+                psCreate.setLong(2, userCourse.getCourseID());
+                psCreate.execute();
+                LOG.info("Statement for new UserCourse entry successfully sent.");
+            } finally {
+                psCreate.close();
             }
         } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException("UserCourseDAO CREATE error: item couldn't have been created, check if all mandatory values have been added or if the connection to the Database is valid.");
         }
     }
 }

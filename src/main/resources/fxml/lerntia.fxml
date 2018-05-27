@@ -19,7 +19,6 @@
             <ImageView fx:id="mainImage" fitHeight="300.0" fitWidth="474.0" preserveRatio="true" pickOnBounds="true"/>
             <HBox>
                 <VBox prefHeight="134.0" prefWidth="323.0"/>
-                <fx:include fx:id="zoomButton" source="/fxml/elements/zoomButton.fxml"/>
             </HBox>
         </VBox>
     </VBox>

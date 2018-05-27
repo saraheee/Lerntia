@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.List;
  * It is the general home for business logic.
  */
 public interface IMainLerntiaService {
+
+    Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException;
 
     Question getFirstQuestion() throws ServiceException;
 
@@ -51,7 +51,7 @@ public interface IMainLerntiaService {
     /**
      * Returns the Size of the ListCounter
      */
-    public int getListcounter();
+    public int getListCounter();
 
     /**
      * Returns the QuistionList

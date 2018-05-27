@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserQuestionaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IUserQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.UserQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserQuestionnaireService;
 import org.slf4j.Logger;
@@ -14,10 +14,10 @@ import java.lang.invoke.MethodHandles;
 public class SimpleUserQuestionnaireService implements IUserQuestionnaireService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final IUserQuestionaireDAO iUserQuestionaireDAO;
+    private final IUserQuestionnaireDAO iUserQuestionnaireDAO;
 
-    public SimpleUserQuestionnaireService(IUserQuestionaireDAO iUserQuestionaireDAO) {
-        this.iUserQuestionaireDAO = iUserQuestionaireDAO;
+    public SimpleUserQuestionnaireService(IUserQuestionnaireDAO iUserQuestionnaireDAO) {
+        this.iUserQuestionnaireDAO = iUserQuestionnaireDAO;
     }
 
     @Override
