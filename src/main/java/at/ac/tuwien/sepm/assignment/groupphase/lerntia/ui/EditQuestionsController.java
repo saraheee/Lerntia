@@ -54,6 +54,7 @@ public class EditQuestionsController {
     private Question selectedQuestion;
     private Stage stage;
     private LearningQuestionnaire learningQuestionnaire;
+    private SelectQuestionAdministrateController selectQuestionAdministrateController;
     @FXML
     private Label noImageLabel;
     private String imageName;
@@ -88,7 +89,8 @@ public class EditQuestionsController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showEditQuestionsControllerWindow(Question selectedQuestion) {
+    public void showEditQuestionsControllerWindow(Question selectedQuestion, SelectQuestionAdministrateController selectQuestionAdministrateController) {
+        this.selectQuestionAdministrateController = selectQuestionAdministrateController;
         LOG.info("Open Edit Questions Controller Window.");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editQuestion.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
@@ -147,6 +149,10 @@ public class EditQuestionsController {
                     "Die Frage wurde erfolgreich bearbeitet.", null);
                 this.stage.close();
                 lerntiaMainController.getAndShowTheFirstQuestion();
+
+                //Show the Last Scene
+                selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectQuestionAdministrateController.getAdministrateMode());
+                selectQuestionAdministrateController.refresh();
             } catch (ServiceException e) {
                 alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);

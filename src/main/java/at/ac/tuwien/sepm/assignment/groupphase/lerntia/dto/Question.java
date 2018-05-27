@@ -63,7 +63,7 @@ public class Question {
     public void setPicture(String picture) {
         this.picture = picture;
         this.containPicture = new CheckBox();
-        if(picture.length()>0){
+        if(picture != null && picture.length()>0){
             this.setContainPicture(true);
         }else{
             this.setContainPicture(false);
