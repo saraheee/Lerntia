@@ -39,7 +39,7 @@ public class SelectQuestionAdministrateController {
     @FXML
     public TableView<Question> tv_questionTable;
     @FXML
-    public TableColumn<Question, Long> tc_id;
+    public TableColumn tc_picture;
     @FXML
     public TableColumn<Question, String> tc_question;
     @FXML
@@ -96,7 +96,7 @@ public class SelectQuestionAdministrateController {
             e.printStackTrace();
         }
         //Fill the First Table.
-        //tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
+        tc_picture.setCellValueFactory(new PropertyValueFactory<Question, CheckBox>("containPicture"));
         tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
         tc_answer1.setCellValueFactory(new PropertyValueFactory<Question, String>("answer1"));
         tc_answer2.setCellValueFactory(new PropertyValueFactory<Question, String>("answer2"));
