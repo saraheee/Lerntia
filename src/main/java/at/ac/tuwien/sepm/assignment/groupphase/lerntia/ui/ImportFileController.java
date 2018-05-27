@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +126,7 @@ public class ImportFileController {
         if (directory != null) {
             try {
                 qservice.importPictures(directory, name);
-            } catch (ServiceException e) {
+            } catch (IOException e) {
                 // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
@@ -143,7 +144,7 @@ public class ImportFileController {
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
-            } catch (ServiceException e) {
+            } catch (Exception e) {
                 // TODO - e.getMessage()
                 qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
