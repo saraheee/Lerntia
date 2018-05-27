@@ -28,7 +28,8 @@ public class SimpleExamResultsWriterService implements IExamResultsWriterService
         try {
             iExamResultsWriterDAO.writeExamResults(questions, path);
         } catch (PersistenceException e) {
-            throw new ServiceException("TODO");
+            // TODO - i want to pass the error message along. is this ok?
+            throw new ServiceException(e.getMessage());
         }
     }
 }

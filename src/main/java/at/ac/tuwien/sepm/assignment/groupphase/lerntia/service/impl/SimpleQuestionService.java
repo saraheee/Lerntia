@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.invoke.MethodHandles;
@@ -24,6 +22,8 @@ public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private QuestionDAO questionDAO;
+
+    private ConfigReader configReaderQuestions = new ConfigReader("questions");
 
     @Autowired
     public SimpleQuestionService(QuestionDAO questionDAO){
@@ -99,8 +99,6 @@ public class SimpleQuestionService implements IQuestionService {
     @Override
     public void validate(Question question) throws ServiceException {
 
-        ConfigReader configReaderQuestions = new ConfigReader("questions");
-
         var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
         var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
         var maxHeightPicture = configReaderQuestions.getValueInt("maxHeightPicture");
@@ -159,6 +157,11 @@ public class SimpleQuestionService implements IQuestionService {
         String correctAnswers = question.getCorrectAnswers();
         var currentCorrectAnswerIndex = 0;
 
+        //check if the correct answers can be parsed to an integer
+        if(!isInteger(correctAnswers)) {
+            throw new ServiceException("The Answers contain invalid characters.");
+        }
+
         // go through the correct answers string one char at a time and check if the value is valid
 
         for (var i = 0; i < correctAnswers.length(); i++){
@@ -193,19 +196,41 @@ public class SimpleQuestionService implements IQuestionService {
         // TODO - more image validation?
         FileInputStream input = null;
         try {
-            input = new FileInputStream(question.getPicture());
-            Image image = new Image(input);
+            if(question.getPicture() != null) {
+                input = new FileInputStream(question.getPicture());
+                Image image = new Image(input);
 
-            if (image.getHeight() < maxHeightPicture) {
-                LOG.error("image has too small height");
-                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
-            }
-            if (image.getWidth() < maxWidthPicture) {
-                LOG.error("image has too small width");
-                throw new ServiceException("Das Bild muss 200x200 Pixel haben");
+                if (image.getHeight() < maxHeightPicture) {
+                    LOG.error("image has too small height");
+                    throw new ServiceException("Das Bild muss mindestens 200x200 Pixel haben");
+                }
+                if (image.getWidth() < maxWidthPicture) {
+                    LOG.error("image has too small width");
+                    throw new ServiceException("Das Bild muss mindestens 200x200 Pixel haben");
+                }
             }
         } catch (FileNotFoundException e) {
             LOG.error("cannot find image");
         }
     }
+
+    @Override
+    public List<Question> searchForQuestions(Question questionInput) throws ServiceException {
+            try {
+                return questionDAO.searchForQuestions(questionInput);
+            } catch (PersistenceException e) {
+                LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
+                throw new ServiceException(e.getMessage());
+            }
+    }
+
+    private static boolean isInteger(String text) {
+        try {
+            Integer.parseInt(text);
+        } catch(NumberFormatException | NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
 }

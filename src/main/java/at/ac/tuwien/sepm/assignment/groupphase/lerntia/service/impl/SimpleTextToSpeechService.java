@@ -43,7 +43,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.error("Failed to initialize speech synthesizer!");
             throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
         }
-        if(playWelcomeText) {
+        if (playWelcomeText) {
             playText(WELCOME);
         }
     }
@@ -90,7 +90,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private void playText(String text) throws TextToSpeechServiceException {
         LOG.trace("Entering method playText.");
-        try (var audio = maryTTS.generateAudio(filterTextInParenthesis(text))) {
+        try (var audio = maryTTS.generateAudio(replaceUmlauts(filterTextInParenthesis(text)))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -126,6 +126,13 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         return filtered.toString();
     }
 
+    public String replaceUmlauts(String text) {
+        return text.replace("ae", "\u00e4")
+                   .replace("oe", "\u00f6")
+                   .replace("ue", "\u00fc")
+                   .replace("sz", "\u00DF");
+    }
+
     @Override
     public void stopSpeaking() {
         LOG.trace("Entering method stopSpeaking.");
@@ -140,6 +147,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     @Override
     public void setVoice(Speech textToSpeech) {
         maryTTS.setVoice(textToSpeech.getVoice());
+    }
+
+    @Override
+    public boolean noCurrentAudio() {
+        return audioPlayer == null || audioPlayer.finishedAudio;
     }
 
     public String getText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
