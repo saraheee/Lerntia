@@ -5,9 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,6 +34,7 @@ public class SelectQuestionAdministrateController {
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
+    private final ILearningQuestionnaireService iLearningQuestionnaireService;
     @FXML
     public TableView<Question> tv_questionTable;
     @FXML
@@ -76,7 +75,8 @@ public class SelectQuestionAdministrateController {
         IQuestionService questionDAO,
         EditQuestionsController editQuestionsController,
         IQuestionnaireQuestionService questionnaireQuestionService,
-        AlertController alertController) {
+        AlertController alertController,
+        ILearningQuestionnaireService iLearningQuestionnaireService) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
@@ -84,6 +84,7 @@ public class SelectQuestionAdministrateController {
         this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.alertController = alertController;
+        this.iLearningQuestionnaireService = iLearningQuestionnaireService;
     }
 
     public void initialize() {
@@ -112,11 +113,22 @@ public class SelectQuestionAdministrateController {
      * Refreshs the Data and the lertiaMainController
      */
     public void refresh() {
-        //Clear the Table and Load the new Data
-        tv_questionTable.getItems().clear();
-        tv_questionTable.getItems().addAll(getContent());
+        LearningQuestionnaire studyMode = null;
         try {
+            studyMode = iLearningQuestionnaireService.getSelected();
+            iLearningQuestionnaireService.deselect(studyMode);
+            iLearningQuestionnaireService.select(administrateMode);
+            this.stage.close();
+            var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+            this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+            tv_questionTable.getItems().clear();
+            tv_questionTable.getItems().addAll(getContent());
+            iLearningQuestionnaireService.deselect(administrateMode);
+            iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
+        } catch (ServiceException e) {
+            e.printStackTrace();
         } catch (ControllerException e) {
             e.printStackTrace();
         }
@@ -201,15 +213,18 @@ public class SelectQuestionAdministrateController {
 
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open informationen Window
-            stage.close();
+            //stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
+
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
             }
+            
+            this.refresh();
         }
     }
 
