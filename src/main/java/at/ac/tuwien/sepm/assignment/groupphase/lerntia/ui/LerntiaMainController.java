@@ -10,11 +10,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaServi
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -36,6 +35,7 @@ import static org.springframework.util.Assert.notNull;
 @Controller
 public class LerntiaMainController {
 
+    private boolean learnalgorithmstatus;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
     private final ZoomedImageController zoomedImageController;
@@ -70,6 +70,8 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
+    private LearnAlgorithmController learnAlgorithmController;
+    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
@@ -94,12 +96,14 @@ public class LerntiaMainController {
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
         IQuestionnaireService questionnaireService,
-        IExamResultsWriterService iExamResultsWriterService
+        IExamResultsWriterService iExamResultsWriterService,
+        LearnAlgorithmController learnAlgorithmController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
         notNull(zoomedImageController, "'zoomedImageController' should not be null");
+        notNull(learnAlgorithmController,"learnAlgorithmController should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;
@@ -107,6 +111,9 @@ public class LerntiaMainController {
         this.zoomedImageController = zoomedImageController;
         this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
+        this.learnAlgorithmController = learnAlgorithmController;
+
+        this.learnalgorithmstatus = false;
     }
 
     @FXML
@@ -146,6 +153,16 @@ public class LerntiaMainController {
             if (e.getCode() == KeyCode.C) {
                 LOG.debug("C key was pressed");
                 checkIfQuestionWasCorrect();
+            }
+            if (e.getCode() == KeyCode.F1){
+                LOG.info("F1 key was pressed.");
+                learnAlgorithmController.onAlgorithmButtonPressed();
+                if (learnAlgorithmController.isSelected()){
+                    LOG.info("Learn Algorithm is now running");
+                }else {
+                    LOG.info("Learn Algorithm is now not running.");
+                }
+                learnalgorithmstatus = learnAlgorithmController.isSelected();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
@@ -198,6 +215,8 @@ public class LerntiaMainController {
 
     }
 
+
+
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
@@ -205,8 +224,15 @@ public class LerntiaMainController {
 
         boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
         //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
-
+        LOG.info("Save values to Algorithm");
         if (answersCorrect) {
+            try {
+
+                lerntiaService.recordCheckedAnswers(question,answersCorrect);
+            } catch (ServiceException e) {
+                e.printStackTrace();
+            }
+
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                 alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
             } else {
@@ -218,6 +244,12 @@ public class LerntiaMainController {
             }
 
         } else {
+
+            try {
+                lerntiaService.recordCheckedAnswers(question,answersCorrect);
+            }catch (ServiceException e){
+                e.printStackTrace();
+            }
             if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                 alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
             } else {
@@ -238,7 +270,7 @@ public class LerntiaMainController {
             mockQuestion.setCorrectAnswers(checkedAnswers);
             LOG.info("Trying to send {} answers on question \"{}\"",
                 mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-            lerntiaService.recordCheckedAnswers(mockQuestion);
+            lerntiaService.recordCheckedAnswers(mockQuestion,answersCorrect);
         } catch (ServiceException e) {
             LOG.error("Could not check whether the answer was correct");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
@@ -512,5 +544,9 @@ public class LerntiaMainController {
             default:
                 return "";
         }
+    }
+
+    public void stopAlgorithm() throws ServiceException {
+        lerntiaService.stopAlgorithm();
     }
 }
