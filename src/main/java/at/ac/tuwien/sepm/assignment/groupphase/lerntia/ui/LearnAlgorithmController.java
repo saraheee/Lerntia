@@ -19,7 +19,7 @@ public class LearnAlgorithmController {
 
     @FXML
     private void initialize(){
-        learnAlgorithmButton.setText("Algorithm OFF");
+        learnAlgorithmButton.setText("Algorithm AUS");
     }
     public LearnAlgorithmController(){
         this.selected = false;
@@ -33,12 +33,12 @@ public class LearnAlgorithmController {
             LOG.info("Set Algorithm to OFF");
             selected = false;
             learnAlgorithmButton.defaultButtonProperty().setValue(false);
-            learnAlgorithmButton.setText(" Algorithm OFF");
+            learnAlgorithmButton.setText("Algorithm AUS");
         }else {
             learnAlgorithmButton.defaultButtonProperty().setValue(true);
             LOG.info("Set Algorithm to ON");
             selected = true;
-            learnAlgorithmButton.setText("Algorithm ON");
+            learnAlgorithmButton.setText("Algorithm AN");
         }
     }
 
