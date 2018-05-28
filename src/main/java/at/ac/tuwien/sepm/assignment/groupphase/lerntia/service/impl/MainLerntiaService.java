@@ -183,11 +183,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         try {
             learnAlgorithm =learnAlgorithmController.isSelected();
             if (learnAlgorithm){
+                LOG.info("Get previous question determined by the Learn Algorithm");
                 if (!(currentAlgorithmQuestionIndex-1<0)){
-
                     currentQuestion = new Question();
                     currentQuestion = questionMap.get(algorithmlist.get(--currentAlgorithmQuestionIndex));
-                    LOG.info("Found previous question determinde by Learn Algorithm.");
+                    LOG.info("Found previous question determinded by the Learn Algorithm.");
                     return currentQuestion;
                 }
             }else {
@@ -224,9 +224,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         try {
             currentAlgorithmQuestionIndex = 0;
             if (learnAlgorithm){
+                LOG.info("Revert to first question in the Algorithm List.");
                 currentQuestion = questionMap.get(algorithmlist.get(currentAlgorithmQuestionIndex));
                 return currentQuestion;
             }else {
+                LOG.info("Get first Question of the Question List.");
                 currentQuestion = questionList.get(0);
                 currentQuestionIndex = 0;
                 return currentQuestion;
