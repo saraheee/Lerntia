@@ -26,7 +26,7 @@ public class QuestionServiceTest {
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         configReaderQuestions = new ConfigReader("questions");
         try {
             this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager)));
@@ -47,7 +47,7 @@ public class QuestionServiceTest {
 
     @Test
     public void validateCorrectQuestion() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
+        Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.validate(q);
     }
 
@@ -55,7 +55,7 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateNoQuestionText() throws ServiceException {
-        Question q = new Question((long)0, "", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
+        Question q = new Question((long) 0, "", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.validate(q);
     }
 
@@ -63,12 +63,12 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateTooLongQuestionText() throws ServiceException {
-        Question q = new Question((long)0, "", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
+        Question q = new Question((long) 0, "", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
 
         var maxLength = this.configReaderQuestions.getValueInt("maxLengthQuestion");
 
         String tooLongQuestionText = "";
-        for (var i = 0; i < maxLength + 1; i++){
+        for (var i = 0; i < maxLength + 1; i++) {
             tooLongQuestionText += "a";
         }
         q.setQuestionText(tooLongQuestionText);
@@ -80,7 +80,7 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateFewerThanTwoAnswersPresent() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "", "", "", "", "1", "feedback", false);
+        Question q = new Question((long) 0, "asdf", "", "a1", "", "", "", "", "1", "feedback", false);
         questionService.validate(q);
     }
 
@@ -88,12 +88,12 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateTooLongAnswer() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
+        Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
 
         var maxLength = this.configReaderQuestions.getValueInt("maxLengthAnswer");
 
         String tooLongAnswer = "";
-        for (var i = 0; i < maxLength + 1; i++){
+        for (var i = 0; i < maxLength + 1; i++) {
             tooLongAnswer += "a";
         }
         q.setAnswer1(tooLongAnswer);
@@ -105,7 +105,14 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateCorrectAnswerNotPresent() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "", "5", "feedback", false);
+        Question q = new Question();
+        q.setQuestionText("asdf");
+        q.setAnswer1("a1");
+        q.setAnswer2("a2");
+        q.setAnswer3("a3");
+        q.setAnswer4("a4");
+        q.setAnswer5("5");
+        q.setOptionalFeedback("feedback");
         questionService.validate(q);
     }
 
@@ -113,20 +120,36 @@ public class QuestionServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateCorrectAnswerWithIndexZero() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "", "120", "feedback", false);
+        Question q = new Question();
+        q.setQuestionText("asdf");
+        q.setAnswer1("a1");
+        q.setAnswer2("a2");
+        q.setAnswer3("a3");
+        q.setAnswer4("a4");
+        q.setAnswer5("");
+        q.setCorrectAnswers("120");
+        q.setOptionalFeedback("feedback");
         questionService.validate(q);
     }
 
-    // answer is makred as correct with index higher than 5
+    // answer is marked as correct with index higher than 5
 
     @Test(expected = ServiceException.class)
     public void validateCorrectAnswerWithIndexHigherThanFive() throws ServiceException {
-        Question q = new Question((long)0, "asdf", "", "a1", "a2", "a3", "a4", "", "126", "feedback", false);
+        Question q = new Question();
+        q.setQuestionText("asdf");
+        q.setAnswer1("a1");
+        q.setAnswer2("a2");
+        q.setAnswer3("a3");
+        q.setAnswer4("a4");
+        q.setAnswer5("");
+        q.setCorrectAnswers("126");
+        q.setOptionalFeedback("feedback");
         questionService.validate(q);
     }
 
     @After
-    public void wrapUp(){
+    public void wrapUp() {
         this.configReaderQuestions.close();
     }
 }
