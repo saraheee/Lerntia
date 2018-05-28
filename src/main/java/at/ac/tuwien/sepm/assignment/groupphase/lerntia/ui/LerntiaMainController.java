@@ -160,7 +160,12 @@ public class LerntiaMainController {
                 LOG.debug("C key was pressed");
                 audioController.stopReading();
                 audioController.deselectAudioButton();
-                checkIfQuestionWasCorrect();
+                if (examMode == false) {
+                    checkIfQuestionWasCorrect();
+                }
+                else {
+                    handIn(null);
+                }
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");

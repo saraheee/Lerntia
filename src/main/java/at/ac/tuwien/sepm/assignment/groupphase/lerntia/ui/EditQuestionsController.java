@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -31,6 +32,7 @@ public class EditQuestionsController {
     private final IQuestionService questionService;
     private final WindowController windowController;
     private final AlertController alertController;
+    private final LerntiaMainController lerntiaMainController;
     @FXML
     public TextField tf_question;
     @FXML
@@ -52,6 +54,7 @@ public class EditQuestionsController {
     private Question selectedQuestion;
     private Stage stage;
     private LearningQuestionnaire learningQuestionnaire;
+    private SelectQuestionAdministrateController selectQuestionAdministrateController;
     @FXML
     private Label noImageLabel;
     private String imageName;
@@ -59,10 +62,12 @@ public class EditQuestionsController {
     @Autowired
     public EditQuestionsController(IQuestionService questionService,
                                    WindowController windowController,
-                                   AlertController alertController) {
+                                   AlertController alertController,
+                                   LerntiaMainController lerntiaMainController) {
         this.questionService = questionService;
         this.windowController = windowController;
         this.alertController = alertController;
+        this.lerntiaMainController = lerntiaMainController;
     }
 
 
@@ -84,7 +89,8 @@ public class EditQuestionsController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showEditQuestionsControllerWindow(Question selectedQuestion) {
+    public void showEditQuestionsControllerWindow(Question selectedQuestion, SelectQuestionAdministrateController selectQuestionAdministrateController) {
+        this.selectQuestionAdministrateController = selectQuestionAdministrateController;
         LOG.info("Open Edit Questions Controller Window.");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editQuestion.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
@@ -98,6 +104,9 @@ public class EditQuestionsController {
         tf_answer5.setText(selectedQuestion.getAnswer5());
         tf_correctAnswer.setText(selectedQuestion.getCorrectAnswers());
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
+
+        //Todo Load the Current Image
+
         if (selectedQuestion.getPicture() != null && selectedQuestion.getPicture().trim().length() > 0) {
             noImageLabel.setVisible(false);
             imageName = selectedQuestion.getPicture();
@@ -139,9 +148,16 @@ public class EditQuestionsController {
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Erfolgreich bearbeitet",
                     "Die Frage wurde erfolgreich bearbeitet.", null);
                 this.stage.close();
+                lerntiaMainController.getAndShowTheFirstQuestion();
+
+                //Show the Last Scene
+                selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectQuestionAdministrateController.getAdministrateMode());
+                selectQuestionAdministrateController.refresh();
             } catch (ServiceException e) {
                 alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);
+            } catch (ControllerException e) {
+                e.printStackTrace();
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
