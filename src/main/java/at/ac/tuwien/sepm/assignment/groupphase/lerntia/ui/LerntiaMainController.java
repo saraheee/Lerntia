@@ -112,17 +112,20 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-/*        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
-        mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-        LOG.debug("Main window left's width set to: {}", mainWindow.widthProperty().divide(100).multiply(25));
+
+        LOG.debug("Main window's min width before: {}", mainWindow.getMinWidth());
+
+        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // todo replace
+
+        LOG.debug("Main image fit width after setting it: {} ", mainImage.getFitWidth());
+
         LOG.debug("Main window's min width set to: {}", mainWindow.getMinWidth());
         LOG.debug("Main window's width set to: {}", mainWindow.getWidth());
         LOG.debug("Main window's PREF width set to: {}", mainWindow.getPrefWidth());
         LOG.debug("Main window LEFT's min width set to: {}", mainWindowLeft.getMinWidth());
         LOG.debug("Main window LEFT's width set to: {}", mainWindowLeft.getWidth());
         LOG.debug("Main window LEFT's PREF width set to: {}", mainWindowLeft.getPrefWidth());
-        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());*/
-
+        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());
 
         buttonBar.getButtons().remove(handInButton);
 
