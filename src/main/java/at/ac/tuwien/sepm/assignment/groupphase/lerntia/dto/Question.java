@@ -23,9 +23,6 @@ public class Question {
 
     public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3,
                     String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
-        this.containPicture.setDisable(false);
-        this.containPicture = new CheckBox();
-        this.containPicture.setSelected(false);
         this.id = id;
         this.questionText = questionText;
         this.picture = picture;
@@ -37,9 +34,6 @@ public class Question {
         this.correctAnswers = correctAnswers;
         this.optionalFeedback = optionalFeedback;
         this.isDeleted = isDeleted;
-        if (picture.trim().length() > 0) {
-            this.setContainPicture(true);
-        }
     }
 
     public Long getId() {
@@ -156,14 +150,6 @@ public class Question {
             '}';
     }
 
-    public String fineToString() {
-        String res = "";
-        res += " Frage: "+questionText+"\n Antowrt1: "+answer2+"\n Antowrt2: "+answer2+
-            "\n Antowrt3: "+answer3+"\n Antowrt4: "+answer4+"\n Antowrt5: "+answer5+"\n Korrekte Antwort: "+correctAnswers+
-            "\nFeedback: "+optionalFeedback;
-        return res;
-    }
-
     public String getCheckedAnswers() {
         return checkedAnswers;
     }
@@ -176,7 +162,7 @@ public class Question {
         return containPicture;
     }
 
-    public void setContainPicture(boolean set) {
+    private void setContainPicture(boolean set) {
         this.containPicture.setSelected(set);
     }
 
