@@ -15,7 +15,7 @@
 
 .main-right {
     -fx-width: 70%;
-    -fx-float: right;
+    -fx-float: left;
     -fx-background-color: rgba(0, 50, 250, 0.005);
 }
 
