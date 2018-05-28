@@ -51,12 +51,10 @@
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml" />
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml" />
-                    <VBox prefHeight="95.0" prefWidth="40.0">
-                  <children>
-                        <fx:include fx:id="learnalgorithmbutton" source="/fxml/elements/learnAlgorithmButton.fxml" />
-                  </children></VBox>
-                    <fx:include fx:id="checkAnswerButton" source="/fxml/elements/checkAnswerButton.fxml" />
+                  <fx:include fx:id="algorithmButton" source="/fxml/elements/learnAlgorithmButton.fxml" />
                     <fx:include fx:id="handInButton" source="/fxml/elements/handInButton.fxml" />
+                    <fx:include fx:id="checkAnswerButton" source="/fxml/elements/checkAnswerButton.fxml" />
+
                 </buttons>
             </ButtonBar>
         </HBox>
