@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
-    <VBox fx:id="mainWindowLeft" prefHeight="768.0" prefWidth="445.0" styleClass="main-left"
+    <VBox fx:id="mainWindowLeft" styleClass="main-left"
           stylesheets="@/css/background-division.css" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS">
         <VBox prefHeight="44.0" prefWidth="453.0">
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
@@ -14,15 +14,15 @@
             <VBox prefHeight="134.0" prefWidth="323.0"/>
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
         </HBox>
-        <HBox prefHeight="17.0" prefWidth="474.0"/>
-        <VBox prefHeight="588.0" prefWidth="473.0">
-            <ImageView fx:id="mainImage" fitHeight="300.0" fitWidth="474.0" preserveRatio="true" pickOnBounds="true"/>
+        <HBox prefHeight="17.0"/>
+        <VBox prefHeight="588.0">
+            <ImageView fx:id="mainImage" fitHeight="450.0"  fitWidth="450.0" preserveRatio="true" pickOnBounds="true"/>
             <HBox>
                 <VBox prefHeight="134.0" prefWidth="323.0"/>
             </HBox>
         </VBox>
     </VBox>
-    <VBox fx:id="mainWindowRight" prefHeight="768" styleClass="main-right" stylesheets="@/css/background-division.css"
+    <VBox fx:id="mainWindowRight" styleClass="main-right" stylesheets="@/css/background-division.css"
           GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS">
         <HBox prefHeight="30.0"/>
         <HBox prefHeight="286.0" styleClass="question-box">
