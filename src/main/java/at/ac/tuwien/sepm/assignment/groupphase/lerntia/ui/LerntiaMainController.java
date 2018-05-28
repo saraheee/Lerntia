@@ -81,6 +81,8 @@ public class LerntiaMainController {
     private Button nextQuestionButton;
     @FXML
     private Button handInButton;
+    @FXML
+    private Button algorithmButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
@@ -438,6 +440,7 @@ public class LerntiaMainController {
         buttonBar.getButtons().remove(previousQuestionButton);
         buttonBar.getButtons().remove(nextQuestionButton);
         buttonBar.getButtons().remove(checkAnswerButton);
+        buttonBar.getButtons().remove(algorithmButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
@@ -458,7 +461,9 @@ public class LerntiaMainController {
 
     public void switchToExamMode() {
         buttonBar.getButtons().remove(checkAnswerButton);
+
         buttonBar.getButtons().add(handInButton);
+        buttonBar.getButtons().remove(algorithmButton);
     }
 
     public void handIn(ActionEvent actionEvent) {
