@@ -222,9 +222,15 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getFirstQuestion() throws ServiceException {
         try {
-            currentQuestion = questionList.get(0);
-            currentQuestionIndex = 0;
-            return currentQuestion;
+            currentAlgorithmQuestionIndex = 0;
+            if (learnAlgorithm){
+                currentQuestion = questionMap.get(algorithmlist.get(currentAlgorithmQuestionIndex));
+                return currentQuestion;
+            }else {
+                currentQuestion = questionList.get(0);
+                currentQuestionIndex = 0;
+                return currentQuestion;
+            }
         } catch (IndexOutOfBoundsException e) {
             throw new ServiceException(e.getMessage());
         }
