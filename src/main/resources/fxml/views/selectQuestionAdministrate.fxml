@@ -5,22 +5,23 @@
 <AnchorPane prefHeight="580.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
-    <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="478.0" prefWidth="1055.0">
-        <columns>
-            <TableColumn fx:id="tc_id" prefWidth="35.0" text="Nr"/>
-            <TableColumn fx:id="tc_question" prefWidth="375." text="Frage"/>
-            <TableColumn fx:id="tc_answer1" prefWidth="130.0" text="Antwort 1"/>
-            <TableColumn fx:id="tc_answer2" prefWidth="130.0" text="Antwort 2"/>
-            <TableColumn fx:id="tc_answer3" prefWidth="130.0" text="Antwort 3"/>
-            <TableColumn fx:id="tc_answer4" prefWidth="130.0" text="Antwort 4"/>
-            <TableColumn fx:id="tc_answer5" prefWidth="106.0" text="Antwort 5"/>
-        </columns>
-    </TableView>
-    <Button layoutX="655.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0"
-            prefWidth="113.0" text="Löschen"/>
-    <Button layoutX="808.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0"
-            prefWidth="113.0" text="Bearbeiten"/>
-    <Button layoutX="956.0" layoutY="515.0" mnemonicParsing="false" onAction="#searchQuestion" prefHeight="37.0"
-            prefWidth="113.0"
-            text="Suchen"/>
+    <children>
+        <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="478.0" prefWidth="1055.0">
+            <columns>
+                <TableColumn fx:id="tc_question" prefWidth="375." text="Frage"/>
+                <TableColumn fx:id="tc_answer1" prefWidth="130.0" text="Antwort 1"/>
+                <TableColumn fx:id="tc_answer2" prefWidth="130.0" text="Antwort 2"/>
+                <TableColumn fx:id="tc_answer3" prefWidth="130.0" text="Antwort 3"/>
+                <TableColumn fx:id="tc_answer4" prefWidth="130.0" text="Antwort 4"/>
+                <TableColumn fx:id="tc_answer5" prefWidth="87.0" text="Antwort 5"/>
+                <TableColumn fx:id="tc_picture" editable="false" prefWidth="56.0" text="Bild"/>
+            </columns>
+        </TableView>
+        <Button layoutX="655.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions" prefHeight="37.0"
+                prefWidth="113.0" text="Löschen"/>
+        <Button layoutX="808.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion" prefHeight="37.0"
+                prefWidth="113.0" text="Bearbeiten"/>
+        <Button layoutX="956.0" layoutY="515.0" mnemonicParsing="false" onAction="#searchQuestion" prefHeight="37.0"
+                prefWidth="113.0" text="Suchen"/>
+    </children>
 </AnchorPane>

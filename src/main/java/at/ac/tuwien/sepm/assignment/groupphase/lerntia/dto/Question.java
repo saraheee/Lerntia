@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
+import javafx.scene.control.CheckBox;
+
 public class Question {
     private Long id;
     private String questionText;
@@ -12,12 +14,18 @@ public class Question {
     private String correctAnswers;
     private String optionalFeedback;
     private Boolean isDeleted;
+    private CheckBox containPicture;
 
     private String checkedAnswers;
 
-    public Question() {}
+    public Question() {
+    }
 
-    public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3, String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
+    public Question(Long id, String questionText, String picture, String answer1, String answer2, String answer3,
+                    String answer4, String answer5, String correctAnswers, String optionalFeedback, Boolean isDeleted) {
+        this.containPicture.setDisable(false);
+        this.containPicture = new CheckBox();
+        this.containPicture.setSelected(false);
         this.id = id;
         this.questionText = questionText;
         this.picture = picture;
@@ -29,6 +37,9 @@ public class Question {
         this.correctAnswers = correctAnswers;
         this.optionalFeedback = optionalFeedback;
         this.isDeleted = isDeleted;
+        if (picture.trim().length() > 0) {
+            this.setContainPicture(true);
+        }
     }
 
     public Long getId() {
@@ -53,6 +64,15 @@ public class Question {
 
     public void setPicture(String picture) {
         this.picture = picture;
+        this.containPicture = new CheckBox();
+        if (picture != null && picture.trim().length() > 0) {
+            this.setContainPicture(true);
+            this.containPicture.setText(checked.Ja.toString());
+        } else {
+            this.setContainPicture(false);
+            this.containPicture.setText(checked.Nein.toString());
+        }
+        this.containPicture.setDisable(true);
     }
 
     public String getAnswer1() {
@@ -136,7 +156,7 @@ public class Question {
             '}';
     }
 
-    public String fineToString(){
+    public String fineToString() {
         String res = "";
         res += " Frage: "+questionText+"\n Antowrt1: "+answer2+"\n Antowrt2: "+answer2+
             "\n Antowrt3: "+answer3+"\n Antowrt4: "+answer4+"\n Antowrt5: "+answer5+"\n Korrekte Antwort: "+correctAnswers+
@@ -150,5 +170,17 @@ public class Question {
 
     public void setCheckedAnswers(String checkedAnswers) {
         this.checkedAnswers = checkedAnswers;
+    }
+
+    public CheckBox getContainPicture() {
+        return containPicture;
+    }
+
+    public void setContainPicture(boolean set) {
+        this.containPicture.setSelected(set);
+    }
+
+    public enum checked {
+        Ja, Nein
     }
 }
