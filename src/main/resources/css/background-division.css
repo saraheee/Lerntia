@@ -1,4 +1,6 @@
-
+* {
+    -fx-box-sizing: border-box;
+}
 
 .main-left {
     -fx-width: 30%;
