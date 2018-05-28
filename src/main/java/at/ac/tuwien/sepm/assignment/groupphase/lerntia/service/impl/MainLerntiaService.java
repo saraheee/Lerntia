@@ -36,6 +36,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     private Question currentQuestion;
     private int listCounter;
     private int currentQuestionIndex;
+    private List<QuestionLearnAlgorithm> questionLearnAlgorithmList;
 
 
     private ICourseService courseService;
@@ -129,7 +130,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         listCounter = 0;
         algorithmlistcounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
-        List<QuestionLearnAlgorithm> questionLearnAlgorithmList = new ArrayList<>();
+        questionLearnAlgorithmList = new ArrayList<>();
         questionList = new ArrayList<>();
         List<Question> searchparameters = new ArrayList<>();
         Question question;
@@ -224,6 +225,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         try {
             currentAlgorithmQuestionIndex = 0;
             if (learnAlgorithm){
+                algorithmlist = learnAlgorithmService.prepareQuestionvalues(questionLearnAlgorithmList);
                 LOG.info("Revert to first question in the Algorithm List.");
                 currentQuestion = questionMap.get(algorithmlist.get(currentAlgorithmQuestionIndex));
                 return currentQuestion;
