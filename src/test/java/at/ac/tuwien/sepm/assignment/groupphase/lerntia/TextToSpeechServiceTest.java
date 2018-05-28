@@ -67,15 +67,27 @@ public class TextToSpeechServiceTest {
     }
 
     @Test
-    public void filterTextInParenthesisShouldPersist() throws TextToSpeechServiceException {
+    public void filterTextInParenthesisShouldPersist() {
         var service = new SimpleTextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("Hallo (a)b"), "Hallo b");
     }
 
     @Test
-    public void filterTextInNestedParenthesisShouldPersist() throws TextToSpeechServiceException {
+    public void filterTextInNestedParenthesisShouldPersist() {
         var service = new SimpleTextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("((Hallo (a)b) c)i"), "i");
+    }
+
+    @Test
+    public void replaceUmlautsInTextWithUmlautsShouldPersist() {
+        var service = new SimpleTextToSpeechService();
+        Assert.assertEquals(service.replaceUmlauts("Möhren-Gemuese Kuchen"), "M\u00f6hren-Gem\u00fcse Kuchen");
+    }
+
+    @Test
+    public void replaceUmlautsInTextWithoutUmlautsShouldPersist() {
+        var service = new SimpleTextToSpeechService();
+        Assert.assertEquals(service.replaceUmlauts("Bei mir gibt es keine Umlaute."), "Bei mir gibt es keine Umlaute.");
     }
 
     @Test
@@ -88,25 +100,25 @@ public class TextToSpeechServiceTest {
         var speech = new Speech();
 
         var question = "Wann ist das Semester vorbei?";
-        var antwort1 = "Bald.";
-        var antwort2 = "Sehr bald.";
-        var antwort3 = "Kurz bevor die Sommerferien anfangen.";
-        var antwort4 = "Am 29.Juni 2018 um 23:59.";
-        var antwort5 = "Keine der genannten Antworten.";
+        var answer1 = "Bald.";
+        var answer2 = "Sehr bald.";
+        var answer3 = "Kurz bevor die Sommerferien anfangen.";
+        var answer4 = "Am 29.Juni 2018 um 23:59.";
+        var answer5 = "Keine der genannten Antworten.";
 
         speech.setQuestion(question);
-        speech.setAnswer1(antwort1);
-        speech.setAnswer2(antwort2);
-        speech.setAnswer3(antwort3);
-        speech.setAnswer4(antwort4);
-        speech.setAnswer5(antwort5);
+        speech.setAnswer1(answer1);
+        speech.setAnswer2(answer2);
+        speech.setAnswer3(answer3);
+        speech.setAnswer4(answer4);
+        speech.setAnswer5(answer5);
 
         Assert.assertEquals(service.getText(speech), question
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + antwort1 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + antwort2 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + antwort3 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + antwort4 + '\n'
-            + BREAK + antwort5 + '\n');
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + answer4 + '\n'
+            + BREAK + answer5 + '\n');
     }
 
     @Test
