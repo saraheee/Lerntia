@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
+import org.hsqldb.persist.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,20 +34,19 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
     public LearnAlgorithmDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         try {
             connection = jdbcConnectionManager.getConnection();
+            LOG.info("Created connection for LearnAlgorithmDAO");
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            LOG.error("Connection Database error for LearnAlgorithmDAO");
         }
     }
     @Override
     public void create(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
         try {
-            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_CREATE_STATEMENT);
-            try{
-                pscreate.setLong(1,questionLearnAlgorithm.getID());
+            LOG.info("Prepare Create Statement for QuestionLearnAlgorithm.");
+            try (PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_CREATE_STATEMENT)) {
+                pscreate.setLong(1, questionLearnAlgorithm.getID());
                 pscreate.executeUpdate();
-
-            } finally {
-                pscreate.close();
+                LOG.info("Create statement for QuestionLearnAlgorithm succesfully sent.");
             }
         }catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO CREATE error: Check if the connection to the Database is valid or if one or multiple mandatory value are missing");
@@ -55,20 +55,16 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void update(List<QuestionLearnAlgorithm> questionLearnAlgorithmList) throws PersistenceException {
-        try {
-            PreparedStatement psupdate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_UPDATE_STATEMENT);
-            try {
-
-                for (QuestionLearnAlgorithm questionLearnAlgorithm: questionLearnAlgorithmList) {
-                    psupdate.setInt(1, questionLearnAlgorithm.getSuccessvalue());
-                    psupdate.setInt(2, questionLearnAlgorithm.getFailurevalue());
-                    psupdate.setDouble(3, questionLearnAlgorithm.getPoints());
-                    psupdate.setLong(4, questionLearnAlgorithm.getID());
-                    psupdate.executeUpdate();
-                }
-            }finally {
-                psupdate.close();
+        try (PreparedStatement psupdate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_UPDATE_STATEMENT)) {
+            LOG.info("Create list of update statements for QuestionLearnAlgorithms");
+            for (QuestionLearnAlgorithm questionLearnAlgorithm : questionLearnAlgorithmList) {
+                 psupdate.setInt(1, questionLearnAlgorithm.getSuccessvalue());
+                 psupdate.setInt(2, questionLearnAlgorithm.getFailurevalue());
+                 psupdate.setDouble(3, questionLearnAlgorithm.getPoints());
+                 psupdate.setLong(4, questionLearnAlgorithm.getID());
+                 psupdate.executeUpdate();
             }
+            LOG.info("All QuestionLearnAlgorithms have been succesfully updated");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO UPDATE error: Check if the connection to the Database is valid or if one or multiple mandatory values are missing.");
         }
@@ -76,14 +72,11 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void delete(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
-        try {
-            PreparedStatement psdelete = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_DELETE_STATEMENT);
-            try {
-                psdelete.setLong(1,questionLearnAlgorithm.getID());
-                psdelete.executeUpdate();
-            }finally {
-                psdelete.close();
-            }
+        try (PreparedStatement psdelete = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_DELETE_STATEMENT)) {
+            LOG.info("Create Delete statement for QuestionLearnAlgorithm.");
+            psdelete.setLong(1, questionLearnAlgorithm.getID());
+            psdelete.executeUpdate();
+            LOG.info("Delete Statement for QuestionLearnAlgorithm has been succesfully sent");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO DELETE error: Check if the connection to the Database is valid or if false question ID has been given");
         }
@@ -119,6 +112,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
     @Override
     public List<QuestionLearnAlgorithm> search(List<QuestionLearnAlgorithm> questionAlgorithmList) throws PersistenceException{
         try {
+            LOG.info("Create search Statement for questionlearnalgorithms,");
             QuestionLearnAlgorithm searchparameter;
             List<QuestionLearnAlgorithm> searchResults = new ArrayList<>();
             QuestionLearnAlgorithm found;
@@ -140,8 +134,8 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
                         found.setPoints(rssearch.getDouble(4));
                         searchResults.add(found);
                     }
-
-                    return searchResults;
+                LOG.info("All search results have been found.");
+                return searchResults;
                 } finally {
                     rssearch.close();
                 }
@@ -153,14 +147,11 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void reset(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
-        try {
-            PreparedStatement psreset = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_RESET_STATEMENT);
-            try {
-                psreset.setLong(1, questionLearnAlgorithm.getID());
-                psreset.executeUpdate();
-            }finally {
-                psreset.close();
-            }
+        try (PreparedStatement psreset = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_RESET_STATEMENT)) {
+            LOG.info("Prepare reset statement for QuestionLearnAlgorithm.");
+            psreset.setLong(1, questionLearnAlgorithm.getID());
+            psreset.executeUpdate();
+            LOG.info("Reset Statetement succesfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO UPDATE error: Check if the connection to the Database is valid or if one or multiple mandatory values are missing.");
         }
