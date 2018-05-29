@@ -170,34 +170,11 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     }
 
     @Override
-    public void importPictures(File file, String name) throws ServiceException {
-
-        Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
-        File imgDir = new File(String.valueOf(imgPath));
-
-        if (!Files.exists(imgPath)) {
-            LOG.info("Image directory not found - will be created");
-            imgDir.mkdir();
-        }
-
-        File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
-        dir.mkdir();
-        File[] files = file.listFiles();
-        if (files != null) {
-            for (File child : files) {
-                String p = dir.getAbsolutePath() + File.separator + child.getName();
-                try {
-                    Path path = Paths.get(p);
-                    Files.copy(child.toPath(), path);
-                } catch (IOException e) {
-                    deletePictures(dir);
-                    throw new ServiceException("Bild kann nicht gelesen werden: " + p);
-                }
-            }
-        }
+    public void importPictures(File file, String name) throws IOException {
+        questionnaireImportDAO.importPictures(file, name);
     }
 
     public void deletePictures(File file) {
-        FileSystemUtils.deleteRecursively(file);
+        questionnaireImportDAO.deletePictures(file);
     }
 }

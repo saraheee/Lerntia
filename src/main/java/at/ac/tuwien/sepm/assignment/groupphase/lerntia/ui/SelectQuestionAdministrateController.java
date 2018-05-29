@@ -5,9 +5,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,10 +34,11 @@ public class SelectQuestionAdministrateController {
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
+    private final ILearningQuestionnaireService iLearningQuestionnaireService;
     @FXML
     public TableView<Question> tv_questionTable;
     @FXML
-    public TableColumn<Question, Long> tc_id;
+    public TableColumn<Question, CheckBox> tc_picture;
     @FXML
     public TableColumn<Question, String> tc_question;
     @FXML
@@ -76,7 +75,8 @@ public class SelectQuestionAdministrateController {
         IQuestionService questionDAO,
         EditQuestionsController editQuestionsController,
         IQuestionnaireQuestionService questionnaireQuestionService,
-        AlertController alertController) {
+        AlertController alertController,
+        ILearningQuestionnaireService iLearningQuestionnaireService) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
@@ -84,6 +84,7 @@ public class SelectQuestionAdministrateController {
         this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.alertController = alertController;
+        this.iLearningQuestionnaireService = iLearningQuestionnaireService;
     }
 
     public void initialize() {
@@ -96,14 +97,14 @@ public class SelectQuestionAdministrateController {
             e.printStackTrace();
         }
         //Fill the First Table.
-        //tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
-        tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
-        tc_answer1.setCellValueFactory(new PropertyValueFactory<Question, String>("answer1"));
-        tc_answer2.setCellValueFactory(new PropertyValueFactory<Question, String>("answer2"));
-        tc_answer3.setCellValueFactory(new PropertyValueFactory<Question, String>("answer3"));
-        tc_answer4.setCellValueFactory(new PropertyValueFactory<Question, String>("answer4"));
-        tc_answer5.setCellValueFactory(new PropertyValueFactory<Question, String>("answer5"));
-        ObservableList<Question> content = this.getContent();
+        tc_picture.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
+        tc_question.setCellValueFactory(new PropertyValueFactory<>("questionText"));
+        tc_answer1.setCellValueFactory(new PropertyValueFactory<>("answer1"));
+        tc_answer2.setCellValueFactory(new PropertyValueFactory<>("answer2"));
+        tc_answer3.setCellValueFactory(new PropertyValueFactory<>("answer3"));
+        tc_answer4.setCellValueFactory(new PropertyValueFactory<>("answer4"));
+        tc_answer5.setCellValueFactory(new PropertyValueFactory<>("answer5"));
+        var content = this.getContent();
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -112,11 +113,22 @@ public class SelectQuestionAdministrateController {
      * Refreshs the Data and the lertiaMainController
      */
     public void refresh() {
-        //Clear the Table and Load the new Data
-        tv_questionTable.getItems().clear();
-        tv_questionTable.getItems().addAll(getContent());
+        LearningQuestionnaire studyMode;
         try {
+            studyMode = iLearningQuestionnaireService.getSelected();
+            iLearningQuestionnaireService.deselect(studyMode);
+            iLearningQuestionnaireService.select(administrateMode);
+            this.stage.close();
+            var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+            this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+            tv_questionTable.getItems().clear();
+            tv_questionTable.getItems().addAll(getContent());
+            iLearningQuestionnaireService.deselect(administrateMode);
+            iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
+        } catch (ServiceException e) {
+            e.printStackTrace();
         } catch (ControllerException e) {
             e.printStackTrace();
         }
@@ -127,9 +139,7 @@ public class SelectQuestionAdministrateController {
      */
     public ObservableList<Question> getContent() {
         ObservableList<Question> content = FXCollections.observableArrayList();
-        for (int i = 0; i < lerntiaService.getQuestionList().size(); i++) {
-            content.add(lerntiaService.getQuestionList().get(i));
-        }
+        content.addAll(lerntiaService.getQuestionList());
         return content;
     }
 
@@ -166,12 +176,12 @@ public class SelectQuestionAdministrateController {
 
         //Open the New Question.
         stage.close();
-        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0));
+        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0),this);
         //TODO Editing Questions.
     }
 
     @FXML
-    public void deleteQuestions(ActionEvent actionEvent) {
+    public void deleteQuestions() {
         LOG.info("Delete Button Clicked");
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
         if (selectedItems.size() == 0) {
@@ -201,15 +211,18 @@ public class SelectQuestionAdministrateController {
 
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open informationen Window
-            stage.close();
+            //stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
+
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
                 e.printStackTrace();
             }
+
+            this.refresh();
         }
     }
 
@@ -225,10 +238,9 @@ public class SelectQuestionAdministrateController {
     /**
      * Is a Helping Function used for the Search operation
      *
-     * @param actionEvent
      */
     @FXML
-    public void onSearchButtonClicked(ActionEvent actionEvent) {
+    public void onSearchButtonClicked() {
         Question questionInput = new Question();
         questionInput.setQuestionText(tf_searchQuestion.getText());
         questionInput.setAnswer1(tf_searchAnswer1.getText());
@@ -257,5 +269,9 @@ public class SelectQuestionAdministrateController {
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(newContent);
+    }
+
+    public LearningQuestionnaire getAdministrateMode(){
+        return this.administrateMode;
     }
 }
