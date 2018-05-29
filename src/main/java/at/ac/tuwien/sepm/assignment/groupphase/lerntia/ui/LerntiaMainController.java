@@ -459,11 +459,13 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
-    public void switchToExamMode() {
+    public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
 
         buttonBar.getButtons().add(handInButton);
         buttonBar.getButtons().remove(algorithmButton);
+
+        lerntiaService.stopAlgorithm();
     }
 
     public void handIn(ActionEvent actionEvent) {
