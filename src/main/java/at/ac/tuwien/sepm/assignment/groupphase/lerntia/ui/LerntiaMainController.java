@@ -222,63 +222,67 @@ public class LerntiaMainController {
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
-        String checkedAnswers = getCheckedAnswers();
-
-        boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
-        LOG.info("Save values to Algorithm");
-        if (answersCorrect) {
-            try {
-
-                lerntiaService.recordCheckedAnswers(question,answersCorrect);
-            } catch (ServiceException e) {
-                e.printStackTrace();
-            }
-
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
-            } else {
-                String answers = "Alle richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
-            }
-
-        } else {
-
-            try {
-                lerntiaService.recordCheckedAnswers(question,answersCorrect);
-            }catch (ServiceException e){
-                e.printStackTrace();
-            }
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
-            } else {
-                String answers = "Die richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
-                        answers += "Auch: ";
-                    }
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
-            }
-        }
-        // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
-            Question mockQuestion = new Question();
-            mockQuestion.setId(question.getId());
-            mockQuestion.setCorrectAnswers(checkedAnswers);
-            LOG.info("Trying to send {} answers on question \"{}\"",
-                mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-            lerntiaService.recordCheckedAnswers(mockQuestion,answersCorrect);
-        } catch (ServiceException e) {
-            LOG.error("Could not check whether the answer was correct");
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            String checkedAnswers = getCheckedAnswers();
+
+            boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
+            //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+            LOG.info("Save values to Algorithm");
+            if (answersCorrect) {
+                try {
+
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
+                } else {
+                    String answers = "Alle richtigen Antworten sind:\n";
+                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                        answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
+                    }
+                    alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
+                }
+
+            } else {
+
+                try {
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
+                } else {
+                    String answers = "Die richtigen Antworten sind:\n";
+                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                        if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
+                            answers += "Auch: ";
+                        }
+                        answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
+                    }
+                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
+                }
+            }
+            // send checked answers to service (in order to use it for statistics and learning algorithm)
+            try {
+                Question mockQuestion = new Question();
+                mockQuestion.setId(question.getId());
+                mockQuestion.setCorrectAnswers(checkedAnswers);
+                LOG.info("Trying to send {} answers on question \"{}\"",
+                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+            } catch (ServiceException e) {
+                LOG.error("Could not check whether the answer was correct");
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            }
+            getAndShowNextQuestion();
+        }catch (NullPointerException e){
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Keine Frage vorhanden","Error","Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
         }
-        getAndShowNextQuestion();
     }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
