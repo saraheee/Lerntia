@@ -10,11 +10,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaServi
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -36,6 +35,7 @@ import static org.springframework.util.Assert.notNull;
 @Controller
 public class LerntiaMainController {
 
+    private boolean learnalgorithmstatus;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
     private final ZoomedImageController zoomedImageController;
@@ -70,6 +70,8 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
+    private LearnAlgorithmController learnAlgorithmController;
+    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
@@ -79,6 +81,8 @@ public class LerntiaMainController {
     private Button nextQuestionButton;
     @FXML
     private Button handInButton;
+    @FXML
+    private Button algorithmButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
@@ -94,12 +98,14 @@ public class LerntiaMainController {
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
         IQuestionnaireService questionnaireService,
-        IExamResultsWriterService iExamResultsWriterService
+        IExamResultsWriterService iExamResultsWriterService,
+        LearnAlgorithmController learnAlgorithmController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
         notNull(zoomedImageController, "'zoomedImageController' should not be null");
+        notNull(learnAlgorithmController,"learnAlgorithmController should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;
@@ -107,6 +113,9 @@ public class LerntiaMainController {
         this.zoomedImageController = zoomedImageController;
         this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
+        this.learnAlgorithmController = learnAlgorithmController;
+
+        this.learnalgorithmstatus = false;
     }
 
     @FXML
@@ -156,6 +165,16 @@ public class LerntiaMainController {
                 else {
                     handIn(null);
                 }
+            }
+            if (e.getCode() == KeyCode.F1){
+                LOG.info("F1 key was pressed.");
+                learnAlgorithmController.onAlgorithmButtonPressed();
+                if (learnAlgorithmController.isSelected()){
+                    LOG.info("Learn Algorithm is now running");
+                }else {
+                    LOG.info("Learn Algorithm is now not running.");
+                }
+                learnalgorithmstatus = learnAlgorithmController.isSelected();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
@@ -208,53 +227,72 @@ public class LerntiaMainController {
 
     }
 
+
+
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
-        String checkedAnswers = getCheckedAnswers();
-
-        boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
-
-        if (answersCorrect) {
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
-            } else {
-                String answers = "Alle richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
-            }
-
-        } else {
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
-            } else {
-                String answers = "Die richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
-                        answers += "Auch: ";
-                    }
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
-            }
-        }
-        // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
-            Question mockQuestion = new Question();
-            mockQuestion.setId(question.getId());
-            mockQuestion.setCorrectAnswers(checkedAnswers);
-            LOG.info("Trying to send {} answers on question \"{}\"",
-                mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-            lerntiaService.recordCheckedAnswers(mockQuestion);
-        } catch (ServiceException e) {
-            LOG.error("Could not check whether the answer was correct");
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            String checkedAnswers = getCheckedAnswers();
+
+            boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
+            //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+            LOG.info("Save values to Algorithm");
+            if (answersCorrect) {
+                try {
+
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
+                } else {
+                    String answers = "Alle richtigen Antworten sind:\n";
+                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                        answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
+                    }
+                    alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
+                }
+
+            } else {
+
+                try {
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
+                } else {
+                    String answers = "Die richtigen Antworten sind:\n";
+                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
+                        if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
+                            answers += "Auch: ";
+                        }
+                        answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
+                    }
+                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
+                }
+            }
+            // send checked answers to service (in order to use it for statistics and learning algorithm)
+            try {
+                Question mockQuestion = new Question();
+                mockQuestion.setId(question.getId());
+                mockQuestion.setCorrectAnswers(checkedAnswers);
+                LOG.info("Trying to send {} answers on question \"{}\"",
+                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+            } catch (ServiceException e) {
+                LOG.error("Could not check whether the answer was correct");
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            }
+            getAndShowNextQuestion();
+        }catch (NullPointerException e){
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Keine Frage vorhanden","Error","Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
         }
-        getAndShowNextQuestion();
     }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
@@ -416,6 +454,7 @@ public class LerntiaMainController {
         buttonBar.getButtons().remove(previousQuestionButton);
         buttonBar.getButtons().remove(nextQuestionButton);
         buttonBar.getButtons().remove(checkAnswerButton);
+        buttonBar.getButtons().remove(algorithmButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
@@ -434,9 +473,13 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
-    public void switchToExamMode() {
+    public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
+
         buttonBar.getButtons().add(handInButton);
+        buttonBar.getButtons().remove(algorithmButton);
+
+        lerntiaService.stopAlgorithm();
     }
 
     public void handIn(ActionEvent actionEvent) {
@@ -522,5 +565,9 @@ public class LerntiaMainController {
             default:
                 return "";
         }
+    }
+
+    public void stopAlgorithm() throws ServiceException {
+        lerntiaService.stopAlgorithm();
     }
 }
