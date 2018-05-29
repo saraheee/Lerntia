@@ -21,7 +21,7 @@ import java.util.Map;
 public class MainLerntiaService implements IMainLerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Map<Long,Question> questionMap;
+    private Map<Long, Question> questionMap;
     private boolean learnAlgorithm;
     private boolean learningMode = true;
     private List<LearningQuestionnaire> allLQs;
@@ -30,8 +30,8 @@ public class MainLerntiaService implements IMainLerntiaService {
     private ExamQuestionnaire currentEQ;
     private List<QuestionnaireQuestion> questionnaireQuestionsList;
     private List<Question> questionList;
-    private List<Long> algorithmlist;
-    private int algorithmlistcounter;
+    private List<Long> algorithmList;
+    private int algorithmListCounter;
     private int currentAlgorithmQuestionIndex;
     private Question currentQuestion;
     private int listCounter;
@@ -56,7 +56,8 @@ public class MainLerntiaService implements IMainLerntiaService {
     public MainLerntiaService(ICourseService courseService, IUserService userService, IQuestionnaireService questionnaireService,
                               IExamQuestionnaireService examQuestionnaireService, ILearningQuestionnaireService learningQuestionnaireService,
                               IQuestionService questionService, IQuestionnaireQuestionService questionnaireQuestionService,
-                              IUserCourseService userCourseService, IUserQuestionnaireService userQuestionnaireService, ILearnAlgorithmService learnAlgorithmService,LearnAlgorithmController learnAlgorithmController) {
+                              IUserCourseService userCourseService, IUserQuestionnaireService userQuestionnaireService,
+                              ILearnAlgorithmService learnAlgorithmService, LearnAlgorithmController learnAlgorithmController) {
         this.courseService = courseService;
         this.userService = userService;
         this.questionnaireService = questionnaireService;
@@ -76,16 +77,16 @@ public class MainLerntiaService implements IMainLerntiaService {
         listCounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
         questionList = new ArrayList<>();
-        List<Question> searchparameters = new ArrayList<>();
+        List<Question> searchParameters = new ArrayList<>();
         Question question;
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(eQ.getId());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
         //TODO send updated DATE to ExamQuestionnaireDAO
-        getExamQuestionFromList(searchparameters);
+        getExamQuestionFromList(searchParameters);
         LOG.info("All Exam Questionnaire Questions info found.");
         LOG.info("Send required question search parameters to retrieve");
-        questionList = questionService.search(searchparameters);
+        questionList = questionService.search(searchParameters);
         for (Question q : questionList) {
             listCounter++;
         }
@@ -104,7 +105,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         }
     }
 
-    private void getLearningQuestionFromList(List<Question> searchparameters, List<QuestionLearnAlgorithm> questionLearnAlgorithmList) {
+    private void getLearningQuestionFromList(List<Question> searchParameters, List<QuestionLearnAlgorithm> questionLearnAlgorithmList) {
         Question question;
         QuestionLearnAlgorithm questionLearnAlgorithm;
         QuestionnaireQuestion questionnaireQuestion;
@@ -113,7 +114,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             questionLearnAlgorithm = new QuestionLearnAlgorithm();
             questionnaireQuestion = questionnaireQuestionsList.get(0);
             question.setId(questionnaireQuestion.getQuestionid());
-            searchparameters.add(question);
+            searchParameters.add(question);
 
             questionLearnAlgorithm.setID(questionnaireQuestion.getQuestionid());
             questionLearnAlgorithmList.add(questionLearnAlgorithm);
@@ -124,32 +125,32 @@ public class MainLerntiaService implements IMainLerntiaService {
     private void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException {
         learnAlgorithm = learnAlgorithmController.isSelected();
         questionMap = new HashMap<>();
-        if (algorithmlist!=null){
-            algorithmlist = null;
-            algorithmlist = new ArrayList<>();
+        if (algorithmList != null) {
+            algorithmList = null;
+            algorithmList = new ArrayList<>();
         }
         LOG.info("Get all questions from a Learning Questionnaire.");
         listCounter = 0;
-        algorithmlistcounter = 0;
+        algorithmListCounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
         questionLearnAlgorithmList = new ArrayList<>();
         questionList = new ArrayList<>();
-        List<Question> searchparameters = new ArrayList<>();
+        List<Question> searchParameters = new ArrayList<>();
         Question question;
         QuestionLearnAlgorithm questionLearnAlgorithm;
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(lQ.getId());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
         LOG.info("All info regarding Questions found.");
-        getLearningQuestionFromList(searchparameters,questionLearnAlgorithmList);
+        getLearningQuestionFromList(searchParameters, questionLearnAlgorithmList);
         LOG.info("All questions from the selected LearningQuestionnaire found.");
         LOG.info("Search for questions in the Database.");
-        questionList = questionService.search(searchparameters);
-        algorithmlist = learnAlgorithmService.prepareQuestionvalues(questionLearnAlgorithmList);
+        questionList = questionService.search(searchParameters);
+        algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
         for (Question q : questionList) {
             listCounter++;
-            algorithmlistcounter++;
-            questionMap.put(q.getId(),q);
+            algorithmListCounter++;
+            questionMap.put(q.getId(), q);
         }
         LOG.info("All Questions from the LearningQuestionnaire are set.");
     }
@@ -158,15 +159,15 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getNextQuestionFromList() throws ServiceException {
         try {
-            learnAlgorithm =learnAlgorithmController.isSelected();
+            learnAlgorithm = learnAlgorithmController.isSelected();
             if (learnAlgorithm) {
-                if (!(currentAlgorithmQuestionIndex+1>algorithmlistcounter)){
-                            currentQuestion = new Question();
-                            currentQuestion = questionMap.get(algorithmlist.get(++currentAlgorithmQuestionIndex));
-                            LOG.info("Found next question determined by Learn Algorithm.");
-                            return currentQuestion;
-                        }
-            }else {
+                if (!(currentAlgorithmQuestionIndex + 1 > algorithmListCounter)) {
+                    currentQuestion = new Question();
+                    currentQuestion = questionMap.get(algorithmList.get(++currentAlgorithmQuestionIndex));
+                    LOG.info("Found next question determined by Learn Algorithm.");
+                    return currentQuestion;
+                }
+            } else {
                 LOG.info("Get next Question from Questionnaire.");
                 if (!(currentQuestionIndex + 1 > listCounter)) {
                     currentQuestion = new Question();
@@ -184,16 +185,16 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getPreviousQuestionFromList() throws ServiceException {
         try {
-            learnAlgorithm =learnAlgorithmController.isSelected();
-            if (learnAlgorithm){
+            learnAlgorithm = learnAlgorithmController.isSelected();
+            if (learnAlgorithm) {
                 LOG.info("Get previous question determined by the Learn Algorithm");
-                if (!(currentAlgorithmQuestionIndex-1<0)){
+                if (!(currentAlgorithmQuestionIndex - 1 < 0)) {
                     currentQuestion = new Question();
-                    currentQuestion = questionMap.get(algorithmlist.get(--currentAlgorithmQuestionIndex));
-                    LOG.info("Found previous question determinded by the Learn Algorithm.");
+                    currentQuestion = questionMap.get(algorithmList.get(--currentAlgorithmQuestionIndex));
+                    LOG.info("Found previous question determined by the Learn Algorithm.");
                     return currentQuestion;
                 }
-            }else {
+            } else {
                 LOG.info("Get previous Question from Questionnaire");
                 if (!(currentQuestionIndex - 1 < 0)) {
                     currentQuestion = new Question();
@@ -226,12 +227,12 @@ public class MainLerntiaService implements IMainLerntiaService {
     public Question getFirstQuestion() throws ServiceException {
         try {
             currentAlgorithmQuestionIndex = 0;
-            if (learnAlgorithm){
-                algorithmlist = learnAlgorithmService.prepareQuestionvalues(questionLearnAlgorithmList);
+            if (learnAlgorithm) {
+                algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
                 LOG.info("Revert to first question in the Algorithm List.");
-                currentQuestion = questionMap.get(algorithmlist.get(currentAlgorithmQuestionIndex));
+                currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 return currentQuestion;
-            }else {
+            } else {
                 LOG.info("Get first Question of the Question List.");
                 currentQuestion = questionList.get(0);
                 currentQuestionIndex = 0;
@@ -243,13 +244,13 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public void recordCheckedAnswers(Question question,boolean answersCorrect) throws ServiceException {
-        learnAlgorithm =learnAlgorithmController.isSelected();
-        if (learnAlgorithm){
-            if (answersCorrect){
+    public void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException {
+        learnAlgorithm = learnAlgorithmController.isSelected();
+        if (learnAlgorithm) {
+            if (answersCorrect) {
                 LOG.info("Send to update Map");
                 learnAlgorithmService.updateSuccessValue(question);
-            }else if (!answersCorrect){
+            } else if (!answersCorrect) {
                 LOG.info("Send to failure Map");
                 learnAlgorithmService.updateFailureValue(question);
             }
@@ -257,7 +258,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public List<Question> getQuestions() throws ServiceException {
+    public List<Question> getQuestions() {
         LOG.info("Get all questions.");
         return questionList;
     }
@@ -278,7 +279,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public void stopAlgorithm() throws ServiceException {
         LOG.info("Turn off Algorithm while its on Exam Mode.");
-        learnAlgorithm= false;
+        learnAlgorithm = false;
         learnAlgorithmService.shutdown();
         learnAlgorithmController.reset();
     }

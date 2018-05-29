@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LearnAlgorithmController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class QuestionDAO implements IQuestionDAO {
     private ILearnAlgorithmDAO learnAlgorithmDAO;
 
     @Autowired
-    public QuestionDAO(JDBCConnectionManager jdbcConnectionManager,ILearnAlgorithmDAO learnAlgorithmDAO) throws PersistenceException {
+    public QuestionDAO(JDBCConnectionManager jdbcConnectionManager, ILearnAlgorithmDAO learnAlgorithmDAO) throws PersistenceException {
         try {
             connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for QuestionDAO obtained.");
