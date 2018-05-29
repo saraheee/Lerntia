@@ -57,11 +57,11 @@ public class SelectExamController {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungen lesen fehlgeschlagen",
-                "Error", "Die Prüfungen konnten nicht aus der Datenbank gelesen werden!");
+                "Fehler", "Die Prüfungen konnten nicht aus der Datenbank gelesen werden!");
         }
 
-        for (int i = 0; i < examQuestionnaireList.size(); i++) {
-            cb_exam.getItems().add(examQuestionnaireList.get(i).getName());
+        for (ExamQuestionnaire anExamQuestionnaireList : examQuestionnaireList) {
+            cb_exam.getItems().add(anExamQuestionnaireList.getName());
         }
 
         cb_exam.getSelectionModel().selectFirst();
@@ -77,7 +77,7 @@ public class SelectExamController {
 
         if (examQuestionnaireList.isEmpty()){
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs Auswahl kann nicht angezeigt werden",
-                "Error", "Es ist noch keine Prüfung vorhanden");
+                "Fehler", "Es ist noch keine Prüfung vorhanden");
             return;
         }
 
@@ -97,7 +97,7 @@ public class SelectExamController {
             iQuestionnaireService.deselectAllQuestionnaires();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Error", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
+                "Fehler", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
         }
 
         // select questionnaire
@@ -106,7 +106,7 @@ public class SelectExamController {
             examQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
-                "Error", "Die Prüfung konnte nicht ausgewählt werden!");
+                "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
         }
 
         // show first question of new questionnaire
@@ -117,9 +117,10 @@ public class SelectExamController {
             lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
-                "Error", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs modus anzeigen fehlgeschlagen.","Error","Nicht möglich in den Prüfungs Modus zu wechseln!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs modus anzeigen fehlgeschlagen.",
+                "Fehler","Nicht möglich in den Prüfungs Modus zu wechseln!");
         }
 
         Node source = (Node) actionEvent.getSource();

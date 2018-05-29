@@ -20,9 +20,9 @@ public interface IMainLerntiaService {
      *
      * @return the next question
      * @throws ServiceException if the method can't find the next Question. Possible reasons:
-     *    - the end of questions list was reached
-     *    - other implementation-specific reasons
-     * */
+     *                          - the end of questions list was reached
+     *                          - other implementation-specific reasons
+     */
     Question getNextQuestionFromList() throws ServiceException;
 
     /**
@@ -30,33 +30,33 @@ public interface IMainLerntiaService {
      *
      * @return the next question
      * @throws ServiceException if the method can't find the previous Question. Possible reasons:
-     *    - the beginning of questions list was reached
-     *    - other implementation-specific reasons
-     * */
-    Question getPreviousQuestionFromList()throws ServiceException;
+     *                          - the beginning of questions list was reached
+     *                          - other implementation-specific reasons
+     */
+    Question getPreviousQuestionFromList() throws ServiceException;
 
     /**
      * Saves the selected answers for the purposes of statistics and learning algorithm
      *
      * @param question a DTO containing only the question id and the list of selected answers in the field correctAnswers
      * @throws ServiceException if the method can't find the next Question. Possible reasons:
-     *    - the selected answers was a null
-     *    - the selected answers has an unexpected format
-     *    - other implementation-specific reasons
-     * */
-    void recordCheckedAnswers(Question question,boolean answersCorrect) throws ServiceException;
+     *                          - the selected answers was a null
+     *                          - the selected answers has an unexpected format
+     *                          - other implementation-specific reasons
+     */
+    void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException;
 
     List<Question> getQuestions() throws ServiceException;
 
     /**
      * Returns the Size of the ListCounter
      */
-    public int getListCounter();
+    int getListCounter();
 
     /**
      * Returns the QuistionList
      */
-    public List<Question> getQuestionList();
+    List<Question> getQuestionList();
 
     void stopAlgorithm() throws ServiceException;
 }
