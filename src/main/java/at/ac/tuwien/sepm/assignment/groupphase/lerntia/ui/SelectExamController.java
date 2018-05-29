@@ -118,6 +118,8 @@ public class SelectExamController {
         } catch (ControllerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Error", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs modus anzeigen fehlgeschlagen.","Error","Nicht möglich in den Prüfungs Modus zu wechseln!");
         }
 
         Node source = (Node) actionEvent.getSource();

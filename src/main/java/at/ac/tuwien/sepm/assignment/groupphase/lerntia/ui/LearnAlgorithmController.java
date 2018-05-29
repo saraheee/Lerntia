@@ -45,4 +45,10 @@ public class LearnAlgorithmController {
     public boolean isSelected() {
         return selected;
     }
+
+    public void reset() {
+        selected = false;
+        learnAlgorithmButton.defaultButtonProperty().setValue(false);
+        learnAlgorithmButton.setText("Algorithm AUS");
+    }
 }

@@ -124,8 +124,10 @@ public class MainLerntiaService implements IMainLerntiaService {
     private void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException {
         learnAlgorithm = learnAlgorithmController.isSelected();
         questionMap = new HashMap<>();
-
-        if (algorithmlist!=null){}
+        if (algorithmlist!=null){
+            algorithmlist = null;
+            algorithmlist = new ArrayList<>();
+        }
         LOG.info("Get all questions from a Learning Questionnaire.");
         listCounter = 0;
         algorithmlistcounter = 0;
@@ -275,7 +277,10 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public void stopAlgorithm() throws ServiceException {
-        learnAlgorithmService.changeAlgorithmValues();
+        LOG.info("Turn off Algorithm while its on Exam Mode.");
+        learnAlgorithm= false;
+        learnAlgorithmService.shutdown();
+        learnAlgorithmController.reset();
     }
 
 }
