@@ -90,7 +90,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private void playText(String text) throws TextToSpeechServiceException {
         LOG.trace("Entering method playText.");
-        try (var audio = maryTTS.generateAudio(filterTextInParenthesis(text))) {
+        try (var audio = maryTTS.generateAudio(replaceUmlauts(filterTextInParenthesis(text)))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -124,6 +124,13 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             }
         }
         return filtered.toString();
+    }
+
+    public String replaceUmlauts(String text) {
+        return text.replace("ae", "\u00e4")
+                   .replace("oe", "\u00f6")
+                   .replace("ue", "\u00fc")
+                   .replace("sz", "\u00DF");
     }
 
     @Override
