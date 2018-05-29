@@ -60,6 +60,7 @@ hs_err_pid*
 ### Testdata-Files ###
 evcbogen/
 img/
+img_original/
 
 ###################
 ### Build-Tools ###

@@ -1,7 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
@@ -17,28 +15,29 @@ public class LearnAlgorithmController {
     private Button learnAlgorithmButton;
     private boolean selected;
 
-    @FXML
-    private void initialize(){
-        learnAlgorithmButton.setText("Algorithm AUS");
-    }
-    public LearnAlgorithmController(){
+    public LearnAlgorithmController() {
         this.selected = false;
 
     }
 
     @FXML
+    private void initialize() {
+        learnAlgorithmButton.setText("Algorithmus AUS");
+    }
+
+    @FXML
     public void onAlgorithmButtonPressed() {
         LOG.info("Learn Algorithm Button Pressed");
-        if (learnAlgorithmButton.isDefaultButton()){
+        if (learnAlgorithmButton.isDefaultButton()) {
             LOG.info("Set Algorithm to OFF");
             selected = false;
             learnAlgorithmButton.defaultButtonProperty().setValue(false);
-            learnAlgorithmButton.setText("Algorithm AUS");
-        }else {
+            learnAlgorithmButton.setText("Algorithmus AUS");
+        } else {
             learnAlgorithmButton.defaultButtonProperty().setValue(true);
             LOG.info("Set Algorithm to ON");
             selected = true;
-            learnAlgorithmButton.setText("Algorithm AN");
+            learnAlgorithmButton.setText("Algorithmus AN");
         }
     }
 
@@ -49,6 +48,6 @@ public class LearnAlgorithmController {
     public void reset() {
         selected = false;
         learnAlgorithmButton.defaultButtonProperty().setValue(false);
-        learnAlgorithmButton.setText("Algorithm AUS");
+        learnAlgorithmButton.setText("Algorithmus AUS");
     }
 }
