@@ -38,13 +38,13 @@ public interface IMainLerntiaService {
     /**
      * Saves the selected answers for the purposes of statistics and learning algorithm
      *
-     * @param mockQuestion a DTO containing only the question id and the list of selected answers in the field correctAnswers
+     * @param question a DTO containing only the question id and the list of selected answers in the field correctAnswers
      * @throws ServiceException if the method can't find the next Question. Possible reasons:
      *    - the selected answers was a null
      *    - the selected answers has an unexpected format
      *    - other implementation-specific reasons
      * */
-    void recordCheckedAnswers(Question mockQuestion) throws ServiceException;
+    void recordCheckedAnswers(Question question,boolean answersCorrect) throws ServiceException;
 
     List<Question> getQuestions() throws ServiceException;
 
@@ -57,4 +57,6 @@ public interface IMainLerntiaService {
      * Returns the QuistionList
      */
     public List<Question> getQuestionList();
+
+    void stopAlgorithm() throws ServiceException;
 }

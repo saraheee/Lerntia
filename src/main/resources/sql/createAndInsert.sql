@@ -116,3 +116,10 @@ WHERE NOT EXISTS (SELECT * FROM PUserCourse);
 --        UNION SELECT '1', '4', '1', false
 --  )
 --WHERE NOT EXISTS (SELECT * FROM Questionnaire);
+
+CREATE TABLE IF NOT EXISTS QuestionAlgoValue(
+  questionid bigint primary key references Question(id),
+  successvalue INTEGER not null,
+  failurevalue INTEGER not null,
+  points double not null,
+);

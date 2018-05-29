@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LearnAlgorithmController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +32,14 @@ public class QuestionDAO implements IQuestionDAO {
 
     private Connection connection;
 
+    private ILearnAlgorithmDAO learnAlgorithmDAO;
+
     @Autowired
-    public QuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
+    public QuestionDAO(JDBCConnectionManager jdbcConnectionManager,ILearnAlgorithmDAO learnAlgorithmDAO) throws PersistenceException {
         try {
             connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for QuestionDAO obtained.");
+            this.learnAlgorithmDAO = learnAlgorithmDAO;
         } catch (PersistenceException e) {
             LOG.error("Question Constructor failed while trying to get connection!");
             throw e;
@@ -55,10 +61,16 @@ public class QuestionDAO implements IQuestionDAO {
                 psCreate.setString(8, question.getCorrectAnswers());
                 psCreate.setString(9, question.getOptionalFeedback());
                 psCreate.executeUpdate();
+
+                QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
+
                 LOG.info("Question successfully saved in Database");
                 try (ResultSet generatedKeys = psCreate.getGeneratedKeys()) {
                     generatedKeys.next();
                     question.setId(generatedKeys.getLong(1));
+                    questionLearnAlgorithm.setID(question.getId());
+
+                    learnAlgorithmDAO.create(questionLearnAlgorithm);
                 }
             }
         } catch (SQLException e) {
@@ -81,6 +93,10 @@ public class QuestionDAO implements IQuestionDAO {
             psUpdate.setString(9, question.getOptionalFeedback());
             psUpdate.setLong(10, question.getId());
             psUpdate.executeUpdate();
+
+            QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
+            questionLearnAlgorithm.setID(question.getId());
+            learnAlgorithmDAO.reset(questionLearnAlgorithm);
             LOG.info("Question successfully updated in Database.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO UPDATE error: question couldn't be updated, check if the mandatory values have been added or if the connection to the Database is valid.");
@@ -135,6 +151,9 @@ public class QuestionDAO implements IQuestionDAO {
                 psDelete.setLong(1, question.getId());
                 psDelete.executeUpdate();
                 LOG.info("Question successfully soft-deleted in Database.");
+                QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
+                questionLearnAlgorithm.setID(question.getId());
+                learnAlgorithmDAO.delete(questionLearnAlgorithm);
             }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionDAO DELETE error: question couldn't be deleted, check if the connection to the Database is valid.");
