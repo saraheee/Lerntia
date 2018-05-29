@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS Questionnaire;
 DROP TABLE IF EXISTS PUserCourse;
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS PUser;
+DROP TABLE IF EXISTS QuestionAlgoValue;
 
 CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   name                VARCHAR(255),
