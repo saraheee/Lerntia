@@ -1,7 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.application;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearnAlgorithmService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.LearnAlgorithmService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
@@ -96,7 +99,12 @@ public final class MainApplication extends Application implements Runnable {
     @Override
     public void stop() {
         LOG.debug("Stopping application");
-
+        try {
+            LOG.info("Stopp Algorithm");
+            controller.stopAlgorithm();
+        } catch (ServiceException e) {
+            LOG.debug("Cant shutdown Algorithm.");
+        }
         if (iTextToSpeechService != null) {
             controller.stopAudio();
         } else {
