@@ -15,6 +15,7 @@
 .button {
     -fx-width: 80%;
     -fx-background-color: rgba(51, 0, 102, 0.09);
+    -fx-font-size: 26px;
 }
 
 .button:hover {
@@ -24,7 +25,6 @@
 
 .button:focused {
     -fx-background-color: rgba(0, 50, 250, 0.1);
-    -fx-font-size: 30px;
 }
 
 .button:selected {

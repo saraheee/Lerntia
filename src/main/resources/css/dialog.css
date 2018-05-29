@@ -45,7 +45,7 @@
 }
 
 .button:default:hover {
-    -fx-background-color: rgba(51, 0, 152, 0.2);
+    -fx-background-color: rgba(0, 50, 250, 0.1);
 }
 
 .button:default:selected {
