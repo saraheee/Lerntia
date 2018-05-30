@@ -30,7 +30,7 @@ public class AdministrateQuestionnaireController {
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
     @FXML
-    public ComboBox cb_questionnaire;
+    public ComboBox<String> cb_questionnaire;
     private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
     private LearningQuestionnaire selectedLearningQuestionnaire;
@@ -60,8 +60,8 @@ public class AdministrateQuestionnaireController {
             LOG.error("Failed to initialize AdministrateQuestionnaireController");
         }
 
-        for (int i = 0; i < learningQuestionnaires.size(); i++) {
-            cb_questionnaire.getItems().add(learningQuestionnaires.get(i).getName());
+        for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
+            cb_questionnaire.getItems().add(learningQuestionnaire.getName());
         }
         cb_questionnaire.getSelectionModel().selectFirst();
     }
@@ -92,9 +92,9 @@ public class AdministrateQuestionnaireController {
         }
 
         LOG.info("Unselect all the Other Questionnaire");
-        for (int i = 0; i < learningQuestionnaires.size(); i++) {
+        for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
             try {
-                simpleLearningQuestionnaireService.deselect(learningQuestionnaires.get(i));
+                simpleLearningQuestionnaireService.deselect(learningQuestionnaire);
             } catch (ServiceException e) {
                 LOG.error("Failed to deselect a questionnaire.");
             }
@@ -128,8 +128,8 @@ public class AdministrateQuestionnaireController {
     }
 
     /**
-     * Opens the first Window in the AdministrateQuestionnare operation.
-     * Opens a window in which the user is allowed to choose a Questionnare.
+     * Opens the first window in the AdministrateQuestionnaire operation.
+     * Opens a window in which the user is allowed to choose a Questionnaire.
      */
     public void showAdministrateQuestionnaireWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/administrateQuestionnaire.fxml"));

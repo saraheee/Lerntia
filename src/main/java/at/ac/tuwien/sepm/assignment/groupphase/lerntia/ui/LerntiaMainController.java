@@ -226,7 +226,6 @@ public class LerntiaMainController {
 
         }));
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
-
     }
 
 
@@ -248,26 +247,21 @@ public class LerntiaMainController {
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    String feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummer ist richtig: " + checkedAnswers;
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
 
-                    audioController.readFeedbackText("Korrekt beantwortet! Folgende Antwort ist richtig: "
-                        + getMethod(question.getCorrectAnswers()) + " " + BREAK + BREAK + question.getOptionalFeedback());
-
-                    alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.",
-                        getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
+                    alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
+                        question.getOptionalFeedback());
 
                 } else {
-                    StringBuilder answers = new StringBuilder("Alle richtigen Antworten sind:\n");
-                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                        answers.append(getMethod(question.getCorrectAnswers().substring(i, i + 1)));
-                    }
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
 
-                    audioController.readFeedbackText("Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
-                        + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
-                        + " " + BREAK + BREAK + question.getOptionalFeedback());
-
-                    alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: "
-                            + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2),
-                        answers + "\n" + question.getOptionalFeedback());
+                    alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
+                        question.getOptionalFeedback());
                 }
             } else {
                 try {
@@ -276,30 +270,21 @@ public class LerntiaMainController {
                     e.printStackTrace();
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
 
-                    audioController.readFeedbackText("Falsch beantwortet! Folgende Antwort wäre richtig gewesen: "
-                        + getMethod(question.getCorrectAnswers()) + " " + BREAK + BREAK + question.getOptionalFeedback());
-
-                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: "
-                        + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
-                        + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
+                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
+                        question.getOptionalFeedback());
 
                 } else {
-                    StringBuilder answers = new StringBuilder("Die richtigen Antworten sind:\n");
-                    for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                        if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
-                            answers.append("Auch: ");
-                        }
-                        answers.append(getMethod(question.getCorrectAnswers().substring(i, i + 1)));
-                    }
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
 
-                    audioController.readFeedbackText("Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
-                        + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
-                        + " " + BREAK + BREAK + question.getOptionalFeedback());
-
-                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: "
-                            + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2),
-                        answers + question.getOptionalFeedback());
+                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
+                        question.getOptionalFeedback());
                 }
             }
             // send checked answers to service (in order to use it for statistics and learning algorithm)
@@ -320,6 +305,10 @@ public class LerntiaMainController {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
                 "Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
         }
+    }
+
+    private String formatAnswerNumbers(String answers) {
+        return answers.replaceAll("(.)", "$1, ").substring(0, answers.length() * 3 - 2);
     }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
