@@ -5,12 +5,14 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceExce
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
@@ -62,6 +64,8 @@ public final class MainApplication extends Application implements Runnable {
             dialogPane.setHeader(header);
             dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
             alert.setDialogPane(dialogPane);
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.Ja.toString());
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.Nein.toString());
             var optional = alert.showAndWait();
 
             if (optional.isPresent() && optional.get() == ButtonType.YES) {
