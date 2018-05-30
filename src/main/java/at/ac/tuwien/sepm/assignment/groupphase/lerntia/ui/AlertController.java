@@ -4,7 +4,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -15,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
@@ -96,7 +100,7 @@ public class AlertController {
 
     public void showCorrectAnswerAlert(String title, String header, String content) {
         var alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.initModality(Modality.NONE);
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
@@ -145,6 +149,7 @@ public class AlertController {
 
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
+        stage.setMaximized(true);
         stage.showAndWait();
         LOG.trace("Showing an answer alert with title: " + title);
     }
@@ -216,9 +221,7 @@ public class AlertController {
 
         ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
         for (var type : dialogPane.getButtonTypes()) {
-            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> {
-                result.set(type);
-            });
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
         }
         stage.showAndWait();
         LOG.trace("Showing a big confirmation alert with title: " + title);
