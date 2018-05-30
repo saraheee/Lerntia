@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWrite
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,6 +46,10 @@ public class LerntiaMainController {
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private boolean learnAlgorithmStatus;
+
+    private ConfigReader configReaderSpeech = new ConfigReader("speech");
+    private final String BREAK = configReaderSpeech.getValue("break");
+
     @FXML
     private HBox mainWindow;
     @FXML
@@ -243,18 +248,27 @@ public class LerntiaMainController {
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+
+                    audioController.readFeedbackText("Korrekt beantwortet! Folgende Antwort ist richtig: "
+                        + getMethod(question.getCorrectAnswers()) + " " + BREAK + BREAK + question.getOptionalFeedback());
+
                     alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.",
                         getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
+
                 } else {
                     StringBuilder answers = new StringBuilder("Alle richtigen Antworten sind:\n");
                     for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
                         answers.append(getMethod(question.getCorrectAnswers().substring(i, i + 1)));
                     }
+
+                    audioController.readFeedbackText("Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
+                        + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
+                        + " " + BREAK + BREAK + question.getOptionalFeedback());
+
                     alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: "
                             + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2),
                         answers + "\n" + question.getOptionalFeedback());
                 }
-
             } else {
                 try {
                     lerntiaService.recordCheckedAnswers(question, answersCorrect);
@@ -262,9 +276,14 @@ public class LerntiaMainController {
                     e.printStackTrace();
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+
+                    audioController.readFeedbackText("Falsch beantwortet! Folgende Antwort wäre richtig gewesen: "
+                        + getMethod(question.getCorrectAnswers()) + " " + BREAK + BREAK + question.getOptionalFeedback());
+
                     alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: "
                         + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
                         + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
+
                 } else {
                     StringBuilder answers = new StringBuilder("Die richtigen Antworten sind:\n");
                     for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
@@ -273,6 +292,11 @@ public class LerntiaMainController {
                         }
                         answers.append(getMethod(question.getCorrectAnswers().substring(i, i + 1)));
                     }
+
+                    audioController.readFeedbackText("Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
+                        + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2)
+                        + " " + BREAK + BREAK + question.getOptionalFeedback());
+
                     alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: "
                             + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2),
                         answers + question.getOptionalFeedback());
