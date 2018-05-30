@@ -20,7 +20,7 @@ public interface IMainLerntiaService {
      *
      * @return the next question
      * @throws ServiceException if the method can't find the next Question. Possible reasons:
-     *                          - the end of questions list was reached
+     *                          - the end of the question list was reached
      *                          - other implementation-specific reasons
      */
     Question getNextQuestionFromList() throws ServiceException;
@@ -30,7 +30,7 @@ public interface IMainLerntiaService {
      *
      * @return the next question
      * @throws ServiceException if the method can't find the previous Question. Possible reasons:
-     *                          - the beginning of questions list was reached
+     *                          - the beginning of the question list was reached
      *                          - other implementation-specific reasons
      */
     Question getPreviousQuestionFromList() throws ServiceException;
@@ -40,8 +40,8 @@ public interface IMainLerntiaService {
      *
      * @param question a DTO containing only the question id and the list of selected answers in the field correctAnswers
      * @throws ServiceException if the method can't find the next Question. Possible reasons:
-     *                          - the selected answers was a null
-     *                          - the selected answers has an unexpected format
+     *                          - the selected answers are null
+     *                          - the selected answers have an unexpected format
      *                          - other implementation-specific reasons
      */
     void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException;
@@ -54,7 +54,7 @@ public interface IMainLerntiaService {
     int getListCounter();
 
     /**
-     * Returns the QuistionList
+     * Returns the QuestionList
      */
     List<Question> getQuestionList();
 
