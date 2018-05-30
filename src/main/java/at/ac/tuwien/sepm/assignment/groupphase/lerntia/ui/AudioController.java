@@ -75,7 +75,7 @@ public class AudioController implements Runnable {
     }
 
     void readSingleAnswer(String answerText) {
-        audioButton.defaultButtonProperty().setValue(false);
+        deselectAudioButton();
         if (answerText == null || answerText.trim().length() < 1) {
             showValidationFailedDialog();
         } else {
@@ -97,6 +97,28 @@ public class AudioController implements Runnable {
                 LOG.error("Failed to read question and answers: iTextToSpeechService is 'null'");
                 showAudioErrorDialog();
             }
+        }
+    }
+
+    void readFeedbackText(String feedbackText) {
+        deselectAudioButton();
+        var tts = new Speech();
+        tts.setFeedbackText(feedbackText);
+        if (iTextToSpeechService != null) {
+            try {
+                stopReading();
+                iTextToSpeechService.readFeedbackText(tts);
+
+            } catch (TextToSpeechServiceException e) {
+                LOG.error("Failed to read the feedback text.");
+                showAudioErrorDialog();
+            } catch (TextToSpeechServiceValidationException e) {
+                LOG.error("Validation failed for the input text of the speech synthesizer.");
+                showValidationFailedDialog();
+            }
+        } else {
+            LOG.error("Failed to read the feedback text: iTextToSpeechService is 'null'");
+            showAudioErrorDialog();
         }
     }
 
