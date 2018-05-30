@@ -247,12 +247,13 @@ public class LerntiaMainController {
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    String feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummer ist richtig: " + checkedAnswers;
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummer ist richtig: " + checkedAnswers;
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
                     alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
                         question.getOptionalFeedback());
+                    audioController.stopReading();
 
                 } else {
                     var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
@@ -262,6 +263,7 @@ public class LerntiaMainController {
 
                     alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
                         question.getOptionalFeedback());
+                    audioController.stopReading();
                 }
             } else {
                 try {
@@ -277,6 +279,7 @@ public class LerntiaMainController {
 
                     alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback());
+                    audioController.stopReading();
 
                 } else {
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
@@ -285,6 +288,7 @@ public class LerntiaMainController {
 
                     alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback());
+                    audioController.stopReading();
                 }
             }
             // send checked answers to service (in order to use it for statistics and learning algorithm)

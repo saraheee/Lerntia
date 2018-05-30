@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
@@ -18,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
@@ -104,7 +104,7 @@ public class AlertController {
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Weiter");
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(ButtonText.Weiter.toString());
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
@@ -215,7 +215,8 @@ public class AlertController {
 
         dialogPane.setHeader(grid);
         dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.Ja.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.Nein.toString());
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
 
