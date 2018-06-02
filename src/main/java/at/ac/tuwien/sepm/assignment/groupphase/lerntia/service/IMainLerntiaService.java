@@ -59,4 +59,6 @@ public interface IMainLerntiaService {
     List<Question> getQuestionList();
 
     void stopAlgorithm() throws ServiceException;
+
+    void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 }

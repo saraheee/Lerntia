@@ -292,18 +292,17 @@ public class LerntiaMainController {
                 }
             }
             // send checked answers to service (in order to use it for statistics and learning algorithm)
-            try {
-                Question mockQuestion = new Question();
-                mockQuestion.setId(question.getId());
-                mockQuestion.setCorrectAnswers(checkedAnswers);
-                LOG.info("Trying to send {} answers on question \"{}\"",
-                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-            } catch (ServiceException e) {
-                LOG.error("Could not check whether the answer was correct");
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
-            }
+        //    try {
+        //      mockQuestion.setId(question.getId());
+          //      mockQuestion.setCorrectAnswers(checkedAnswers);
+        //    LOG.info("Trying to send {} answers on question \"{}\"",
+        //      mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+        //        lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+        //    } catch (ServiceException e) {
+        //        LOG.error("Could not check whether the answer was correct");
+        //        alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+        //            "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+        //   }
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
@@ -341,10 +340,13 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
             // todo add statistics after that is implemented
 
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
+            alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+
+            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
             try {
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
