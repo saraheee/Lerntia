@@ -59,7 +59,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         cell_checked.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell_checked.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-
         Image img_box = null;
         try {
             img_box = Image.getInstance("src/main/resources/icons/exam_report_box.png");
@@ -85,38 +84,36 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             // afterwards a table is created where each row holds an answer and the
             // expected state as well as the actual state of the checkbox.
 
-            //try {
-                Paragraph container = new Paragraph();
 
-                Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
-                paragraphQuestionNumber.setSpacingBefore(15);
+            // the container is used to hold the question as well as the table with the answers.
+            // this is done to ensure, that the question is on a different page than the answers.
 
-                //document.add(paragraphQuestionNumber);
+            Paragraph container = new Paragraph();
 
-                Paragraph paragraphQuestionText = new Paragraph(questions.get(i).getQuestionText());
-                paragraphQuestionText.setSpacingAfter(10);
+            Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
+            paragraphQuestionNumber.setSpacingBefore(15);
 
-                container.add(paragraphQuestionNumber);
-                container.add(paragraphQuestionText);
+            Paragraph paragraphQuestionText = new Paragraph(questions.get(i).getQuestionText());
+            paragraphQuestionText.setSpacingAfter(10);
 
-                container.setKeepTogether(true);
+            container.add(paragraphQuestionNumber);
+            container.add(paragraphQuestionText);
 
-                //document.add(container);
-/*
-            } catch (DocumentException e) {
-                e.printStackTrace();
-            }
-*/
+            container.setSpacingAfter(15);
+            container.setKeepTogether(true);
+
             // a nesting table is needed to ensure that a table is not split over two pages.
 
             PdfPTable nesting = new PdfPTable(1);
             nesting.setWidthPercentage(100);
 
-            PdfPTable table = new PdfPTable(3);
+            // create a table with 4 columns and stretch it to 100% of the page width
+
+            PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
 
             try {
-                table.setWidths(new float[] { 8, (float) 1.5, (float) 1.5});
+                table.setWidths(new float[] { 8, (float) 1.25, (float) 1.5, (float) 1});
             } catch (DocumentException e) {
                 e.printStackTrace();
             }
@@ -124,6 +121,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             table.addCell("Antworten");
             table.addCell("Erwartet");
             table.addCell("Ausgewählt");
+            table.addCell("Richtig");
 
             ArrayList<String> allAnswers = questionService.getAllAnswers(questions.get(i));
 
@@ -149,6 +147,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
                 table.addCell( (answerWasCorrect) ? cell_checked : cell_box );
                 table.addCell( (answerWasCecked) ? cell_checked : cell_box );
+                table.addCell( (answerWasCorrect == answerWasCecked) ? cell_checked : cell_box );
             }
 
             PdfPCell cell = new PdfPCell(table);
