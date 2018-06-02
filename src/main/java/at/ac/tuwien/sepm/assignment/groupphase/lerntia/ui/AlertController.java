@@ -5,10 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -22,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 @Controller
 public class AlertController {
@@ -36,6 +34,7 @@ public class AlertController {
     private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
     private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
     private boolean wrongAnswer = false;
+    private boolean onlyWrongQuestions =false;
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
@@ -83,14 +82,33 @@ public class AlertController {
         headerLabel.setMaxHeight(Double.MAX_VALUE);
         grid.add(headerLabel, 1, 0);
 
-        dialogPane.setHeader(grid);
-        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        ButtonType btnyes = new ButtonType("Ja",ButtonBar.ButtonData.YES);
+        ButtonType btnno = new ButtonType("Nein",ButtonBar.ButtonData.NO);
 
+        dialogPane.setHeader(grid);
+
+        if (alertType == Alert.AlertType.CONFIRMATION){
+            dialogPane.getButtonTypes().setAll(btnyes,btnno);
+        }else {
+            dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        }
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
-        stage.showAndWait();
+
         LOG.trace("Showing a big alert with title: " + title);
+
+        if (alertType == Alert.AlertType.CONFIRMATION){
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get()==btnyes){
+            onlyWrongQuestions = true;
+        }else if (result.get() == btnno){
+            onlyWrongQuestions = false;
+        }
     }
+    else {
+        stage.showAndWait();
+    }
+}
 
 
     public void showWrongAnswerAlert(String title, String header, String content) {
@@ -227,5 +245,9 @@ public class AlertController {
         stage.showAndWait();
         LOG.trace("Showing a big confirmation alert with title: " + title);
         return result.get() == ButtonType.YES;
+    }
+
+    public boolean isOnlyWrongQuestions() {
+        return onlyWrongQuestions;
     }
 }
