@@ -284,4 +284,38 @@ public class MainLerntiaService implements IMainLerntiaService {
         learnAlgorithmController.reset();
     }
 
+    @Override
+    public int getCorrectAnswers() {
+        int count = 0;
+        for (int i = 0; i < questionList.size(); i++) {
+            String givenAnswers = questionList.get(i).getCheckedAnswers();
+            String correctAnswers = questionList.get(i).getCorrectAnswers();
+            if (givenAnswers.equals(correctAnswers)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public int getWrongAnswers() {
+        int count = 0;
+        for (int i = 0; i < questionList.size(); i++) {
+            String givenAnswers = questionList.get(i).getCheckedAnswers();
+            String correctAnswers = questionList.get(i).getCorrectAnswers();
+            if (!givenAnswers.equals(correctAnswers)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public double getPercent() {
+        double share = (double) getCorrectAnswers();
+        double base = (double) questionList.size();
+        double percent = (share / base) * 100.00;
+        return percent;
+    }
+
 }
