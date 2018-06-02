@@ -80,7 +80,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             playText(textToSpeech.getFeedbackText());
             feedbackText = false;
         } else {
-            playText(getText(textToSpeech));
+            playText(getQuestionAndAnswerText(textToSpeech));
         }
     }
 
@@ -164,7 +164,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         return audioPlayer == null || audioPlayer.finishedAudio;
     }
 
-    public String getText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
+    public String getQuestionAndAnswerText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
         if (emptyQuestionAndAnswer(textToSpeech)) {
             throw new TextToSpeechServiceValidationException("All questions and answers are empty. Nothing to read!");
         }
