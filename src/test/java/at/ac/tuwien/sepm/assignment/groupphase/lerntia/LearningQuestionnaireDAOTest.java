@@ -1,17 +1,14 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.Assert;
@@ -19,11 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
-import java.util.List;
 
 public class LearningQuestionnaireDAOTest {
 
@@ -53,7 +48,7 @@ public class LearningQuestionnaireDAOTest {
     }
 
     private void ICourseDAO(CourseDAO courseDAO) {
-        this.courseDAO=courseDAO;
+        this.courseDAO = courseDAO;
     }
 
     private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
@@ -63,10 +58,10 @@ public class LearningQuestionnaireDAOTest {
     @Test
     public void createNewLearningQuestionnaire() throws PersistenceException {
         try {
-            Long expected = Long.valueOf(0);
+            Long expected = 0L;
 
             Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"15");
+            tgi.setSemester(Semester.SS + "15");
             tgi.setMark("123.349");
             tgi.setName("TGI");
             courseDAO.create(tgi);
@@ -84,19 +79,16 @@ public class LearningQuestionnaireDAOTest {
             learningQuestionnaireDAO.create(chapter2);
 
             Assert.assertEquals(expected, chapter2.getId());
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             throw new PersistenceException(e.getMessage());
         }
     }
 
     @Test(expected = Exception.class)
-    public void createNewLearningQuestionnaireError() throws PersistenceException{
-        try {
-            LearningQuestionnaire chapter1 = new LearningQuestionnaire();
-            chapter1.setName("Error chapter");
-            learningQuestionnaireDAO.create(chapter1);
-        }catch (PersistenceException e){
-            throw new PersistenceException(e.getMessage());
-        }
+    public void createNewLearningQuestionnaireError() throws PersistenceException {
+        LearningQuestionnaire chapter1 = new LearningQuestionnaire();
+        chapter1.setName("Error chapter");
+        learningQuestionnaireDAO.create(chapter1);
+
     }
 }
