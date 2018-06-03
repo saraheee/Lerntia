@@ -30,6 +30,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     private List<LearningQuestionnaire> allLQs;
     private LearningQuestionnaire currentLQ;
     private List<ExamQuestionnaire> allEQs;
+    private List<QuestionLearnAlgorithm> checker ;
     private ExamQuestionnaire currentEQ;
     private List<QuestionnaireQuestion> questionnaireQuestionsList;
     private List<Question> questionList;
@@ -122,7 +123,9 @@ public class MainLerntiaService implements IMainLerntiaService {
         Question question;
         QuestionLearnAlgorithm questionLearnAlgorithm;
         QuestionnaireQuestion questionnaireQuestion;
+
         while (!questionnaireQuestionsList.isEmpty()) {
+            List<QuestionLearnAlgorithm> helper = questionLearnAlgorithmList;
             question = new Question();
             questionLearnAlgorithm = new QuestionLearnAlgorithm();
             questionnaireQuestion = questionnaireQuestionsList.get(0);
@@ -159,6 +162,8 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("All questions from the selected LearningQuestionnaire found.");
         LOG.info("Search for questions in the Database.");
         questionList = questionService.search(searchParameters);
+        checker = questionLearnAlgorithmList;
+        System.out.println("PLS WORK"+checker.size());
         algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
         for (Question q : questionList) {
             listCounter++;
@@ -184,6 +189,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                }else {
                    alertController.showBigAlert(Alert.AlertType.WARNING,"No Questions","No wrong questions availaable.","There are no wrong answered questions available anymore." +
                        "Showing first normal question from questionnaire.");
+                   stopAlgorithm();
                    resetWrongQuestionList();
                    alertController.setOnlyWrongQuestions(false);
                    getFirstQuestion();
@@ -279,15 +285,25 @@ public class MainLerntiaService implements IMainLerntiaService {
         }else {
             resetWrongQuestionList();
         }
+
+
         currentLQ = learningQuestionnaireService.getSelected();
         if (currentLQ == null) {
             throw new ServiceException("No Questionnaire has been selected yet.");
         }
+            getQuestionsFromLearningQuestionnaire(currentLQ);
+        if (!learnAlgorithm) {
+            currentQuestionIndex = -1;
+            currentAlgorithmQuestionIndex = 0;
+        }else {
+            currentQuestionIndex = 0;
+            currentAlgorithmQuestionIndex = -1;
 
-        getQuestionsFromLearningQuestionnaire(currentLQ);
-        currentQuestionIndex = -1;
-        LOG.info("First question found.");
-        return getNextQuestionFromList();
+        }
+        System.out.println("STAAAA"+questionLearnAlgorithmList.size());
+            LOG.info("First question found.");
+            return getNextQuestionFromList();
+
     }
 
     @Override
@@ -300,10 +316,11 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentWrongQuestionIndex = 0;
                 return currentQuestion;
             }else if (learnAlgorithm&&showOnlyWrongQuestions&&wrongQuestions.size()==0){
+                currentAlgorithmQuestionIndex = 0;
                 alertController.showBigAlert(Alert.AlertType.INFORMATION,"Keine Fragen","Keine falsche Fragen vorhanden","Es gibt keine falsch beantworteten Fragen. Der ganze Fragebogen wird angezeigt.");
                 LOG.info("Get first Question of the Question List.");
-                currentQuestion = questionList.get(0);
-                currentQuestionIndex = 0;
+                LOG.info("Revert to first question in the Algorithm List.");
+                currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 wrongQuestions = new ArrayList<>();
                 currentWrongQuestionIndex = 0;
                 wrongQuestionListCounter = 0;
@@ -312,6 +329,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 return currentQuestion;
             }
             else if (learnAlgorithm) {
+                System.out.println(questionLearnAlgorithmList.size());
                 algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
                 LOG.info("Revert to first question in the Algorithm List.");
                 currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
@@ -403,6 +421,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public void stopAlgorithm() throws ServiceException {
         LOG.info("Turn off Algorithm while its on Exam Mode.");
+        currentAlgorithmQuestionIndex = 0;
         showOnlyWrongQuestions=false;
         learnAlgorithm = false;
         learnAlgorithmService.shutdown();
