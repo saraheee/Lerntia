@@ -204,8 +204,8 @@ public class MainLerntiaService implements IMainLerntiaService {
                         return currentQuestion;
                     }
                 }else {
-                    alertController.showBigAlert(Alert.AlertType.WARNING,"No Questions","No wrong questions availaable.","There are no wrong answered questions available anymore." +
-                        "Showing first normal question from questionnaire.");
+                    alertController.showBigAlert(Alert.AlertType.WARNING,"Keine Fragen mehr.","Keine falsch beantwortete Fragen mehr.","Es gibt keine falsch beantworteten Fragen mehr." +
+                        "Es wird die erste Frage des Fragebogens angezeigt.");
                     resetWrongQuestionList();
                     alertController.setOnlyWrongQuestions(false);
                     getFirstQuestion();
@@ -272,7 +272,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException {
         LearningQuestionnaire currentLQ;
-        
         if (wrongQuestions == null){
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
