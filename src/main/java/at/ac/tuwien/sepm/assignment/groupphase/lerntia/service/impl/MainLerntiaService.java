@@ -329,8 +329,8 @@ public class MainLerntiaService implements IMainLerntiaService {
                 return currentQuestion;
             }
             else if (learnAlgorithm) {
+                currentAlgorithmQuestionIndex = 0;
                 System.out.println(questionLearnAlgorithmList.size());
-                algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
                 LOG.info("Revert to first question in the Algorithm List.");
                 currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 wrongQuestions = new ArrayList<>();
