@@ -24,9 +24,9 @@ public class SimpleExamResultsWriterService implements IExamResultsWriterService
     }
 
     @Override
-    public void writeExamResults(List<Question> questions, String path) throws ServiceException {
+    public void writeExamResults(List<Question> questions, String name, String path) throws ServiceException {
         try {
-            iExamResultsWriterDAO.writeExamResults(questions, path);
+            iExamResultsWriterDAO.writeExamResults(questions, name, path);
         } catch (PersistenceException e) {
             // TODO - i want to pass the error message along. is this ok?
             throw new ServiceException(e.getMessage());
