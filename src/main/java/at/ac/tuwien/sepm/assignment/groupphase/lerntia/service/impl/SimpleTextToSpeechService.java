@@ -32,6 +32,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private AudioPlayer audioPlayer;
     private MaryInterface maryTTS;
     private boolean singleAnswer = false;
+    private boolean feedbackText = false;
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
@@ -55,12 +56,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.trace("maryTTS is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
             LOG.trace("stopSpeaking method is called. Calling playText method.");
-            if (!singleAnswer) {
-                playText(getText(textToSpeech));
-            } else {
-                playText(textToSpeech.getSingleAnswer());
-                singleAnswer = false;
-            }
+            getTextToRead(textToSpeech);
             LOG.trace("playText method is called.");
         } else {
             try {
@@ -68,12 +64,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 maryTTS = new LocalMaryInterface();
                 LOG.trace("mary interface is created. maryTTS is not null anymore.");
                 maryTTS.setVoice(VOICE);
-                if (!singleAnswer) {
-                    playText(getText(textToSpeech));
-                } else {
-                    playText(textToSpeech.getSingleAnswer());
-                    singleAnswer = false;
-                }
+                getTextToRead(textToSpeech);
             } catch (MaryConfigurationException e) {
                 LOG.error("Failed to initialize speech synthesizer!");
                 throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
@@ -81,10 +72,29 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
     }
 
+    private void getTextToRead(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        if (singleAnswer) {
+            playText(textToSpeech.getSingleAnswer());
+            singleAnswer = false;
+        } else if (feedbackText) {
+            playText(textToSpeech.getFeedbackText());
+            feedbackText = false;
+        } else {
+            playText(getQuestionAndAnswerText(textToSpeech));
+        }
+    }
+
     @Override
     public void readSingleAnswer(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
         LOG.trace("Entering method readSingleAnswer.");
         singleAnswer = true;
+        readQuestionAndAnswers(textToSpeech);
+    }
+
+    @Override
+    public void readFeedbackText(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        LOG.trace("Entering method readFeedbackText.");
+        feedbackText = true;
         readQuestionAndAnswers(textToSpeech);
     }
 
@@ -154,7 +164,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         return audioPlayer == null || audioPlayer.finishedAudio;
     }
 
-    public String getText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
+    public String getQuestionAndAnswerText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
         if (emptyQuestionAndAnswer(textToSpeech)) {
             throw new TextToSpeechServiceValidationException("All questions and answers are empty. Nothing to read!");
         }

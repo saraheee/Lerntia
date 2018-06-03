@@ -9,6 +9,7 @@ public class Speech {
     private String answer5;
     private String voice;
     private String singleAnswer;
+    private String feedbackText;
 
     public Speech() {
     }
@@ -87,6 +88,14 @@ public class Speech {
         this.singleAnswer = singleAnswer;
     }
 
+    public String getFeedbackText() {
+        return feedbackText;
+    }
+
+    public void setFeedbackText(String feedbackText) {
+        this.feedbackText = feedbackText;
+    }
+
     @Override
     public String toString() {
         return "TextToSpeech{" +
@@ -99,4 +108,5 @@ public class Speech {
             ", voice='" + voice + '\'' +
             '}';
     }
+
 }
