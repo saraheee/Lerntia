@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWrite
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,11 +43,13 @@ public class LerntiaMainController {
     private final ZoomedImageController zoomedImageController;
     private final AudioController audioController;
     private final AlertController alertController;
-
     private final IQuestionnaireService questionnaireService;
-
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
+    private boolean learnAlgorithmStatus;
+
+    private ConfigReader configReaderSpeech = new ConfigReader("speech");
+    private final String BREAK = configReaderSpeech.getValue("break");
 
     @FXML
     private GridPane mainWindow;
@@ -71,6 +74,8 @@ public class LerntiaMainController {
     @FXML
     private AudioController audioButtonController;
     @FXML
+    private LearnAlgorithmController learnAlgorithmController;
+    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
@@ -80,6 +85,8 @@ public class LerntiaMainController {
     private Button nextQuestionButton;
     @FXML
     private Button handInButton;
+    @FXML
+    private Button algorithmButton;
 
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
@@ -95,12 +102,14 @@ public class LerntiaMainController {
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
         IQuestionnaireService questionnaireService,
-        IExamResultsWriterService iExamResultsWriterService
+        IExamResultsWriterService iExamResultsWriterService,
+        LearnAlgorithmController learnAlgorithmController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
         notNull(zoomedImageController, "'zoomedImageController' should not be null");
+        notNull(learnAlgorithmController, "learnAlgorithmController should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;
@@ -108,6 +117,9 @@ public class LerntiaMainController {
         this.zoomedImageController = zoomedImageController;
         this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
+        this.learnAlgorithmController = learnAlgorithmController;
+
+        this.learnAlgorithmStatus = false;
     }
 
     @FXML
@@ -163,12 +175,21 @@ public class LerntiaMainController {
                 LOG.debug("C key was pressed");
                 audioController.stopReading();
                 audioController.deselectAudioButton();
-                if (examMode == false) {
+                if (!examMode) {
                     checkIfQuestionWasCorrect();
-                }
-                else {
+                } else {
                     handIn(null);
                 }
+            }
+            if (e.getCode() == KeyCode.G) {
+                LOG.info("G key was pressed.");
+                learnAlgorithmController.onAlgorithmButtonPressed();
+                if (learnAlgorithmController.isSelected()) {
+                    LOG.info("Learn Algorithm is now running");
+                } else {
+                    LOG.info("Learn Algorithm is now not running.");
+                }
+                learnAlgorithmStatus = learnAlgorithmController.isSelected();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
@@ -218,56 +239,93 @@ public class LerntiaMainController {
 
         }));
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
-
     }
+
 
     @FXML
     private void checkIfQuestionWasCorrect() {
         // gather the info about the checked answers
-        String checkedAnswers = getCheckedAnswers();
-
-        boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-        //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
-
-        if (answersCorrect) {
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showCorrectAnswerAlert("Antwort richtig!", checkedAnswers + " ist richtig.", getMethod(question.getCorrectAnswers()) + "\n" + question.getOptionalFeedback());
-            } else {
-                String answers = "Alle richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showCorrectAnswerAlert("Antworten richtig!", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + "\n" + question.getOptionalFeedback());
-            }
-
-        } else {
-            if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                alertController.showWrongAnswerAlert("Antwort nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2) + " ist die richtige Antwort", getMethod(question.getCorrectAnswers()) + question.getOptionalFeedback());
-            } else {
-                String answers = "Die richtigen Antworten sind:\n";
-                for (int i = 0; i < question.getCorrectAnswers().length(); i++) {
-                    if (!checkedAnswers.contains(question.getCorrectAnswers().substring(i, (i + 1)))) {
-                        answers += "Auch: ";
-                    }
-                    answers += getMethod(question.getCorrectAnswers().substring(i, i + 1));
-                }
-                alertController.showWrongAnswerAlert("Antworten nicht richtig.", "Die korrekten Antworten lauten: " + question.getCorrectAnswers().replaceAll("(.)", "$1, ").substring(0, question.getCorrectAnswers().length() * 3 - 2), answers + question.getOptionalFeedback());
-            }
-        }
-        // send checked answers to service (in order to use it for statistics and learning algorithm)
         try {
-            Question mockQuestion = new Question();
-            mockQuestion.setId(question.getId());
-            mockQuestion.setCorrectAnswers(checkedAnswers);
-            LOG.info("Trying to send {} answers on question \"{}\"",
-                mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-            lerntiaService.recordCheckedAnswers(mockQuestion);
-        } catch (ServiceException e) {
-            LOG.error("Could not check whether the answer was correct");
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            String checkedAnswers = getCheckedAnswers();
+
+            boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
+            //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
+            LOG.info("Save values to Algorithm");
+            if (answersCorrect) {
+                try {
+
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummer ist richtig: " + checkedAnswers;
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
+
+                    alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
+                        question.getOptionalFeedback());
+                    audioController.stopReading();
+
+                } else {
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
+
+                    alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
+                        question.getOptionalFeedback());
+                    audioController.stopReading();
+                }
+            } else {
+                try {
+                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                }
+                if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                        question.getOptionalFeedback());
+
+                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
+                        question.getOptionalFeedback());
+                    audioController.stopReading();
+
+                } else {
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
+                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
+
+                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
+                        question.getOptionalFeedback());
+                    audioController.stopReading();
+                }
+            }
+            // send checked answers to service (in order to use it for statistics and learning algorithm)
+            try {
+                Question mockQuestion = new Question();
+                mockQuestion.setId(question.getId());
+                mockQuestion.setCorrectAnswers(checkedAnswers);
+                LOG.info("Trying to send {} answers on question \"{}\"",
+                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+            } catch (ServiceException e) {
+                LOG.error("Could not check whether the answer was correct");
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+            }
+            getAndShowNextQuestion();
+        } catch (NullPointerException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
+                "Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
         }
-        getAndShowNextQuestion();
+    }
+
+    private String formatAnswerNumbers(String answers) {
+        return answers.replaceAll("(.)", "$1, ").substring(0, answers.length() * 3 - 2);
     }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
@@ -426,6 +484,7 @@ public class LerntiaMainController {
         buttonBar.getButtons().remove(previousQuestionButton);
         buttonBar.getButtons().remove(nextQuestionButton);
         buttonBar.getButtons().remove(checkAnswerButton);
+        buttonBar.getButtons().remove(algorithmButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
@@ -444,9 +503,13 @@ public class LerntiaMainController {
         audioButtonController.stopReading();
     }
 
-    public void switchToExamMode() {
+    public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
+
         buttonBar.getButtons().add(handInButton);
+        buttonBar.getButtons().remove(algorithmButton);
+
+        lerntiaService.stopAlgorithm();
     }
 
     public void handIn(ActionEvent actionEvent) {
@@ -480,7 +543,6 @@ public class LerntiaMainController {
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
                 "Error", e.getMessage());
-            return;
         }
     }
 
@@ -532,5 +594,9 @@ public class LerntiaMainController {
             default:
                 return "";
         }
+    }
+
+    public void stopAlgorithm() throws ServiceException {
+        lerntiaService.stopAlgorithm();
     }
 }

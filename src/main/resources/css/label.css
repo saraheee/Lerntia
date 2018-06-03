@@ -20,7 +20,6 @@
 
 .button:hover {
     -fx-background-color: rgba(0, 50, 250, 0.1);
-    -fx-font-size: 30px;
 }
 
 .button:focused {

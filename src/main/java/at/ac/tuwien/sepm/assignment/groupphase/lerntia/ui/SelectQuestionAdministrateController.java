@@ -5,7 +5,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -137,7 +140,7 @@ public class SelectQuestionAdministrateController {
     /**
      * @return the Content for the Table in form of a ObservableList<Question>
      */
-    public ObservableList<Question> getContent() {
+    private ObservableList<Question> getContent() {
         ObservableList<Question> content = FXCollections.observableArrayList();
         content.addAll(lerntiaService.getQuestionList());
         return content;
@@ -155,7 +158,7 @@ public class SelectQuestionAdministrateController {
     }
 
     @FXML
-    public void editQuestion(ActionEvent actionEvent) {
+    public void editQuestion() {
 
         //Check if there is at Least and not more than one element is Selected
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
@@ -176,8 +179,7 @@ public class SelectQuestionAdministrateController {
 
         //Open the New Question.
         stage.close();
-        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0),this);
-        //TODO Editing Questions.
+        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0), this);
     }
 
     @FXML
@@ -186,23 +188,21 @@ public class SelectQuestionAdministrateController {
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
         if (selectedItems.size() == 0) {
             //Nothing is selected -> Show a warning window
-            AlertController alertController = new AlertController();
             alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen",
                 "Bitte mindestens eine Frage auswählen!", null);
             return;
         }
 
         //If min. 1 question is selected.
-        AlertController alertController = new AlertController();
         boolean press = alertController.showStandardConfirmationAlert("Fragen löschen",
             "Sollen die ausgewählten Fragen wirklich gelöscht werden?", "Es wurden " + selectedItems.size() + " Fragen ausgewählt.");
         if (press) {
-            for (int i = 0; i < selectedItems.size(); i++) {
+            for (Question selectedItem : selectedItems) {
                 try {
-                    questionDAO.delete(selectedItems.get(i));
+                    questionDAO.delete(selectedItem);
                     QuestionnaireQuestion qq = new QuestionnaireQuestion();
                     qq.setQid(administrateMode.getId());
-                    qq.setQuestionid(selectedItems.get(i).getId());
+                    qq.setQuestionid(selectedItem.getId());
                     questionnaireQuestionService.delete(qq);
                 } catch (ServiceException e) {
                     e.printStackTrace();
@@ -210,7 +210,7 @@ public class SelectQuestionAdministrateController {
             }
 
             LOG.info("Delete Complete - Start Refreshing");
-            //Close Window and Open informationen Window
+            //Close Window and Open information Window
             //stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
@@ -227,17 +227,15 @@ public class SelectQuestionAdministrateController {
     }
 
     @FXML
-    public void searchQuestion(ActionEvent actionEvent) {
+    public void searchQuestion() {
         this.stage.close();
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
-        //Todo - Searching for Questions/Answers
     }
 
     /**
      * Is a Helping Function used for the Search operation
-     *
      */
     @FXML
     public void onSearchButtonClicked() {
@@ -271,7 +269,7 @@ public class SelectQuestionAdministrateController {
         tv_questionTable.getItems().addAll(newContent);
     }
 
-    public LearningQuestionnaire getAdministrateMode(){
+    public LearningQuestionnaire getAdministrateMode() {
         return this.administrateMode;
     }
 }

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS Questionnaire;
 DROP TABLE IF EXISTS PUserCourse;
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS PUser;
+DROP TABLE IF EXISTS QuestionAlgoValue;
 
 CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
   name                VARCHAR(255),
@@ -116,3 +117,10 @@ WHERE NOT EXISTS (SELECT * FROM PUserCourse);
 --        UNION SELECT '1', '4', '1', false
 --  )
 --WHERE NOT EXISTS (SELECT * FROM Questionnaire);
+
+CREATE TABLE IF NOT EXISTS QuestionAlgoValue(
+  questionid bigint primary key references Question(id),
+  successvalue INTEGER not null,
+  failurevalue INTEGER not null,
+  points double not null,
+);
