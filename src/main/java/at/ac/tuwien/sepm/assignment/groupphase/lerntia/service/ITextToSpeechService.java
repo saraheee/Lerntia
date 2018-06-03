@@ -32,6 +32,15 @@ public interface ITextToSpeechService {
     void readSingleAnswer(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException;
 
     /**
+     * Reads the feedback text with an audio player
+     *
+     * @param textToSpeech the textToSpeech object with the properties of the text
+     * @throws TextToSpeechServiceException           if the audio can't be played.
+     * @throws TextToSpeechServiceValidationException if the text input fails the validation.
+     */
+    void readFeedbackText(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException;
+
+    /**
      * Stops the playing of an audio text
      */
     void stopSpeaking();
