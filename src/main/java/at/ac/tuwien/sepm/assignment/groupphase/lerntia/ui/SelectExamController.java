@@ -113,6 +113,7 @@ public class SelectExamController {
 
         try {
             lerntiaMainController.setExamMode(true);
+            lerntiaMainController.setExamName(selectedQuestionnaire.getName());
             lerntiaMainController.switchToExamMode();
             lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ControllerException e) {

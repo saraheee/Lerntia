@@ -16,7 +16,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -31,7 +33,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     @Override
-    public void writeExamResults(List<Question> questions, String path) throws PersistenceException {
+    public void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException {
+
+        // create the document
 
         LOG.info("Create new Document for new report");
         Document document = new Document();
@@ -43,6 +47,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden");
         }
         document.open();
+
+        // images are used to show if an answer has been selected or not.
+        // these two images are loaded here and placed in a cell.
+        // later these cells are added to the table of answers.
 
         Image img_checked = null;
         try {
@@ -74,7 +82,47 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         cell_box.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell_box.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
+        // prepare the fonts used in the document
+
+        Font fontTitle       = FontFactory.getFont(FontFactory.COURIER, 26, BaseColor.BLACK);
+        Font fontExamName    = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Font fontExamDate    = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Font fontStudentInfo = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+
         LOG.info("Prepare report");
+
+        // at first we create the header with exam name, student info and so on
+
+        // the container is used to ensure that the text is not split over two pages
+        // highly unlikely, but just to be sure.
+
+        Paragraph headerContainerParagraph = new Paragraph();
+
+        Paragraph titleParagraph = new Paragraph("Prüfung", fontTitle);
+        titleParagraph.setSpacingAfter(0);
+
+        headerContainerParagraph.add(titleParagraph);
+
+        Paragraph examNameParagraph = new Paragraph(name, fontExamName);
+        examNameParagraph.setSpacingAfter(0);
+
+        headerContainerParagraph.add(examNameParagraph);
+
+        Paragraph dateParagraph = new Paragraph("am: " + new SimpleDateFormat("dd.MM.yyyy").format(new Date()), fontExamDate);
+        dateParagraph.setSpacingAfter(10);
+
+        headerContainerParagraph.add(dateParagraph);
+
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: TODO\nMatrikelnummer: TODO", fontStudentInfo);
+        studentInfoParagraph.setSpacingAfter(10);
+
+        headerContainerParagraph.add(studentInfoParagraph);
+
+        try {
+            document.add(headerContainerParagraph);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
 
         // Each question is added to a table as well as an indicator if the answer was correct or not
 

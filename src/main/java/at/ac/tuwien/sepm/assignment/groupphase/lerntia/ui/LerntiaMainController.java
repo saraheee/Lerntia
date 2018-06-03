@@ -92,6 +92,7 @@ public class LerntiaMainController {
     private File imageFile;
 
     private boolean examMode;
+    private String examName;
 
     @Autowired
     public LerntiaMainController(
@@ -529,7 +530,7 @@ public class LerntiaMainController {
         // TODO - ask the user where the report should be saved
 
         try {
-            iExamResultsWriterService.writeExamResults(questionList, "");
+            iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), "");
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
                 "Error", e.getMessage());
@@ -588,5 +589,13 @@ public class LerntiaMainController {
 
     public void stopAlgorithm() throws ServiceException {
         lerntiaService.stopAlgorithm();
+    }
+
+    public void setExamName(String examName){
+        this.examName = examName;
+    }
+
+    public String getExamName(){
+        return this.examName;
     }
 }
