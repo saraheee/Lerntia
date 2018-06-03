@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.sound.midi.SysexMessage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -132,7 +134,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             // afterwards a table is created where each row holds an answer and the
             // expected state as well as the actual state of the checkbox.
 
-
             // the container is used to hold the question as well as the table with the answers.
             // this is done to ensure, that the question is on a different page than the answers.
 
@@ -146,6 +147,40 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
             container.add(paragraphQuestionNumber);
             container.add(paragraphQuestionText);
+
+            if (questions.get(i).getPicture() != "") {
+
+                Image imgQuestion = null;
+
+                String imagePath =
+                    System.getProperty("user.dir") + File.separator + "img" + File.separator +
+                        name + File.separator +
+                        questions.get(i).getPicture();
+
+                System.out.println(imagePath);
+
+                try {
+                    imgQuestion = Image.getInstance(imagePath);
+                } catch (BadElementException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PdfPTable imgTable = new PdfPTable(1);
+
+                imgTable.setWidthPercentage(100);
+
+                PdfPCell cellImgQuestion = new PdfPCell(imgQuestion, false);
+                cellImgQuestion.setFixedHeight(200);
+                cellImgQuestion.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cellImgQuestion.setBorder(PdfPCell.NO_BORDER);
+
+                imgTable.addCell(cellImgQuestion);
+
+                container.add(imgTable);
+            }
+
 
             container.setSpacingAfter(15);
             container.setKeepTogether(true);
