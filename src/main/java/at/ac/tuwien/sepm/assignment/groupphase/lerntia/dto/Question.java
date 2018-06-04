@@ -58,7 +58,11 @@ public class Question {
 
     public void setPicture(String picture) {
         this.picture = picture;
-        this.containPicture = new CheckBox();
+        containPicture = new CheckBox();
+        if (picture.equals("")) {
+            this.setContainPicture(false);
+            this.containPicture.setText(checked.Nein.toString());
+        }
         if (picture != null && picture.trim().length() > 0) {
             this.setContainPicture(true);
             this.containPicture.setText(checked.Ja.toString());
