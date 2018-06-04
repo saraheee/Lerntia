@@ -56,6 +56,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Image img_checked = null;
         try {
+            //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box_checked.png")));
             img_checked = Image.getInstance("src/main/resources/icons/exam_report_box_checked.png");
             img_checked.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
@@ -71,6 +72,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Image img_box = null;
         try {
+            //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box.png")));
             img_box = Image.getInstance("src/main/resources/icons/exam_report_box.png");
             img_box.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
@@ -86,10 +88,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         // prepare the fonts used in the document
 
-        Font fontTitle       = FontFactory.getFont(FontFactory.COURIER, 26, BaseColor.BLACK);
-        Font fontExamName    = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Font fontExamDate    = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Font fontStudentInfo = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Font fontTitle       = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
+        Font fontExamName    = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        Font fontExamDate    = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        Font fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
 
         LOG.info("Prepare report");
 
@@ -143,7 +145,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             paragraphQuestionNumber.setSpacingBefore(15);
 
             Paragraph paragraphQuestionText = new Paragraph(questions.get(i).getQuestionText());
-            paragraphQuestionText.setSpacingAfter(10);
+            paragraphQuestionText.setSpacingAfter(5);
 
             container.add(paragraphQuestionNumber);
             container.add(paragraphQuestionText);
@@ -156,8 +158,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                     System.getProperty("user.dir") + File.separator + "img" + File.separator +
                         name + File.separator +
                         questions.get(i).getPicture();
-
-                System.out.println(imagePath);
 
                 try {
                     imgQuestion = Image.getInstance(imagePath);
@@ -172,11 +172,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                 imgTable.setWidthPercentage(100);
 
                 PdfPCell cellImgQuestion = new PdfPCell(imgQuestion, false);
-                cellImgQuestion.setFixedHeight(200);
+                cellImgQuestion.setFixedHeight(180);
                 cellImgQuestion.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cellImgQuestion.setBorder(PdfPCell.NO_BORDER);
 
                 imgTable.addCell(cellImgQuestion);
+                imgTable.setSpacingAfter(5);
 
                 container.add(imgTable);
             }
