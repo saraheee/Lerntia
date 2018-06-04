@@ -11,9 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.codehaus.groovy.runtime.dgmimpl.arrays.LongArrayGetAtMetaMethod;
 import org.springframework.stereotype.Controller;
@@ -34,6 +32,8 @@ public class EditExamController {
 
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
 
+    @FXML
+    private ListView<Question> listView = new ListView<>();
     @FXML
     private TableView<Question> questionTable;
     @FXML
@@ -57,10 +57,24 @@ public class EditExamController {
 
     @FXML
     private void initialize(){
-        System.out.println("si tu?");
+
+
         questionColumn.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         setQuestionTable();
+            listView.getItems().setAll(examQuestionList);
 
+        listView.setCellFactory(param -> new ListCell<Question>() {
+            @Override
+            protected void updateItem(Question item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getQuestionText() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getQuestionText());
+                }
+            }
+        });
     }
 
 
