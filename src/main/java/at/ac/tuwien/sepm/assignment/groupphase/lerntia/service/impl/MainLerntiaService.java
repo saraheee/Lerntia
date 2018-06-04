@@ -44,6 +44,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     private int listCounter;
     private int currentQuestionIndex;
     private List<QuestionLearnAlgorithm> questionLearnAlgorithmList;
+    private boolean examMode;
 
 
 
@@ -81,6 +82,16 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.alertController = alertController;
     }
 
+
+    @Override
+    public void setCustomExamQuestions(ArrayList customList) throws ServiceException {
+        stopAlgorithm();
+        resetWrongQuestionList();
+        questionList = customList;
+        listCounter = questionList.size();
+        currentQuestionIndex = -1;
+        LOG.info("First question found.");
+    }
 
     private void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException {
         //In case that the Programm switched from learning to examquestionnaire while learnalgorithm is still open or if the option was selected that only wrong question are to be shown
@@ -276,7 +287,6 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException {
-        LearningQuestionnaire currentLQ;
         if (wrongQuestions == null){
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
@@ -285,12 +295,13 @@ public class MainLerntiaService implements IMainLerntiaService {
             resetWrongQuestionList();
         }
 
-
-        currentLQ = learningQuestionnaireService.getSelected();
-        if (currentLQ == null) {
-            throw new ServiceException("No Questionnaire has been selected yet.");
-        }
+            currentLQ = learningQuestionnaireService.getSelected();
+            currentEQ = null;
             getQuestionsFromLearningQuestionnaire(currentLQ);
+            if (currentLQ == null) {
+                throw new ServiceException("No Questionnaire has been selected yet.");
+            }
+
         if (!learnAlgorithm) {
             currentQuestionIndex = -1;
             currentAlgorithmQuestionIndex = 0;
@@ -429,6 +440,23 @@ public class MainLerntiaService implements IMainLerntiaService {
     public void setOnlyWrongQuestions(Boolean onlyWrongQuestions) {
         this.showOnlyWrongQuestions = onlyWrongQuestions;
     }
+
+    @Override
+    public void setExamMode(boolean examMode) {
+        this.examMode = examMode;
+
+    }
+
+    @Override
+    public void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
+        this.currentEQ = selectedQuestionnaire;
+    }
+
+    @Override
+    public Question getFirstExamQuestion() throws ServiceException {
+        return getNextQuestionFromList();
+    }
+
 
     private void resetWrongQuestionList() {
         alertController.setOnlyWrongQuestions(false);

@@ -1,22 +1,27 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.stage.Stage;
 import org.codehaus.groovy.runtime.dgmimpl.arrays.LongArrayGetAtMetaMethod;
 import org.springframework.stereotype.Controller;
 
@@ -33,6 +38,7 @@ public class EditExamController {
     private final IExamQuestionnaireService examQuestionnaireService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final IQuestionService questionService;
+    private final IMainLerntiaService mainLerntiaService;
     private ExamQuestionnaire selected;
 
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
@@ -43,19 +49,25 @@ public class EditExamController {
     private TableColumn<Question,String> questionColumn;
     @FXML
     private TableColumn<Integer,Integer> columnList;
+    @FXML
+    private Button tableViewButton;
+    @FXML
+    private Button randomButton;
 
     public EditExamController(LerntiaMainController lerntiaMainController,
                               WindowController windowController,
                               AlertController alertController,
                               IExamQuestionnaireService examQuestionnaireService,
                               IQuestionnaireQuestionService questionnaireQuestionService,
-                              IQuestionService questionService) {
+                              IQuestionService questionService,
+                              IMainLerntiaService mainLerntiaService) {
         this.lerntiaMainController = lerntiaMainController ;
         this.windowController = windowController;
         this.alertController = alertController;
         this.examQuestionnaireService = examQuestionnaireService;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.questionService = questionService;
+        this.mainLerntiaService = mainLerntiaService;
     }
 
     @FXML
@@ -104,9 +116,6 @@ public class EditExamController {
 
                     questionTable.getItems().add(dropIndex, draggedQuestion);
 
-                    //TODO IMPORTANT
-                    Question tableRow = questionTable.getItems().get(0);
-
                     event.setDropCompleted(true);
                     questionTable.getSelectionModel().select(dropIndex);
                     event.consume();
@@ -128,16 +137,20 @@ public class EditExamController {
 
     private void setQuestionTable() {
         try {
+
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         List<Question> searchparameters = new ArrayList<>();
         List<Question> questionList = new ArrayList<>();
         questionnaireQuestion.setQid(selected.getId());
+            System.out.println(selected.getId()+"STA");
         List<QuestionnaireQuestion> helper = questionnaireQuestionService.search(questionnaireQuestion);
+            System.out.println(helper.size()+"OKE");
 
         Question searchparameter;
         for (QuestionnaireQuestion q:helper){
             searchparameter = new Question();
             searchparameter.setId(q.getQuestionid());
+            searchparameters.add(searchparameter);
         }
 
         questionList = questionService.search(searchparameters);
@@ -149,10 +162,39 @@ public class EditExamController {
         }
     }
 
-    private static ArrayList<String> getTableViewValues(TableView tableView) {
-        //TODO implement when implementing buttons
-        ArrayList<String> values = new ArrayList<>();
-        ObservableList<Question> columns = tableView.getColumns();
-        return values;
+
+
+    public void onTableViewButtonClicked(ActionEvent actionEvent) {
+        ArrayList questionList = new ArrayList();
+        for (int i=0;i<questionTable.getItems().size();i++) {
+            Question tableRow = questionTable.getItems().get(i);
+            questionList.add(tableRow);
+        }
+
+        lerntiaMainController.setExamMode(true);
+        try {
+            lerntiaMainController.setExamMode(true);
+            lerntiaMainController.switchToExamMode();
+            mainLerntiaService.setCustomExamQuestions(questionList);
+            lerntiaMainController.getAndShowTheFirstExamQuestion();
+
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
+                "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
+    public void onRandomButtonClicked(ActionEvent actionEvent) {
+
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 }

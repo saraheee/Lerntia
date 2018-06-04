@@ -359,6 +359,14 @@ public class LerntiaMainController {
     private String formatAnswerNumbers(String answers) {
         return answers.replaceAll("(.)", "$1, ").substring(0, answers.length() * 3 - 2);
     }
+    public void getAndShowTheFirstExamQuestion() throws ControllerException {
+        try {
+            question = lerntiaService.getFirstExamQuestion();
+        } catch (ServiceException e) {
+            throw new ControllerException("Es gibt noch keine Prüfungs Fragen");
+        }
+        showQuestionAndAnswers();
+    }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
@@ -542,10 +550,8 @@ public class LerntiaMainController {
 
     public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
-
         buttonBar.getButtons().add(handInButton);
         buttonBar.getButtons().remove(algorithmButton);
-
         lerntiaService.stopAlgorithm();
     }
 
@@ -589,6 +595,7 @@ public class LerntiaMainController {
 
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
+        lerntiaService.setExamMode(examMode);
     }
 
     private String getCheckedAnswers() {
@@ -636,4 +643,5 @@ public class LerntiaMainController {
     public void stopAlgorithm() throws ServiceException {
         lerntiaService.stopAlgorithm();
     }
+
 }
