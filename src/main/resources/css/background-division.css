@@ -3,38 +3,25 @@
 }
 
 .main-left {
-    -fx-width: 30%;
-    -fx-float: left;
-    -fx-background-color: white;
+    -fx-background-color: gray;
 }
 
 .square-button {
-    -fx-width: 20%;
-    -fx-float: right;
-    -fx-background-color: white;
-
 }
 
 .main-right {
-    -fx-width: 70%;
-    -fx-float: left;
     -fx-background-color: rgba(0, 50, 250, 0.005);
 }
 
 
 .question-box {
-    -fx-width: 20%;
-    -fx-float: left;
+
 }
 
 .answer-box {
-    -fx-width: 16%;
-    -fx-float: left;
 
 }
 
 .button-box {
-    -fx-width: 16%;
-    -fx-float: left;
 
 }
