@@ -13,9 +13,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -23,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +45,11 @@ public class LerntiaMainController {
     private final IQuestionnaireService questionnaireService;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
+    private DialogPane alertFeedback;
+    private boolean openFeedbackAlert = false;
     private boolean learnAlgorithmStatus;
-
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
-
     @FXML
     private GridPane mainWindow;
     @FXML
@@ -148,22 +147,45 @@ public class LerntiaMainController {
                 LOG.debug("N key was pressed");
                 audioController.stopReading();
                 audioController.deselectAudioButton();
-                getAndShowNextQuestion();
+                if (openFeedbackAlert) {
+                    fireFeedbackAlert();
+                } else {
+                    getAndShowNextQuestion();
+                }
             }
             if (e.getCode() == KeyCode.P) {
                 LOG.debug("P key was pressed");
                 audioController.stopReading();
                 audioController.deselectAudioButton();
-                getAndShowPreviousQuestion();
+                if (openFeedbackAlert) {
+                    fireFeedbackAlert();
+                    //go two steps back
+                    getAndShowPreviousQuestion();
+                    getAndShowPreviousQuestion();
+                } else {
+                    getAndShowPreviousQuestion();
+                }
             }
             if (e.getCode() == KeyCode.C) {
                 LOG.debug("C key was pressed");
+                fireFeedbackAlert();
                 audioController.stopReading();
                 audioController.deselectAudioButton();
                 if (!examMode) {
                     checkIfQuestionWasCorrect();
                 } else {
                     handIn(null);
+                }
+            }
+            if (e.getCode() == KeyCode.M) {
+                LOG.debug("M key was pressed");
+                if (alertFeedback != null && alertFeedback.getScene() != null) {
+                    var stage = (Stage) alertFeedback.getScene().getWindow();
+                    if (stage != null) {
+                        stage.setIconified(false);
+                        stage.setMaximized(false);
+                        stage.toFront();
+                    }
                 }
             }
             if (e.getCode() == KeyCode.G) {
@@ -226,6 +248,13 @@ public class LerntiaMainController {
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
     }
 
+    public void fireFeedbackAlert() {
+        if (alertFeedback != null) {
+            var okButton = (Button) (alertFeedback.lookupButton(ButtonType.OK));
+            okButton.fire();
+            openFeedbackAlert = false;
+        }
+    }
 
     @FXML
     private void checkIfQuestionWasCorrect() {
@@ -249,9 +278,14 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
+                    alertFeedback = alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
                         question.getOptionalFeedback());
+                    var stage = (Stage) alertFeedback.getScene().getWindow();
+                    openFeedbackAlert = true;
+                    stage.showAndWait();
                     audioController.stopReading();
+                    openFeedbackAlert = false;
+
 
                 } else {
                     var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
@@ -259,9 +293,13 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
+                    alertFeedback = alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
                         question.getOptionalFeedback());
+                    var stage = (Stage) alertFeedback.getScene().getWindow();
+                    openFeedbackAlert = true;
+                    stage.showAndWait();
                     audioController.stopReading();
+                    openFeedbackAlert = false;
                 }
             } else {
                 try {
@@ -275,33 +313,40 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
+                    alertFeedback = alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback());
+                    var stage = (Stage) alertFeedback.getScene().getWindow();
+                    openFeedbackAlert = true;
+                    stage.showAndWait();
                     audioController.stopReading();
+                    openFeedbackAlert = false;
 
                 } else {
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
                         + formatAnswerNumbers(question.getCorrectAnswers());
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
 
-                    alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
+                    alertFeedback = alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback());
+                    var stage = (Stage) alertFeedback.getScene().getWindow();
+                    openFeedbackAlert = true;
+                    stage.showAndWait();
                     audioController.stopReading();
+                    openFeedbackAlert = false;
                 }
             }
             // send checked answers to service (in order to use it for statistics and learning algorithm)
-            try {
-                Question mockQuestion = new Question();
-                mockQuestion.setId(question.getId());
-                mockQuestion.setCorrectAnswers(checkedAnswers);
-                LOG.info("Trying to send {} answers on question \"{}\"",
-                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-            } catch (ServiceException e) {
-                LOG.error("Could not check whether the answer was correct");
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
-            }
+        //    try {
+        //      mockQuestion.setId(question.getId());
+          //      mockQuestion.setCorrectAnswers(checkedAnswers);
+        //    LOG.info("Trying to send {} answers on question \"{}\"",
+        //      mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+        //        lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+        //    } catch (ServiceException e) {
+        //        LOG.error("Could not check whether the answer was correct");
+        //        alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+        //            "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+        //   }
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
@@ -337,12 +382,14 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
-            // todo add statistics after that is implemented
 
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
+                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.\nRichtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+
+            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
             try {
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
@@ -362,7 +409,7 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
-            // todo add statistics after that is implemented
+            // todo add statistics after that is implemented - wirklich auch am Anfang?
 
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
                 "Du bist am Anfang.", "");
@@ -484,7 +531,7 @@ public class LerntiaMainController {
     }
 
     public void stopAudio() {
-        LOG.debug("Stop Audio");
+        LOG.debug("Stop audio");
         audioButtonController.stopReading();
     }
 
