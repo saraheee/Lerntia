@@ -385,11 +385,8 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
 
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Richtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Die erste Frage wird wieder angezeigt.");
-
-            alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.\nRichtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
 
             Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
