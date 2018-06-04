@@ -57,7 +57,7 @@ public class SelectExamController {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungen lesen fehlgeschlagen",
-                "Fehler", "Die Prüfungen konnten nicht aus der Datenbank gelesen werden!");
+                "Fehler", "Die Prüfungen konnten nicht gelesen werden!");
         }
 
         for (ExamQuestionnaire anExamQuestionnaireList : examQuestionnaireList) {
@@ -76,7 +76,7 @@ public class SelectExamController {
         }
 
         if (examQuestionnaireList.isEmpty()){
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs Auswahl kann nicht angezeigt werden",
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsauswahl kann nicht angezeigt werden",
                 "Fehler", "Es ist noch keine Prüfung vorhanden");
             return;
         }
@@ -119,8 +119,8 @@ public class SelectExamController {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs modus anzeigen fehlgeschlagen.",
-                "Fehler","Nicht möglich in den Prüfungs Modus zu wechseln!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
+                "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         }
 
         Node source = (Node) actionEvent.getSource();
