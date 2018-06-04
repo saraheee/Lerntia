@@ -29,6 +29,7 @@ public class SelectExamController {
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
+    private final EditExamController editExamController;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
@@ -40,7 +41,8 @@ public class SelectExamController {
         IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
-        AlertController alertController
+        AlertController alertController,
+        EditExamController editExamController
     )
     {
         this.examQuestionnaireService = examQuestionnaireService;
@@ -48,6 +50,7 @@ public class SelectExamController {
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.alertController = alertController;
+        this.editExamController = editExamController;
     }
 
     @FXML
@@ -123,6 +126,33 @@ public class SelectExamController {
                 "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         }
 
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
+    public void selectExamAndEdit(ActionEvent actionEvent){
+        int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
+        ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
+
+        // unselect all questionnaires
+
+        try {
+            iQuestionnaireService.deselectAllQuestionnaires();
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
+                "Fehler", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
+        }
+
+        // select questionnaire
+
+        try {
+            examQuestionnaireService.select(selectedQuestionnaire);
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
+                "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
+        }
+        editExamController.showSelectExamWindow(selectedQuestionnaire);
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
