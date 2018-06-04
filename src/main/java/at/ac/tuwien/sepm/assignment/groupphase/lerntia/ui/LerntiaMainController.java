@@ -124,23 +124,8 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-
-        LOG.debug("Main window's min width before: {}", mainWindow.getMinWidth());
-
-        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // todo replace
-
-        LOG.debug("Main image fit width after setting it: {} ", mainImage.getFitWidth());
-
-        LOG.debug("Main window's min width set to: {}", mainWindow.getMinWidth());
-        LOG.debug("Main window's width set to: {}", mainWindow.getWidth());
-        LOG.debug("Main window's PREF width set to: {}", mainWindow.getPrefWidth());
-        LOG.debug("Main window LEFT's min width set to: {}", mainWindowLeft.getMinWidth());
-        LOG.debug("Main window LEFT's width set to: {}", mainWindowLeft.getWidth());
-        LOG.debug("Main window LEFT's PREF width set to: {}", mainWindowLeft.getPrefWidth());
-        LOG.debug("mainImage's fit width set to: {}", mainImage.getFitWidth());
-
+        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *neccessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
-
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
