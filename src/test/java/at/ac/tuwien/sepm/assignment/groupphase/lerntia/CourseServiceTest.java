@@ -15,6 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 public class CourseServiceTest {
 
@@ -33,6 +37,72 @@ public class CourseServiceTest {
 
     private void ICourseService(SimpleCourseService simpleCourseService) {
         this.courseService = simpleCourseService;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // creation
+    // -----------------------------------------------------------------------------------------------------------------
+
+    @Test
+    public void createCorrectCourse() throws ServiceException {
+        int before = courseService.readAll().size();
+        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        courseService.create(course);
+        int after = courseService.readAll().size();
+        String mark = courseService.readAll().get(after-1).getMark();
+        assertTrue(before < after);
+        assertTrue(mark.equals("asdf"));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // update
+    // -----------------------------------------------------------------------------------------------------------------
+
+    @Test
+    public void updateCorrectCourse() throws ServiceException {
+        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        courseService.create(course);
+        String old = course.getSemester().toString();
+        String after = Semester.WS+"2018";
+        course.setSemester(after);
+        courseService.update(course);
+        assertTrue(!old.equals(after));
+        assertTrue(course.getSemester().equals(Semester.WS+"2018"));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // search
+    // -----------------------------------------------------------------------------------------------------------------
+    // TODO: search not yet implemented
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // delete
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void deleteCorrectCourse() throws ServiceException {
+        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        courseService.create(course);
+        int before = courseService.readAll().size();
+        courseService.delete(course);
+        int after = courseService.readAll().size();
+        assertTrue(before > after);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // readAll
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void readAllCourses() throws ServiceException {
+        int before = courseService.readAll().size();
+        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        courseService.create(course);
+        List<Course> list = courseService.readAll();
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            count++;
+        }
+        assertEquals(before+1, count);
+        assertTrue(list.get(count-1).getMark().equals("asdf"));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
