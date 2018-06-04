@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 
 <GridPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
-    <VBox fx:id="mainWindowLeft" styleClass="main-left" stylesheets="@/css/background-division.css" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
+    <VBox fx:id="mainWindowLeft" styleClass="main-left" stylesheets="@/css/background-division.css"
+          minWidth="0" GridPane.columnIndex="0" GridPane.rowIndex="0">
         <VBox>
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
         </VBox>
@@ -24,7 +25,7 @@
     </VBox>
     <!-- try next: https://stackoverflow.com/questions/41127429/javafx-fill-widthcolumn-constraint-is-not-working-inside-a-layout -->
     <VBox fx:id="mainWindowRight" styleClass="main-right" stylesheets="@/css/background-division.css"
-          GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
+          minWidth="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <HBox prefHeight="30.0" />
         <HBox prefHeight="286.0" styleClass="question-box" >
             <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />

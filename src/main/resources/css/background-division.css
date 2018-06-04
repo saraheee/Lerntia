@@ -1,27 +1,77 @@
 * {
+
     -fx-box-sizing: border-box;
+
 }
+
+
 
 .main-left {
-    -fx-background-color: gray;
+
+    -fx-width: 25%;
+
+    -fx-float: left;
+
+    -fx-background-color: white;
+
 }
+
+
 
 .square-button {
+
+    -fx-width: 20%;
+
+    -fx-float: right;
+
+    -fx-background-color: white;
+
 }
 
+
+
 .main-right {
+
+    -fx-width: 75%;
+
+    -fx-float: left;
+
     -fx-background-color: rgba(0, 50, 250, 0.005);
+
 }
+
+
+
 
 
 .question-box {
 
+    -fx-width: 20%;
+
+    -fx-float: left;
+
 }
+
+
 
 .answer-box {
 
+    -fx-width: 16%;
+
+    -fx-float: left;
+
+
+
 }
 
+
+
 .button-box {
+
+    -fx-width: 16%;
+
+    -fx-float: left;
+
+
 
 }
