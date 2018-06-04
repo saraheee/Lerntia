@@ -5,10 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -93,12 +90,12 @@ public class AlertController {
     }
 
 
-    public void showWrongAnswerAlert(String title, String header, String content) {
+    public DialogPane showWrongAnswerAlert(String title, String header, String content) {
         wrongAnswer = true;
-        showCorrectAnswerAlert(title, header, content);
+        return showCorrectAnswerAlert(title, header, content);
     }
 
-    public void showCorrectAnswerAlert(String title, String header, String content) {
+    public DialogPane showCorrectAnswerAlert(String title, String header, String content) {
         var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initModality(Modality.NONE);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -150,8 +147,8 @@ public class AlertController {
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
         stage.setMaximized(true);
-        stage.showAndWait();
         LOG.trace("Showing an answer alert with title: " + title);
+        return dialogPane;
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
