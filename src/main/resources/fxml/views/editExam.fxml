@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,9 +9,9 @@
    <children>
       <TableView fx:id="questionTable" layoutX="63.0" layoutY="22.0" prefHeight="200.0" prefWidth="528.0">
         <columns>
-          <TableColumn fx:id="columnList" prefWidth="75.0" text="C1" />
-          <TableColumn fx:id="questionColumn" prefWidth="452.0" text="Fragen" />
+          <TableColumn fx:id="questionColumn" prefWidth="527.0" text="Fragen" />
         </columns>
       </TableView>
+      <ListView fx:id="listView" layoutX="63.0" layoutY="236.0" prefHeight="200.0" prefWidth="528.0" />
    </children>
 </AnchorPane>
