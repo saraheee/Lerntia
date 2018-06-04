@@ -163,7 +163,6 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("Search for questions in the Database.");
         questionList = questionService.search(searchParameters);
         checker = questionLearnAlgorithmList;
-        System.out.println("PLS WORK"+checker.size());
         algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
         for (Question q : questionList) {
             listCounter++;
@@ -300,7 +299,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             currentAlgorithmQuestionIndex = -1;
 
         }
-        System.out.println("STAAAA"+questionLearnAlgorithmList.size());
             LOG.info("First question found.");
             return getNextQuestionFromList();
 
@@ -330,7 +328,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
             else if (learnAlgorithm) {
                 currentAlgorithmQuestionIndex = 0;
-                System.out.println(questionLearnAlgorithmList.size());
                 LOG.info("Revert to first question in the Algorithm List.");
                 currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 wrongQuestions = new ArrayList<>();
