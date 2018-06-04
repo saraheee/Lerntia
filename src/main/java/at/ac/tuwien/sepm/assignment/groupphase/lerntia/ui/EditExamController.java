@@ -26,6 +26,7 @@ import org.codehaus.groovy.runtime.dgmimpl.arrays.LongArrayGetAtMetaMethod;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -192,6 +193,25 @@ public class EditExamController {
 
     public void onRandomButtonClicked(ActionEvent actionEvent) {
 
+        ArrayList questionList = new ArrayList();
+        for (int i=0;i<questionTable.getItems().size();i++) {
+            Question tableRow = questionTable.getItems().get(i);
+            questionList.add(tableRow);
+        }
+        Collections.shuffle(questionList);
+        lerntiaMainController.setExamMode(true);
+        try {
+            lerntiaMainController.setExamMode(true);
+            lerntiaMainController.switchToExamMode();
+            mainLerntiaService.setCustomExamQuestions(questionList);
+            lerntiaMainController.getAndShowTheFirstExamQuestion();
+
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
+                "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!.");
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
 
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
