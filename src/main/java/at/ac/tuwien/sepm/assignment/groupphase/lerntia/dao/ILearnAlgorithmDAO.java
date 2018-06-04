@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ILearnAlgorithmDAO {
@@ -40,8 +42,30 @@ public interface ILearnAlgorithmDAO {
      * */
     List<QuestionLearnAlgorithm> readAll() throws PersistenceException;
 
+    /**
+     * Helper method that puts the result from ResultSet into the Results list.
+     *
+     * @param rsReadAll ResultSet from the readall or search methods of the LearnAlgorithmDAO
+     * @param readResults the List of results which the values of the resultset need to be inserted
+     * @throws SQLException if the method can't transfer the values from the resultset to the list
+     * */
+    void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException;
+
+    /**
+     * Search for all specific algorithm values of specified questions.
+     *
+     * @param  questionAlgorithmList searchparameters on which values of what questions to extract
+     * @throws PersistenceException if the method can't find all values specified by the searchparameters.
+     * @return List of all questionalgorithm values needed.
+     * */
     List<QuestionLearnAlgorithm> search(List<QuestionLearnAlgorithm> questionAlgorithmList) throws PersistenceException;
 
+    /**
+     * Reset the values of a speciic questions (in case a question changes or was updated)
+     *
+     * @param questionLearnAlgorithm the question which values need to be reseted.
+     * @throws PersistenceException if the method can't reset the values of the given question.
+     * */
     void reset(QuestionLearnAlgorithm questionLearnAlgorithm)throws PersistenceException;
 }
 

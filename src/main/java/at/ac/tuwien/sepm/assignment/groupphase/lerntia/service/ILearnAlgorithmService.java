@@ -5,6 +5,8 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * The LearnAlgorithmService Class will handle the majority of calculation and value-management of the learn algorithm.
  * It will handle the successValue , failureValue and pointValue update. It will also sort all questions there are with the questions
@@ -43,6 +45,8 @@ public interface ILearnAlgorithmService {
      *
      * */
     List<Long> prepareQuestionValues(List<QuestionLearnAlgorithm> questionAlgorithmList) throws ServiceException;
+
+    List<Long> sortValueMap(Map<Long, Double> valueMap);
 
     /**
      * Change the Values of Questions in the Database when another questionnaire has been selected or the program shuts down.

@@ -11,8 +11,20 @@ import java.util.List;
  */
 public interface IMainLerntiaService {
 
+    /**
+     * Loads selected Questionnaire and gets first question of that questionnaire
+     *
+     * @return first question of the newly selected Questionnaire
+     * @throws ServiceException if the method can't get the questionnaire or select the first question
+     */
     Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException;
 
+    /**
+     * Get first question of the selected Questionnaire on startup or when the questionnaire has been passed through
+     *
+     * @return first Question of the questionnaire
+     * @throws ServiceException if the method can't select or get the first question
+     * */
     Question getFirstQuestion() throws ServiceException;
 
     /**
@@ -46,6 +58,13 @@ public interface IMainLerntiaService {
      */
     void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException;
 
+    /**
+     *
+     * Returns the list of current questions
+     *
+     * @throws ServiceException if the method can't get the current list of questions
+     * @return List of the currently used questions.
+     */
     List<Question> getQuestions() throws ServiceException;
 
     /**
@@ -58,6 +77,12 @@ public interface IMainLerntiaService {
      */
     List<Question> getQuestionList();
 
+
+    /**
+     * Stops the Learning algorithm and sends the updated values to the DB before closing.
+     *
+     * @throws ServiceException if the Learnalgorithm shutdown encounters an error during shutdown or during the sending of the value package to the Database
+     * */
     void stopAlgorithm() throws ServiceException;
 
     /**
@@ -75,5 +100,10 @@ public interface IMainLerntiaService {
      */
     double getPercent();
 
+    /**
+     * Set if the programm has to rerun the questionnaire with only the wrongly answered questions or not.
+     *
+     * @param onlyWrongQuestions boolean flag which determines if it needs only wrong questions or all in general.
+     */
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 }
