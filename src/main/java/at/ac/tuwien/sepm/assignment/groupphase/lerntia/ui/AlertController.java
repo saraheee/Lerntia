@@ -111,12 +111,12 @@ public class AlertController {
 }
 
 
-    public void showWrongAnswerAlert(String title, String header, String content) {
+    public DialogPane showWrongAnswerAlert(String title, String header, String content) {
         wrongAnswer = true;
-        showCorrectAnswerAlert(title, header, content);
+        return showCorrectAnswerAlert(title, header, content);
     }
 
-    public void showCorrectAnswerAlert(String title, String header, String content) {
+    public DialogPane showCorrectAnswerAlert(String title, String header, String content) {
         var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initModality(Modality.NONE);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -168,8 +168,8 @@ public class AlertController {
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
         stage.setMaximized(true);
-        stage.showAndWait();
         LOG.trace("Showing an answer alert with title: " + title);
+        return dialogPane;
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
