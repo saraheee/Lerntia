@@ -64,7 +64,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         try {
             document.add(table);
         } catch (DocumentException e) {
-            throw new PersistenceException("Die Ergebnisse konnte nicht in das Dokument eingefügt werden");
+            throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden");
         }
         document.close();
     }

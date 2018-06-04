@@ -60,5 +60,20 @@ public interface IMainLerntiaService {
 
     void stopAlgorithm() throws ServiceException;
 
+    /**
+     * Returns the number of correct answers of one questionnaire
+     */
+    int getCorrectAnswers();
+
+    /**
+     * Returns the number of wrong answers of one questionnaire
+     */
+    int getWrongAnswers();
+
+    /**
+     * Returns the percentage of correct answers of one questionnaire
+     */
+    double getPercent();
+
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 }
