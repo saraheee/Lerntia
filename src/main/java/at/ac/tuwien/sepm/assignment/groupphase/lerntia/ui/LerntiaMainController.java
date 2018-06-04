@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -50,7 +51,7 @@ public class LerntiaMainController {
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
     @FXML
-    private HBox mainWindow;
+    private GridPane mainWindow;
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -122,11 +123,8 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
-        mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-
+        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *neccessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
-
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
@@ -338,18 +336,17 @@ public class LerntiaMainController {
                 }
             }
             // send checked answers to service (in order to use it for statistics and learning algorithm)
-            try {
-                Question mockQuestion = new Question();
-                mockQuestion.setId(question.getId());
-                mockQuestion.setCorrectAnswers(checkedAnswers);
-                LOG.info("Trying to send {} answers on question \"{}\"",
-                    mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-                lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-            } catch (ServiceException e) {
-                LOG.error("Could not check whether the answer was correct");
-                alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                    "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
-            }
+        //    try {
+        //      mockQuestion.setId(question.getId());
+          //      mockQuestion.setCorrectAnswers(checkedAnswers);
+        //    LOG.info("Trying to send {} answers on question \"{}\"",
+        //      mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+        //        lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+        //    } catch (ServiceException e) {
+        //        LOG.error("Could not check whether the answer was correct");
+        //        alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+        //            "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+        //   }
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
@@ -386,10 +383,13 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
 
-            alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Richtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Die erste Frage wird wieder angezeigt.");
+                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.\nRichtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+
+            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
             try {
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
@@ -426,9 +426,6 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
-        //  mainWindowRight.autosize(); // to resize the frame structure back to default values
-        mainWindowLeft.autosize();
-
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");
