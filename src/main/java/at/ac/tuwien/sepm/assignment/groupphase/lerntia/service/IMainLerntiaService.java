@@ -74,4 +74,6 @@ public interface IMainLerntiaService {
      * Returns the percentage of correct answers of one questionnaire
      */
     double getPercent();
+
+    void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 }
