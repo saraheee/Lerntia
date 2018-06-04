@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="412.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
    <children>
-      <TableView fx:id="questionTable" layoutX="63.0" layoutY="22.0" prefHeight="200.0" prefWidth="528.0">
+      <TableView fx:id="questionTable" layoutX="16.0" layoutY="22.0" prefHeight="276.0" prefWidth="713.0">
         <columns>
-          <TableColumn fx:id="questionColumn" prefWidth="527.0" text="Fragen" />
+          <TableColumn fx:id="questionColumn" prefWidth="712.0" text="Fragen" />
         </columns>
       </TableView>
-      <ListView fx:id="listView" layoutX="63.0" layoutY="236.0" prefHeight="200.0" prefWidth="528.0" />
    </children>
 </AnchorPane>

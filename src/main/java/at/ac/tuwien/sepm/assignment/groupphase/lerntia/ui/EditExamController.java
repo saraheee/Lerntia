@@ -13,6 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import org.codehaus.groovy.runtime.dgmimpl.arrays.LongArrayGetAtMetaMethod;
 import org.springframework.stereotype.Controller;
 
@@ -22,6 +26,7 @@ import java.util.List;
 @Controller
 public class EditExamController {
 
+    private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
@@ -32,8 +37,6 @@ public class EditExamController {
 
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
 
-    @FXML
-    private ListView<Question> listView = new ListView<>();
     @FXML
     private TableView<Question> questionTable;
     @FXML
@@ -57,51 +60,78 @@ public class EditExamController {
 
     @FXML
     private void initialize(){
-
-
         questionColumn.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         setQuestionTable();
-            listView.getItems().setAll(examQuestionList);
 
-        listView.setCellFactory(param -> new ListCell<Question>() {
-            @Override
-            protected void updateItem(Question item, boolean empty) {
-                super.updateItem(item, empty);
+        questionTable.setRowFactory(tv -> {
+            TableRow<Question> row = new TableRow<>();
 
-                if (empty || item == null || item.getQuestionText() == null) {
-                    setText(null);
-                } else {
-                    setText(item.getQuestionText());
+            row.setOnDragDetected(event -> {
+                if (! row.isEmpty()) {
+                    Integer index = row.getIndex();
+                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(row.snapshot(null, null));
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(SERIALIZED_MIME_TYPE, index);
+                    db.setContent(cc);
+                    event.consume();
                 }
-            }
+            });
+
+            row.setOnDragOver(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        event.consume();
+                    }
+                }
+            });
+
+            row.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+                    Question draggedQuestion = questionTable.getItems().remove(draggedIndex);
+
+                    int dropIndex ;
+
+                    if (row.isEmpty()) {
+                        dropIndex = questionTable.getItems().size() ;
+                    } else {
+                        dropIndex = row.getIndex();
+                    }
+
+                    questionTable.getItems().add(dropIndex, draggedQuestion);
+
+                    //TODO IMPORTANT
+                    Question tableRow = questionTable.getItems().get(0);
+
+                    event.setDropCompleted(true);
+                    questionTable.getSelectionModel().select(dropIndex);
+                    event.consume();
+                }
+            });
+            return row ;
         });
+
     }
 
 
 
     public void showSelectExamWindow(ExamQuestionnaire selectedQuestionnaire){
         selected = selectedQuestionnaire;
-        System.out.println("STA OCES");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
-
     }
 
     private void setQuestionTable() {
         try {
-            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            System.out.println("sta je problem?");
-            List<Question> searchparameters = new ArrayList<>();
-            List<Question> questionList = new ArrayList<>();
-
-        System.out.println("sigurno");
-        System.out.println(selected.getId());
-
-
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        List<Question> searchparameters = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
         questionnaireQuestion.setQid(selected.getId());
-        System.out.println(questionnaireQuestion.getQid());
-        System.out.println("A sad?");
         List<QuestionnaireQuestion> helper = questionnaireQuestionService.search(questionnaireQuestion);
 
         Question searchparameter;
@@ -109,18 +139,20 @@ public class EditExamController {
             searchparameter = new Question();
             searchparameter.setId(q.getQuestionid());
         }
-        System.out.println(helper.size()+"helper");
 
-
-
-
-         questionList = questionService.search(searchparameters);
-        System.out.println("hahaha"+questionList.size());
+        questionList = questionService.search(searchparameters);
         examQuestionList = FXCollections.observableArrayList(questionList);
         questionTable.setItems(FXCollections.observableArrayList(examQuestionList));
         questionTable.getSelectionModel().selectFirst();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+    }
+
+    private static ArrayList<String> getTableViewValues(TableView tableView) {
+        //TODO implement when implementing buttons
+        ArrayList<String> values = new ArrayList<>();
+        ObservableList<Question> columns = tableView.getColumns();
+        return values;
     }
 }
