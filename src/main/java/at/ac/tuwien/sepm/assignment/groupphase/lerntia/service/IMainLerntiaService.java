@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +28,8 @@ public interface IMainLerntiaService {
      * @throws ServiceException if the method can't select or get the first question
      * */
     Question getFirstQuestion() throws ServiceException;
+
+    void setCustomExamQuestions(ArrayList customList) throws ServiceException;
 
     /**
      * Return the next question (in order) form the selected questionnaire
@@ -106,4 +110,11 @@ public interface IMainLerntiaService {
      * @param onlyWrongQuestions boolean flag which determines if it needs only wrong questions or all in general.
      */
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
+
+    void setExamMode(boolean examMode);
+
+    void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire);
+
+
+    Question getFirstExamQuestion() throws ServiceException;
 }
