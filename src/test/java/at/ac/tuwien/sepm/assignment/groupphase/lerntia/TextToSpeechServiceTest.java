@@ -40,6 +40,19 @@ public class TextToSpeechServiceTest {
         textToSpeechService.readQuestionAndAnswers(speech);
     }
 
+    @Test
+    public void playWelcomeAndQuestionAndAnswersShouldPersist() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        textToSpeechService.playWelcomeText();
+        var speech = new Speech();
+        speech.setQuestion("Eine erste Frage?");
+        speech.setAnswer1("Eine Antwort!");
+        speech.setAnswer2("Noch eine Antwort!");
+        textToSpeechService.readQuestionAndAnswers(speech);
+        speech.setQuestion("Eine weitere Frage?");
+        speech.setAnswer1("Eine weitere Antwort!");
+        speech.setAnswer2("Noch eine weitere Antwort!");
+        textToSpeechService.readQuestionAndAnswers(speech);
+    }
 
     @Test(expected = TextToSpeechServiceValidationException.class)
     public void readQuestionAndAnswersWithEmptyValuesShouldFail() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
@@ -64,6 +77,47 @@ public class TextToSpeechServiceTest {
         var speech = new Speech();
         speech.setSingleAnswer("Schön");
         textToSpeechService.readSingleAnswer(speech);
+    }
+
+    @Test
+    public void readFeedbackTextShouldPersist() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
+        var speech = new Speech();
+        speech.setFeedbackText("Feedback!");
+        textToSpeechService.readFeedbackText(speech);
+    }
+
+    @Test
+    public void setVoiceShouldPersist() throws TextToSpeechServiceException {
+        textToSpeechService.playWelcomeText();
+        var speech = new Speech();
+        speech.setVoice("bits3-hsmm");
+        textToSpeechService.setVoice(speech);
+    }
+
+    @Test
+    public void noCurrentAudioShouldReturnTrue() {
+        Assert.assertEquals(textToSpeechService.noCurrentAudio(), true);
+    }
+
+    @Test
+    public void noCurrentAudioShouldReturnFalse() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        var speech = new Speech();
+        speech.setFeedbackText("Text zum Lesen!");
+        textToSpeechService.readFeedbackText(speech);
+        Assert.assertEquals(textToSpeechService.noCurrentAudio(), false);
+    }
+
+    @Test
+    public void stopSpeakingWithAudioShouldPersist() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
+        var speech = new Speech();
+        speech.setFeedbackText("Feedback text!");
+        textToSpeechService.readFeedbackText(speech);
+        textToSpeechService.stopSpeaking();
+    }
+
+    @Test
+    public void stopSpeakingWithoutAudioShouldPersist() {
+        textToSpeechService.stopSpeaking();
     }
 
     @Test
@@ -113,7 +167,7 @@ public class TextToSpeechServiceTest {
         speech.setAnswer4(answer4);
         speech.setAnswer5(answer5);
 
-        Assert.assertEquals(service.getText(speech), question
+        Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
             + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
             + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
             + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'

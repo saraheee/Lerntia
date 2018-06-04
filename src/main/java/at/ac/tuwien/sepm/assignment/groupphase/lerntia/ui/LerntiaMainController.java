@@ -340,10 +340,9 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
-            // todo add statistics after that is implemented
 
             alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.", "Die erste Frage wird wieder angezeigt.");
+                "Richtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Die erste Frage wird wieder angezeigt.");
 
             try {
                 question = lerntiaService.getFirstQuestion();
@@ -365,7 +364,7 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
-            // todo add statistics after that is implemented
+            // todo add statistics after that is implemented - wirklich auch am Anfang?
 
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
                 "Du bist am Anfang.", "");
