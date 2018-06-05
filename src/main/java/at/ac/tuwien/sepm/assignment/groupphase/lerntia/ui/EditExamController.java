@@ -90,6 +90,10 @@ public class EditExamController {
     @FXML
     private Button resetButton;
     @FXML
+    private Button removeQuestions;
+    @FXML
+    private Button addQuestions;
+    @FXML
     private AnchorPane pane;
 
     public EditExamController(LerntiaMainController lerntiaMainController,
@@ -125,12 +129,16 @@ public class EditExamController {
 
         setQuestionTable();
         resetButton.setDisable(true);
+        removeQuestions.setDisable(true);
+        addQuestions.setDisable(true);
 
         acceptedTable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 selectedQuestions = acceptedTable.getSelectionModel().getSelectedItems();
                 questionTable.getSelectionModel().clearSelection();
+                addQuestions.setDisable(true);
+                removeQuestions.setDisable(false);
             }
         });
 
@@ -139,10 +147,8 @@ public class EditExamController {
             public void handle(MouseEvent event) {
                 selectedQuestions = questionTable.getSelectionModel().getSelectedItems();
                 acceptedTable.getSelectionModel().clearSelection();
-                if (selectedQuestions.size()!=0 || selectedQuestions != null){
-                }else {
-                }
-
+                addQuestions.setDisable(false);
+                removeQuestions.setDisable(true);
             }
         });
 
@@ -161,7 +167,6 @@ public class EditExamController {
             LOG.info("Row factory for Question Table");
             row.hoverProperty().addListener(event ->{
                 if (!row.isEmpty()) {
-                    LOG.info("Hovering over Question");
                     ToolTipManager.sharedInstance().setInitialDelay(40);
                     int delay = Integer.MAX_VALUE;
                     ToolTipManager.sharedInstance().setDismissDelay(delay);
@@ -169,8 +174,6 @@ public class EditExamController {
                     Question q = row.getItem();
                     t.setText(q.toStringGUI());
                     row.setTooltip(t);
-
-
                 }
             });
 
@@ -389,41 +392,49 @@ public class EditExamController {
     }
 
     public void onAddQuestionsButtonClicked(ActionEvent actionEvent) {
-        for (Question q: selectedQuestions){
-            if (!acceptedQuestionList.contains(q)){
+        if (selectedQuestions != null){
+        for (Question q : selectedQuestions) {
+            if (!acceptedQuestionList.contains(q)) {
                 acceptedQuestionList.add(q);
             }
         }
-        for (Question q: selectedQuestions){
-            if (currentQuestionList.contains(q)){
+        for (Question q : selectedQuestions) {
+            if (currentQuestionList.contains(q)) {
                 currentQuestionList.remove(q);
             }
         }
 
         ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
         resetButton.setDisable(false);
+        addQuestions.setDisable(true);
         acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
         questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
         selectedQuestions.clear();
+        }
 
     }
 
     public void onRemoveQuestionsButtonClicked(ActionEvent actionEvent) {
-        for (Question q: selectedQuestions){
-            if (acceptedQuestionList.contains(q)){
-                acceptedQuestionList.remove(q);
+        if (selectedQuestions != null) {
+            for (Question q : selectedQuestions) {
+                if (acceptedQuestionList.contains(q)) {
+                    acceptedQuestionList.remove(q);
+                }
             }
-        }
-        for (Question q: selectedQuestions){
-            if (!currentQuestionList.contains(q)){
-                currentQuestionList.add(q);
-            }
-        }
 
-        ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
-        resetButton.setDisable(false);
-        acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
-        questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
-        selectedQuestions.clear();
+            for (Question q : selectedQuestions) {
+                if (!currentQuestionList.contains(q)) {
+                    currentQuestionList.add(q);
+                }
+            }
+
+            ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
+            resetButton.setDisable(false);
+            removeQuestions.setDisable(true);
+            acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
+            questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
+            selectedQuestions.clear();
+        }
     }
 }
+
