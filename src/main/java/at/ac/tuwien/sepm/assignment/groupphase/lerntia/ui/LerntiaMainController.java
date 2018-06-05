@@ -12,13 +12,14 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -46,11 +47,12 @@ public class LerntiaMainController {
     private final IExamResultsWriterService iExamResultsWriterService;
     private DialogPane alertFeedback;
     private boolean openFeedbackAlert = false;
+    private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
     @FXML
-    private HBox mainWindow;
+    private GridPane mainWindow;
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -122,11 +124,8 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-        mainWindowLeft.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(25));
-        mainWindowRight.prefWidthProperty().bind(mainWindow.widthProperty().divide(100).multiply(75));
-
+        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
-
         try {
             getAndShowTheFirstQuestion();
         } catch (ControllerException e) {
@@ -248,6 +247,18 @@ public class LerntiaMainController {
 
         }));
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
+        mainImage.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            scene.setCursor(Cursor.HAND);
+            mainImage.getStyleClass().clear();
+            mainImage.getStyleClass().add("image-enter");
+            event.consume();
+        });
+        mainImage.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            scene.setCursor(Cursor.DEFAULT);
+            mainImage.getStyleClass().clear();
+            mainImage.getStyleClass().add("image-exit");
+            event.consume();
+        });
     }
 
     public void fireFeedbackAlert() {
@@ -337,18 +348,18 @@ public class LerntiaMainController {
                     openFeedbackAlert = false;
                 }
             }
-            // send checked answers to service (in order to use it for statistics and learning algorithm)
-        //    try {
-        //      mockQuestion.setId(question.getId());
-          //      mockQuestion.setCorrectAnswers(checkedAnswers);
-        //    LOG.info("Trying to send {} answers on question \"{}\"",
-        //      mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-        //        lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-        //    } catch (ServiceException e) {
-        //        LOG.error("Could not check whether the answer was correct");
-        //        alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-        //            "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
-        //   }
+            /* send checked answers to service (in order to use it for statistics and learning algorithm)
+                try {
+                  mockQuestion.setId(question.getId());
+                  mockQuestion.setCorrectAnswers(checkedAnswers);
+                LOG.info("Trying to send {} answers on question \"{}\"",
+                  mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+                    lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+                } catch (ServiceException e) {
+                    LOG.error("Could not check whether the answer was correct");
+                    alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+               } */
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
@@ -391,19 +402,57 @@ public class LerntiaMainController {
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
+
             LOG.warn("No next question to be displayed.");
 
-                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.\nRichtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+            if (!onlyWrongQuestions) {
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
+                        + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
-            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
+            }else {
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
+                    "Alle vorherig Falsche Fragen wurden durchgegangen..",
+                    "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
+                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
 
+            }
+            if (e1.getMessage().contains("List of wrong questions is Empty")) {
+                alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                    "Es gibt keine falsch beantworteten Fragen mehr." +
+                        "Die erste Frage wird wieder angezeigt.");
+                alertController.setOnlyWrongQuestions(false);
+            }
+                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
+
+            if (onlyWrongQuestionshelp){
+                onlyWrongQuestions = true;
+            }else {
+                onlyWrongQuestions = false;
+            }
             try {
-                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
-                e.printStackTrace();
+
+                if (e.getMessage().contains("No wrong Questions available")){
+                    alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
+                        "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
+                            + "Daher werden alle Fragen angezeigt.");
+                        question = lerntiaService.restoreQuestionsAndGetFirst();
+                        showQuestionAndAnswers();
+                }else if (e.getMessage().contains("List of wrong questions is Empty.")){
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                        "Es gibt keine falsch beantworteten Fragen mehr." +
+                            "Die erste Frage wird wieder angezeigt.");
+                    try {
+                        getAndShowTheFirstQuestion();
+                    } catch (ControllerException e2) {
+                        e2.printStackTrace();
+                    }
+                }
             }
         }
     }
@@ -419,10 +468,9 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
-            // todo add statistics after that is implemented - wirklich auch am Anfang?
 
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
-                "Du bist am Anfang.", "");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine vorherigen Fragen",
+                "Das ist die erste Frage.", "Keine vorherigen Fragen vorhanden.");
 
             // TODO - code can probably be deleted.
             /*
@@ -436,9 +484,6 @@ public class LerntiaMainController {
     }
 
     private void showQuestionAndAnswers() {
-        //  mainWindowRight.autosize(); // to resize the frame structure back to default values
-        mainWindowLeft.autosize();
-
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");

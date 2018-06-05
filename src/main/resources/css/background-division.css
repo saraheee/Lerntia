@@ -1,4 +1,3 @@
-
 * {
     -fx-box-sizing: border-box;
 }
@@ -21,7 +20,6 @@
     -fx-background-color: rgba(0, 50, 250, 0.005);
 }
 
-
 .question-box {
     -fx-width: 20%;
     -fx-float: left;
@@ -30,11 +28,9 @@
 .answer-box {
     -fx-width: 16%;
     -fx-float: left;
-
 }
 
 .button-box {
     -fx-width: 16%;
     -fx-float: left;
-
 }
