@@ -34,7 +34,7 @@ public class AlertController {
     private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
     private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
     private boolean wrongAnswer = false;
-    private boolean onlyWrongQuestions =false;
+    private boolean onlyWrongQuestions = false;
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
@@ -82,14 +82,14 @@ public class AlertController {
         headerLabel.setMaxHeight(Double.MAX_VALUE);
         grid.add(headerLabel, 1, 0);
 
-        ButtonType btnyes = new ButtonType("Ja",ButtonBar.ButtonData.YES);
-        ButtonType btnno = new ButtonType("Nein",ButtonBar.ButtonData.NO);
+        //used only for repeating questions
+        var btnAll = new ButtonType(ButtonText.WRONGQUESTIONS.toString(), ButtonBar.ButtonData.YES);
+        var btnFalse = new ButtonType(ButtonText.ALLQUESTIONS.toString(), ButtonBar.ButtonData.NO);
 
         dialogPane.setHeader(grid);
-
-        if (alertType == Alert.AlertType.CONFIRMATION){
-            dialogPane.getButtonTypes().setAll(btnyes,btnno);
-        }else {
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            dialogPane.getButtonTypes().setAll(btnAll, btnFalse);
+        } else {
             dialogPane.getButtonTypes().setAll(ButtonType.OK);
         }
         var stage = (Stage) dialogPane.getScene().getWindow();
@@ -97,18 +97,17 @@ public class AlertController {
 
         LOG.trace("Showing a big alert with title: " + title);
 
-        if (alertType == Alert.AlertType.CONFIRMATION){
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get()==btnyes){
-            onlyWrongQuestions = true;
-        }else if (result.get() == btnno){
-            onlyWrongQuestions = false;
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            var result = alert.showAndWait();
+            if (result.isPresent() && result.get() == btnAll) {
+                onlyWrongQuestions = true;
+            } else if (result.isPresent() && result.get() == btnFalse) {
+                onlyWrongQuestions = false;
+            }
+        } else {
+            stage.showAndWait();
         }
     }
-    else {
-        stage.showAndWait();
-    }
-}
 
 
     public DialogPane showWrongAnswerAlert(String title, String header, String content) {
@@ -122,7 +121,7 @@ public class AlertController {
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(ButtonText.Weiter.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(ButtonText.CONTINUE.toString());
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
@@ -233,8 +232,8 @@ public class AlertController {
 
         dialogPane.setHeader(grid);
         dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.Ja.toString());
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.Nein.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.YES.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.NO.toString());
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
 
@@ -251,5 +250,7 @@ public class AlertController {
         return onlyWrongQuestions;
     }
 
-    public void setOnlyWrongQuestions(boolean onlyWrongQuestions){this.onlyWrongQuestions = onlyWrongQuestions;}
+    public void setOnlyWrongQuestions(boolean onlyWrongQuestions) {
+        this.onlyWrongQuestions = onlyWrongQuestions;
+    }
 }

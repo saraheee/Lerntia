@@ -248,12 +248,14 @@ public class LerntiaMainController {
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
         mainImage.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             scene.setCursor(Cursor.HAND);
-            mainImage.setStyle(" -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);");
+            mainImage.getStyleClass().clear();
+            mainImage.getStyleClass().add("image-enter");
             event.consume();
         });
         mainImage.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             scene.setCursor(Cursor.DEFAULT);
-            mainImage.setStyle(" -fx-effect: dropshadow(gaussian, white, 0, 0, 0, 0);");
+            mainImage.getStyleClass().clear();
+            mainImage.getStyleClass().add("image-exit");
             event.consume();
         });
     }
@@ -394,7 +396,9 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
 
             alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n" + "Du hast " + lerntiaService.getPercent() + "% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+                "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
+                    + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
             Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
@@ -419,10 +423,9 @@ public class LerntiaMainController {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             LOG.warn("No previous question to be displayed.");
-            // todo add statistics after that is implemented - wirklich auch am Anfang?
 
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine früheren Fragen",
-                "Du bist am Anfang.", "");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine vorherigen Fragen",
+                "Das ist die erste Frage.", "Keine vorherigen Fragen vorhanden.");
 
             // TODO - code can probably be deleted.
             /*
