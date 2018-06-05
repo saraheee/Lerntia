@@ -58,6 +58,8 @@ public class EditQuestionsController {
     @FXML
     private Label noImageLabel;
     private String imageName;
+    @FXML
+    private Label imgNameLabel;
 
     @Autowired
     public EditQuestionsController(IQuestionService questionService,
@@ -102,10 +104,9 @@ public class EditQuestionsController {
         tf_answer3.setText(selectedQuestion.getAnswer3());
         tf_answer4.setText(selectedQuestion.getAnswer4());
         tf_answer5.setText(selectedQuestion.getAnswer5());
+        imgNameLabel.setText(selectedQuestion.getPicture());
         tf_correctAnswer.setText(selectedQuestion.getCorrectAnswers());
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
-
-        //Todo Load the Current Image
 
         if (selectedQuestion.getPicture() != null && selectedQuestion.getPicture().trim().length() > 0) {
             noImageLabel.setVisible(false);
@@ -183,6 +184,7 @@ public class EditQuestionsController {
             imageName = file.getName();
             loadImage(PATH + imageName, iv_image);
             LOG.debug("Selected image: " + imageName);
+            imgNameLabel.setText(imageName);
             noImageLabel.setVisible(false);
         } else {
             LOG.debug("Canceled image selection.");
