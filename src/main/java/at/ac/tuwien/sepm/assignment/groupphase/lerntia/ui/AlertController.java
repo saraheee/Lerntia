@@ -252,5 +252,6 @@ public class AlertController {
 
     public void setOnlyWrongQuestions(boolean onlyWrongQuestions) {
         this.onlyWrongQuestions = onlyWrongQuestions;
+
     }
 }

@@ -31,6 +31,8 @@ public interface IMainLerntiaService {
 
     void setCustomExamQuestions(ArrayList customList) throws ServiceException;
 
+    void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException;
+
     /**
      * Return the next question (in order) form the selected questionnaire
      *

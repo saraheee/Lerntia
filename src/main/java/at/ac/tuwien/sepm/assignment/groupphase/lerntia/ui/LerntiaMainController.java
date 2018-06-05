@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
@@ -124,6 +125,7 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
+
         mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
         try {
@@ -402,6 +404,10 @@ public class LerntiaMainController {
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
+            if (examMode){
+                alertController.showBigAlert(Alert.AlertType.WARNING,"Ende der Fragenliste","Ende des Prüfungs Fragebogen erreicht",
+                    "Sie sind am Ende des Prüfungsfragebogen angelangt. Schauen Sie ob Sie noch welche Fragen nicht beantwortet haben \nund drücken Sie auf 'Abgeben'");
+            }else {
 
             LOG.warn("No next question to be displayed.");
 
@@ -460,6 +466,7 @@ public class LerntiaMainController {
                     }
                 }
             }
+        }
         }
     }
 
@@ -647,6 +654,7 @@ public class LerntiaMainController {
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
         lerntiaService.setExamMode(examMode);
+        onlyWrongQuestions=false;
     }
 
     private String getCheckedAnswers() {
@@ -695,4 +703,16 @@ public class LerntiaMainController {
         lerntiaService.stopAlgorithm();
     }
 
+    public void prepareExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
+        try {
+
+            lerntiaService.getQuestionsFromExamQuestionnaire(selectedQuestionnaire);
+            getAndShowTheFirstExamQuestion();
+        } catch (ControllerException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
+                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
 }
