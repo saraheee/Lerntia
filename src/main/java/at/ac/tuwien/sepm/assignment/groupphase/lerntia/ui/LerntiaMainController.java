@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -19,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -123,7 +123,7 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
-        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *neccessary* in order to bind the image width to the width of the left pane
+        mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
         try {
             getAndShowTheFirstQuestion();
@@ -246,6 +246,16 @@ public class LerntiaMainController {
 
         }));
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
+        mainImage.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            scene.setCursor(Cursor.HAND);
+            mainImage.setStyle(" -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);");
+            event.consume();
+        });
+        mainImage.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            scene.setCursor(Cursor.DEFAULT);
+            mainImage.setStyle(" -fx-effect: dropshadow(gaussian, white, 0, 0, 0, 0);");
+            event.consume();
+        });
     }
 
     public void fireFeedbackAlert() {
@@ -335,18 +345,18 @@ public class LerntiaMainController {
                     openFeedbackAlert = false;
                 }
             }
-            // send checked answers to service (in order to use it for statistics and learning algorithm)
-        //    try {
-        //      mockQuestion.setId(question.getId());
-          //      mockQuestion.setCorrectAnswers(checkedAnswers);
-        //    LOG.info("Trying to send {} answers on question \"{}\"",
-        //      mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-        //        lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-        //    } catch (ServiceException e) {
-        //        LOG.error("Could not check whether the answer was correct");
-        //        alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-        //            "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
-        //   }
+            /* send checked answers to service (in order to use it for statistics and learning algorithm)
+                try {
+                  mockQuestion.setId(question.getId());
+                  mockQuestion.setCorrectAnswers(checkedAnswers);
+                LOG.info("Trying to send {} answers on question \"{}\"",
+                  mockQuestion.getCorrectAnswers(), mockQuestion.getId());
+                    lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
+                } catch (ServiceException e) {
+                    LOG.error("Could not check whether the answer was correct");
+                    alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
+                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+               } */
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
@@ -383,8 +393,8 @@ public class LerntiaMainController {
         } catch (ServiceException e1) {
             LOG.warn("No next question to be displayed.");
 
-                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Du bist am Ende angelangt.\nRichtig: "+lerntiaService.getCorrectAnswers()+"\n"+"Falsch: "+lerntiaService.getWrongAnswers()+"\n"+"Du hast "+lerntiaService.getPercent()+"% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
+            alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                "Du bist am Ende angelangt.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n" + "Du hast " + lerntiaService.getPercent() + "% aller Fragen richtig beantwortet.", "Möchtest du nur die falsch beantworteten Fragen wiederholen, oder wieder alle Fragen?");
 
             Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
 
