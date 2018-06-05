@@ -5,14 +5,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import java.lang.String?>
-<AnchorPane stylesheets="@/css/views.css" prefHeight="236.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/8.0.121"
+<AnchorPane stylesheets="@/css/views.css" prefHeight="275.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AdministrateQuestionnaireController">
 
     <Label layoutX="53.0" layoutY="85.0" text="Fragebogen:"/>
-    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="81.0" prefHeight="41.0" prefWidth="188.0"/>
+    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0"/>
 
-    <Button defaultButton="true" layoutX="169.0" layoutY="145.0" mnemonicParsing="false" onAction="#selectQuestionnaire"
+    <Button defaultButton="true" layoutX="169.0" layoutY="170.0" mnemonicParsing="false" onAction="#selectQuestionnaire"
             prefHeight="41.0" prefWidth="188.0" text="Auswählen" pickOnBounds="false">
         <styleClass>
             <String fx:value="button"/>
