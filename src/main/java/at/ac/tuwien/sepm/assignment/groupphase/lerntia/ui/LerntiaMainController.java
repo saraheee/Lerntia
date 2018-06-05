@@ -411,7 +411,7 @@ public class LerntiaMainController {
                         + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
                     "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
-            }else {
+            }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
                     "Alle vorherig Falsche Fragen wurden durchgegangen..",
                     "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
@@ -441,12 +441,18 @@ public class LerntiaMainController {
                     alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
                         "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
                             + "Daher werden alle Fragen angezeigt.");
-                        question = lerntiaService.restoreQuestionsAndGetFirst();
+                    alertController.setOnlyWrongQuestions(false);
+                    onlyWrongQuestions = false;
+                    question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
                 }else if (e.getMessage().contains("List of wrong questions is Empty.")){
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
                         "Es gibt keine falsch beantworteten Fragen mehr." +
                             "Die erste Frage wird wieder angezeigt.");
+
+                    alertController.setOnlyWrongQuestions(false);
+                    onlyWrongQuestions = false;
+
                     try {
                         getAndShowTheFirstQuestion();
                     } catch (ControllerException e2) {
