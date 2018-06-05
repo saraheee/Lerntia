@@ -111,6 +111,10 @@ public interface IMainLerntiaService {
      */
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 
+    Question restoreQuestionsAndGetFirst();
+
+
+
     void setExamMode(boolean examMode);
 
     void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire);
