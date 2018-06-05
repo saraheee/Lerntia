@@ -94,24 +94,6 @@ public class SelectExamController {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 
-        /** unselect all questionnaires
-
-        try {
-            iQuestionnaireService.deselectAllQuestionnaires();
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Fehler", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
-        }
-
-        // select questionnaire
-
-        try {
-            examQuestionnaireService.select(selectedQuestionnaire);
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
-                "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
-        }
-*/
         // show first question of new questionnaire
 
         try {
@@ -132,23 +114,6 @@ public class SelectExamController {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 
-        // unselect all questionnaires
-
-        try {
-            iQuestionnaireService.deselectAllQuestionnaires();
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Fehler", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
-        }
-
-        // select questionnaire
-
-        try {
-            examQuestionnaireService.select(selectedQuestionnaire);
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
-                "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
-        }
         editExamController.showSelectExamWindow(selectedQuestionnaire);
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
