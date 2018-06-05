@@ -76,4 +76,8 @@ public interface IMainLerntiaService {
     double getPercent();
 
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
+
+    Question restoreQuestionsAndGetFirst();
+
+
 }

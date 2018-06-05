@@ -47,6 +47,7 @@ public class LerntiaMainController {
     private final IExamResultsWriterService iExamResultsWriterService;
     private DialogPane alertFeedback;
     private boolean openFeedbackAlert = false;
+    private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
@@ -393,21 +394,57 @@ public class LerntiaMainController {
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
+
             LOG.warn("No next question to be displayed.");
 
-            alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                    + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
-                "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
+            if (!onlyWrongQuestions) {
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
+                        + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
-            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
+            }else {
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
+                    "Alle vorherig Falsche Fragen wurden durchgegangen..",
+                    "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
+                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
 
+            }
+            if (e1.getMessage().contains("List of wrong questions is Empty")) {
+                alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                    "Es gibt keine falsch beantworteten Fragen mehr." +
+                        "Die erste Frage wird wieder angezeigt.");
+                alertController.setOnlyWrongQuestions(false);
+            }
+                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
+
+            if (onlyWrongQuestionshelp){
+                onlyWrongQuestions = true;
+            }else {
+                onlyWrongQuestions = false;
+            }
             try {
-                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
-                e.printStackTrace();
+
+                if (e.getMessage().contains("No wrong Questions available")){
+                    alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
+                        "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
+                            + "Daher werden alle Fragen angezeigt.");
+                        question = lerntiaService.restoreQuestionsAndGetFirst();
+                        showQuestionAndAnswers();
+                }else if (e.getMessage().contains("List of wrong questions is Empty.")){
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                        "Es gibt keine falsch beantworteten Fragen mehr." +
+                            "Die erste Frage wird wieder angezeigt.");
+                    try {
+                        getAndShowTheFirstQuestion();
+                    } catch (ControllerException e2) {
+                        e2.printStackTrace();
+                    }
+                }
             }
         }
     }
