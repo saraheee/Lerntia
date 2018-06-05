@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="665.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
+<AnchorPane fx:id="pane" prefHeight="665.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
    <children>
       <TableView fx:id="questionTable" layoutX="16.0" layoutY="22.0" prefHeight="520.0" prefWidth="848.0">
         <columns>
@@ -14,5 +14,7 @@
       </TableView>
       <Button fx:id="tableViewButton" layoutX="671.0" layoutY="563.0" mnemonicParsing="false" onAction="#onTableViewButtonClicked" prefHeight="89.0" prefWidth="195.0" text="Tabellen Reihenfolge einsetzen" />
       <Button fx:id="randomButton" layoutX="504.0" layoutY="563.0" mnemonicParsing="false" onAction="#onRandomButtonClicked" prefHeight="89.0" prefWidth="140.0" text="Random Reihenfolge" />
+      <Button fx:id="removeButton" layoutX="16.0" layoutY="563.0" mnemonicParsing="false" onAction="#onRemoveButtonClicked" prefHeight="89.0" prefWidth="115.0" text="Fragen Entfernen" />
+      <Button fx:id="resetButton" layoutX="154.0" layoutY="563.0" mnemonicParsing="false" onAction="#onResetButtonClicked" prefHeight="89.0" prefWidth="115.0" text="Liste zurücksetzen" />
    </children>
 </AnchorPane>

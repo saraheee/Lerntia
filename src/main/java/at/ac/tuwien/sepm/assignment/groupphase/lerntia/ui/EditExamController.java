@@ -12,19 +12,18 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQue
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.codehaus.groovy.runtime.dgmimpl.arrays.LongArrayGetAtMetaMethod;
 import org.springframework.stereotype.Controller;
 
+import javax.script.Bindings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +40,9 @@ public class EditExamController {
     private final IQuestionService questionService;
     private final IMainLerntiaService mainLerntiaService;
     private ExamQuestionnaire selected;
+    private ObservableList<Question> selectedQuestions;
+    private List<Question> entirequestionList;
+    private List<Question> currentQuestionList;
 
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
 
@@ -54,6 +56,12 @@ public class EditExamController {
     private Button tableViewButton;
     @FXML
     private Button randomButton;
+    @FXML
+    private Button removeButton;
+    @FXML
+    private Button resetButton;
+    @FXML
+    private AnchorPane pane;
 
     public EditExamController(LerntiaMainController lerntiaMainController,
                               WindowController windowController,
@@ -75,7 +83,30 @@ public class EditExamController {
     private void initialize(){
         questionColumn.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         setQuestionTable();
+        removeButton.setDisable(true);
+        resetButton.setDisable(true);
+        questionTable.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                selectedQuestions = questionTable.getSelectionModel().getSelectedItems();
+                if (selectedQuestions.size()!=0 || selectedQuestions != null){
+                    removeButton.setDisable(false);
+                }else {
+                    removeButton.setDisable(true);
+                }
 
+            }
+        });
+
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                questionTable.getSelectionModel().clearSelection();
+                removeButton.setDisable(true);
+            }
+        });
+        questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        questionColumn.setSortable(false);
         questionTable.setRowFactory(tv -> {
             TableRow<Question> row = new TableRow<>();
 
@@ -118,6 +149,7 @@ public class EditExamController {
                     questionTable.getItems().add(dropIndex, draggedQuestion);
 
                     event.setDropCompleted(true);
+                    questionTable.getSelectionModel().clearSelection();
                     questionTable.getSelectionModel().select(dropIndex);
                     event.consume();
                 }
@@ -141,11 +173,9 @@ public class EditExamController {
 
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         List<Question> searchparameters = new ArrayList<>();
-        List<Question> questionList = new ArrayList<>();
+        entirequestionList = new ArrayList<>();
         questionnaireQuestion.setQid(selected.getId());
-            System.out.println(selected.getId()+"STA");
         List<QuestionnaireQuestion> helper = questionnaireQuestionService.search(questionnaireQuestion);
-            System.out.println(helper.size()+"OKE");
 
         Question searchparameter;
         for (QuestionnaireQuestion q:helper){
@@ -154,10 +184,11 @@ public class EditExamController {
             searchparameters.add(searchparameter);
         }
 
-        questionList = questionService.search(searchparameters);
-        examQuestionList = FXCollections.observableArrayList(questionList);
+        entirequestionList = questionService.search(searchparameters);
+        currentQuestionList = new ArrayList<>();
+        entirequestionList.forEach(currentQuestionList::add);
+        examQuestionList = FXCollections.observableArrayList(currentQuestionList);
         questionTable.setItems(FXCollections.observableArrayList(examQuestionList));
-        questionTable.getSelectionModel().selectFirst();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
@@ -166,33 +197,38 @@ public class EditExamController {
 
 
     public void onTableViewButtonClicked(ActionEvent actionEvent) {
-        ArrayList questionList = new ArrayList();
-        for (int i=0;i<questionTable.getItems().size();i++) {
-            Question tableRow = questionTable.getItems().get(i);
-            questionList.add(tableRow);
-        }
-
-        lerntiaMainController.setExamMode(true);
         try {
+            if (questionTable.getItems().size()==0){
+                throw new ControllerException("Keine Fragen vorhanden");
+            }
+            ArrayList questionList = new ArrayList();
+            for (int i=0;i<questionTable.getItems().size();i++) {
+                Question tableRow = questionTable.getItems().get(i);
+                questionList.add(tableRow);
+            }
+
+            lerntiaMainController.setExamMode(true);
             lerntiaMainController.setExamMode(true);
             lerntiaMainController.switchToExamMode();
             mainLerntiaService.setCustomExamQuestions(questionList);
             lerntiaMainController.getAndShowTheFirstExamQuestion();
+            Node source = (Node) actionEvent.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
 
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
                 "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         } catch (ControllerException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Lehre Prüfungsfragenbogen.","Keine Fragen verfügbar","Nicht möglich in den Prüfungsmodus zu wechseln.\n Revetieren Sie die gelöschten Fragen und versuchen Sie erneut.");
         }
-
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 
     public void onRandomButtonClicked(ActionEvent actionEvent) {
-
+        try {
+            if (questionTable.getItems().size()==0){
+                throw new ControllerException("Keine Fragen vorhanden");
+            }
         ArrayList questionList = new ArrayList();
         for (int i=0;i<questionTable.getItems().size();i++) {
             Question tableRow = questionTable.getItems().get(i);
@@ -200,21 +236,42 @@ public class EditExamController {
         }
         Collections.shuffle(questionList);
         lerntiaMainController.setExamMode(true);
-        try {
-            lerntiaMainController.setExamMode(true);
-            lerntiaMainController.switchToExamMode();
-            mainLerntiaService.setCustomExamQuestions(questionList);
-            lerntiaMainController.getAndShowTheFirstExamQuestion();
+        lerntiaMainController.setExamMode(true);
+        lerntiaMainController.switchToExamMode();
+        mainLerntiaService.setCustomExamQuestions(questionList);
+        lerntiaMainController.getAndShowTheFirstExamQuestion();
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
 
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
                 "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!.");
         } catch (ControllerException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Lehre Prüfungsfragenbogen.","Keine Fragen verfügbar","Nicht möglich in den Prüfungsmodus zu wechseln.\n Revetieren Sie die gelöschten Fragen und versuchen Sie erneut.");
         }
 
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+
+    }
+
+    public void onRemoveButtonClicked(ActionEvent actionEvent) {
+        for (Question q: selectedQuestions){
+            System.out.println("STAAAAA"+selectedQuestions.size());
+            if (currentQuestionList.contains(q)){
+                currentQuestionList.remove(q);
+            }
+        }
+        ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
+        resetButton.setDisable(false);
+        questionTable.setItems(newList);
+        selectedQuestions.clear();
+    }
+
+    public void onResetButtonClicked(ActionEvent actionEvent) {
+        questionTable.setItems(FXCollections.observableArrayList(entirequestionList));
+        resetButton.setDisable(true);
+        selectedQuestions.clear();
+        currentQuestionList.clear();
+        entirequestionList.forEach(currentQuestionList::add);
     }
 }
