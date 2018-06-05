@@ -1,0 +1,7 @@
+.image-enter {
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);
+}
+
+.image-exit {
+    -fx-effect: dropshadow(gaussian, white, 0, 0, 0, 0);
+}

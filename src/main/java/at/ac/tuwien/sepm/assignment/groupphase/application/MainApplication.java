@@ -56,9 +56,9 @@ public final class MainApplication extends Application implements Runnable {
             event.consume();
         });
 
-        Font.loadFont(MainApplication.class.getResource("/fonts/Arial Black.ttf").toExternalForm(), 36);
-        Font.loadFont(MainApplication.class.getResource("/fonts/Lora-Bold.ttf").toExternalForm(), 36);
-        context = new AnnotationConfigApplicationContext(MainApplication.class);
+        Font.loadFont(getClass().getResource("/fonts/Arial Black.ttf").toExternalForm(), 36);
+        Font.loadFont(getClass().getResource("/fonts/Lora-Bold.ttf").toExternalForm(), 36);
+        context = new AnnotationConfigApplicationContext(getClass());
         final var fxmlLoader = context.getBean(SpringFXMLLoader.class);
 
         var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
@@ -67,6 +67,7 @@ public final class MainApplication extends Application implements Runnable {
         controller = loader.getController();
 
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
+        scene.getStylesheets().add(getClass().getResource("/css/image.css").toExternalForm());
         controller.update(scene);
         primaryStage.setScene(scene);
 

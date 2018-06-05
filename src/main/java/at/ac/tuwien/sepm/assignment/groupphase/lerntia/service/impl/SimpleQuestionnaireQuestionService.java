@@ -55,7 +55,12 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
 
     @Override
     public List readAll() throws ServiceException {
-        return null;
+        try {
+            return iQuestionnaireQuestionDAO.readAll();
+        } catch (PersistenceException e) {
+            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     @Override
