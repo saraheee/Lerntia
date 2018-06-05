@@ -119,7 +119,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
             LOG.info("All Exam Questions set.");
         }catch (Exception e){
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Can't retrieve exam questionnaire.");
         }
     }
 
@@ -256,7 +256,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 }
                 return currentQuestion;
             } catch(IndexOutOfBoundsException e){
-                throw new ServiceException(e.getMessage());
+                throw new ServiceException("Reached end of Question List");
             }
         }
         return currentQuestion;
