@@ -208,7 +208,6 @@ public class EditExamController {
             }
 
             lerntiaMainController.setExamMode(true);
-            lerntiaMainController.setExamMode(true);
             lerntiaMainController.switchToExamMode();
             mainLerntiaService.setCustomExamQuestions(questionList);
             lerntiaMainController.getAndShowTheFirstExamQuestion();
@@ -236,7 +235,6 @@ public class EditExamController {
         }
         Collections.shuffle(questionList);
         lerntiaMainController.setExamMode(true);
-        lerntiaMainController.setExamMode(true);
         lerntiaMainController.switchToExamMode();
         mainLerntiaService.setCustomExamQuestions(questionList);
         lerntiaMainController.getAndShowTheFirstExamQuestion();
@@ -256,7 +254,6 @@ public class EditExamController {
 
     public void onRemoveButtonClicked(ActionEvent actionEvent) {
         for (Question q: selectedQuestions){
-            System.out.println("STAAAAA"+selectedQuestions.size());
             if (currentQuestionList.contains(q)){
                 currentQuestionList.remove(q);
             }

@@ -94,7 +94,7 @@ public class SelectExamController {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 
-        // unselect all questionnaires
+        /** unselect all questionnaires
 
         try {
             iQuestionnaireService.deselectAllQuestionnaires();
@@ -111,16 +111,13 @@ public class SelectExamController {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
                 "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
         }
-
+*/
         // show first question of new questionnaire
 
         try {
             lerntiaMainController.setExamMode(true);
             lerntiaMainController.switchToExamMode();
-            lerntiaMainController.getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
-                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+            lerntiaMainController.prepareExamQuestionnaire(selectedQuestionnaire);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
                 "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
