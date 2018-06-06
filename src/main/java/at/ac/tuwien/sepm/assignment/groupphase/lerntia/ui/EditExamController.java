@@ -347,6 +347,10 @@ public class EditExamController {
             lerntiaMainController.switchToExamMode();
             mainLerntiaService.setCustomExamQuestions(questionList);
             lerntiaMainController.getAndShowTheFirstExamQuestion();
+            questionList.clear();
+            entirequestionList.clear();
+            acceptedQuestionList.clear();
+            examQuestionList.clear();
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
