@@ -613,6 +613,13 @@ public class LerntiaMainController {
         lerntiaService.stopAlgorithm();
     }
 
+    public void switchToLearnMode() {
+        buttonBar.getButtons().add(checkAnswerButton);
+        buttonBar.getButtons().remove(handInButton);
+        buttonBar.getButtons().add(algorithmButton);
+
+    }
+
     public void handIn(ActionEvent actionEvent) {
 
         // the state of the current question has to be saved here as well.
@@ -655,6 +662,8 @@ public class LerntiaMainController {
         this.examMode = examMode;
         lerntiaService.setExamMode(examMode);
         onlyWrongQuestions=false;
+        alertController.setOnlyWrongQuestions(false);
+        lerntiaService.setOnlyWrongQuestions(false);
     }
 
     private String getCheckedAnswers() {
@@ -705,7 +714,6 @@ public class LerntiaMainController {
 
     public void prepareExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
         try {
-
             lerntiaService.getQuestionsFromExamQuestionnaire(selectedQuestionnaire);
             getAndShowTheFirstExamQuestion();
         } catch (ControllerException e) {
