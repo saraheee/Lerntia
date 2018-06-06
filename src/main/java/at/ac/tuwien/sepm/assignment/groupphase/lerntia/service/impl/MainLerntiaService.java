@@ -316,10 +316,11 @@ public class MainLerntiaService implements IMainLerntiaService {
 
             currentLQ = learningQuestionnaireService.getSelected();
             currentEQ = null;
-            getQuestionsFromLearningQuestionnaire(currentLQ);
             if (currentLQ == null) {
                 throw new ServiceException("No Questionnaire has been selected yet.");
             }
+            getQuestionsFromLearningQuestionnaire(currentLQ);
+
 
         if (!learnAlgorithm) {
             currentQuestionIndex = -1;
