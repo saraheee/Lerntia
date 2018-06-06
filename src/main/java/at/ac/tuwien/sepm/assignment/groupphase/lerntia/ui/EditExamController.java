@@ -392,6 +392,7 @@ public class EditExamController {
         resetButton.setDisable(true);
         selectedQuestions.clear();
         currentQuestionList.clear();
+        acceptedQuestionList.clear();
         entirequestionList.forEach(currentQuestionList::add);
     }
 
