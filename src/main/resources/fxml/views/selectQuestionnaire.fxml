@@ -10,7 +10,11 @@
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionnaireController">
 
     <Label layoutX="53.0" layoutY="85.0" text="Fragebogen:"/>
-    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0"/>
+    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0">
+        <styleClass>
+            <String fx:value="combo-box"/>
+        </styleClass>
+    </ComboBox>
 
     <Button defaultButton="true" layoutX="169.0" layoutY="170.0" mnemonicParsing="false" onAction="#selectQuestionnaire"
             prefHeight="41.0" prefWidth="188.0" text="Auswählen" pickOnBounds="false">

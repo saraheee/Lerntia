@@ -247,13 +247,11 @@ public class LerntiaMainController {
         }));
         mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
         mainImage.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            scene.setCursor(Cursor.HAND);
             mainImage.getStyleClass().clear();
             mainImage.getStyleClass().add("image-enter");
             event.consume();
         });
         mainImage.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-            scene.setCursor(Cursor.DEFAULT);
             mainImage.getStyleClass().clear();
             mainImage.getStyleClass().add("image-exit");
             event.consume();
