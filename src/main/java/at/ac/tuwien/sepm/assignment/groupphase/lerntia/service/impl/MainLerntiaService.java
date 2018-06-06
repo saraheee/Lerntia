@@ -117,6 +117,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             for (Question q : questionList) {
                 listCounter++;
             }
+            currentQuestionIndex = -1;
             LOG.info("All Exam Questions set.");
         }catch (Exception e){
             throw new ServiceException("Can't retrieve exam questionnaire.");
