@@ -70,18 +70,16 @@ public class SelectExamController {
         cb_exam.getSelectionModel().selectFirst();
     }
 
-    void showSelectExamWindow() {
+    void showSelectExamWindow() throws ControllerException {
 
         try {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            // TODO - finish exception handling
+            //Todo better exception handling
         }
 
         if (examQuestionnaireList.isEmpty()){
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsauswahl kann nicht angezeigt werden",
-                "Fehler", "Es ist noch keine Prüfung vorhanden");
-            return;
+            throw new ControllerException("No Exams available");
         }
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));

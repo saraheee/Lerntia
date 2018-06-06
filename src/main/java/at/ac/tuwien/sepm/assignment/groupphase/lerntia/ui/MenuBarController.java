@@ -79,9 +79,16 @@ public class MenuBarController {
 
     @FXML
     public void switchToExamMode(ActionEvent actionEvent) {
-        selectExamController.showSelectExamWindow();
-        examToLearnButton.setDisable(false);
-        learnToExamButton.setDisable(true);
+
+        try {
+            selectExamController.showSelectExamWindow();
+            examToLearnButton.setDisable(false);
+            learnToExamButton.setDisable(true);
+        } catch (ControllerException e) {
+            alertController.showBigAlert(Alert.AlertType.ERROR,"Keine Prüfungsblätter","Keine Prüfungsfragebogen vorhanden",
+                "Zurzeit gibt es noch keine Prüfungsfragenbogen, laden Sie eins hoch und versuchen Sie es erneut.");
+        }
+
     }
     @FXML
     public void switchToLearnMode(ActionEvent actionEvent) {
