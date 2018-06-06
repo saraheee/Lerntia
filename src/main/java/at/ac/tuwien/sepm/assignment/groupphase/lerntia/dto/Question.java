@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.CheckBox;
 
 public class Question {
@@ -58,6 +59,7 @@ public class Question {
 
     public void setPicture(String picture) {
         this.picture = picture;
+        JFXPanel fxPanel = new JFXPanel();
         containPicture = new CheckBox();
         if (picture != null && picture.equals("")) {
             this.setContainPicture(false);
