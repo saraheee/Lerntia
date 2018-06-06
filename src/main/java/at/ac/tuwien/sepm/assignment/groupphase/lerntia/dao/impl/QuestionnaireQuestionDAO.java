@@ -70,7 +70,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
                 while (rs.next()) {
                     questionnaireQuestion = new QuestionnaireQuestion();
-                    questionnaireQuestion.setQid(rs.getLong(1));
+                    questionnaireQuestion.setQid(searchparameters.getQid());
                     questionnaireQuestion.setQuestionid(rs.getLong(2));
                     questionnaireQuestion.setDeleted(rs.getBoolean(3));
                     searchresults.add(questionnaireQuestion);
