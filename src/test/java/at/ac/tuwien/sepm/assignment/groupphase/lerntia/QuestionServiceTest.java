@@ -51,7 +51,6 @@ public class QuestionServiceTest {
     // creation
     // -----------------------------------------------------------------------------------------------------------------
 
-    @Ignore
     @Test
     public void createCorrectQuestion() throws PersistenceException, ServiceException {
         Question q1 = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
@@ -67,7 +66,6 @@ public class QuestionServiceTest {
     // update
     // -----------------------------------------------------------------------------------------------------------------
 
-    @Ignore
     @Test
     public void updateCorrectCourse() throws ServiceException, PersistenceException {
         Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
@@ -89,7 +87,6 @@ public class QuestionServiceTest {
     public void searchQuestions() throws PersistenceException, ServiceException {
         List<Question> questionlist = new ArrayList<>();
         Question q1 = new Question();
-        q1.setPicture("");
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
         q1.setAnswer2("a2");
@@ -101,7 +98,6 @@ public class QuestionServiceTest {
         questionlist.add(q1);
         questionService.create(q1);
         Question q2 = new Question();
-        q2.setPicture("");
         q2.setQuestionText("qwert");
         q2.setAnswer1("a1");
         q2.setAnswer2("a2");
@@ -115,6 +111,63 @@ public class QuestionServiceTest {
         List<Question> questions = questionService.search(questionlist);
         assertTrue(questionlist.get(0).getQuestionText().equals(questions.get(0).getQuestionText()));
         assertTrue(questionlist.get(1).getQuestionText().equals(questions.get(1).getQuestionText()));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // delete
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void deleteQuestion() throws ServiceException, PersistenceException {
+        Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
+        questionService.create(q);
+        boolean before = q.getDeleted();
+        questionService.delete(q);
+        boolean after = q.getDeleted();
+        assertTrue(before == false);
+        assertTrue(after == true);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // get
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void getQuestionwithId() throws ServiceException, PersistenceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        long id = q1.getId();
+        Question q2 = questionService.get(id);
+        assertTrue(q1.getQuestionText().equals(q2.getQuestionText()));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // getAllAnswers
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void getAllAnswersOfQuestion() throws ServiceException, PersistenceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        ArrayList<String> answers = questionService.getAllAnswers(q1);
+        assertTrue(q1.getAnswer1().equals(answers.get(0)));
+        assertTrue(q1.getAnswer2().equals(answers.get(1)));
+        assertTrue(q1.getAnswer3().equals(answers.get(2)));
+        assertTrue(q1.getAnswer4().equals(answers.get(3)));
+        assertTrue(q1.getAnswer5().equals(answers.get(4)));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -224,6 +277,97 @@ public class QuestionServiceTest {
         q.setCorrectAnswers("126");
         q.setOptionalFeedback("feedback");
         questionService.validate(q);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // search for questions
+    // -----------------------------------------------------------------------------------------------------------------
+
+    @Test
+    public void searchForQuestionsWithTwoResults() throws PersistenceException, ServiceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        Question q2 = new Question();
+        q2.setQuestionText("asdf");
+        q2.setAnswer1("a1");
+        q2.setAnswer2("a2");
+        q2.setAnswer3("a3");
+        q2.setAnswer4("a4");
+        q2.setAnswer5("a5");
+        q2.setCorrectAnswers("23");
+        q2.setOptionalFeedback("feedback");
+        questionService.create(q2);
+        List<Question> questions = questionService.searchForQuestions(q1);
+        assertTrue(questions.get(0).getQuestionText().equals(q1.getQuestionText()));
+        assertTrue(questions.get(1).getQuestionText().equals(q2.getQuestionText()));
+    }
+
+    @Test
+    public void searchForQuestionsWithOneResult() throws PersistenceException, ServiceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        Question q2 = new Question();
+        q2.setQuestionText("qwert");
+        q2.setAnswer1("a1");
+        q2.setAnswer2("a2");
+        q2.setAnswer3("a3");
+        q2.setAnswer4("a4");
+        q2.setAnswer5("a5");
+        q2.setCorrectAnswers("23");
+        q2.setOptionalFeedback("feedback");
+        questionService.create(q2);
+        List<Question> questions = questionService.searchForQuestions(q1);
+        assertTrue(questions.get(0).getQuestionText().equals(q1.getQuestionText()));
+    }
+
+    @Test
+    public void searchForQuestionsWithNoResult() throws PersistenceException, ServiceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        Question q = new Question((long) 0, "qwert", null, null, null, null, null, null, null, null, false);
+        List<Question> questions = questionService.searchForQuestions(q);
+        assertTrue(questions.size() == 0);
+    }
+
+    @Test
+    public void searchForDeletedQuestion() throws PersistenceException, ServiceException {
+        Question q1 = new Question();
+        q1.setQuestionText("asdf");
+        q1.setAnswer1("a1");
+        q1.setAnswer2("a2");
+        q1.setAnswer3("a3");
+        q1.setAnswer4("a4");
+        q1.setAnswer5("a5");
+        q1.setCorrectAnswers("23");
+        q1.setOptionalFeedback("feedback");
+        questionService.create(q1);
+        questionService.delete(q1);
+        List<Question> questions = questionService.searchForQuestions(q1);
+        assertTrue(questions.size() == 0);
     }
 
     @After
