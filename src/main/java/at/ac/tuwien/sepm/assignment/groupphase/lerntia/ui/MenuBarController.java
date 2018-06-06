@@ -1,8 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,12 @@ public class MenuBarController {
     private final AdministrateQuestionnaireController administrateQuestionnaireController;
     private final AboutSectionController showAboutSectionController;
     private final AlertController alertController;
+
+
+    @FXML
+    private MenuItem examToLearnButton;
+    @FXML
+    private MenuItem learnToExamButton;
 
     @Autowired
     MenuBarController(
@@ -49,6 +59,11 @@ public class MenuBarController {
     }
 
     @FXML
+    private void initialize(){
+        examToLearnButton.setVisible(false);
+    }
+
+    @FXML
     private void importQuestions() {
         importFileController.showImportWindow();
     }
@@ -64,6 +79,28 @@ public class MenuBarController {
     @FXML
     public void switchToExamMode(ActionEvent actionEvent) {
         selectExamController.showSelectExamWindow();
+        examToLearnButton.setVisible(true);
+        learnToExamButton.setVisible(false);
+
+    }
+    @FXML
+    public void switchToLearnMode(ActionEvent actionEvent) {
+        try {
+            boolean clicked = alertController.showStandardConfirmationAlert("In dem Lernmodus ändern.","Sie verlassen gerade den Prüfungsmodus!",
+                "Sie sind gerade im Prozess den Prüfungsmodus zu verlassen.\nSind Sie sich sicher? Fragen und Antworten werden zurückgesetzt");
+
+            if (clicked) {
+                lerntiaMainController.setExamMode(false);
+                lerntiaMainController.switchToLearnMode();
+                lerntiaMainController.getAndShowTheFirstQuestion();
+                learnToExamButton.setVisible(true);
+                examToLearnButton.setVisible(false);
+            }
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @FXML
@@ -84,4 +121,6 @@ public class MenuBarController {
             "Diese Funktionalität ist noch nicht verfügbar.",
             "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
     }
+
+
 }
