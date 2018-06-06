@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
@@ -47,6 +48,7 @@ public class LerntiaMainController {
     private final IExamResultsWriterService iExamResultsWriterService;
     private DialogPane alertFeedback;
     private boolean openFeedbackAlert = false;
+    private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
@@ -123,6 +125,7 @@ public class LerntiaMainController {
 
     @FXML
     private void initialize() {
+
         mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
         try {
@@ -367,6 +370,14 @@ public class LerntiaMainController {
     private String formatAnswerNumbers(String answers) {
         return answers.replaceAll("(.)", "$1, ").substring(0, answers.length() * 3 - 2);
     }
+    public void getAndShowTheFirstExamQuestion() throws ControllerException {
+        try {
+            question = lerntiaService.getFirstExamQuestion();
+        } catch (ServiceException e) {
+            throw new ControllerException("Es gibt noch keine Prüfungs Fragen");
+        }
+        showQuestionAndAnswers();
+    }
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
@@ -391,22 +402,69 @@ public class LerntiaMainController {
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
+            if (examMode){
+                alertController.showBigAlert(Alert.AlertType.WARNING,"Ende der Fragenliste","Ende des Prüfungs Fragebogen erreicht",
+                    "Sie sind am Ende des Prüfungsfragebogen angelangt. Schauen Sie ob Sie noch welche Fragen nicht beantwortet haben \nund drücken Sie auf 'Abgeben'");
+            }else {
+
             LOG.warn("No next question to be displayed.");
 
-            alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                    + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
-                "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
+            if (!onlyWrongQuestions) {
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
+                        + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
-            Boolean onlyWrongQuestions = alertController.isOnlyWrongQuestions();
+            }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
+                    "Alle vorherig Falsche Fragen wurden durchgegangen..",
+                    "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
+                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
 
+            }
+            if (e1.getMessage().contains("List of wrong questions is Empty")) {
+                alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                    "Es gibt keine falsch beantworteten Fragen mehr." +
+                        "Die erste Frage wird wieder angezeigt.");
+                alertController.setOnlyWrongQuestions(false);
+            }
+                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
+
+            if (onlyWrongQuestionshelp){
+                onlyWrongQuestions = true;
+            }else {
+                onlyWrongQuestions = false;
+            }
             try {
-                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestions);
+                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
                 question = lerntiaService.getFirstQuestion();
                 showQuestionAndAnswers();
             } catch (ServiceException e) {
-                e.printStackTrace();
+
+                if (e.getMessage().contains("No wrong Questions available")){
+                    alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
+                        "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
+                            + "Daher werden alle Fragen angezeigt.");
+                    alertController.setOnlyWrongQuestions(false);
+                    onlyWrongQuestions = false;
+                    question = lerntiaService.restoreQuestionsAndGetFirst();
+                        showQuestionAndAnswers();
+                }else if (e.getMessage().contains("List of wrong questions is Empty.")){
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                        "Es gibt keine falsch beantworteten Fragen mehr." +
+                            "Die erste Frage wird wieder angezeigt.");
+
+                    alertController.setOnlyWrongQuestions(false);
+                    onlyWrongQuestions = false;
+
+                    try {
+                        getAndShowTheFirstQuestion();
+                    } catch (ControllerException e2) {
+                        e2.printStackTrace();
+                    }
+                }
             }
+        }
         }
     }
 
@@ -548,11 +606,16 @@ public class LerntiaMainController {
 
     public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
-
         buttonBar.getButtons().add(handInButton);
         buttonBar.getButtons().remove(algorithmButton);
-
         lerntiaService.stopAlgorithm();
+    }
+
+    public void switchToLearnMode() {
+        buttonBar.getButtons().add(checkAnswerButton);
+        buttonBar.getButtons().remove(handInButton);
+        buttonBar.getButtons().add(algorithmButton);
+
     }
 
     public void handIn(ActionEvent actionEvent) {
@@ -595,6 +658,10 @@ public class LerntiaMainController {
 
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
+        lerntiaService.setExamMode(examMode);
+        onlyWrongQuestions=false;
+        alertController.setOnlyWrongQuestions(false);
+        lerntiaService.setOnlyWrongQuestions(false);
     }
 
     private String getCheckedAnswers() {
@@ -641,5 +708,17 @@ public class LerntiaMainController {
 
     public void stopAlgorithm() throws ServiceException {
         lerntiaService.stopAlgorithm();
+    }
+
+    public void prepareExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
+        try {
+            lerntiaService.getQuestionsFromExamQuestionnaire(selectedQuestionnaire);
+            getAndShowTheFirstExamQuestion();
+        } catch (ControllerException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
+                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
     }
 }

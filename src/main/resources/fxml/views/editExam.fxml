@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="pane" prefHeight="771.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
+    <TableView fx:id="questionTable" layoutX="16.0" layoutY="22.0" prefHeight="292.0" prefWidth="842.0">
+        <columns>
+            <TableColumn fx:id="questionColumn" prefWidth="245.0" text="Fragen"/>
+            <TableColumn fx:id="firstAnswerColumn" prefWidth="124.0" text="1. Antwort"/>
+            <TableColumn fx:id="secondAnswerColumn" prefWidth="116.0" text="2. Antwort"/>
+            <TableColumn fx:id="thirdAnswerColumn" prefWidth="113.0" text="3. Antwort"/>
+            <TableColumn fx:id="fourthAnswerColumn" prefWidth="122.0" text="4. Antwort"/>
+            <TableColumn fx:id="fifthAnswerColumn" prefWidth="121.0" text="5. Antwort"/>
+        </columns>
+    </TableView>
+    <Button fx:id="tableViewButton" layoutX="671.0" layoutY="698.0" mnemonicParsing="false"
+            onAction="#onTableViewButtonClicked" prefHeight="64.0" prefWidth="195.0"
+            text="Tabellen Reihenfolge einsetzen"/>
+    <Button fx:id="randomButton" layoutX="504.0" layoutY="698.0" mnemonicParsing="false"
+            onAction="#onRandomButtonClicked" prefHeight="64.0" prefWidth="140.0" text="Random Reihenfolge"/>
+    <Button fx:id="resetButton" layoutX="15.0" layoutY="696.0" mnemonicParsing="false"
+            onAction="#onResetButtonClicked" prefHeight="64.0" prefWidth="121.0" text="Listen zurücksetzen"/>
+    <TableView fx:id="acceptedTable" layoutX="14.0" layoutY="377.0" prefHeight="304.0" prefWidth="842.0">
+        <columns>
+            <TableColumn fx:id="columnAccepted" prefWidth="245.0" text="Genomene Fragen"/>
+            <TableColumn prefWidth="131.0" text="1. Antwort" fx:id="xfirstAnswerColumn"/>
+            <TableColumn minWidth="7.0" prefWidth="125.0" text="2. Antwort" fx:id="xsecondAnswerColumn"/>
+            <TableColumn prefWidth="100.0" text="3. Antwort" fx:id="xthirdAnswerColumn"/>
+            <TableColumn prefWidth="118.0" text="4. Antwort" fx:id="xfourthAnswerColumn"/>
+            <TableColumn prefWidth="122.0" text="5. Antwort" fx:id="xfifthAnswerColumn"/>
+        </columns>
+    </TableView>
+    <Button fx:id="addQuestions" layoutX="226.0" layoutY="339.0" mnemonicParsing="false"
+            onAction="#onAddQuestionsButtonClicked" text="v v"/>
+    <Button fx:id="removeQuestions" layoutX="602.0" layoutY="339.0" mnemonicParsing="false"
+            onAction="#onRemoveQuestionsButtonClicked" text="^^"/>
+</AnchorPane>
