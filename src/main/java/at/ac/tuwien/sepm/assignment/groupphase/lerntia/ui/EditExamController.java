@@ -49,6 +49,7 @@ public class EditExamController {
     private ObservableList<Question> selectedQuestions;
     private List<Question> entirequestionList;
     private List<Question> currentQuestionList;
+    private ArrayList<Question> questionList = new ArrayList<>();
     private List<Question> acceptedQuestionList = new ArrayList<>();
 
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
@@ -306,7 +307,6 @@ public class EditExamController {
 
     private void setQuestionTable() {
         try {
-
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         List<Question> searchparameters = new ArrayList<>();
         entirequestionList = new ArrayList<>();
@@ -337,7 +337,9 @@ public class EditExamController {
             if (acceptedTable.getItems().size()==0){
                 throw new ControllerException("Keine Fragen vorhanden");
             }
-            ArrayList questionList = new ArrayList();
+            if (questionList!=null){
+                questionList.clear();
+            }
             for (int i=0;i<acceptedTable.getItems().size();i++) {
                 Question tableRow = acceptedTable.getItems().get(i);
                 questionList.add(tableRow);
@@ -347,7 +349,6 @@ public class EditExamController {
             lerntiaMainController.switchToExamMode();
             mainLerntiaService.setCustomExamQuestions(questionList);
             lerntiaMainController.getAndShowTheFirstExamQuestion();
-            questionList.clear();
             entirequestionList.clear();
             acceptedQuestionList.clear();
             examQuestionList.clear();
