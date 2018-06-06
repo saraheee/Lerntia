@@ -180,7 +180,16 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                 imgTable.setWidthPercentage(100);
 
                 PdfPCell cellImgQuestion = new PdfPCell(imgQuestion, false);
-                cellImgQuestion.setFixedHeight(180);
+
+                // very wide images get a smaller height. if this is not done, the image would
+                // be too big and reach out of the bounds of the pdf file.
+
+                if (imgQuestion.getWidth() > ( imgQuestion.getHeight()*2 )) {
+                    cellImgQuestion.setFixedHeight(80);
+                } else {
+                    cellImgQuestion.setFixedHeight(180);
+                }
+
                 cellImgQuestion.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cellImgQuestion.setBorder(PdfPCell.NO_BORDER);
 
