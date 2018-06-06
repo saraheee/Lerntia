@@ -378,7 +378,8 @@ public class EditExamController {
 
 
         }catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR,"Lehre Prüfungsfragenbogen.","Keine Fragen verfügbar","Nicht möglich in den Prüfungsmodus zu wechseln.\n Revetieren Sie die gelöschten Fragen und versuchen Sie erneut.");
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Lehre Prüfungsfragenbogen.","Keine Fragen verfügbar",
+                "Nicht möglich random Reihenfolge zu erstellen da keine Fragen ausgewählt wurden.");
         }
 
 

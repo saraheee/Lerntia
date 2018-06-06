@@ -60,7 +60,8 @@ public class MenuBarController {
 
     @FXML
     private void initialize(){
-        examToLearnButton.setVisible(false);
+        examToLearnButton.setDisable(true);
+        learnToExamButton.setDisable(false);
     }
 
     @FXML
@@ -79,9 +80,8 @@ public class MenuBarController {
     @FXML
     public void switchToExamMode(ActionEvent actionEvent) {
         selectExamController.showSelectExamWindow();
-        examToLearnButton.setVisible(true);
-        learnToExamButton.setVisible(false);
-
+        examToLearnButton.setDisable(false);
+        learnToExamButton.setDisable(true);
     }
     @FXML
     public void switchToLearnMode(ActionEvent actionEvent) {
@@ -93,8 +93,8 @@ public class MenuBarController {
                 lerntiaMainController.setExamMode(false);
                 lerntiaMainController.switchToLearnMode();
                 lerntiaMainController.getAndShowTheFirstQuestion();
-                learnToExamButton.setVisible(true);
-                examToLearnButton.setVisible(false);
+                learnToExamButton.setDisable(false);
+                examToLearnButton.setDisable(true);
             }
         } catch (ControllerException e) {
             e.printStackTrace();
