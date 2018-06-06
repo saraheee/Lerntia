@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
@@ -46,8 +43,7 @@ public class MenuBarController {
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
         AlertController alertController
-    )
-    {
+    ) {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;
@@ -59,7 +55,7 @@ public class MenuBarController {
     }
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         examToLearnButton.setDisable(true);
         learnToExamButton.setDisable(false);
     }
@@ -70,31 +66,37 @@ public class MenuBarController {
     }
 
     @FXML
-    public void createCourse(ActionEvent actionEvent) { createCourseController.showCreateCourseWindow(); }
+    public void createCourse() {
+        createCourseController.showCreateCourseWindow();
+    }
 
     @FXML
-    public void selectQuestionnaire(ActionEvent actionEvent) {
+    public void selectQuestionnaire() {
         selectQuestionnaireController.showSelectQuestionnaireWindow();
     }
 
     @FXML
-    public void switchToExamMode(ActionEvent actionEvent) {
+    public void switchToExamMode() {
 
         try {
             selectExamController.showSelectExamWindow();
             examToLearnButton.setDisable(false);
             learnToExamButton.setDisable(true);
         } catch (ControllerException e) {
-            alertController.showBigAlert(Alert.AlertType.ERROR,"Keine Prüfungsblätter","Keine Prüfungsfragebogen vorhanden",
-                "Zurzeit gibt es noch keine Prüfungsfragenbogen, laden Sie eins hoch und versuchen Sie es erneut.");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Prüfungsfragebögen",
+                "Keine Prüfungsfragebögen vorhanden",
+                "Es gibt es noch keine Prüfungsfragenbögen. Bitte zuerst einen Fragebogen importieren\n" +
+                    "Hinweis: Beim Import nicht vergessen, die entsprechende Checkbox zu markieren!");
         }
 
     }
+
     @FXML
-    public void switchToLearnMode(ActionEvent actionEvent) {
+    public void switchToLearnMode() {
         try {
-            boolean clicked = alertController.showStandardConfirmationAlert("In dem Lernmodus ändern.","Sie verlassen gerade den Prüfungsmodus!",
-                "Sie sind gerade im Prozess den Prüfungsmodus zu verlassen.\nSind Sie sich sicher? Fragen und Antworten werden zurückgesetzt");
+            boolean clicked = alertController.showStandardConfirmationAlert("In den Lernmodus wechseln.",
+                "Soll der Prüfungsmodus wirklich verlassen werden?",
+                "Alle Fragen und Antworten werden zurückgesetzt!");
 
             if (clicked) {
                 learnToExamButton.setDisable(false);
@@ -111,17 +113,17 @@ public class MenuBarController {
     }
 
     @FXML
-    public void administrateQuestionnaire(ActionEvent actionEvent) {
+    public void administrateQuestionnaire() {
         administrateQuestionnaireController.showAdministrateQuestionnaireWindow();
     }
 
     @FXML
-    private void showAboutSection(ActionEvent actionEvent) {
+    private void showAboutSection() {
         showAboutSectionController.showAboutSection();
     }
 
     @FXML
-    private void exportQuestions(ActionEvent actionEvent) {
+    private void exportQuestions() {
         //TODO: remove alert, when it's implemented
         alertController.showBigAlert(Alert.AlertType.INFORMATION,
             "Nicht verfügbar",
