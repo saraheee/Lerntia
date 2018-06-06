@@ -17,7 +17,11 @@
     <TextField fx:id="tf_courseName" layoutX="201.0" layoutY="87.0" prefHeight="26.0" prefWidth="188.0"/>
 
     <Label layoutX="61.0" layoutY="137.0" text="Semester:"/>
-    <ComboBox fx:id="cb_semester" layoutX="201.0" layoutY="137.0" prefWidth="188.0" prefHeight="26.0"/>
+    <ComboBox fx:id="cb_semester" layoutX="201.0" layoutY="137.0" prefWidth="188.0" prefHeight="26.0">
+        <styleClass>
+            <String fx:value="combo-box"/>
+        </styleClass>
+    </ComboBox>
 
     <Label layoutX="61.0" layoutY="189.0" text="Jahr:"/>
     <TextField fx:id="tf_semesterYear" layoutX="201.0" layoutY="187.0" prefHeight="26.0" prefWidth="188.0"/>

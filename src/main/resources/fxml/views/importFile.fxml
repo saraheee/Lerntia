@@ -9,7 +9,11 @@
             prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ImportFileController">
     <Label layoutX="28.0" layoutY="42.0" text="Lehrveranstaltung:"/>
-    <ComboBox fx:id="cb_course" layoutX="231.0" layoutY="38.0" prefWidth="215.0"/>
+    <ComboBox fx:id="cb_course" layoutX="231.0" layoutY="38.0" prefWidth="215.0">
+        <styleClass>
+            <String fx:value="combo-box"/>
+        </styleClass>
+    </ComboBox>
     <Label layoutX="28.0" layoutY="93.0" text="Name des Fragebogens:"/>
     <TextField fx:id="tf_questionnaire" layoutX="231.0" layoutY="88.0" prefHeight="26.0" prefWidth="215.0"/>
     <Text fx:id="t_filename" layoutX="28.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0"
@@ -29,7 +33,7 @@
         </styleClass>
     </Button>
     <CheckBox fx:id="questionnaireIsExam" layoutX="95.0" layoutY="265.0" mnemonicParsing="false"
-              text="Es handelt sich um eine Prüfung"/>
+              text="Es handelt sich um eine Prüfung!"/>
     <Button layoutX="148.0" layoutY="332.0" mnemonicParsing="false" onAction="#importFile" prefHeight="41.0"
             prefWidth="188.0" text="Importieren" pickOnBounds="false">
         <styleClass>
