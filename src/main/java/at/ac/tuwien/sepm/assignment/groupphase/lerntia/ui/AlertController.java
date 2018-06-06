@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 
 @Controller
 public class AlertController {
@@ -59,13 +58,7 @@ public class AlertController {
         grid.getColumnConstraints().setAll(graphicColumn, textColumn);
         grid.setPadding(new Insets(5));
 
-        if (alertType == Alert.AlertType.ERROR) {
-            imageView = new ImageView(ERROR);
-        } else if (alertType == Alert.AlertType.WARNING) {
-            imageView = new ImageView(WARNING);
-        } else {
-            imageView = new ImageView(INFO);
-        }
+        getAlertImage(alertType);
         imageView.setFitWidth(84);
         imageView.setFitHeight(84);
 
@@ -96,7 +89,6 @@ public class AlertController {
         stage.getIcons().add(new Image("/icons/main.png"));
 
         LOG.trace("Showing a big alert with title: " + title);
-
         if (alertType == Alert.AlertType.CONFIRMATION) {
             var result = alert.showAndWait();
             if (result.isPresent() && result.get() == btnAll) {
@@ -172,13 +164,68 @@ public class AlertController {
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         var alert = new Alert(alertType);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        alert.showAndWait();
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().clear();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        dialogPane.getStyleClass().add("standard-dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        getAlertImage(alertType);
+        imageView.setFitWidth(54);
+        imageView.setFitHeight(54);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        headerLabel.getStyleClass().add("standard-dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        LOG.trace("Showing a standard alert with title: " + title);
+        stage.showAndWait();
     }
+
+
+    private void getAlertImage(Alert.AlertType alertType) {
+        if (alertType == Alert.AlertType.ERROR) {
+            imageView = new ImageView(ERROR);
+        } else if (alertType == Alert.AlertType.WARNING) {
+            imageView = new ImageView(WARNING);
+        } else {
+            imageView = new ImageView(INFO);
+        }
+    }
+
 
     public boolean showStandardConfirmationAlert(String title, String header, String content) {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);

@@ -1,33 +1,9 @@
-.dialogue {
-    -fx-font-size: 34px;
-    -fx-font-family: "Lora-Bold";
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-}
-
-
-.dialogue-header {
-    -fx-font-size: 36px;
-    -fx-font-family: "Lora-Bold";
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-}
-
-
-.dialogue-content {
-    -fx-font-size: 22px;
-    -fx-font-family: "Lora-Bold";
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-}
-
 .standard-dialogue {
     -fx-font-size: 16px;
     -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
-
 
 .standard-dialogue-header {
     -fx-font-size: 20px;
@@ -36,23 +12,14 @@
     -fx-text-fill: #333333;
 }
 
-
 .standard-dialogue-content {
     -fx-font-size: 16px;
     -fx-font-family: "Lora-Bold";
     -fx-text-fill: #333333;
 }
 
-.standard-button {
-    -fx-font-size: 16px;
-    -fx-font-family: "Lora-Bold";
-    -fx-background-color: rgba(51, 0, 102, 0.05);
-    -fx-padding: 10px 40px;
-}
-
-
 .button {
-    -fx-font-size: 36px;
+    -fx-font-size: 15px;
     -fx-font-family: "Lora-Bold";
     -fx-background-color: rgba(51, 0, 102, 0.05);
     -fx-padding: 10px 40px;
@@ -89,8 +56,4 @@
 
 .button:default:focused:hover {
     -fx-background-color: rgba(0, 50, 250, 0.2);
-}
-
-.button:selected {
-    -fx-background-color: #3e8e41;
 }
