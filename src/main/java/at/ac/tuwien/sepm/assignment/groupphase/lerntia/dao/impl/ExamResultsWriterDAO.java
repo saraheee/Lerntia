@@ -8,6 +8,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.maven.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         Image img_checked = null;
         try {
             //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box_checked.png")));
-            img_checked = Image.getInstance("src/main/resources/icons/exam_report_box_checked.png");
+            //img_checked = Image.getInstance("src/main/resources/icons/exam_report_box_checked.png");
+            img_checked = Image.getInstance(Resource.class.getResource("/icons/exam_report_box_checked.png"));
             img_checked.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
             e.printStackTrace();
@@ -73,7 +75,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         Image img_box = null;
         try {
             //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box.png")));
-            img_box = Image.getInstance("src/main/resources/icons/exam_report_box.png");
+            //img_box = Image.getInstance("src/main/resources/icons/exam_report_box.png");
+            img_box = Image.getInstance(Resource.class.getResource("/icons/exam_report_box.png"));
             img_box.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
             e.printStackTrace();
@@ -150,6 +153,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             container.add(paragraphQuestionNumber);
             container.add(paragraphQuestionText);
 
+            // add an image if the question has one
+
             if (questions.get(i).getPicture() != "") {
 
                 Image imgQuestion = null;
@@ -167,6 +172,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                     e.printStackTrace();
                 }
 
+                // there have been problems with adding the image directly.
+                // as a workaround a table is created with a single cell that holds the image.
+
                 PdfPTable imgTable = new PdfPTable(1);
 
                 imgTable.setWidthPercentage(100);
@@ -181,7 +189,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
                 container.add(imgTable);
             }
-
 
             container.setSpacingAfter(15);
             container.setKeepTogether(true);
