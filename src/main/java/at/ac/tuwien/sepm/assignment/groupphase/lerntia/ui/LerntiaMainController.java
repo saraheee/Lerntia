@@ -385,9 +385,9 @@ public class LerntiaMainController {
         try {
             question = null;
             question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
-if (question!=null){
-    showNoQuestionsAvailable();
-}
+            if (question==null){
+            showNoQuestionsAvailable();
+            }
         } catch (ServiceException e) {
             //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
@@ -515,66 +515,67 @@ if (question!=null){
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             showNoQuestionsAvailable();
-        }
+        }else {
 
-        qLabelController.setQuestionText(question.getQuestionText());
-        audioController.setQuestion(qLabelController.getQuestionText());
-        resetAnswerController();
-        setAnswerText(answer1Controller, question.getAnswer1());
-        setAnswerText(answer2Controller, question.getAnswer2());
-        setAnswerText(answer3Controller, question.getAnswer3());
-        setAnswerText(answer4Controller, question.getAnswer4());
-        setAnswerText(answer5Controller, question.getAnswer5());
+            qLabelController.setQuestionText(question.getQuestionText());
+            audioController.setQuestion(qLabelController.getQuestionText());
+            resetAnswerController();
+            setAnswerText(answer1Controller, question.getAnswer1());
+            setAnswerText(answer2Controller, question.getAnswer2());
+            setAnswerText(answer3Controller, question.getAnswer3());
+            setAnswerText(answer4Controller, question.getAnswer4());
+            setAnswerText(answer5Controller, question.getAnswer5());
 
-        var checkedAnswers = question.getCheckedAnswers();
+            var checkedAnswers = question.getCheckedAnswers();
 
-        try {
-            answer1Controller.setSelected(checkedAnswers.contains("1"));
-            answer2Controller.setSelected(checkedAnswers.contains("2"));
-            answer3Controller.setSelected(checkedAnswers.contains("3"));
-            answer4Controller.setSelected(checkedAnswers.contains("4"));
-            answer5Controller.setSelected(checkedAnswers.contains("5"));
-        } catch (NullPointerException e) {
-            // nothing has been selected if the question is shown for the first time.
-            // this can be ignored.
-        }
-
-        audioController.setAnswer1(answer1Controller.getAnswerText());
-        audioController.setAnswer2(answer2Controller.getAnswerText());
-        audioController.setAnswer3(answer3Controller.getAnswerText());
-        audioController.setAnswer4(answer4Controller.getAnswerText());
-        audioController.setAnswer5(answer5Controller.getAnswerText());
-
-        // show image in the main window or hide the zoom button if there is no image to be shown
-        if (question.getPicture() == null || question.getPicture().trim().isEmpty()) {
-            mainImage.setVisible(false);
-            zoomedImageController.setImageFile(null);
-            LOG.debug("No image to be displayed for this question");
-        } else {
             try {
-                LearningQuestionnaire selectedLearningQuestionnaire = null;
+                answer1Controller.setSelected(checkedAnswers.contains("1"));
+                answer2Controller.setSelected(checkedAnswers.contains("2"));
+                answer3Controller.setSelected(checkedAnswers.contains("3"));
+                answer4Controller.setSelected(checkedAnswers.contains("4"));
+                answer5Controller.setSelected(checkedAnswers.contains("5"));
+            } catch (NullPointerException e) {
+                // nothing has been selected if the question is shown for the first time.
+                // this can be ignored.
+            }
 
+            audioController.setAnswer1(answer1Controller.getAnswerText());
+            audioController.setAnswer2(answer2Controller.getAnswerText());
+            audioController.setAnswer3(answer3Controller.getAnswerText());
+            audioController.setAnswer4(answer4Controller.getAnswerText());
+            audioController.setAnswer5(answer5Controller.getAnswerText());
+
+            // show image in the main window or hide the zoom button if there is no image to be shown
+            if (question.getPicture() == null || question.getPicture().trim().isEmpty()) {
+                mainImage.setVisible(false);
+                zoomedImageController.setImageFile(null);
+                LOG.debug("No image to be displayed for this question");
+            } else {
                 try {
-                    selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
-                } catch (ServiceException e) {
-                    e.printStackTrace();
-                }
-                if (selectedLearningQuestionnaire != null) {
-                    String imagePath =
-                        System.getProperty("user.dir") + File.separator + "img" + File.separator +
-                            selectedLearningQuestionnaire.getName() + File.separator +
-                            question.getPicture();
+                    LearningQuestionnaire selectedLearningQuestionnaire = null;
 
-                    LOG.debug("Image path: " + imagePath);
-                    File imageFile = new File(imagePath);
-                    zoomedImageController.setImageFile(imageFile);
-                    Image image = new Image(imageFile.toURI().toURL().toExternalForm());
-                    mainImage.setImage(image);
-                    mainImage.setVisible(true);
-                    LOG.info("Image for this question is displayed: '{}'", question.getPicture());
+                    try {
+                        selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
+                    } catch (ServiceException e) {
+                        e.printStackTrace();
+                    }
+                    if (selectedLearningQuestionnaire != null) {
+                        String imagePath =
+                            System.getProperty("user.dir") + File.separator + "img" + File.separator +
+                                selectedLearningQuestionnaire.getName() + File.separator +
+                                question.getPicture();
+
+                        LOG.debug("Image path: " + imagePath);
+                        File imageFile = new File(imagePath);
+                        zoomedImageController.setImageFile(imageFile);
+                        Image image = new Image(imageFile.toURI().toURL().toExternalForm());
+                        mainImage.setImage(image);
+                        mainImage.setVisible(true);
+                        LOG.info("Image for this question is displayed: '{}'", question.getPicture());
+                    }
+                } catch (MalformedURLException e) {
+                    LOG.debug("Exception while trying to display image " + e.getMessage());
                 }
-            } catch (MalformedURLException e) {
-                LOG.debug("Exception while trying to display image " + e.getMessage());
             }
         }
     }
