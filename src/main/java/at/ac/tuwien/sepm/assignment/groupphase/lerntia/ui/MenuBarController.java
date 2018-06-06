@@ -79,9 +79,16 @@ public class MenuBarController {
 
     @FXML
     public void switchToExamMode(ActionEvent actionEvent) {
-        selectExamController.showSelectExamWindow();
-        examToLearnButton.setDisable(false);
-        learnToExamButton.setDisable(true);
+
+        try {
+            selectExamController.showSelectExamWindow();
+            examToLearnButton.setDisable(false);
+            learnToExamButton.setDisable(true);
+        } catch (ControllerException e) {
+            alertController.showBigAlert(Alert.AlertType.ERROR,"Keine Prüfungsblätter","Keine Prüfungsfragebogen vorhanden",
+                "Zurzeit gibt es noch keine Prüfungsfragenbogen, laden Sie eins hoch und versuchen Sie es erneut.");
+        }
+
     }
     @FXML
     public void switchToLearnMode(ActionEvent actionEvent) {
@@ -90,11 +97,11 @@ public class MenuBarController {
                 "Sie sind gerade im Prozess den Prüfungsmodus zu verlassen.\nSind Sie sich sicher? Fragen und Antworten werden zurückgesetzt");
 
             if (clicked) {
+                learnToExamButton.setDisable(false);
+                examToLearnButton.setDisable(true);
                 lerntiaMainController.setExamMode(false);
                 lerntiaMainController.switchToLearnMode();
                 lerntiaMainController.getAndShowTheFirstQuestion();
-                learnToExamButton.setDisable(false);
-                examToLearnButton.setDisable(true);
             }
         } catch (ControllerException e) {
             e.printStackTrace();
