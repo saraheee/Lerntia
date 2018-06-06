@@ -26,6 +26,7 @@ public class AlertController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static String LERNTIA = "[Lerntia] ";
     private static String SPACE = "   ";
+    private static int MINWIDTH = 50;
     private Image INFO = new Image(getClass().getResourceAsStream("/icons/info.png"));
     private Image ERROR = new Image(getClass().getResourceAsStream("/icons/error.png"));
     private Image WARNING = new Image(getClass().getResourceAsStream("/icons/warning.png"));
@@ -37,6 +38,11 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
         var alert = new Alert(alertType);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -167,6 +173,12 @@ public class AlertController {
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;
+
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
 
         var alert = new Alert(alertType);
         alert.initModality(Modality.APPLICATION_MODAL);
