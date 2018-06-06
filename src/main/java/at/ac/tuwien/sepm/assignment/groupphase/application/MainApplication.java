@@ -33,6 +33,7 @@ public final class MainApplication extends Application implements Runnable {
     private ITextToSpeechService iTextToSpeechService;
     private LerntiaMainController controller;
 
+
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
         Application.launch(MainApplication.class, args);

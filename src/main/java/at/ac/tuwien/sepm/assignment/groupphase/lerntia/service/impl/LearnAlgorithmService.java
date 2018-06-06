@@ -272,8 +272,8 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
         }
     }
 
-    //Sorts the value Map by ascending value
-    private List<Long> sortValueMap(Map<Long, Double> valueMap) {
+    @Override
+    public List<Long> sortValueMap(Map<Long, Double> valueMap) {
         // 1. Convert the entry Map to a List
         LOG.info("Sort the Question values have been initiated.");
         LinkedHashMap<Long, Double> sortedMap = new LinkedHashMap<>();
