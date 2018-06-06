@@ -59,7 +59,7 @@ public class Question {
     public void setPicture(String picture) {
         this.picture = picture;
         containPicture = new CheckBox();
-        if (picture.equals("")) {
+        if (picture != null && picture.equals("")) {
             this.setContainPicture(false);
             this.containPicture.setText(checked.Nein.toString());
         }

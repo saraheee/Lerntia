@@ -9,13 +9,16 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.function.Function;
 
 
 @Controller
@@ -69,6 +73,8 @@ public class SelectQuestionAdministrateController {
     public TextField tf_searchAnswer5;
     private Stage stage;
     private LearningQuestionnaire administrateMode;
+    @FXML
+    private AnchorPane anchorPane;
 
     @Autowired
     public SelectQuestionAdministrateController(
@@ -90,6 +96,12 @@ public class SelectQuestionAdministrateController {
         this.iLearningQuestionnaireService = iLearningQuestionnaireService;
     }
 
+    private static <S, T> TableColumn<S, T> column(String title, Function<S, Property<T>> property) {
+        TableColumn<S, T> col = new TableColumn<>(title);
+        col.setCellValueFactory(cellData -> property.apply(cellData.getValue()));
+        return col;
+    }
+
     public void initialize() {
         /*
          * The following line must stay there. It Refreshs the LerntiaService.
@@ -99,6 +111,7 @@ public class SelectQuestionAdministrateController {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+
         //Fill the First Table.
         tc_picture.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
         tc_question.setCellValueFactory(new PropertyValueFactory<>("questionText"));
@@ -108,8 +121,22 @@ public class SelectQuestionAdministrateController {
         tc_answer4.setCellValueFactory(new PropertyValueFactory<>("answer4"));
         tc_answer5.setCellValueFactory(new PropertyValueFactory<>("answer5"));
         var content = this.getContent();
+
+        StringProperty hoveredProperty = new SimpleStringProperty();
+        tc_question.setCellFactory(tc -> new HoverCell(hoveredProperty));
+        tc_answer1.setCellFactory(tc -> new HoverCell(hoveredProperty));
+        tc_answer2.setCellFactory(tc -> new HoverCell(hoveredProperty));
+        tc_answer3.setCellFactory(tc -> new HoverCell(hoveredProperty));
+        tc_answer4.setCellFactory(tc -> new HoverCell(hoveredProperty));
+        tc_answer5.setCellFactory(tc -> new HoverCell(hoveredProperty));
+
+        var currentHover = new Label();
+        currentHover.textProperty().bind(hoveredProperty);
+
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        AnchorPane.setTopAnchor(currentHover, 1.0);
+
     }
 
     /**
@@ -271,5 +298,18 @@ public class SelectQuestionAdministrateController {
 
     public LearningQuestionnaire getAdministrateMode() {
         return this.administrateMode;
+    }
+
+    private class HoverCell extends TableCell<Question, String> {
+        HoverCell(StringProperty hoveredProperty) {
+            setOnMouseEntered(e -> hoveredProperty.set(getItem()));
+            setOnMouseExited(e -> hoveredProperty.set(null));
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            setText(empty ? null : item);
+        }
     }
 }

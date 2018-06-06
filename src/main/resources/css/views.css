@@ -8,12 +8,12 @@
 .button {
     -fx-font-size: 17px;
     -fx-font-family: "Lora-Bold";
-    -fx-background-color: rgba(1, 0, 1, 0.05);
-    -fx-effect: dropshadow(gaussian, white, 50, -6, 0, 0);
+    -fx-background-color: rgba(51, 0, 102, 0.1);
 }
 
 .button:hover {
     -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-effect: dropshadow(gaussian, white, 50, -6, 0, 0);
 }
 
 .button:focused {
@@ -25,7 +25,7 @@
 }
 
 .button:default {
-    -fx-background-color: rgba(51, 0, 102, 0.05);
+    -fx-background-color: rgba(51, 0, 102, 0.1);
 }
 
 .button:default:hover {
@@ -47,4 +47,75 @@
 
 .button:selected {
     -fx-background-color: #3e8e41;
+}
+
+.combo-box {
+    -fx-font-family: "Lora-Bold";
+    -fx-font-size: 17px;
+    -fx-text-fill: #333333;
+    -fx-background-color: rgb(217, 210, 230);
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(51, 0, 102, 0.2);
+}
+
+.combo-box .cell:selected {
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(239, 235, 249, 0.68);
+}
+
+.table-view {
+    -fx-text-fill: #333333;
+    -fx-selection-bar: rgb(225, 217, 239);
+    -fx-selection-bar-non-focused: rgba(51, 0, 102, 0.07);
+}
+
+.table-view .filler,
+.table-view .column-header,
+.table-view .column-header-background {
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(51, 0, 102, 0.07);
+}
+
+.table-view:focused {
+    -fx-background-color: rgba(51, 0, 102, 0.07);
+}
+
+.table-view .table-cell:focused {
+    -fx-background-color: rgba(51, 0, 102, 0.07);
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: lightgrey;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, white, 10, -3, 0, 0);
+}
+
+.check-box:selected .box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -6, 0, 0);
+}
+
+.check-box:disabled, .check-box:disabled > * {
+    -fx-opacity: 1.0;
+    -fx-effect: none
+}
+
+.check-box .box:disabled {
+    -fx-background-color: white;
+    -fx-border-color: lightgrey;
+    -fx-text-fill: #333333;
+    -fx-border-radius: 5px;
+}
+
+.text-field {
+    -fx-border-radius: 1px;
+    -fx-accent: rgba(51, 0, 102, 0.45);
+}
+
+.text-field:focused {
+    -fx-background-color: rgba(51, 0, 102, 0.07);
 }
