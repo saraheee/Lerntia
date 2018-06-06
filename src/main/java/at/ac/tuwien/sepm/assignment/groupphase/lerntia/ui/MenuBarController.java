@@ -97,11 +97,11 @@ public class MenuBarController {
                 "Sie sind gerade im Prozess den Prüfungsmodus zu verlassen.\nSind Sie sich sicher? Fragen und Antworten werden zurückgesetzt");
 
             if (clicked) {
+                learnToExamButton.setDisable(false);
+                examToLearnButton.setDisable(true);
                 lerntiaMainController.setExamMode(false);
                 lerntiaMainController.switchToLearnMode();
                 lerntiaMainController.getAndShowTheFirstQuestion();
-                learnToExamButton.setDisable(false);
-                examToLearnButton.setDisable(true);
             }
         } catch (ControllerException e) {
             e.printStackTrace();
