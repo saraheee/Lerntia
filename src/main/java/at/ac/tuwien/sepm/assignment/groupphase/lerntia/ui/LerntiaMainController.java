@@ -616,16 +616,20 @@ public class LerntiaMainController {
     }
 
     public void switchToExamMode() throws ServiceException {
-        buttonBar.getButtons().remove(checkAnswerButton);
-        buttonBar.getButtons().add(handInButton);
-        buttonBar.getButtons().remove(algorithmButton);
-        lerntiaService.stopAlgorithm();
+        if (!examMode) {
+            buttonBar.getButtons().remove(checkAnswerButton);
+            buttonBar.getButtons().add(handInButton);
+            buttonBar.getButtons().remove(algorithmButton);
+            lerntiaService.stopAlgorithm();
+        }
     }
 
     public void switchToLearnMode() {
-        buttonBar.getButtons().add(algorithmButton);
-        buttonBar.getButtons().add(checkAnswerButton);
-        buttonBar.getButtons().remove(handInButton);
+        if (examMode) {
+            buttonBar.getButtons().add(algorithmButton);
+            buttonBar.getButtons().add(checkAnswerButton);
+            buttonBar.getButtons().remove(handInButton);
+        }
     }
 
     public void handIn(ActionEvent actionEvent) {
