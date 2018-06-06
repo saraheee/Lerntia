@@ -315,7 +315,9 @@ public class MainLerntiaService implements IMainLerntiaService {
         }
 
             currentLQ = learningQuestionnaireService.getSelected();
-            currentEQ = null;
+            if (currentEQ!=null){
+                currentEQ=null;
+            }
             if (currentLQ == null) {
                 throw new ServiceException("No Questionnaire has been selected yet.");
             }
