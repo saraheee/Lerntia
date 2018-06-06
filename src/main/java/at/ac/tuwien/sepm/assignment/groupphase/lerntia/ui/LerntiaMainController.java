@@ -129,7 +129,7 @@ public class LerntiaMainController {
         mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
         try {
-            getAndShowTheFirstQuestion();
+            getAndShowTheFirstQuestionFirstTime();
         } catch (ControllerException e) {
             //showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
@@ -383,10 +383,25 @@ public class LerntiaMainController {
 
     public void getAndShowTheFirstQuestion() throws ControllerException {
         try {
+            question = null;
             question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
+if (question!=null){
+    showNoQuestionsAvailable();
+}
         } catch (ServiceException e) {
             //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
+            showNoQuestionsAvailable();
+        }
+        showQuestionAndAnswers();
+    }
+
+    public void getAndShowTheFirstQuestionFirstTime() throws ControllerException {
+        try {
+            question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
+        } catch (ServiceException e) {
+
+            showNoQuestionsAvailable();
 
             throw new ControllerException("Es gibt noch keine Fragen");
         }
@@ -499,8 +514,7 @@ public class LerntiaMainController {
     private void showQuestionAndAnswers() {
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Fragen verfügbar", "", "");
-            return;
+            showNoQuestionsAvailable();
         }
 
         qLabelController.setQuestionText(question.getQuestionText());
@@ -578,16 +592,12 @@ public class LerntiaMainController {
         qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
         audioController.setQuestion("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
 
-        setAnswerText(answer1Controller, null);
-        setAnswerText(answer2Controller, null);
-        setAnswerText(answer3Controller, null);
-        setAnswerText(answer4Controller, null);
-        setAnswerText(answer5Controller, null);
+        setAnswerText(answer1Controller, "Keine Antwort vorhanden");
+        setAnswerText(answer2Controller, "Keine Antwort vorhanden");
+        setAnswerText(answer3Controller, "Keine Antwort vorhanden");
+        setAnswerText(answer4Controller, "Keine Antwort vorhanden");
+        setAnswerText(answer5Controller, "Keine Antwort vorhanden");
 
-        buttonBar.getButtons().remove(previousQuestionButton);
-        buttonBar.getButtons().remove(nextQuestionButton);
-        buttonBar.getButtons().remove(checkAnswerButton);
-        buttonBar.getButtons().remove(algorithmButton);
     }
 
     private void setAnswerText(AnswerController answerController, String answerText) {
@@ -614,10 +624,9 @@ public class LerntiaMainController {
     }
 
     public void switchToLearnMode() {
+        buttonBar.getButtons().add(algorithmButton);
         buttonBar.getButtons().add(checkAnswerButton);
         buttonBar.getButtons().remove(handInButton);
-        buttonBar.getButtons().add(algorithmButton);
-
     }
 
     public void handIn(ActionEvent actionEvent) {
