@@ -519,13 +519,26 @@ public class MainLerntiaService implements IMainLerntiaService {
                 count++;
             }
         }
+        count = count - getIgnoredAnswers();
+        return count;
+    }
+
+    @Override
+    public int getIgnoredAnswers() {
+        int count = 0;
+        for (int i = 0; i < questionList.size(); i++) {
+            String givenAnswers = questionList.get(i).getCheckedAnswers();
+            if (givenAnswers.equals("")) {
+                count++;
+            }
+        }
         return count;
     }
 
     @Override
     public double getPercent() {
         double share = (double) getCorrectAnswers();
-        double base = (double) questionList.size();
+        double base = (double) questionList.size() - getIgnoredAnswers();
         double percent = (share / base) * 100.00;
         return percent;
     }

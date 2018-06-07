@@ -102,6 +102,11 @@ public interface IMainLerntiaService {
     int getWrongAnswers();
 
     /**
+     * Returns the number of questions of one questionnaire, which were not answered
+     */
+    int getIgnoredAnswers();
+
+    /**
      * Returns the percentage of correct answers of one questionnaire
      */
     double getPercent();
