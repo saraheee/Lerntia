@@ -45,6 +45,7 @@ public class LerntiaMainController {
     private final IQuestionnaireService questionnaireService;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
+    private final DirectoryChooserController directoryChooserController;
     private boolean learnAlgorithmStatus;
 
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
@@ -103,7 +104,8 @@ public class LerntiaMainController {
         ZoomedImageController zoomedImageController,
         IQuestionnaireService questionnaireService,
         IExamResultsWriterService iExamResultsWriterService,
-        LearnAlgorithmController learnAlgorithmController
+        LearnAlgorithmController learnAlgorithmController,
+        DirectoryChooserController directoryChooserController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -118,6 +120,7 @@ public class LerntiaMainController {
         this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
         this.learnAlgorithmController = learnAlgorithmController;
+        this.directoryChooserController = directoryChooserController;
 
         this.learnAlgorithmStatus = false;
     }
@@ -526,10 +529,16 @@ public class LerntiaMainController {
             return;
         }
 
-        // TODO - ask the user where the report should be saved
+        String filePath = null;
 
         try {
-            iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), "");
+            filePath = directoryChooserController.showFileSaveDirectoryChooser();
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), filePath);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
                 "Error", e.getMessage());
