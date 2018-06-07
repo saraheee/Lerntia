@@ -90,8 +90,8 @@ public class SelectExamController {
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();
             if (alertController.showStandardConfirmationAlert("Prüfungsauswahl abbrechen?",
-                "Soll die Auswahl einer Prüfung wirklich beendet werden?",
-                "")) {
+                "Soll die Auswahl einer Prüfung wirklich abgebrochen werden?",
+                "Bei einem Abbruch wird nicht in den Prüfungsmodus gewechselt!")) {
                 LOG.debug("Canceled selecting an exam!");
                 selectingCanceled = true;
                 return;
