@@ -35,6 +35,8 @@ public class SelectExamController {
 
     @FXML
     private ComboBox<String> cb_exam;
+    private Stage windowStage;
+    private boolean selectingCanceled = false;
 
     public SelectExamController(
         SimpleExamQuestionnaireService examQuestionnaireService,
@@ -43,8 +45,7 @@ public class SelectExamController {
         WindowController windowController,
         AlertController alertController,
         EditExamController editExamController
-    )
-    {
+    ) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
@@ -78,13 +79,33 @@ public class SelectExamController {
             //Todo better exception handling
         }
 
-        if (examQuestionnaireList.isEmpty()){
+        if (examQuestionnaireList.isEmpty()) {
             throw new ControllerException("No Exams available");
         }
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+        windowStage = windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+
+        windowStage.setOnCloseRequest(event -> {
+            var alertController = new AlertController();
+            if (alertController.showStandardConfirmationAlert("Prüfungsauswahl abbrechen?",
+                "Soll die Auswahl einer Prüfung wirklich beendet werden?",
+                "")) {
+                LOG.debug("Canceled selecting an exam!");
+                selectingCanceled = true;
+                return;
+            }
+            event.consume();
+        });
+    }
+
+    public boolean getSelectingCanceled() {
+        return selectingCanceled;
+    }
+
+    public void setSelectingCanceled(boolean selectingCanceled) {
+        this.selectingCanceled = selectingCanceled;
     }
 
     public void selectExam(ActionEvent actionEvent) {
@@ -100,7 +121,7 @@ public class SelectExamController {
             lerntiaMainController.prepareExamQuestionnaire(selectedQuestionnaire);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
-                "Fehler","Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
+                "Fehler", "Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         }
 
         Node source = (Node) actionEvent.getSource();
@@ -108,7 +129,7 @@ public class SelectExamController {
         stage.close();
     }
 
-    public void selectExamAndEdit(ActionEvent actionEvent){
+    public void selectExamAndEdit(ActionEvent actionEvent) {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 

@@ -240,14 +240,69 @@ public class AlertController {
 
 
     public boolean showStandardConfirmationAlert(String title, String header, String content) {
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
 
-        var result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().clear();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        dialogPane.getStyleClass().add("standard-dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        imageView = new ImageView(CONFIRMATION);
+        imageView.setFitWidth(54);
+        imageView.setFitHeight(54);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        headerLabel.getStyleClass().add("standard-dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.YES.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.NO.toString());
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+
+        ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
+        for (var type : dialogPane.getButtonTypes()) {
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
+        }
+        stage.showAndWait();
+        LOG.trace("Showing a standard confirmation alert with title: " + title);
+        return result.get() == ButtonType.YES;
     }
 
     public boolean showBigConfirmationAlert(String title, String header, String content) {
