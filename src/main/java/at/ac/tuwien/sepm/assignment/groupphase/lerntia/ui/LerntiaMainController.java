@@ -13,7 +13,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -370,6 +369,7 @@ public class LerntiaMainController {
     private String formatAnswerNumbers(String answers) {
         return answers.replaceAll("(.)", "$1, ").substring(0, answers.length() * 3 - 2);
     }
+
     public void getAndShowTheFirstExamQuestion() throws ControllerException {
         try {
             question = lerntiaService.getFirstExamQuestion();
@@ -383,8 +383,8 @@ public class LerntiaMainController {
         try {
             question = null;
             question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
-            if (question==null){
-            showNoQuestionsAvailable();
+            if (question == null) {
+                showNoQuestionsAvailable();
             }
         } catch (ServiceException e) {
             //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
@@ -417,69 +417,66 @@ public class LerntiaMainController {
             question = lerntiaService.getNextQuestionFromList();
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
-            if (examMode){
-                alertController.showBigAlert(Alert.AlertType.WARNING,"Ende der Fragenliste","Ende des Prüfungs Fragebogen erreicht",
-                    "Sie sind am Ende des Prüfungsfragebogen angelangt. Schauen Sie ob Sie noch welche Fragen nicht beantwortet haben \nund drücken Sie auf 'Abgeben'");
-            }else {
+            if (examMode) {
+                alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
+                    "Die letzte Frage wurde erreicht. Wenn Fragen ausgelassen wurden, kann jetzt zu ihnen zurücknavigiert werden.\n" +
+                        "Nicht vergessen die Prüfung am Ende abzugeben!");
+            } else {
 
-            LOG.warn("No next question to be displayed.");
+                LOG.warn("No next question to be displayed.");
 
-            if (!onlyWrongQuestions) {
-                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                        + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
-                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
+                if (!onlyWrongQuestions) {
+                    alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
+                            + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                        "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
-            }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
-                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
-                    "Alle vorherig Falsche Fragen wurden durchgegangen..",
-                    "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
-                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
+                } else if (!e1.getMessage().contains("List of wrong questions is Empty")) {
+                    alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
+                        "Alle zuvor falsch beantworteten Fragen wurden durchgegangen",
+                        "Es gibt noch Fragen, die falsch beantwortet wurden." + "\n" +
+                            "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
 
-            }
-            if (e1.getMessage().contains("List of wrong questions is Empty")) {
-                alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
-                    "Es gibt keine falsch beantworteten Fragen mehr." +
-                        "Die erste Frage wird wieder angezeigt.");
-                alertController.setOnlyWrongQuestions(false);
-            }
-                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
-
-            if (onlyWrongQuestionshelp){
-                onlyWrongQuestions = true;
-            }else {
-                onlyWrongQuestions = false;
-            }
-            try {
-                lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
-                question = lerntiaService.getFirstQuestion();
-                showQuestionAndAnswers();
-            } catch (ServiceException e) {
-
-                if (e.getMessage().contains("No wrong Questions available")){
-                    alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
-                        "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
-                            + "Daher werden alle Fragen angezeigt.");
-                    alertController.setOnlyWrongQuestions(false);
-                    onlyWrongQuestions = false;
-                    question = lerntiaService.restoreQuestionsAndGetFirst();
-                        showQuestionAndAnswers();
-                }else if (e.getMessage().contains("List of wrong questions is Empty.")){
+                }
+                if (e1.getMessage().contains("List of wrong questions is Empty")) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
                         "Es gibt keine falsch beantworteten Fragen mehr." +
                             "Die erste Frage wird wieder angezeigt.");
-
                     alertController.setOnlyWrongQuestions(false);
-                    onlyWrongQuestions = false;
+                }
+                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
 
-                    try {
-                        getAndShowTheFirstQuestion();
-                    } catch (ControllerException e2) {
-                        e2.printStackTrace();
+                onlyWrongQuestions = onlyWrongQuestionshelp;
+                try {
+                    lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
+                    question = lerntiaService.getFirstQuestion();
+                    showQuestionAndAnswers();
+                } catch (ServiceException e) {
+
+                    if (e.getMessage().contains("No wrong Questions available")) {
+                        alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
+                            "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
+                                + "Daher werden alle Fragen angezeigt.");
+                        alertController.setOnlyWrongQuestions(false);
+                        onlyWrongQuestions = false;
+                        question = lerntiaService.restoreQuestionsAndGetFirst();
+                        showQuestionAndAnswers();
+                    } else if (e.getMessage().contains("List of wrong questions is Empty.")) {
+                        alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                            "Es gibt keine falsch beantworteten Fragen mehr." +
+                                "Die erste Frage wird wieder angezeigt.");
+
+                        alertController.setOnlyWrongQuestions(false);
+                        onlyWrongQuestions = false;
+
+                        try {
+                            getAndShowTheFirstQuestion();
+                        } catch (ControllerException e2) {
+                            e2.printStackTrace();
+                        }
                     }
                 }
             }
-        }
         }
     }
 
@@ -513,7 +510,7 @@ public class LerntiaMainController {
         if (question == null) {
             LOG.error("ShowQuestionAndAnswers method was called, although the controller did not get a valid Question.");
             showNoQuestionsAvailable();
-        }else {
+        } else {
 
             qLabelController.setQuestionText(question.getQuestionText());
             audioController.setQuestion(qLabelController.getQuestionText());
@@ -588,8 +585,8 @@ public class LerntiaMainController {
 
     // this method should be called if the DB does not contain any questions that could be displayed
     private void showNoQuestionsAvailable() {
-        qLabelController.setQuestionText("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
-        audioController.setQuestion("Keine Fragen gefunden. Sind die Fragebögen schon in der Datenbank importiert?");
+        qLabelController.setQuestionText("Keine Fragen gefunden. Bitte einen Fragebogen importieren!\n" + "(Menü -> \"Fragen von CSV importieren\")");
+        audioController.setQuestion("Keine Fragen gefunden. Bitte einen Fragebogen importieren!");
 
         setAnswerText(answer1Controller, "Keine Antwort vorhanden");
         setAnswerText(answer2Controller, "Keine Antwort vorhanden");
@@ -673,7 +670,7 @@ public class LerntiaMainController {
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
         lerntiaService.setExamMode(examMode);
-        onlyWrongQuestions=false;
+        onlyWrongQuestions = false;
         alertController.setOnlyWrongQuestions(false);
         lerntiaService.setOnlyWrongQuestions(false);
     }

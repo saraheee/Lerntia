@@ -117,7 +117,7 @@ public class ImportFileController {
         String name = tf_questionnaire.getText().trim();
 
         if (name.equals("")) {
-            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Fehlerhafter Name", "Warnung", "Bitte gib einen gültigen Namen an!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehlerhafter Name", "Fehler", "Bitte einen gültigen Namen angeben!");
             return;
         }
 
@@ -149,7 +149,7 @@ public class ImportFileController {
             }
         } else {
             qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
-            alertController.showStandardAlert(Alert.AlertType.WARNING, "Kein File ausgewählt", "Achtung", "Bitte wähle zuerst eine csv-Datei aus!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Kein File ausgewählt", "Fehler", "Bitte zuerst eine csv-Datei auswählen!");
         }
     }
 

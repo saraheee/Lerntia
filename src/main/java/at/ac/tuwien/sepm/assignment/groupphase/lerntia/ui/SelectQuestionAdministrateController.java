@@ -31,7 +31,7 @@ import java.util.function.Function;
 
 
 @Controller
-public class SelectQuestionAdministrateController {
+public class SelectQuestionAdministrateController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaMainController lerntiaMainController;
@@ -75,6 +75,15 @@ public class SelectQuestionAdministrateController {
     private LearningQuestionnaire administrateMode;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button editButton;
+
+    private boolean deleteButtonClicked = false;
+    private boolean editButtonClicked = false;
+    private boolean searchButtonClicked = false;
+    private boolean closedWindow = false;
 
     @Autowired
     public SelectQuestionAdministrateController(
@@ -137,6 +146,11 @@ public class SelectQuestionAdministrateController {
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         AnchorPane.setTopAnchor(currentHover, 1.0);
 
+        editButtonClicked = false;
+        deleteButtonClicked = false;
+        searchButtonClicked = false;
+        var buttonThread = new Thread(this);
+        buttonThread.start();
     }
 
     /**
@@ -152,15 +166,23 @@ public class SelectQuestionAdministrateController {
             var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
             fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
             this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+            stage.setOnCloseRequest(event -> closedWindow = true);
             tv_questionTable.getItems().clear();
             tv_questionTable.getItems().addAll(getContent());
             iLearningQuestionnaireService.deselect(administrateMode);
             iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
+
+            editButtonClicked = false;
+            deleteButtonClicked = false;
+            searchButtonClicked = false;
+            var buttonThread = new Thread(this);
+            buttonThread.start();
+
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.debug("Failed to refresh the table!");
         } catch (ControllerException e) {
-            e.printStackTrace();
+            LOG.debug("Failed to update the learn questionnaire!");
         }
     }
 
@@ -182,11 +204,12 @@ public class SelectQuestionAdministrateController {
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
         this.administrateMode = administrateMode;
+        stage.setOnCloseRequest(event -> closedWindow = true);
     }
 
     @FXML
     public void editQuestion() {
-
+        editButtonClicked = true;
         //Check if there is at Least and not more than one element is Selected
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
         if (selectedItems.size() < 1) {
@@ -211,6 +234,7 @@ public class SelectQuestionAdministrateController {
 
     @FXML
     public void deleteQuestions() {
+        deleteButtonClicked = true;
         LOG.info("Delete Button Clicked");
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
         if (selectedItems.size() == 0) {
@@ -262,6 +286,7 @@ public class SelectQuestionAdministrateController {
 
     @FXML
     public void searchQuestion() {
+        searchButtonClicked = true;
         this.stage.close();
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
@@ -273,6 +298,7 @@ public class SelectQuestionAdministrateController {
      */
     @FXML
     public void onSearchButtonClicked() {
+        searchButtonClicked = true;
         Question questionInput = new Question();
         questionInput.setQuestionText(tf_searchQuestion.getText());
         questionInput.setAnswer1(tf_searchAnswer1.getText());
@@ -305,6 +331,25 @@ public class SelectQuestionAdministrateController {
 
     public LearningQuestionnaire getAdministrateMode() {
         return this.administrateMode;
+    }
+
+    @Override
+    public void run() {
+        while (!closedWindow && !deleteButtonClicked && !editButtonClicked && !searchButtonClicked) {
+            var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+            if (selectedItems.size() < 1) {
+                editButton.setDisable(true);
+                deleteButton.setDisable(true);
+            }
+            if (selectedItems.size() == 1) {
+                editButton.setDisable(false);
+                deleteButton.setDisable(false);
+            }
+            if (selectedItems.size() > 1) {
+                editButton.setDisable(true);
+                deleteButton.setDisable(false);
+            }
+        }
     }
 
     private class HoverCell extends TableCell<Question, String> {
