@@ -427,7 +427,7 @@ public class LerntiaMainController {
             if (!onlyWrongQuestions) {
                 alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                     "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                        + lerntiaService.getWrongAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                        + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
                     "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
 
             }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
