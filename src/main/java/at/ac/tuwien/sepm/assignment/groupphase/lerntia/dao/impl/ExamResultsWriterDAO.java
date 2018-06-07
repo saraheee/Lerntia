@@ -43,7 +43,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         LOG.info("Create new Document for new report");
         Document document = new Document();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
+            //PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(path));
         } catch (DocumentException e) {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden");
         } catch (FileNotFoundException e) {
