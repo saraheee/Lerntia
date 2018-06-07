@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.lang.invoke.MethodHandles;
 
 @Controller
-public class MenuBarController {
+public class MenuBarController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -20,6 +20,7 @@ public class MenuBarController {
     private final CreateCourseController createCourseController;
     private final SelectQuestionnaireController selectQuestionnaireController;
     private final SelectExamController selectExamController;
+    private final EditExamController editExamController;
 
     private final LerntiaMainController lerntiaMainController;
 
@@ -39,6 +40,7 @@ public class MenuBarController {
         CreateCourseController createCourseController,
         SelectQuestionnaireController selectQuestionnaireController,
         SelectExamController selectExamController,
+        EditExamController editExamController,
         LerntiaMainController lerntiaMainController,
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
@@ -48,6 +50,7 @@ public class MenuBarController {
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;
         this.selectExamController = selectExamController;
+        this.editExamController = editExamController;
         this.lerntiaMainController = lerntiaMainController;
         this.administrateQuestionnaireController = administrateQuestionnaireController;
         this.showAboutSectionController = showAboutSectionController;
@@ -82,14 +85,34 @@ public class MenuBarController {
             selectExamController.showSelectExamWindow();
             examToLearnButton.setDisable(false);
             learnToExamButton.setDisable(true);
+
+            editExamController.setEditingCanceled(false);
+
+
+            var examEditThread = new Thread(this);
+            examEditThread.start();
+
         } catch (ControllerException e) {
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Prüfungsfragebögen",
                 "Keine Prüfungsfragebögen vorhanden",
-                "Es gibt es noch keine Prüfungsfragenbögen. Bitte zuerst einen Fragebogen importieren\n" +
+                "Es gibt noch keine Prüfungsfragenbögen. Bitte zuerst einen Fragebogen importieren\n" +
                     "Hinweis: Beim Import nicht vergessen, die entsprechende Checkbox zu markieren!");
         }
-
     }
+
+    @Override
+    public void run() {
+        LOG.debug("Edit exam listener thread started!");
+        while (!lerntiaMainController.isExamMode()) {
+            if (editExamController.getEditingCanceled()) {
+                examToLearnButton.setDisable(true);
+                learnToExamButton.setDisable(false);
+                LOG.debug("Exam canceled!");
+                return;
+            }
+        }
+    }
+
 
     @FXML
     public void switchToLearnMode() {
@@ -104,6 +127,7 @@ public class MenuBarController {
                 lerntiaMainController.setExamMode(false);
                 lerntiaMainController.switchToLearnMode();
                 lerntiaMainController.getAndShowTheFirstQuestion();
+
             }
         } catch (ControllerException e) {
             e.printStackTrace();
@@ -130,6 +154,5 @@ public class MenuBarController {
             "Diese Funktionalität ist noch nicht verfügbar.",
             "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
     }
-
 
 }

@@ -51,7 +51,7 @@ public class EditExamController {
     private List<Question> currentQuestionList;
     private ArrayList<Question> questionList = new ArrayList<>();
     private List<Question> acceptedQuestionList = new ArrayList<>();
-
+    private boolean editingCanceled = false;
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
 
     @FXML
@@ -96,6 +96,7 @@ public class EditExamController {
     private Button addQuestions;
     @FXML
     private AnchorPane pane;
+    private Stage windowStage;
 
     public EditExamController(LerntiaMainController lerntiaMainController,
                               WindowController windowController,
@@ -283,7 +284,27 @@ public class EditExamController {
         selected = selectedQuestionnaire;
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
+        windowStage = windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
+
+        windowStage.setOnCloseRequest(event -> {
+            var alertController = new AlertController();
+            if (alertController.showStandardConfirmationAlert("Prüfungseditierung abbrechen?",
+                "Soll der Prüfungsvorgang wirklich beendet werden?",
+                "Alle Änderungen gehen verloren und der Prüfungsmodus wird verlassen!")) {
+                LOG.debug("Canceled editing the exam!");
+                editingCanceled = true;
+                return;
+            }
+            event.consume();
+        });
+    }
+
+    public boolean getEditingCanceled() {
+        return editingCanceled;
+    }
+
+    public void setEditingCanceled(boolean editingCanceled) {
+        this.editingCanceled = editingCanceled;
     }
 
     private void setQuestionTable() {
@@ -294,11 +315,11 @@ public class EditExamController {
             questionnaireQuestion.setQid(selected.getId());
             List<QuestionnaireQuestion> helper = questionnaireQuestionService.search(questionnaireQuestion);
 
-            Question searchparameter;
+            Question searchParameter;
             for (QuestionnaireQuestion q : helper) {
-                searchparameter = new Question();
-                searchparameter.setId(q.getQuestionid());
-                searchparameters.add(searchparameter);
+                searchParameter = new Question();
+                searchParameter.setId(q.getQuestionid());
+                searchparameters.add(searchParameter);
             }
 
             entireQuestionList = questionService.search(searchparameters);
