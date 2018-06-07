@@ -66,7 +66,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
     }
 
     @Override
-    public List readAll() throws ServiceException {
+    public List<LearningQuestionnaire> readAll() throws ServiceException {
         try {
             return iLearningQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
