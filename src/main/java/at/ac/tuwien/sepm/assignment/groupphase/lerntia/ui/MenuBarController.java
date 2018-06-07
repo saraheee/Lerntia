@@ -86,9 +86,8 @@ public class MenuBarController implements Runnable {
             examToLearnButton.setDisable(false);
             learnToExamButton.setDisable(true);
 
+            selectExamController.setSelectingCanceled(false);
             editExamController.setEditingCanceled(false);
-
-
             var examEditThread = new Thread(this);
             examEditThread.start();
 
@@ -104,7 +103,9 @@ public class MenuBarController implements Runnable {
     public void run() {
         LOG.debug("Edit exam listener thread started!");
         while (!lerntiaMainController.isExamMode()) {
-            if (editExamController.getEditingCanceled()) {
+            LOG.debug("exam editing canceled: " + editExamController.getEditingCanceled() + ", exam selection canceled: " + selectExamController.getSelectingCanceled());
+            
+            if (editExamController.getEditingCanceled() || selectExamController.getSelectingCanceled()) {
                 examToLearnButton.setDisable(true);
                 learnToExamButton.setDisable(false);
                 LOG.debug("Exam canceled!");
