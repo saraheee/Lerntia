@@ -216,13 +216,20 @@ public class SelectQuestionAdministrateController {
         if (selectedItems.size() == 0) {
             //Nothing is selected -> Show a warning window
             alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen",
-                "Bitte mindestens eine Frage auswählen!", null);
+                "Bitte mindestens eine Frage zum Löschen auswählen!", null);
             return;
         }
 
-        //If min. 1 question is selected.
-        boolean press = alertController.showStandardConfirmationAlert("Fragen löschen",
-            "Sollen die ausgewählten Fragen wirklich gelöscht werden?", "Es wurden " + selectedItems.size() + " Fragen ausgewählt.");
+        boolean press;
+        //One question was selected
+        if (selectedItems.size() == 1) {
+            press = alertController.showStandardConfirmationAlert("Frage löschen",
+                "Soll die ausgewählte Frage wirklich gelöscht werden?", "Diese Änderung kann nicht rückgängig gemacht werden!");
+        } else {
+            press = alertController.showStandardConfirmationAlert("Fragen löschen",
+                "Sollen die ausgewählten Fragen wirklich gelöscht werden?", "Es wurden " + selectedItems.size() + " Fragen ausgewählt.\n" +
+                    "Diese Änderung kann nicht rückgängig gemacht werden!");
+        }
         if (press) {
             for (Question selectedItem : selectedItems) {
                 try {
