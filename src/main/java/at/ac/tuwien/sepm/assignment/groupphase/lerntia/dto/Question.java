@@ -143,29 +143,28 @@ public class Question {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", questionText='" + questionText + '\'' +"\n"+
-            ", picture='" + picture + '\'' +"\n"+
-            ", answer1='" + answer1 + '\'' +"\n"+
-            ", answer2='" + answer2 + '\'' +"\n"+
-            ", answer3='" + answer3 + '\'' +"\n"+
-            ", answer4='" + answer4 + '\'' +"\n"+
-            ", answer5='" + answer5 + '\'' +"\n"+
-            ", correctAnswers='" + correctAnswers + '\'' +"\n"+
-            ", optionalFeedback='" + optionalFeedback + '\'' +"\n"+
+            ", questionText='" + questionText + '\'' + "\n" +
+            ", picture='" + picture + '\'' + "\n" +
+            ", answer1='" + answer1 + '\'' + "\n" +
+            ", answer2='" + answer2 + '\'' + "\n" +
+            ", answer3='" + answer3 + '\'' + "\n" +
+            ", answer4='" + answer4 + '\'' + "\n" +
+            ", answer5='" + answer5 + '\'' + "\n" +
+            ", correctAnswers='" + correctAnswers + '\'' + "\n" +
+            ", optionalFeedback='" + optionalFeedback + '\'' + "\n" +
             ", isDeleted=" + isDeleted +
             '}';
     }
 
-    public String toStringGUI(){
-        return "Question Text: '" + questionText + '\'' +"\n"+
-            "Picture: '" + picture + '\'' +"\n"+
-            "Answer 1: '" + answer1 + '\'' +"\n"+
-            "Answer 2: '" + answer2 + '\'' +"\n"+
-            "Answer 3: '" + answer3 + '\'' +"\n"+
-            "Answer 4: '" + answer4 + '\'' +"\n"+
-            "Answer 5: '" + answer5 + '\'' +"\n"+
-            "Correct Answers: '" + correctAnswers + '\'' +"\n"+
-            "Optional Feedback: '" + optionalFeedback + '\'';
+    public String toStringGUI() {
+        //the first three fields are mandatory
+        return "Frage: " + questionText + "\n" +
+            "Antwort 1: " + answer1 + "\n" +
+            "Antwort 2: " + answer2 + "\n" +
+            ((answer3 != null && answer3.trim().length() > 0) ? "Antwort 3: " + answer3 + "\n" : "") +
+            ((answer4 != null && answer4.trim().length() > 0) ? "Antwort 4: " + answer4 + "\n" : "") +
+            ((answer5 != null && answer5.trim().length() > 0) ? "Antwort 5: " + answer5 + "\n" : "") +
+            ((picture != null && picture.trim().length() > 0) ? "Bild: " + picture : "");
     }
 
     public String getCheckedAnswers() {

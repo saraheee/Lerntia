@@ -268,7 +268,7 @@ public class EditExamController {
     private void showHoverText(TableRow<Question> row) {
         row.hoverProperty().addListener(event -> {
             if (!row.isEmpty()) {
-                ToolTipManager.sharedInstance().setInitialDelay(40);
+                ToolTipManager.sharedInstance().setInitialDelay(10);
                 int delay = Integer.MAX_VALUE;
                 ToolTipManager.sharedInstance().setDismissDelay(delay);
                 final Tooltip t = new Tooltip();
@@ -290,7 +290,7 @@ public class EditExamController {
             var alertController = new AlertController();
             if (alertController.showStandardConfirmationAlert("Prüfungseditierung abbrechen?",
                 "Soll der Prüfungsvorgang wirklich beendet werden?",
-                "Alle Änderungen gehen verloren und der Prüfungsmodus wird verlassen!")) {
+                "Alle Änderungen gehen verloren und es erfolgt eine Weiterleitung in den Lernmodus!")) {
                 LOG.debug("Canceled editing the exam!");
                 editingCanceled = true;
                 return;

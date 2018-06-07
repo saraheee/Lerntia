@@ -119,3 +119,12 @@
 .text-field:focused {
     -fx-background-color: rgba(51, 0, 102, 0.07);
 }
+
+.tooltip {
+    -fx-background: rgb(138, 138, 138);
+    -fx-text-fill: black;
+    -fx-background-color: rgba(234, 227, 247, 0.95);
+    -fx-background-radius: 6px;
+    -fx-font-size: 1.15em;
+}
+
