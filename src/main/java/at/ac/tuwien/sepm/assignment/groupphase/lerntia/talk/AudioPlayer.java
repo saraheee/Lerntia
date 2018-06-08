@@ -20,17 +20,11 @@ public class AudioPlayer extends Thread implements IAudioPlayer {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public boolean finishedAudio = false;
     private AudioInputStream ais;
-    private LineListener lineListener;
     private SourceDataLine line;
-    private int outputMode;
     private Status status = Status.WAITING;
     private boolean exitRequested = false;
     private float gain = 1.0f;
 
-
-    //AudioPlayer which can be used if audio stream is to be set separately, using setAudio().
-    public AudioPlayer() {
-    }
 
     public void setAudio(AudioInputStream audio) {
         if (status == Status.PLAYING) {
@@ -71,19 +65,12 @@ public class AudioPlayer extends Thread implements IAudioPlayer {
         finishedAudio = false;
         var audioFormat = ais.getFormat();
         if (audioFormat.getChannels() == 1) {
-            if (outputMode != 0) {
-                ais = new StereoAudioInputStream(ais, outputMode);
-                audioFormat = ais.getFormat();
-            }
+            ais = new StereoAudioInputStream(ais);
+            audioFormat = ais.getFormat();
+
         } else {
             assert audioFormat.getChannels() == 2 : "Unexpected number of channels: " + audioFormat.getChannels();
-            if (outputMode == 0) {
-                ais = new MonoAudioInputStream(ais);
-            } else if (outputMode == 1 || outputMode == 2) {
-                ais = new StereoAudioInputStream(ais, outputMode);
-            } else {
-                assert outputMode == 3 : "Unexpected output mode: " + outputMode;
-            }
+            ais = new MonoAudioInputStream(ais);
         }
 
         var info = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -102,9 +89,6 @@ public class AudioPlayer extends Thread implements IAudioPlayer {
                 }
                 info = new DataLine.Info(SourceDataLine.class, audioFormat);
                 line = (SourceDataLine) AudioSystem.getLine(info);
-            }
-            if (lineListener != null) {
-                line.addLineListener(lineListener);
             }
             line.open(audioFormat);
         } catch (Exception ex) {
