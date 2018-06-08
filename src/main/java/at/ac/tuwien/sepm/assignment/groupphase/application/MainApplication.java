@@ -51,7 +51,6 @@ public final class MainApplication extends Application implements Runnable {
             if (alertController.showBigConfirmationAlert("Wirklich beenden",
                 "Soll Lerntia wirklich beendet werden?", "")) {
                 LOG.debug("Application shutdown initiated");
-                controller.fireFeedbackAlert();
                 return;
             }
             event.consume();

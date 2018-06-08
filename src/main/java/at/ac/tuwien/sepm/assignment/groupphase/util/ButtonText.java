@@ -5,6 +5,8 @@ public enum ButtonText {
     YES("Ja"),
     NO("Nein"),
     CONTINUE("Weiter"),
+    CANCEL("Abbrechen"),
+    SHOW("Anzeigen"),
     ALLQUESTIONS("Alle Fragen"),
     WRONGQUESTIONS("Falsche Fragen");
 

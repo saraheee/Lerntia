@@ -14,14 +14,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,6 @@ public class LerntiaMainController {
     private final IQuestionnaireService questionnaireService;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
-    private DialogPane alertFeedback;
-    private boolean openFeedbackAlert = false;
     private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
@@ -162,17 +161,6 @@ public class LerntiaMainController {
                     handIn(null);
                 }
             }
-            if (e.getCode() == KeyCode.M) { //TODO: method not needed anymore (should be deleted AFTER deleting the symbol by the student)
-                LOG.debug("M key was pressed");
-                if (alertFeedback != null && alertFeedback.getScene() != null) {
-                    var stage = (Stage) alertFeedback.getScene().getWindow();
-                    if (stage != null) {
-                        stage.setIconified(false);
-                        stage.setMaximized(false);
-                        stage.toFront();
-                    }
-                }
-            }
             if (e.getCode() == KeyCode.G) {
                 LOG.info("G key was pressed.");
                 learnAlgorithmController.onAlgorithmButtonPressed();
@@ -185,88 +173,23 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
                 LOG.debug("1 key was pressed");
-
                 handleAnswer(answer1Controller);
-
-                /*if (answer1Controller.isDisabled()) {
-                    audioController.readSingleAnswer(answer1Controller.getAnswerText());
-
-                } else { //answer is not disabled
-                    answer1Controller.setSelected(!answer1Controller.isSelected());
-                    if (answer1Controller.isSelected()) {
-                        audioController.readSingleAnswer(answer1Controller.getAnswerText());
-                    } else {
-                        audioController.stopReading();
-                    }
-                }*/
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
                 LOG.debug("2 key was pressed");
-
                 handleAnswer(answer2Controller);
-
-                /*if (answer2Controller.isDisabled()) {
-                    audioController.readSingleAnswer(answer2Controller.getAnswerText());
-
-                } else { //answer is not disabled
-                    answer2Controller.setSelected(!answer2Controller.isSelected());
-                    if (answer2Controller.isSelected()) {
-                        audioController.readSingleAnswer(answer2Controller.getAnswerText());
-                    } else {
-                        audioController.stopReading();
-                    }
-                }*/
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
                 LOG.debug("3 key was pressed");
-
                 handleAnswer(answer3Controller);
-
-                /*if (answer3Controller.isDisabled()) {
-                    audioController.readSingleAnswer(answer3Controller.getAnswerText());
-
-                } else { //answer is not disabled
-                    answer3Controller.setSelected(!answer3Controller.isSelected());
-                    if (answer3Controller.isSelected()) {
-                        audioController.readSingleAnswer(answer3Controller.getAnswerText());
-                    } else {
-                        audioController.stopReading();
-                    }
-                }*/
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
                 LOG.debug("4 key was pressed");
-
                 handleAnswer(answer4Controller);
-
-                /*if (answer4Controller.isDisabled()) {
-                    audioController.readSingleAnswer(answer4Controller.getAnswerText());
-
-                } else { //answer is not disabled
-                    answer4Controller.setSelected(!answer4Controller.isSelected());
-                    if (answer4Controller.isSelected()) {
-                        audioController.readSingleAnswer(answer4Controller.getAnswerText());
-                    } else {
-                        audioController.stopReading();
-                    }
-                }*/
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
                 LOG.debug("5 key was pressed");
-
                 handleAnswer(answer5Controller);
-
-                /*if (answer5Controller.isDisabled()) {
-                    audioController.readSingleAnswer(answer5Controller.getAnswerText());
-
-                } else { //answer is not disabled
-                    answer5Controller.setSelected(!answer5Controller.isSelected());
-                    if (answer5Controller.isSelected()) {
-                        audioController.readSingleAnswer(answer5Controller.getAnswerText());
-                    } else {
-                        audioController.stopReading();
-                    }
-                }*/
             }
 
         }));
@@ -284,7 +207,7 @@ public class LerntiaMainController {
     }
 
     private void handleAnswer(AnswerController answerController) {
-        if (answerController.isDisabled()) {
+        if (answerController.isDisabled()) { // enable reading but not selecting of answers
             audioController.readSingleAnswer(answerController.getAnswerText());
 
         } else { //answer is not disabled
@@ -297,24 +220,15 @@ public class LerntiaMainController {
         }
     }
 
-    public void fireFeedbackAlert() {
-        if (alertFeedback != null) {
-            var okButton = (Button) (alertFeedback.lookupButton(ButtonType.OK));
-            okButton.fire();
-            openFeedbackAlert = false;
-        }
-    }
-
     @FXML
     private void checkIfQuestionWasCorrect() {
-        // gather the info about the checked answers
-
         audioController.stopReading();
         audioController.deselectAudioButton();
         if (questionColored) {
             removeColorsAndEnableAnswers();
         }
 
+        // gather the info about the checked answers
         try {
             String checkedAnswers = getCheckedAnswers();
             boolean goToNextQuestion = true;
@@ -334,20 +248,11 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    if (alertController.showBigConfirmationAlert("Antwort richtig!", feedbackPrefix,
+                    if (alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
                         question.getOptionalFeedback())) {
                         goToNextQuestion = false;
                     }
-
-
-                    /*alertFeedback = alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
-                        question.getOptionalFeedback());
-                    var stage = (Stage) alertFeedback.getScene().getWindow();
-                    openFeedbackAlert = true;
-                    stage.showAndWait();*/
                     audioController.stopReading();
-                    openFeedbackAlert = false;
-
 
                 } else {
                     var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
@@ -355,18 +260,11 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    if (alertController.showBigConfirmationAlert("Antworten richtig!", feedbackPrefix,
+                    if (alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
                         question.getOptionalFeedback())) {
                         goToNextQuestion = false;
                     }
-
-                    /*alertFeedback = alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
-                        question.getOptionalFeedback());
-                    var stage = (Stage) alertFeedback.getScene().getWindow();
-                    openFeedbackAlert = true;
-                    stage.showAndWait();*/
                     audioController.stopReading();
-                    openFeedbackAlert = false;
                 }
             } else {
                 try {
@@ -380,36 +278,22 @@ public class LerntiaMainController {
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
-                    if (alertController.showBigConfirmationAlert("Antwort nicht richtig.", feedbackPrefix,
+                    if (alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback())) {
                         goToNextQuestion = false;
                     }
-
-                    /*alertFeedback = alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
-                        question.getOptionalFeedback());
-                    var stage = (Stage) alertFeedback.getScene().getWindow();
-                    openFeedbackAlert = true;
-                    stage.showAndWait();*/
                     audioController.stopReading();
-                    openFeedbackAlert = false;
 
                 } else {
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
                         + formatAnswerNumbers(question.getCorrectAnswers());
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
 
-                    if (alertController.showBigConfirmationAlert("Antworten nicht richtig.", feedbackPrefix,
+                    if (alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback())) {
                         goToNextQuestion = false;
                     }
-
-                    /*alertFeedback = alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
-                        question.getOptionalFeedback());
-                    var stage = (Stage) alertFeedback.getScene().getWindow();
-                    openFeedbackAlert = true;
-                    stage.showAndWait();*/
                     audioController.stopReading();
-                    openFeedbackAlert = false;
                 }
             }
             /* send checked answers to service (in order to use it for statistics and learning algorithm)
@@ -437,7 +321,7 @@ public class LerntiaMainController {
 
     private void showColorsAndDisableAnswers(String correctAnswers) {
         questionColored = true;
-        LOG.debug("QUESTIONS COLORED");
+        LOG.debug("Answers colored");
         if (correctAnswers.contains(String.valueOf(1))) {
             answer1Controller.markGreen();
         } else {
@@ -470,8 +354,8 @@ public class LerntiaMainController {
         answer5Controller.setDisabled(true);
     }
 
-    private void removeColorsAndEnableAnswers() {
-        LOG.debug("QUESTIONS UNCOLORED");
+    public void removeColorsAndEnableAnswers() {
+        LOG.debug("Answers uncolored");
         answer1Controller.markBlack();
         answer2Controller.markBlack();
         answer3Controller.markBlack();

@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
@@ -156,4 +157,13 @@ public class MenuBarController implements Runnable {
             "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
     }
 
+    @FXML
+    private void onMenuClicked() {
+        lerntiaMainController.removeColorsAndEnableAnswers();
+    }
+
+    @FXML
+    private void onHelpClicked() {
+        lerntiaMainController.removeColorsAndEnableAnswers();
+    }
 }
