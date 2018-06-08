@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,18 +34,13 @@ public class UserQuestionnaireDAO implements IUserQuestionnaireDAO {
 
     @Override
     public void create(UserQuestionnaire userQuestionnaire) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for new UserQuestionnaire entry.");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_USERQUESTIONNAIREQ_CREATE_STATEMENT);
-            try {
-                psCreate.setString(1, userQuestionnaire.getMatriculationNumber());
-                psCreate.setLong(2, userQuestionnaire.getQid());
-                psCreate.setBoolean(3, userQuestionnaire.getDeleted());
-                psCreate.execute();
-                LOG.info("Statement for new UserQuestionnaire entry successfully sent.");
-            } finally {
-                psCreate.close();
-            }
+        LOG.info("Prepare Statement for new UserQuestionnaire entry.");
+        try (PreparedStatement psCreate = connection.prepareStatement(SQL_USERQUESTIONNAIREQ_CREATE_STATEMENT)) {
+            psCreate.setString(1, userQuestionnaire.getMatriculationNumber());
+            psCreate.setLong(2, userQuestionnaire.getQid());
+            psCreate.setBoolean(3, userQuestionnaire.getDeleted());
+            psCreate.execute();
+            LOG.info("Statement for new UserQuestionnaire entry successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("UserQuestionnaireDAO CREATE error: item couldn't been created, check if all mandatory values have been added and if the connection to the Database is valid.");
         }
