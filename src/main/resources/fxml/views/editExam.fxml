@@ -8,6 +8,9 @@
             xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
     <TableView fx:id="questionTable" layoutX="16.0" layoutY="22.0" prefHeight="292.0" prefWidth="863.0">
+        <placeholder>
+            <Label wrapText="true" text="Alle Fragen wurden der Prüfungstabelle hinzugefügt."/>
+        </placeholder>
         <columns>
             <TableColumn fx:id="questionColumn" prefWidth="245.0" text="Fragen"/>
             <TableColumn fx:id="firstAnswerColumn" prefWidth="120.0" text="1. Antwort"/>
@@ -38,6 +41,9 @@
     </Button>
 
     <TableView fx:id="acceptedTable" layoutX="14.0" layoutY="377.0" prefHeight="304.0" prefWidth="863.0">
+        <placeholder>
+            <Label wrapText="true" text="Es wurden noch keine Fragen der Prüfungstabelle hinzugefügt."/>
+        </placeholder>
         <columns>
             <TableColumn fx:id="columnAccepted" prefWidth="245.0" text="Prüfungsfragen"/>
             <TableColumn prefWidth="120.0" text="1. Antwort" fx:id="xfirstAnswerColumn"/>

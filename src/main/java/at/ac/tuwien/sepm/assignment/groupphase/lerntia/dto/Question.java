@@ -3,6 +3,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.CheckBox;
 
+import java.text.BreakIterator;
+import java.util.Locale;
+
 public class Question {
     private Long id;
     private String questionText;
@@ -61,7 +64,7 @@ public class Question {
         this.picture = picture;
         JFXPanel fxPanel = new JFXPanel();
         containPicture = new CheckBox();
-        if (picture != null && picture.equals("")) {
+        if (picture != null && picture.trim().equals("")) {
             this.setContainPicture(false);
             this.containPicture.setText(checked.Nein.toString());
         }
@@ -158,7 +161,7 @@ public class Question {
 
     public String toStringGUI() {
         //the first three fields are mandatory
-        return "Frage: " + questionText + "\n" +
+        return "Frage: " + formatLines(questionText, new Locale ("de","AT")) +
             "Antwort 1: " + answer1 + "\n" +
             "Antwort 2: " + answer2 + "\n" +
             ((answer3 != null && answer3.trim().length() > 0) ? "Antwort 3: " + answer3 + "\n" : "") +
@@ -181,6 +184,27 @@ public class Question {
 
     private void setContainPicture(boolean set) {
         this.containPicture.setSelected(set);
+    }
+
+    private static String formatLines(String target, Locale currentLocale) {
+        var boundary = BreakIterator.getSentenceInstance(currentLocale);
+        boundary.setText(target);
+        var start = boundary.first();
+        var end = boundary.next();
+        var lineLength = 0;
+        var word = new StringBuilder();
+        while (end != BreakIterator.DONE) {
+            word.append(target.substring(start, end));
+            lineLength = lineLength + word.length();
+            if (lineLength >= 100) {
+                word.append('\n');
+                lineLength = word.length();
+            }
+            start = end;
+            end = boundary.next();
+        }
+        word = (word.substring(word.length() - 1).equals("\n") ? word : (word.append("\n")));
+        return word.toString();
     }
 
     public enum checked {

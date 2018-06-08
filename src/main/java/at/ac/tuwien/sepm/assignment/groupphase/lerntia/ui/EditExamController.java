@@ -154,9 +154,10 @@ public class EditExamController {
         questionColumn.setSortable(false);
         questionTable.setRowFactory(tv -> {
             TableRow<Question> row = new TableRow<>();
+            showHoverText(row);
 
             row.setOnDragDetected(event -> {
-                if (! row.isEmpty()) {
+                if (!row.isEmpty()) {
                     Integer index = row.getIndex();
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
@@ -170,7 +171,7 @@ public class EditExamController {
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -183,10 +184,10 @@ public class EditExamController {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Question draggedQuestion = questionTable.getItems().remove(draggedIndex);
 
-                    int dropIndex ;
+                    int dropIndex;
 
                     if (row.isEmpty()) {
-                        dropIndex = questionTable.getItems().size() ;
+                        dropIndex = questionTable.getItems().size();
                     } else {
                         dropIndex = row.getIndex();
                     }
@@ -199,17 +200,18 @@ public class EditExamController {
                 }
             });
 
-            return row ;
+            return row;
         });
 
 
         acceptedTable.setRowFactory(tv -> {
             TableRow<Question> row = new TableRow<>();
+            showHoverText(row);
 
             row.setOnDragDetected(event -> {
-               if (! row.isEmpty()) {
-                   LOG.info("Drag detected in acceptedtable");
-                   Integer index = row.getIndex();
+                if (!row.isEmpty()) {
+                    LOG.info("Drag detected in acceptedtable");
+                    Integer index = row.getIndex();
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
@@ -220,11 +222,10 @@ public class EditExamController {
             });
 
             row.setOnDragOver(event -> {
-
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                LOG.info("Drag over event in Accepted Table");
-                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    LOG.info("Drag over event in Accepted Table");
+                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -238,10 +239,10 @@ public class EditExamController {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Question draggedQuestion = acceptedTable.getItems().remove(draggedIndex);
 
-                    int dropIndex ;
+                    int dropIndex;
 
                     if (row.isEmpty()) {
-                        dropIndex = acceptedTable.getItems().size() ;
+                        dropIndex = acceptedTable.getItems().size();
                     } else {
                         dropIndex = row.getIndex();
                     }
@@ -253,8 +254,7 @@ public class EditExamController {
                     event.consume();
                 }
             });
-
-            return row ;
+            return row;
         });
     }
 
@@ -370,8 +370,6 @@ public class EditExamController {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Fragen vorhanden.", "Keine Fragen verfügbar",
                 "Eine Zufallsreihenfolge kann nicht generiert werden, wenn keine Fragen zur Prüfungstabelle hinzugefügt wurden.");
         }
-
-
     }
 
 
@@ -405,7 +403,6 @@ public class EditExamController {
             questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
             selectedQuestions.clear();
         }
-
     }
 
     public void onRemoveQuestionsButtonClicked() {
