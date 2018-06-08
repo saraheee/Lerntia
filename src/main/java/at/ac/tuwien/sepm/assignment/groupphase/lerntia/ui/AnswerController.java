@@ -72,7 +72,7 @@ public class AnswerController implements Initializable {
     }
 
     void markBlack() {
-        answer.setTextFill(Color.web("BLACK"));
+        answer.setTextFill(Color.web("#333333"));
     }
 
     public boolean isDisabled() {
