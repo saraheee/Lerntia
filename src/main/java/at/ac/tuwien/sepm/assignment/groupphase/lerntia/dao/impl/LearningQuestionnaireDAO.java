@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,18 +41,19 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             questionnaireDAO.create(learningQuestionnaire);
             LOG.info("Entry for general Questionnaire successful.");
             LOG.info("Prepare Statement for LearningQuestionnaire...");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT);
-            try {
+            try (PreparedStatement psCreate = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT)) {
+
                 psCreate.setLong(1, learningQuestionnaire.getId());
                 psCreate.executeUpdate();
                 LOG.info("Statement for LearningQuestionnaire successfully sent.");
-            }finally {
-                psCreate.close();
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException("LearningQuestionnaireDAO CREATE error: LearningQuestionnaire couldn't be created, check if all mandatory values have been added or the connection to the Database is valid.");
-        }
 
+            } catch (SQLException e) {
+                throw new PersistenceException("LearningQuestionnaireDAO CREATE error: LearningQuestionnaire couldn't be created, check if all mandatory values have been added or the connection to the Database is valid.");
+            }
+
+        } catch (PersistenceException e){
+            throw new PersistenceException("LearningQuestionnaireDAO CREATE error: Questionnaire couldn't be created so the LearningQuestionnaire entry couldn't be created either.");
+        }
     }
 
     @Override

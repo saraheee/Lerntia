@@ -50,17 +50,6 @@ public class SimpleCourseService implements ICourseService {
         }
     }
 
-    @Override
-    public void search(Course course) throws ServiceException {
-        try {
-            LOG.info("Search for Course: {}", course);
-            courseDAO.search(course);
-            LOG.info("Course has been found");
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
 
     @Override
     public void delete(Course course) throws ServiceException {

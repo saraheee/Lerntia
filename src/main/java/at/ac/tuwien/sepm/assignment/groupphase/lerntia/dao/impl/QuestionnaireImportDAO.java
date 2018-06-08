@@ -1,12 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireImportDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
