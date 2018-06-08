@@ -155,14 +155,8 @@ public class EditExamController {
         questionTable.setRowFactory(tv -> {
             TableRow<Question> row = new TableRow<>();
 
-            LOG.info("Row factory for Question Table");
-            showHoverText(row);
-
-
             row.setOnDragDetected(event -> {
-
-                if (!row.isEmpty()) {
-                    LOG.info("Drag detected");
+                if (! row.isEmpty()) {
                     Integer index = row.getIndex();
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
@@ -176,8 +170,7 @@ public class EditExamController {
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    LOG.info("");
-                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
+                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -187,39 +180,36 @@ public class EditExamController {
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    LOG.info("Drag Dropped");
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Question draggedQuestion = questionTable.getItems().remove(draggedIndex);
 
-                    int dropIndex;
+                    int dropIndex ;
 
                     if (row.isEmpty()) {
-                        dropIndex = questionTable.getItems().size();
+                        dropIndex = questionTable.getItems().size() ;
                     } else {
                         dropIndex = row.getIndex();
                     }
-                    questionTable.getItems().add(draggedQuestion);
+
+                    questionTable.getItems().add(dropIndex, draggedQuestion);
 
                     event.setDropCompleted(true);
-                    acceptedTable.getSelectionModel().clearSelection();
-                    questionTable.getSelectionModel().clearSelection();
                     questionTable.getSelectionModel().select(dropIndex);
                     event.consume();
                 }
             });
-            return row;
+
+            return row ;
         });
 
 
         acceptedTable.setRowFactory(tv -> {
             TableRow<Question> row = new TableRow<>();
 
-
-            showHoverText(row);
-
             row.setOnDragDetected(event -> {
-                if (!row.isEmpty()) {
-                    Integer index = row.getIndex();
+               if (! row.isEmpty()) {
+                   LOG.info("Drag detected in acceptedtable");
+                   Integer index = row.getIndex();
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
                     ClipboardContent cc = new ClipboardContent();
@@ -230,9 +220,11 @@ public class EditExamController {
             });
 
             row.setOnDragOver(event -> {
+
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
+                LOG.info("Drag over event in Accepted Table");
+                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -242,26 +234,27 @@ public class EditExamController {
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    LOG.info("Drop event in accepted table");
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Question draggedQuestion = acceptedTable.getItems().remove(draggedIndex);
 
-                    int dropIndex;
+                    int dropIndex ;
 
                     if (row.isEmpty()) {
-                        dropIndex = acceptedTable.getItems().size();
+                        dropIndex = acceptedTable.getItems().size() ;
                     } else {
                         dropIndex = row.getIndex();
                     }
-                    acceptedTable.getItems().add(draggedQuestion);
+
+                    acceptedTable.getItems().add(dropIndex, draggedQuestion);
 
                     event.setDropCompleted(true);
-                    acceptedTable.getSelectionModel().clearSelection();
-                    questionTable.getSelectionModel().clearSelection();
                     acceptedTable.getSelectionModel().select(dropIndex);
                     event.consume();
                 }
             });
-            return row;
+
+            return row ;
         });
     }
 
