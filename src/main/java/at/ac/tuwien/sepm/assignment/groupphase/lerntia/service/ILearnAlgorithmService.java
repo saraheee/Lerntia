@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
-
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +45,12 @@ public interface ILearnAlgorithmService {
      * */
     List<Long> prepareQuestionValues(List<QuestionLearnAlgorithm> questionAlgorithmList) throws ServiceException;
 
+    /**
+     * Helper method that sorts the valuemap and returns it as a list.
+     *
+     * @param valueMap map of question values that need to be sorted.
+     * @return list of sorted question ids that will be used as an index.
+     * */
     List<Long> sortValueMap(Map<Long, Double> valueMap);
 
     /**

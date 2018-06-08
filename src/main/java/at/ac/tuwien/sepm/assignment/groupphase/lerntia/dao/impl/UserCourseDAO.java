@@ -32,17 +32,12 @@ public class UserCourseDAO implements IUserCourseDAO {
 
     @Override
     public void create(UserCourse userCourse) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for new UserCourse entry.");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_USERCOURSE_CREATE_STATEMENT);
-            try {
-                psCreate.setString(1, userCourse.getMatriculationNumber());
-                psCreate.setLong(2, userCourse.getCourseID());
-                psCreate.execute();
-                LOG.info("Statement for new UserCourse entry successfully sent.");
-            } finally {
-                psCreate.close();
-            }
+        LOG.info("Prepare Statement for new UserCourse entry.");
+        try (PreparedStatement psCreate = connection.prepareStatement(SQL_USERCOURSE_CREATE_STATEMENT)) {
+            psCreate.setString(1, userCourse.getMatriculationNumber());
+            psCreate.setLong(2, userCourse.getCourseID());
+            psCreate.execute();
+            LOG.info("Statement for new UserCourse entry successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("UserCourseDAO CREATE error: item couldn't have been created, check if all mandatory values have been added or if the connection to the Database is valid.");
         }

@@ -24,14 +24,6 @@ public interface ICourseService {
     void update(Course course) throws ServiceException;
 
     /**
-     * Search for a course in the Database with specific searchparameters
-     *
-     * @param course the Parameters used to find the Courses in question
-     * @throws ServiceException if the method can't search for the course
-     * */
-    void search(Course course) throws ServiceException;
-
-    /**
      * Delete an existing course from the Database
      *
      * @param course the course that needs to be deleted
