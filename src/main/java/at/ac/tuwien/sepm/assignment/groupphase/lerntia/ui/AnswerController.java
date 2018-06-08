@@ -68,7 +68,7 @@ public class AnswerController implements Initializable {
     }
 
     void markGreen() {
-        answer.setTextFill(Color.web("GREEN"));
+        answer.setTextFill(Color.web("DARKGREEN"));
     }
 
     void markBlack() {

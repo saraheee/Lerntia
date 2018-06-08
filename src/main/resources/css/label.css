@@ -73,5 +73,5 @@
 }
 
 .check-box:disabled, .check-box:disabled > * {
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.85;
 }
