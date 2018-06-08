@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +28,21 @@ public interface IMainLerntiaService {
      * */
     Question getFirstQuestion() throws ServiceException;
 
+    /**
+     * Sets the customly choosen questions from the Edit Exam Window in the Questions List
+     *
+     * @param customList custom list of questions that are set for the exam.
+     * @throws ServiceException if the method can't obtain the questions or/and can't set them into the question list.
+     * */
     void setCustomExamQuestions(ArrayList customList) throws ServiceException;
 
+    /**
+     * Standard Exam Questionnaire question set method. Takes the questions linked with a specific Exam Questionnaire
+     * and sets those questions into the Programm
+     *
+     * @param eQ Exam Questionnaire in question.
+     * @throws ServiceException if the method can't obtain the questions or set them into the Question List
+     * */
     void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException;
 
     /**
@@ -75,11 +87,15 @@ public interface IMainLerntiaService {
 
     /**
      * Returns the Size of the ListCounter
+     *
+     * @return Integer of the counter of a specific list.
      */
     int getListCounter();
 
     /**
      * Returns the QuestionList
+     *
+     * @return list of questions.
      */
     List<Question> getQuestionList();
 
@@ -93,16 +109,22 @@ public interface IMainLerntiaService {
 
     /**
      * Returns the number of correct answers of one questionnaire
+     *
+     * @return the number of correct answers of one questionnaire
      */
     int getCorrectAnswers();
 
     /**
      * Returns the number of wrong answers of one questionnaire
+     *
+     * @return number of wrong answers of one questionnaire
      */
     int getWrongAnswers();
 
     /**
      * Returns the number of questions of one questionnaire, which were not answered
+     *
+     * @return the number of questions of one questionnaire, which were not answered.
      */
     int getIgnoredAnswers();
 
@@ -118,14 +140,36 @@ public interface IMainLerntiaService {
      */
     void setOnlyWrongQuestions(Boolean onlyWrongQuestions);
 
+    /**
+     * Restores all questions and returns the first question of the list. Used mostly after using the "wrong question list" option
+     * and deciding to revert to all the questions from a questionnaire.
+     *
+     * @return first question of the restored list.
+     * */
     Question restoreQuestionsAndGetFirst();
 
 
-
+   /**
+    * Set the boolean value for the service layer that the exam mode is currently active or not.
+    *
+    * @param examMode boolean value which indicates if the programm is currently in the Exam mode or not.
+    * */
     void setExamMode(boolean examMode);
 
+
+    /**
+     * Set current Exam Questionnaire
+     *
+     * @param selectedQuestionnaire questionnaire in question
+     * */
     void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire);
 
 
+    /**
+     * Returns the first Question of an Exam Questionnaire
+     *
+     * @return first exam question
+     * @throws ServiceException if the method can't obtain the first Exam Question.
+     * */
     Question getFirstExamQuestion() throws ServiceException;
 }
