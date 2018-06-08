@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
@@ -119,7 +118,6 @@ public class QuestionDAO implements IQuestionDAO {
             String searchStatement = SQL_QUESTION_SEARCH_STATEMENT + parameters;
             LOG.info("Prepare Statement for Question search.");
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
-                //id,questionText,picture,answer1,answer2,answer3,answer4,answer5,correctAnswers,optionalFeedback
                 while (rs.next()) {
                     foundQuestion = new Question();
                     foundQuestion.setId(rs.getLong(1));
@@ -164,10 +162,8 @@ public class QuestionDAO implements IQuestionDAO {
     public Question get(long id) throws PersistenceException {
         try {
             LOG.info("Create GET statement for Question.");
-            String help;
-            help = SQL_QUESTION_GET_STATEMENT + id;
             Question q;
-            try (ResultSet rsGet = connection.prepareStatement(help).executeQuery()) {
+            try (ResultSet rsGet = connection.prepareStatement(SQL_QUESTION_GET_STATEMENT+id).executeQuery()) {
                 q = new Question();
                 if (rsGet.next()) {
                     q.setId(id);
@@ -194,41 +190,35 @@ public class QuestionDAO implements IQuestionDAO {
     public List<Question> searchForQuestions(Question questionInput) throws PersistenceException {
         List<Question> results = new ArrayList<>();
         LOG.info("Search a Questions which contains a part of a input String");
-        try {
-            PreparedStatement ps = connection.prepareStatement(SQL_QUESTION_SEARCH_UPPER_STATEMENT);
-            try {
+            try (PreparedStatement ps = connection.prepareStatement(SQL_QUESTION_SEARCH_UPPER_STATEMENT)) {
                 ps.setString(1, "%" + questionInput.getQuestionText() + "%");
                 ps.setString(2, "%" + questionInput.getAnswer1() + "%");
                 ps.setString(3, "%" + questionInput.getAnswer2() + "%");
                 ps.setString(4, "%" + questionInput.getAnswer3() + "%");
                 ps.setString(5, "%" + questionInput.getAnswer4() + "%");
                 ps.setString(6, "%" + questionInput.getAnswer5() + "%");
-                ResultSet rs = ps.executeQuery();
-                try {
-                    while (rs.next()) {
-                        Question q = new Question();
-                        q.setId(rs.getLong(1));
-                        q.setQuestionText(rs.getString(2));
-                        q.setPicture(rs.getString(3));
-                        q.setAnswer1(rs.getString(4));
-                        q.setAnswer2(rs.getString(5));
-                        q.setAnswer3(rs.getString(6));
-                        q.setAnswer4(rs.getString(7));
-                        q.setAnswer5(rs.getString(8));
-                        q.setCorrectAnswers(rs.getString(9));
-                        q.setOptionalFeedback(rs.getString(10));
-                        results.add(q);
-                    }
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            Question q = new Question();
+                            q.setId(rs.getLong(1));
+                            q.setQuestionText(rs.getString(2));
+                            q.setPicture(rs.getString(3));
+                            q.setAnswer1(rs.getString(4));
+                            q.setAnswer2(rs.getString(5));
+                            q.setAnswer3(rs.getString(6));
+                            q.setAnswer4(rs.getString(7));
+                            q.setAnswer5(rs.getString(8));
+                            q.setCorrectAnswers(rs.getString(9));
+                            q.setOptionalFeedback(rs.getString(10));
+                            results.add(q);
+                        }
                     LOG.info("All questions matching the searchparameter found.");
-                    return results;
-                } finally {
-                    rs.close();
                 }
-            } finally {
-                ps.close();
+                return results;
+            } catch (SQLException e) {
+                    throw new PersistenceException("QuestionDAO SEARCHFORQUESTION error: method didn't work, check if proper values have been added or if the connection to the Database is valid.");
+                }
             }
-        } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO SEARCHFORQUESTION error: method didn't work, check if proper values have been added or if the connection to the Database is valid.");
-        }
+
     }
-}
+
