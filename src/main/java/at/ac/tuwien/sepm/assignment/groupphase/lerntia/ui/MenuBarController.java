@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Controller
 public class MenuBarController implements Runnable {
@@ -28,8 +28,7 @@ public class MenuBarController implements Runnable {
     private final AdministrateQuestionnaireController administrateQuestionnaireController;
     private final AboutSectionController showAboutSectionController;
     private final AlertController alertController;
-
-
+    ReentrantLock lock = new ReentrantLock();
     @FXML
     private MenuItem examToLearnButton;
     @FXML
@@ -100,17 +99,21 @@ public class MenuBarController implements Runnable {
         }
     }
 
+
     @Override
     public void run() {
         LOG.debug("Edit exam listener thread started!");
         while (!lerntiaMainController.isExamMode()) {
-            LOG.debug("exam editing canceled: " + editExamController.getEditingCanceled() + ", exam selection canceled: " + selectExamController.getSelectingCanceled());
-
-            if (editExamController.getEditingCanceled() || selectExamController.getSelectingCanceled()) {
-                examToLearnButton.setDisable(true);
-                learnToExamButton.setDisable(false);
-                LOG.debug("Exam canceled!");
-                return;
+            lock.lock();
+            try {
+                if (selectExamController.getSelectingCanceled() || editExamController.getEditingCanceled()) {
+                    examToLearnButton.setDisable(true);
+                    learnToExamButton.setDisable(false);
+                    LOG.debug("Exam canceled!");
+                    return;
+                }
+            } finally {
+                lock.unlock();
             }
         }
     }

@@ -292,7 +292,7 @@ public class EditExamController {
                 "Soll der Prüfungsvorgang wirklich beendet werden?",
                 "Alle Änderungen gehen verloren und es erfolgt eine Weiterleitung in den Lernmodus!")) {
                 LOG.debug("Canceled editing the exam!");
-                editingCanceled = true;
+                setEditingCanceled(true);
                 return;
             }
             event.consume();

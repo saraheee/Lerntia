@@ -93,7 +93,7 @@ public class SelectExamController {
                 "Soll die Auswahl einer Prüfung wirklich abgebrochen werden?",
                 "Bei einem Abbruch wird nicht in den Prüfungsmodus gewechselt!")) {
                 LOG.debug("Canceled selecting an exam!");
-                selectingCanceled = true;
+                setSelectingCanceled(true);
                 return;
             }
             event.consume();
