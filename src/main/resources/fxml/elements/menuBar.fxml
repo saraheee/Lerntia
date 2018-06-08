@@ -5,7 +5,7 @@
 <MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css"
          xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
          fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
-    <Menu mnemonicParsing="false" text="Menü">
+    <Menu mnemonicParsing="false" text="Menü" onAction="#onMenuClicked">
         <MenuItem mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
@@ -58,7 +58,7 @@
             </graphic>
         </MenuItem>
     </Menu>
-    <Menu mnemonicParsing="false" text="Hilfe">
+    <Menu mnemonicParsing="false" text="Hilfe" onAction="#onHelpClicked">
         <MenuItem mnemonicParsing="false" onAction="#showAboutSection" text="Über Lerntia">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
