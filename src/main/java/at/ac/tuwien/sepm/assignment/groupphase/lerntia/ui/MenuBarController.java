@@ -137,8 +137,6 @@ public class MenuBarController implements Runnable {
         } catch (ControllerException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
@@ -163,10 +161,12 @@ public class MenuBarController implements Runnable {
     @FXML
     private void onMenuClicked() {
         lerntiaMainController.removeColorsAndEnableAnswers();
+        lerntiaMainController.stopAudio();
     }
 
     @FXML
     private void onHelpClicked() {
         lerntiaMainController.removeColorsAndEnableAnswers();
+        lerntiaMainController.stopAudio();
     }
 }
