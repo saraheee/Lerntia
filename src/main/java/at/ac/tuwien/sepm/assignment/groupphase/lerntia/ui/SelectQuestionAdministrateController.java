@@ -259,7 +259,6 @@ public class SelectQuestionAdministrateController implements Runnable {
 
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open information Window
-            //stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
 
@@ -281,6 +280,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
+        stage.setOnCloseRequest(event -> closedWindow = true);
 
         var buttonThread = new Thread(this);
         buttonThread.start();
@@ -318,6 +318,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+        stage.setOnCloseRequest(event -> closedWindow = true);
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(newContent);
     }
