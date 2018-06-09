@@ -539,6 +539,9 @@ public class MainLerntiaService implements IMainLerntiaService {
     public double getPercent() {
         double share = (double) getCorrectAnswers();
         double base = (double) questionList.size() - getIgnoredAnswers();
+        if (base <= 0) {
+            return 0.0;
+        }
         double percent = (share / base) * 100.00;
         return percent;
     }
