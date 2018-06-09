@@ -44,7 +44,6 @@ public class LerntiaMainController implements Runnable {
     private final ZoomedImageController zoomedImageController;
     private final AudioController audioController;
     private final AlertController alertController;
-    private final IQuestionnaireService questionnaireService;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private boolean onlyWrongQuestions = false;
@@ -103,7 +102,6 @@ public class LerntiaMainController implements Runnable {
         AlertController alertController,
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
-        IQuestionnaireService questionnaireService,
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController
     ) {
@@ -117,7 +115,6 @@ public class LerntiaMainController implements Runnable {
         this.alertController = alertController;
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.zoomedImageController = zoomedImageController;
-        this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
         this.learnAlgorithmController = learnAlgorithmController;
 
@@ -383,7 +380,7 @@ public class LerntiaMainController implements Runnable {
         try {
             question = lerntiaService.getFirstExamQuestion();
         } catch (ServiceException e) {
-            throw new ControllerException("Es gibt noch keine Prüfungs Fragen");
+            throw new ControllerException("Es gibt noch keine Prüfungsfragen!");
         }
         showQuestionAndAnswers();
     }
@@ -410,7 +407,7 @@ public class LerntiaMainController implements Runnable {
 
             showNoQuestionsAvailable();
 
-            throw new ControllerException("Es gibt noch keine Fragen");
+            throw new ControllerException("Es gibt noch keine Fragen!");
         }
         showQuestionAndAnswers();
     }
@@ -454,7 +451,7 @@ public class LerntiaMainController implements Runnable {
 
                 }
                 if (e1.getMessage().contains("List of wrong questions is Empty")) {
-                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                         "Es gibt keine falsch beantworteten Fragen mehr." +
                             "Die erste Frage wird wieder angezeigt.");
                     alertController.setOnlyWrongQuestions(false);
@@ -477,7 +474,7 @@ public class LerntiaMainController implements Runnable {
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
                     } else if (e.getMessage().contains("List of wrong questions is Empty.")) {
-                        alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                        alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                             "Es gibt keine falsch beantworteten Fragen mehr." +
                                 "Die erste Frage wird wieder angezeigt.");
 

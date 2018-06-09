@@ -41,7 +41,6 @@ public class EditExamController {
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
-    private final IExamQuestionnaireService examQuestionnaireService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final IQuestionService questionService;
     private final IMainLerntiaService mainLerntiaService;
@@ -96,19 +95,20 @@ public class EditExamController {
     private Button addQuestions;
     @FXML
     private AnchorPane pane;
-    private Stage windowStage;
+    @FXML
+    private TableColumn<Question, CheckBox> pictureColumn;
+    @FXML
+    private TableColumn<Question, CheckBox> xpictureColumn;
 
     public EditExamController(LerntiaMainController lerntiaMainController,
                               WindowController windowController,
                               AlertController alertController,
-                              IExamQuestionnaireService examQuestionnaireService,
                               IQuestionnaireQuestionService questionnaireQuestionService,
                               IQuestionService questionService,
                               IMainLerntiaService mainLerntiaService) {
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.alertController = alertController;
-        this.examQuestionnaireService = examQuestionnaireService;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.questionService = questionService;
         this.mainLerntiaService = mainLerntiaService;
@@ -128,6 +128,8 @@ public class EditExamController {
         xfourthAnswerColumn.setCellValueFactory(new PropertyValueFactory<>("answer4"));
         fifthAnswerColumn.setCellValueFactory(new PropertyValueFactory<>("answer5"));
         xfifthAnswerColumn.setCellValueFactory(new PropertyValueFactory<>("answer5"));
+        pictureColumn.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
+        xpictureColumn.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
 
         setQuestionTable();
         resetButton.setDisable(true);
@@ -171,7 +173,7 @@ public class EditExamController {
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -225,7 +227,7 @@ public class EditExamController {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     LOG.info("Drag over event in Accepted Table");
-                    if (row.getIndex() != ((Integer) db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -277,7 +279,7 @@ public class EditExamController {
         selected = selectedQuestionnaire;
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowStage = windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
+        Stage windowStage = windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
 
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();
