@@ -137,7 +137,7 @@ public class ImportFileController {
                 Course selectedCourse = courses.get(cb_courseIndex);
 
                 qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
-                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert");
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert!");
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
