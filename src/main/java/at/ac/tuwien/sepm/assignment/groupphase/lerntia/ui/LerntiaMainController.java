@@ -32,11 +32,12 @@ import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class LerntiaMainController {
+public class LerntiaMainController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IMainLerntiaService lerntiaService;
@@ -93,6 +94,7 @@ public class LerntiaMainController {
 
     private boolean examMode;
     private boolean questionColored = false;
+    private ReentrantLock lock = new ReentrantLock();
 
     @Autowired
     public LerntiaMainController(
@@ -143,6 +145,8 @@ public class LerntiaMainController {
             }
             if (e.getCode() == KeyCode.Z) {
                 LOG.debug("Z key was pressed, imageFile = {}", imageFile);
+                var zoomedImageThread = new Thread(this);
+                zoomedImageThread.start();
                 zoomedImageController.onZoomButtonClicked();
             }
             if (e.getCode() == KeyCode.N) {
@@ -744,5 +748,46 @@ public class LerntiaMainController {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+        resetZoomedImageEvents();
+        while (!zoomedImageController.getImageClosed()) {
+            lock.lock();
+            try {
+                if (zoomedImageController.isKey1pressed()) {
+                    handleAnswer(answer1Controller);
+                    return;
+                }
+                if (zoomedImageController.isKey2pressed()) {
+                    handleAnswer(answer2Controller);
+                    return;
+                }
+                if (zoomedImageController.isKey3pressed()) {
+                    handleAnswer(answer3Controller);
+                    return;
+                }
+                if (zoomedImageController.isKey4pressed()) {
+                    handleAnswer(answer4Controller);
+                    return;
+                }
+                if (zoomedImageController.isKey5pressed()) {
+                    handleAnswer(answer5Controller);
+                    return;
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    private void resetZoomedImageEvents() {
+        zoomedImageController.setImageClosed(false);
+        zoomedImageController.setKey1pressed(false);
+        zoomedImageController.setKey2pressed(false);
+        zoomedImageController.setKey3pressed(false);
+        zoomedImageController.setKey4pressed(false);
+        zoomedImageController.setKey5pressed(false);
     }
 }

@@ -48,7 +48,6 @@ public class ImportFileController {
     @FXML
     private Text t_filename;
     @FXML
-
     private Text t_directoryname;
     @FXML
     private TextField tf_questionnaire;
