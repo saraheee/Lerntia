@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import javax.swing.*;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 @Controller
@@ -78,6 +79,7 @@ public class SelectQuestionAdministrateController implements Runnable {
     private boolean editButtonClicked = false;
     private boolean searchButtonClicked = false;
     private boolean closedWindow = false;
+    private ReentrantLock lock = new ReentrantLock();
 
     @Autowired
     public SelectQuestionAdministrateController(
@@ -122,9 +124,6 @@ public class SelectQuestionAdministrateController implements Runnable {
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        editButtonClicked = false;
-        deleteButtonClicked = false;
-        searchButtonClicked = false;
         var buttonThread = new Thread(this);
         buttonThread.start();
         tv_questionTable.setRowFactory(tv -> {
@@ -168,9 +167,6 @@ public class SelectQuestionAdministrateController implements Runnable {
             iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
 
-            editButtonClicked = false;
-            deleteButtonClicked = false;
-            searchButtonClicked = false;
             var buttonThread = new Thread(this);
             buttonThread.start();
 
@@ -286,6 +282,9 @@ public class SelectQuestionAdministrateController implements Runnable {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
+
+        var buttonThread = new Thread(this);
+        buttonThread.start();
     }
 
     /**
@@ -330,21 +329,35 @@ public class SelectQuestionAdministrateController implements Runnable {
 
     @Override
     public void run() {
+        resetValues();
         while (!closedWindow && !deleteButtonClicked && !editButtonClicked && !searchButtonClicked) {
-            var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
-            if (selectedItems.size() < 1) {
-                editButton.setDisable(true);
-                deleteButton.setDisable(true);
+            lock.lock();
+            try {
+                var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+                if (selectedItems.size() < 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(true);
+                }
+                if (selectedItems.size() == 1) {
+                    editButton.setDisable(false);
+                    deleteButton.setDisable(false);
+                }
+                if (selectedItems.size() > 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(false);
+                }
+            } finally {
+                lock.unlock();
             }
-            if (selectedItems.size() == 1) {
-                editButton.setDisable(false);
-                deleteButton.setDisable(false);
-            }
-            if (selectedItems.size() > 1) {
-                editButton.setDisable(true);
-                deleteButton.setDisable(false);
-            }
+
         }
+    }
+
+    private void resetValues() {
+        closedWindow = false;
+        editButtonClicked = false;
+        deleteButtonClicked = false;
+        searchButtonClicked = false;
     }
 
 }
