@@ -113,7 +113,8 @@ public class AlertController {
         }
     }
 
-    public void showBigAlertWithDiagram(Alert.AlertType alertType, String title, String header, String content, ImageView iw) {
+    public void showBigAlertWithDiagram(Alert.AlertType alertType, String title, String header, String content, ImageView imageView) {
+        this.imageView = imageView;
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
             headerBuilder.append(" ");
@@ -141,8 +142,6 @@ public class AlertController {
         grid.setPadding(new Insets(5));
 
         getAlertImage(alertType);
-        imageView.setFitWidth(84);
-        imageView.setFitHeight(84);
 
         var stackPane = new StackPane(imageView);
         stackPane.setAlignment(Pos.CENTER);
@@ -169,7 +168,7 @@ public class AlertController {
         }
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
-        alert.setGraphic(iw);
+        alert.setGraphic(imageView);
 
         LOG.trace("Showing a big alert with title: " + title);
         if (alertType == Alert.AlertType.CONFIRMATION) {
