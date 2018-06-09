@@ -543,7 +543,8 @@ public class MainLerntiaService implements IMainLerntiaService {
             return 0.0;
         }
         double percent = (share / base) * 100.00;
-        return percent;
+        int temp = (int)(percent * Math.pow(10 , 2));
+        return ((double)temp)/Math.pow(10 , 2);
     }
 
 }

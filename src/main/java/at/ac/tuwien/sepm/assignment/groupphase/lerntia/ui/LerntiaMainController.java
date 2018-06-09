@@ -37,6 +37,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
@@ -437,15 +438,17 @@ public class LerntiaMainController {
 
             if (!onlyWrongQuestions) {
                 alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                        + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
+                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
+                        + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
+                        + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.\n"
+                    + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
                     "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
 
             }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
-                alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
+                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
                     "Alle vorherig Falsche Fragen wurden durchgegangen..",
                     "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
-                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?", createPieChart());
+                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
 
             }
             if (e1.getMessage().contains("List of wrong questions is Empty")) {
@@ -759,18 +762,20 @@ public class LerntiaMainController {
         Scene scene = new Scene(pieChart);
         stage.setScene(scene);
         stage.show();
+
         scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
         pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
         pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
+
         WritableImage snapShot = scene.snapshot(null);
         try {
-            File f = new File(System.getProperty("user.dir") + File.separator + "test.png");
+            File f = new File(System.getProperty("user.dir") + File.separator + "statistik.png");
             ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", f);
-            ImageView imageView = new ImageView(this.getClass().getResourceAsStream(System.getProperty("user.dir") + File.separator + "test.png").toString());
-            //ImageView imageView = new ImageView(this.getClass().getResource(System.getProperty("user.dir") + File.separator + "test.png").toString());
+            Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistik.png"));
+            ImageView imageView = new ImageView(image);
             return imageView;
         } catch (IOException e) {
-            System.out.println("--------------FEHLER----------------");
+            e.printStackTrace();
             return null;
         } finally {
             stage.close();
