@@ -22,6 +22,7 @@ public class MenuBarController implements Runnable {
     private final SelectQuestionnaireController selectQuestionnaireController;
     private final SelectExamController selectExamController;
     private final EditExamController editExamController;
+    private final ExportQuestionnaireController exportQuestionnaireController;
 
     private final LerntiaMainController lerntiaMainController;
 
@@ -44,7 +45,8 @@ public class MenuBarController implements Runnable {
         LerntiaMainController lerntiaMainController,
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
-        AlertController alertController
+        AlertController alertController,
+        ExportQuestionnaireController exportQuestionnaireController
     ) {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
@@ -55,6 +57,7 @@ public class MenuBarController implements Runnable {
         this.administrateQuestionnaireController = administrateQuestionnaireController;
         this.showAboutSectionController = showAboutSectionController;
         this.alertController = alertController;
+        this.exportQuestionnaireController = exportQuestionnaireController;
     }
 
     @FXML
@@ -152,10 +155,11 @@ public class MenuBarController implements Runnable {
     @FXML
     private void exportQuestions() {
         //TODO: remove alert, when it's implemented
-        alertController.showBigAlert(Alert.AlertType.INFORMATION,
+        exportQuestionnaireController.showExportQuestionnaireWindow();
+        /*alertController.showBigAlert(Alert.AlertType.INFORMATION,
             "Nicht verfügbar",
             "Diese Funktionalität ist noch nicht verfügbar.",
-            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
+            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");*/
     }
 
     @FXML
