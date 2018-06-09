@@ -5,7 +5,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
@@ -26,7 +25,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import javax.swing.*;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -116,6 +114,7 @@ public class EditExamController {
 
     @FXML
     private void initialize() {
+        LOG.debug("Initialize settings and presets for Edit Exam Controller");
         questionColumn.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         columnAccepted.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         firstAnswerColumn.setCellValueFactory(new PropertyValueFactory<>("answer1"));
@@ -151,6 +150,7 @@ public class EditExamController {
         });
 
         pane.setOnMouseClicked(event -> questionTable.getSelectionModel().clearSelection());
+        pane.setOnMouseClicked(event -> acceptedTable.getSelectionModel().clearSelection());
         questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         acceptedTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         questionColumn.setSortable(false);
@@ -160,6 +160,7 @@ public class EditExamController {
 
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty()) {
+                    LOG.info("Drag detected in Question Table.");
                     Integer index = row.getIndex();
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     db.setDragView(row.snapshot(null, null));
@@ -173,6 +174,7 @@ public class EditExamController {
             row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    LOG.info("Drag over detected in Question Table");
                     if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
@@ -183,6 +185,7 @@ public class EditExamController {
             row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    LOG.info("Drag drop detected in Question Table");
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Question draggedQuestion = questionTable.getItems().remove(draggedIndex);
 
@@ -304,6 +307,7 @@ public class EditExamController {
 
     private void setQuestionTable() {
         try {
+            LOG.info("Set Question Table for Question selection.");
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
             List<Question> searchParameters = new ArrayList<>();
             entireQuestionList = new ArrayList<>();
@@ -330,6 +334,7 @@ public class EditExamController {
 
     public void onTableViewButtonClicked(ActionEvent actionEvent) {
         try {
+            LOG.info("Table View Button Clicked.");
             if (acceptedTable.getItems().size() == 0) {
                 throw new ControllerException("Keine Fragen vorhanden");
             }
@@ -345,6 +350,7 @@ public class EditExamController {
             entireQuestionList.clear();
             acceptedQuestionList.clear();
             examQuestionList.clear();
+            LOG.info("Close Edit Exam Window.");
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
@@ -360,6 +366,7 @@ public class EditExamController {
 
     public void onRandomButtonClicked() {
         try {
+            LOG.info("Random Button Clicked");
             if (acceptedTable.getItems().size() == 0) {
                 throw new ControllerException("Keine Fragen vorhanden");
             }
@@ -376,6 +383,7 @@ public class EditExamController {
 
 
     public void onResetButtonClicked() {
+        LOG.info("Reset Button Clicked");
         questionTable.setItems(FXCollections.observableArrayList(entireQuestionList));
         acceptedTable.setItems(FXCollections.observableArrayList());
         resetButton.setDisable(true);
@@ -386,6 +394,7 @@ public class EditExamController {
     }
 
     public void onAddQuestionsButtonClicked() {
+        LOG.info("Add question Button clicked.");
         if (selectedQuestions != null) {
             for (Question q : selectedQuestions) {
                 if (!acceptedQuestionList.contains(q)) {
@@ -404,10 +413,12 @@ public class EditExamController {
             acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
             questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
             selectedQuestions.clear();
+            LOG.info("Questions transfered to accepted table.");
         }
     }
 
     public void onRemoveQuestionsButtonClicked() {
+        LOG.info("Remove Question Button clicked");
         if (selectedQuestions != null) {
             for (Question q : selectedQuestions) {
                 if (acceptedQuestionList.contains(q)) {
@@ -427,6 +438,7 @@ public class EditExamController {
             acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
             questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
             selectedQuestions.clear();
+            LOG.info("Selected questions reverted back to the table.");
         }
     }
 }
