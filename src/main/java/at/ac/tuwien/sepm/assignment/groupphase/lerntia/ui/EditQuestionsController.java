@@ -161,7 +161,7 @@ public class EditQuestionsController {
                 e.printStackTrace();
             }
         } else {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
                 "Mindestens eines der Pflichtfelder ist leer.", null);
         }
     }
