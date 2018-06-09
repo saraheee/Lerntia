@@ -11,16 +11,23 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaServi
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -28,9 +35,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.springframework.util.Assert.notNull;
@@ -362,6 +372,7 @@ public class LerntiaMainController {
                } */
             getAndShowNextQuestion();
         } catch (NullPointerException e) {
+            e.printStackTrace();
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
                 "Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
         }
@@ -425,16 +436,16 @@ public class LerntiaMainController {
             LOG.warn("No next question to be displayed.");
 
             if (!onlyWrongQuestions) {
-                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                     "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
                         + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
-                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
+                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
 
             }else if (!e1.getMessage().contains("List of wrong questions is Empty")){
-                alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
+                alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Ende der Falschen Fragen",
                     "Alle vorherig Falsche Fragen wurden durchgegangen..",
                     "Alle vorherige falsch beantworteten Fragen wurden durchgegangen und es gibt noch paar falsche Fragen."+"\n"+
-                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
+                        "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?", createPieChart());
 
             }
             if (e1.getMessage().contains("List of wrong questions is Empty")) {
@@ -733,6 +744,36 @@ public class LerntiaMainController {
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         } catch (ServiceException e) {
             e.printStackTrace();
+        }
+    }
+
+    public ImageView createPieChart() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+            new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
+            new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()));
+        PieChart pieChart = new PieChart(pieChartData);
+        pieChart.setClockwise(false);
+        pieChart.setLegendVisible(false);
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(pieChart);
+        stage.setScene(scene);
+        stage.show();
+        scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
+        pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
+        WritableImage snapShot = scene.snapshot(null);
+        try {
+            File f = new File(System.getProperty("user.dir") + File.separator + "test.png");
+            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", f);
+            ImageView imageView = new ImageView(this.getClass().getResourceAsStream(System.getProperty("user.dir") + File.separator + "test.png").toString());
+            //ImageView imageView = new ImageView(this.getClass().getResource(System.getProperty("user.dir") + File.separator + "test.png").toString());
+            return imageView;
+        } catch (IOException e) {
+            System.out.println("--------------FEHLER----------------");
+            return null;
+        } finally {
+            stage.close();
         }
     }
 }

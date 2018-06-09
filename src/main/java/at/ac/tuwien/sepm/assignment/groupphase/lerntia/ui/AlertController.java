@@ -3,21 +3,27 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Controller
@@ -93,6 +99,77 @@ public class AlertController {
         }
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
+
+        LOG.trace("Showing a big alert with title: " + title);
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            var result = alert.showAndWait();
+            if (result.isPresent() && result.get() == btnAll) {
+                onlyWrongQuestions = true;
+            } else if (result.isPresent() && result.get() == btnFalse) {
+                onlyWrongQuestions = false;
+            }
+        } else {
+            stage.showAndWait();
+        }
+    }
+
+    public void showBigAlertWithDiagram(Alert.AlertType alertType, String title, String header, String content, ImageView iw) {
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+        var alert = new Alert(alertType);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
+        alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        getAlertImage(alertType);
+        imageView.setFitWidth(84);
+        imageView.setFitHeight(84);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        headerLabel.getStyleClass().add("dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        //used only for repeating questions
+        var btnAll = new ButtonType(ButtonText.WRONGQUESTIONS.toString(), ButtonBar.ButtonData.YES);
+        var btnFalse = new ButtonType(ButtonText.ALLQUESTIONS.toString(), ButtonBar.ButtonData.NO);
+
+        dialogPane.setHeader(grid);
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            dialogPane.getButtonTypes().setAll(btnAll, btnFalse);
+        } else {
+            dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        }
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        alert.setGraphic(iw);
 
         LOG.trace("Showing a big alert with title: " + title);
         if (alertType == Alert.AlertType.CONFIRMATION) {
