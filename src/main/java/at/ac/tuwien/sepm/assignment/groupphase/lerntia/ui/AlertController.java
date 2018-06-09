@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import java.lang.invoke.MethodHandles;
 
 @Controller
@@ -38,6 +37,7 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Create Big Alert");
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
             headerBuilder.append(" ");
@@ -114,6 +114,7 @@ public class AlertController {
     }
 
     public boolean showCorrectAnswerAlert(String title, String header, String content) {
+        LOG.info("Create correct Answer Alert.");
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -176,6 +177,7 @@ public class AlertController {
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;

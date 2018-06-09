@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
