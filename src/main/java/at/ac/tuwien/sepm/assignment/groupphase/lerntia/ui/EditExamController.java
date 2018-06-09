@@ -303,7 +303,7 @@ public class EditExamController {
     private void setQuestionTable() {
         try {
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            List<Question> searchparameters = new ArrayList<>();
+            List<Question> searchParameters = new ArrayList<>();
             entireQuestionList = new ArrayList<>();
             questionnaireQuestion.setQid(selected.getId());
             List<QuestionnaireQuestion> helper = questionnaireQuestionService.search(questionnaireQuestion);
@@ -312,10 +312,10 @@ public class EditExamController {
             for (QuestionnaireQuestion q : helper) {
                 searchParameter = new Question();
                 searchParameter.setId(q.getQuestionid());
-                searchparameters.add(searchParameter);
+                searchParameters.add(searchParameter);
             }
 
-            entireQuestionList = questionService.search(searchparameters);
+            entireQuestionList = questionService.search(searchParameters);
             currentQuestionList = new ArrayList<>();
             currentQuestionList.addAll(entireQuestionList);
             examQuestionList = FXCollections.observableArrayList(currentQuestionList);

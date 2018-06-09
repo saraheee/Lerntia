@@ -28,7 +28,7 @@ public class MenuBarController implements Runnable {
     private final AdministrateQuestionnaireController administrateQuestionnaireController;
     private final AboutSectionController showAboutSectionController;
     private final AlertController alertController;
-    ReentrantLock lock = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
     @FXML
     private MenuItem examToLearnButton;
     @FXML
