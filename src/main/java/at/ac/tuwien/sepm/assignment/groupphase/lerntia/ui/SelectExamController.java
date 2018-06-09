@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class SelectExamController {
     private final WindowController windowController;
     private final AlertController alertController;
     private final EditExamController editExamController;
+    public Label studentNameLabel;
+    public Label matriculationNumberLabel;
+    public Label programNumberLabel;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
@@ -85,7 +89,7 @@ public class SelectExamController {
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowStage = windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+        windowStage = windowController.openNewWindow("Fragebogen auswählen und Studentendaten überprüfen", fxmlLoader);
 
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();
@@ -137,5 +141,10 @@ public class SelectExamController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+    public void changeStudentInfo(ActionEvent actionEvent) {
+        // todo student data
+        LOG.debug("Clicked on change student data.");
     }
 }
