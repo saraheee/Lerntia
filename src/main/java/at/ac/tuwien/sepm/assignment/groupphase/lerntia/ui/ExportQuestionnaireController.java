@@ -3,10 +3,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -24,19 +23,18 @@ import java.util.List;
 public class ExportQuestionnaireController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    @FXML public ComboBox<String> cb_questionnaire;
-    private Stage stage;
-    private List<LearningQuestionnaire> learningQuestionnaires;
-    private LearningQuestionnaire selectedLearningQuestionnaire;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
     private final WindowController windowController;
-    private List learningQuestionnaireList;
-    private AlertController alertController;
     private final IQuestionnaireExportService exportService;
     private final IMainLerntiaService lerntiaService;
     private final IQuestionnaireService iQuestionnaireService;
-    private final LerntiaMainController lerntiaMainController;
+    @FXML
+    public ComboBox<String> cb_questionnaire;
+    private Stage stage;
+    private List<LearningQuestionnaire> learningQuestionnaires;
+    private List learningQuestionnaireList;
+    private AlertController alertController;
+
     @Autowired
     public ExportQuestionnaireController(
         SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
@@ -44,16 +42,14 @@ public class ExportQuestionnaireController {
         IQuestionnaireExportService iQuestionnaireExportService,
         AlertController alertController,
         IMainLerntiaService lerntiaService,
-        IQuestionnaireService iQuestionnaireService,
-        LerntiaMainController lerntiaMainController
-    ){
+        IQuestionnaireService iQuestionnaireService
+    ) {
         this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
         this.windowController = windowController;
         this.exportService = iQuestionnaireExportService;
         this.alertController = alertController;
         this.lerntiaService = lerntiaService;
         this.iQuestionnaireService = iQuestionnaireService;
-        this.lerntiaMainController = lerntiaMainController;
     }
 
 
@@ -65,7 +61,7 @@ public class ExportQuestionnaireController {
             LOG.error("Failed to initialize ExportQuestionnaireController");
         }
 
-        for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
+        for (var learningQuestionnaire : learningQuestionnaires) {
             cb_questionnaire.getItems().add(learningQuestionnaire.getName());
         }
         cb_questionnaire.getSelectionModel().selectFirst();
@@ -73,7 +69,7 @@ public class ExportQuestionnaireController {
 
 
     /**
-     * Opens the first window in the AdministrateQuestionnaire operation.
+     * Opens the first window in the ExportQuestionnaire operation.
      * Opens a window in which the user is allowed to choose a Questionnaire.
      */
     public void showExportQuestionnaireWindow() {
@@ -83,7 +79,7 @@ public class ExportQuestionnaireController {
     }
 
     @FXML
-    public void selectQuestionnaire(ActionEvent actionEvent) {
+    public void selectQuestionnaire() {
         try {
             learningQuestionnaireList = simpleLearningQuestionnaireService.readAll();
         } catch (ServiceException e) {
@@ -99,27 +95,35 @@ public class ExportQuestionnaireController {
         }
 
         //Get the Selected Item /Study Mode.
-        selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        var selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
         LearningQuestionnaire studyMode = null;
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
             exportService.exportSelectedQuestionnaire(selectedLearningQuestionnaire.getName());
+            stage.close();
+            LOG.info("Successfully exported the questionnaire.");
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION,
+                "Fragenbogen exportieren", "Der Fragebogen '" + selectedLearningQuestionnaire.getName()
+                    + "' wurde erfolgreich exportiert!", "");
         } catch (ServiceException e) {
-            LOG.error("Selected Questionnaire can't be retrieved.");
+            LOG.error("Failed to export the questionnaire.");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen kann nicht exportiert werden",
+                "Fehler!", "Der ausgewählte Fragebogen konnte nicht exportiert werden!");
         }
-        LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
-        alertController.showStandardAlert(Alert.AlertType.INFORMATION,
-            "Fragenbogen Exportieren",selectedLearningQuestionnaire.getName()+" wurde erfolgreich exportiert",
-            "");
+        if (studyMode != null) {
+            LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+        }
 
         //Refresh the StudyMode again.
-        //SutdyMode is beginning Starting from the Beginning.
+        //StudyMode is starting from the beginning.
         try {
             iQuestionnaireService.deselectAllQuestionnaires();
             simpleLearningQuestionnaireService.select(studyMode);
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Learning questionnaire can't be retrieved.");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen kann nicht angezeigt werden",
+                "Fehler!", "Der aktuelle Lernfragebogen konnte nicht geladen werden!");
         }
     }
 }

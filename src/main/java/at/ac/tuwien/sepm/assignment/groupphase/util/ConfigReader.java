@@ -10,13 +10,16 @@ import java.util.Properties;
 public class ConfigReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    InputStream inputStream;
-    Properties prop;
+    private InputStream inputStream;
+    private Properties prop;
 
-    public ConfigReader(String config){
+    public ConfigReader(String config) {
 
         String propsPath = System.getProperty("user.home");
         propsPath += File.separator + "Lerntia" + File.separator + "config" + File.separator + config + ".properties";
+
+        //String propsPath = System.getProperty("user.dir");
+        //propsPath += File.separator + "config" + File.separator + config + ".properties";
 
         this.prop = new Properties();
         File propsFile = new File(propsPath);
@@ -27,7 +30,7 @@ public class ConfigReader {
             this.inputStream = new FileInputStream(propsFile);
             LOG.debug("Opened input stream: {}", inputStream);
             try {
-                this.prop.load( this.inputStream );
+                this.prop.load(this.inputStream);
             } catch (IOException e) {
 
                 try {
@@ -43,19 +46,19 @@ public class ConfigReader {
         }
     }
 
-    public String getValue(String key){
+    public String getValue(String key) {
         return this.prop.getProperty(key);
     }
 
-    public int getValueInt(String key){
+    public int getValueInt(String key) {
         return Integer.parseInt(this.prop.getProperty(key));
     }
 
-    public boolean getValueBoolean(String key){
+    public boolean getValueBoolean(String key) {
         return Boolean.valueOf(this.prop.getProperty(key));
     }
 
-    public void close(){
+    public void close() {
         try {
             this.inputStream.close();
         } catch (IOException e) {
