@@ -52,8 +52,8 @@ public class JDBCConnectionManager {
                 LOG.info("Reading initial commands from input stream.");
             }
         } catch (SQLException | ClassNotFoundException e) {
-            LOG.debug("Could not initialize the database:" + e.getMessage());
-            throw new PersistenceException(e.getMessage());
+            LOG.debug("Could not initialize the database.");
+            throw new PersistenceException("Could not initialize the database.");
         }
     }
 
@@ -62,7 +62,7 @@ public class JDBCConnectionManager {
             try {
                 connection.close();
             } catch (SQLException e) {
-                LOG.error("Failed to close connection '{}'", e.getMessage(), e);
+                LOG.error("Failed to close connection");
             }
             connection = null;
         }

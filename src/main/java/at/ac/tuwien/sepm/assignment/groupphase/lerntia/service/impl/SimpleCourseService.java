@@ -33,8 +33,8 @@ public class SimpleCourseService implements ICourseService {
             courseDAO.create(course);
             LOG.info("New course created: {}", course);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -45,22 +45,11 @@ public class SimpleCourseService implements ICourseService {
             courseDAO.update(course);
             LOG.info("Course successfully updated.");
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
-    @Override
-    public void search(Course course) throws ServiceException {
-        try {
-            LOG.info("Search for Course: {}", course);
-            courseDAO.search(course);
-            LOG.info("Course has been found");
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
 
     @Override
     public void delete(Course course) throws ServiceException {
@@ -69,8 +58,8 @@ public class SimpleCourseService implements ICourseService {
             courseDAO.delete(course);
             LOG.info("Course successfully deleted.");
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -81,8 +70,8 @@ public class SimpleCourseService implements ICourseService {
         try {
             courses = courseDAO.readAll();
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
 
         if (courses.isEmpty()) {

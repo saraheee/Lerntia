@@ -10,6 +10,9 @@
         <String fx:value="view"/>
     </styleClass>
     <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="478.0" prefWidth="1155.0">
+        <placeholder>
+            <Label wrapText="true" text="Keine Fragen in der Tabelle vorhanden."/>
+        </placeholder>
         <columns>
             <TableColumn fx:id="tc_question" prefWidth="385." text="Frage"/>
             <TableColumn fx:id="tc_answer1" prefWidth="130.0" text="Antwort 1"/>
@@ -20,14 +23,16 @@
             <TableColumn fx:id="tc_picture" editable="false" prefWidth="96.0" text="Bild"/>
         </columns>
     </TableView>
-    <Button defaultButton="true" layoutX="550.0" layoutY="515.0" mnemonicParsing="false" onAction="#deleteQuestions"
+    <Button fx:id="deleteButton" defaultButton="true" layoutX="550.0" layoutY="515.0" mnemonicParsing="false"
+            onAction="#deleteQuestions"
             prefHeight="41.0" pickOnBounds="false"
             prefWidth="188.0" text="Löschen">
         <styleClass>
             <String fx:value="button"/>
         </styleClass>
     </Button>
-    <Button defaultButton="true" layoutX="766.0" layoutY="515.0" mnemonicParsing="false" onAction="#editQuestion"
+    <Button fx:id="editButton" defaultButton="true" layoutX="766.0" layoutY="515.0" mnemonicParsing="false"
+            onAction="#editQuestion"
             prefHeight="41.0" pickOnBounds="false"
             prefWidth="188.0" text="Bearbeiten">
         <styleClass>

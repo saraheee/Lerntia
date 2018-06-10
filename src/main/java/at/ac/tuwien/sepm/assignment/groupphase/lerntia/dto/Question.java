@@ -3,6 +3,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.CheckBox;
 
+import java.text.BreakIterator;
+import java.util.Locale;
+
 public class Question {
     private Long id;
     private String questionText;
@@ -61,7 +64,7 @@ public class Question {
         this.picture = picture;
         JFXPanel fxPanel = new JFXPanel();
         containPicture = new CheckBox();
-        if (picture != null && picture.equals("")) {
+        if (picture != null && picture.trim().equals("")) {
             this.setContainPicture(false);
             this.containPicture.setText(checked.Nein.toString());
         }
@@ -143,29 +146,28 @@ public class Question {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", questionText='" + questionText + '\'' +"\n"+
-            ", picture='" + picture + '\'' +"\n"+
-            ", answer1='" + answer1 + '\'' +"\n"+
-            ", answer2='" + answer2 + '\'' +"\n"+
-            ", answer3='" + answer3 + '\'' +"\n"+
-            ", answer4='" + answer4 + '\'' +"\n"+
-            ", answer5='" + answer5 + '\'' +"\n"+
-            ", correctAnswers='" + correctAnswers + '\'' +"\n"+
-            ", optionalFeedback='" + optionalFeedback + '\'' +"\n"+
+            ", questionText='" + questionText + '\'' + "\n" +
+            ", picture='" + picture + '\'' + "\n" +
+            ", answer1='" + answer1 + '\'' + "\n" +
+            ", answer2='" + answer2 + '\'' + "\n" +
+            ", answer3='" + answer3 + '\'' + "\n" +
+            ", answer4='" + answer4 + '\'' + "\n" +
+            ", answer5='" + answer5 + '\'' + "\n" +
+            ", correctAnswers='" + correctAnswers + '\'' + "\n" +
+            ", optionalFeedback='" + optionalFeedback + '\'' + "\n" +
             ", isDeleted=" + isDeleted +
             '}';
     }
 
-    public String toStringGUI(){
-        return "Question Text: '" + questionText + '\'' +"\n"+
-            "Picture: '" + picture + '\'' +"\n"+
-            "Answer 1: '" + answer1 + '\'' +"\n"+
-            "Answer 2: '" + answer2 + '\'' +"\n"+
-            "Answer 3: '" + answer3 + '\'' +"\n"+
-            "Answer 4: '" + answer4 + '\'' +"\n"+
-            "Answer 5: '" + answer5 + '\'' +"\n"+
-            "Correct Answers: '" + correctAnswers + '\'' +"\n"+
-            "Optional Feedback: '" + optionalFeedback + '\'';
+    public String toStringGUI() {
+        //the first three fields are mandatory
+        return "Fragestellung: " + formatLines(questionText, new Locale ("de","AT")) +
+            "Antwort 1: " + answer1 + "\n" +
+            "Antwort 2: " + answer2 + "\n" +
+            ((answer3 != null && answer3.trim().length() > 0) ? "Antwort 3: " + answer3 + "\n" : "") +
+            ((answer4 != null && answer4.trim().length() > 0) ? "Antwort 4: " + answer4 + "\n" : "") +
+            ((answer5 != null && answer5.trim().length() > 0) ? "Antwort 5: " + answer5 + "\n" : "") +
+            ((picture != null && picture.trim().length() > 0) ? "Bildname: " + picture : "");
     }
 
     public String getCheckedAnswers() {
@@ -182,6 +184,27 @@ public class Question {
 
     private void setContainPicture(boolean set) {
         this.containPicture.setSelected(set);
+    }
+
+    private static String formatLines(String target, Locale currentLocale) {
+        var boundary = BreakIterator.getSentenceInstance(currentLocale);
+        boundary.setText(target);
+        var start = boundary.first();
+        var end = boundary.next();
+        var lineLength = 0;
+        var word = new StringBuilder();
+        while (end != BreakIterator.DONE) {
+            word.append(target.substring(start, end));
+            lineLength = lineLength + word.length();
+            if (lineLength >= 100) {
+                word.append('\n');
+                lineLength = word.length();
+            }
+            start = end;
+            end = boundary.next();
+        }
+        word = (word.substring(word.length() - 1).equals("\n") ? word : (word.append("\n")));
+        return word.toString();
     }
 
     public enum checked {

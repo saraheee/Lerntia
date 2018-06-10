@@ -5,8 +5,12 @@ public enum ButtonText {
     YES("Ja"),
     NO("Nein"),
     CONTINUE("Weiter"),
+    CANCEL("Abbrechen"),
+    SHOW("Anzeigen"),
     ALLQUESTIONS("Alle Fragen"),
-    WRONGQUESTIONS("Falsche Fragen");
+    WRONGQUESTIONS("Falsche Fragen"),
+    ALGORITHMOFF("Algorithmus AUS"),
+    ALGORITHMON("Algorithmus EIN");
 
     private String name;
 

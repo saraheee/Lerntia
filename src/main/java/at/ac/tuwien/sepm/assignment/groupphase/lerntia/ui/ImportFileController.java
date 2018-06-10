@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -48,7 +47,6 @@ public class ImportFileController {
     @FXML
     private Text t_filename;
     @FXML
-
     private Text t_directoryname;
     @FXML
     private TextField tf_questionnaire;
@@ -117,7 +115,7 @@ public class ImportFileController {
         String name = tf_questionnaire.getText().trim();
 
         if (name.equals("")) {
-            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Fehlerhafter Name", "Warnung", "Bitte gib einen gültigen Namen an!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehlerhafter Name", "Fehler", "Bitte einen gültigen Namen angeben!");
             return;
         }
 
@@ -125,7 +123,6 @@ public class ImportFileController {
             try {
                 qservice.importPictures(directory, name);
             } catch (IOException e) {
-                // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
             }
@@ -138,18 +135,17 @@ public class ImportFileController {
                 Course selectedCourse = courses.get(cb_courseIndex);
 
                 qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
-                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert");
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert!");
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
             } catch (Exception e) {
-                // TODO - e.getMessage()
                 qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
             }
         } else {
             qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
-            alertController.showStandardAlert(Alert.AlertType.WARNING, "Kein File ausgewählt", "Achtung", "Bitte wähle zuerst eine csv-Datei aus!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Kein File ausgewählt", "Fehler", "Bitte zuerst eine csv-Datei auswählen!");
         }
     }
 
@@ -160,7 +156,7 @@ public class ImportFileController {
         try {
             coursedata = cservice.readAll();
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getMessage());
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getCustommessage());
             return;
         }
 

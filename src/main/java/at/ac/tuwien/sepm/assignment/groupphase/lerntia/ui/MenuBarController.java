@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.lang.invoke.MethodHandles;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Controller
 public class MenuBarController implements Runnable {
@@ -21,14 +21,14 @@ public class MenuBarController implements Runnable {
     private final SelectQuestionnaireController selectQuestionnaireController;
     private final SelectExamController selectExamController;
     private final EditExamController editExamController;
+    private final ExportQuestionnaireController exportQuestionnaireController;
 
     private final LerntiaMainController lerntiaMainController;
 
     private final AdministrateQuestionnaireController administrateQuestionnaireController;
     private final AboutSectionController showAboutSectionController;
     private final AlertController alertController;
-
-
+    private ReentrantLock lock = new ReentrantLock();
     @FXML
     private MenuItem examToLearnButton;
     @FXML
@@ -44,7 +44,8 @@ public class MenuBarController implements Runnable {
         LerntiaMainController lerntiaMainController,
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
-        AlertController alertController
+        AlertController alertController,
+        ExportQuestionnaireController exportQuestionnaireController
     ) {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
@@ -55,6 +56,7 @@ public class MenuBarController implements Runnable {
         this.administrateQuestionnaireController = administrateQuestionnaireController;
         this.showAboutSectionController = showAboutSectionController;
         this.alertController = alertController;
+        this.exportQuestionnaireController = exportQuestionnaireController;
     }
 
     @FXML
@@ -99,17 +101,21 @@ public class MenuBarController implements Runnable {
         }
     }
 
+
     @Override
     public void run() {
         LOG.debug("Edit exam listener thread started!");
         while (!lerntiaMainController.isExamMode()) {
-            LOG.debug("exam editing canceled: " + editExamController.getEditingCanceled() + ", exam selection canceled: " + selectExamController.getSelectingCanceled());
-            
-            if (editExamController.getEditingCanceled() || selectExamController.getSelectingCanceled()) {
-                examToLearnButton.setDisable(true);
-                learnToExamButton.setDisable(false);
-                LOG.debug("Exam canceled!");
-                return;
+            lock.lock();
+            try {
+                if (selectExamController.getSelectingCanceled() || editExamController.getEditingCanceled()) {
+                    examToLearnButton.setDisable(true);
+                    learnToExamButton.setDisable(false);
+                    LOG.debug("Exam canceled!");
+                    return;
+                }
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -133,8 +139,6 @@ public class MenuBarController implements Runnable {
         } catch (ControllerException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
@@ -150,10 +154,22 @@ public class MenuBarController implements Runnable {
     @FXML
     private void exportQuestions() {
         //TODO: remove alert, when it's implemented
-        alertController.showBigAlert(Alert.AlertType.INFORMATION,
+        exportQuestionnaireController.showExportQuestionnaireWindow();
+        /*alertController.showBigAlert(Alert.AlertType.INFORMATION,
             "Nicht verfügbar",
             "Diese Funktionalität ist noch nicht verfügbar.",
-            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");
+            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");*/
     }
 
+    @FXML
+    private void onMenuClicked() {
+        lerntiaMainController.removeColorsAndEnableAnswers();
+        lerntiaMainController.stopAudio();
+    }
+
+    @FXML
+    private void onHelpClicked() {
+        lerntiaMainController.removeColorsAndEnableAnswers();
+        lerntiaMainController.stopAudio();
+    }
 }

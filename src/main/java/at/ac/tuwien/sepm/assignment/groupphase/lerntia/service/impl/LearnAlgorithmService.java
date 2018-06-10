@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
@@ -18,13 +17,10 @@ import java.util.*;
 public class LearnAlgorithmService implements ILearnAlgorithmService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-
     private ILearnAlgorithmDAO learnAlgorithmDAO;
     private Map<Long, Integer> successMap;
     private Map<Long, Integer> failureMap;
     private Map<Long, Double> valueMap;
-    private List<QuestionLearnAlgorithm> questionLearnAlgorithmList;
 
     @Autowired
     public LearnAlgorithmService(ILearnAlgorithmDAO learnAlgorithmDAO) {
@@ -70,6 +66,9 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                     case 10:
                         successMap.put(question.getId(), 10);
                         break;
+                    default:
+                        successMap.put(question.getId(),0);
+                        break;
                 }
             } else {
                 switch (successMap.get(question.getId())) {
@@ -113,9 +112,11 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                     case 10:
                         failureMap.put(question.getId(), 0);
                         break;
+                    default:
+                        successMap.put(question.getId(),0);
+                        break;
                 }
             }
-
             LOG.info("Determine new point value of the question.");
             if (failureMap.get(question.getId()) < 0) {
                 failureMap.put(question.getId(), 0);
@@ -138,7 +139,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             changeAlgorithmValues();
             LOG.info("Update the value in the value-map.");
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Exception");
         }
     }
 
@@ -177,6 +178,9 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                 case 9:
                 case 10:
                     failureMap.put(question.getId(), 10);
+                    break;
+                default:
+                    failureMap.put(question.getId(),0);
                     break;
             }
         } else {
@@ -219,6 +223,9 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                     failureMap.put(question.getId(), 10);
                     successMap.put(question.getId(), successMap.get(question.getId()) - 3);
                     break;
+                default:
+                    failureMap.put(question.getId(),0);
+                    break;
             }
         }
         LOG.info("Determine new point value of the failed question.");
@@ -240,7 +247,6 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
         } else if (newValue >= 200.0) {
             newValue = 200.0;
         }
-
         valueMap.put(question.getId(), newValue);
         LOG.info("New value has been added to the value-map");
         changeAlgorithmValues();
@@ -249,7 +255,6 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
     @Override
     public List<Long> prepareQuestionValues(List<QuestionLearnAlgorithm> questionAlgorithmList) throws ServiceException {
         try {
-            questionLearnAlgorithmList = questionAlgorithmList;
             LOG.info("Prepare Question Values of selected Learn Questionnaire.");
             successMap = new HashMap<>();
             failureMap = new HashMap<>();
@@ -268,17 +273,16 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             LOG.info("All Learn Algorithm Values have been found and added.");
             return list;
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
     @Override
     public List<Long> sortValueMap(Map<Long, Double> valueMap) {
-        // 1. Convert the entry Map to a List
+        LOG.info("Convert entry Map to Array");
         LOG.info("Sort the Question values have been initiated.");
         LinkedHashMap<Long, Double> sortedMap = new LinkedHashMap<>();
         valueMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
-
         List<Long> sortedList = new ArrayList<>();
         for (Map.Entry<Long, Double> entry : sortedMap.entrySet()) {
             sortedList.add(entry.getKey());
@@ -306,13 +310,14 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                 LOG.info("All Algorithm values have been successfully sent to the next layer.");
             }
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
 
     }
 
     @Override
     public void shutdown() throws ServiceException {
+        LOG.info("Learn Algorithm Shutdown initiated");
         changeAlgorithmValues();
     }
 }
