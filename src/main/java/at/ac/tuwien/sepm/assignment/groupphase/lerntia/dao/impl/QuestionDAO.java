@@ -149,6 +149,7 @@ public class QuestionDAO implements IQuestionDAO {
             try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTION_DELETE_STATEMENT)) {
                 psDelete.setLong(1, question.getId());
                 psDelete.executeUpdate();
+                question.setDeleted(true);
                 LOG.info("Question successfully soft-deleted in Database.");
                 QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
                 questionLearnAlgorithm.setID(question.getId());
