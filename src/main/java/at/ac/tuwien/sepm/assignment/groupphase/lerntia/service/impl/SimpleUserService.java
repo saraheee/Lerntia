@@ -23,16 +23,15 @@ public class SimpleUserService implements IUserService {
     }
 
     @Override
-    public void update(User user) throws ServiceException {
-        // todo change config file
-    }
-
-    @Override
     public User read() throws ServiceException {
-        try {
-            return new User(configReader.getValue("name"), configReader.getValue("matriculationNumber"), configReader.getValue("studyProgramme"), false);
-        } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+        User user = new User(configReader.getValue("name"), configReader.getValue("matriculationNumber"),
+            configReader.getValue("studyProgramme"), false);
+        if (user.getName() == null || user.getName().trim().isEmpty() || user.getMatriculationNumber() == null ||
+            user.getMatriculationNumber().trim().isEmpty() || user.getStudyProgramme() == null ||
+            user.getStudyProgramme().trim().isEmpty()) {
+            throw new ServiceException("Some student data could not be read. Is student.properties file provided?");
         }
+
+        return user;
     }
 }
