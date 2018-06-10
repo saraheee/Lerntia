@@ -307,6 +307,7 @@ public class LerntiaMainController implements Runnable {
                         "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
                } */
             if (goToNextQuestion) {
+                removeColorsAndEnableAnswers();
                 getAndShowNextQuestion();
             } else {
                 showColorsAndDisableAnswers(question.getCorrectAnswers());
@@ -361,12 +362,19 @@ public class LerntiaMainController implements Runnable {
         answer5Controller.markBlack();
         questionColored = false;
 
-        //TODO: maybe enable everything in the end not now
-        answer1Controller.setDisabled(false);
-        answer2Controller.setDisabled(false);
-        answer3Controller.setDisabled(false);
-        answer4Controller.setDisabled(false);
-        answer5Controller.setDisabled(false);
+        if (!examMode) {
+            answer1Controller.setDisabled(false);
+            answer2Controller.setDisabled(false);
+            answer3Controller.setDisabled(false);
+            answer4Controller.setDisabled(false);
+            answer5Controller.setDisabled(false);
+
+            answer1Controller.setSelected(false);
+            answer2Controller.setSelected(false);
+            answer3Controller.setSelected(false);
+            answer4Controller.setSelected(false);
+            answer5Controller.setSelected(false);
+        }
     }
 
     private String formatAnswerNumbers(String answers) {
