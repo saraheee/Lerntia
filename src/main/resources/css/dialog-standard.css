@@ -1,26 +1,25 @@
-.dialogue {
-    -fx-font-size: 34px;
+.standard-dialogue {
+    -fx-font-size: 16px;
     -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
 
-.dialogue-header {
-    -fx-font-size: 36px;
+.standard-dialogue-header {
+    -fx-font-size: 20px;
     -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
 
-.dialogue-content {
-    -fx-font-size: 22px;
+.standard-dialogue-content {
+    -fx-font-size: 16px;
     -fx-font-family: "Lora-Bold";
-    -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
 
 .button {
-    -fx-font-size: 36px;
+    -fx-font-size: 15px;
     -fx-font-family: "Lora-Bold";
     -fx-background-color: rgba(51, 0, 102, 0.05);
     -fx-padding: 10px 40px;
@@ -57,20 +56,4 @@
 
 .button:default:focused:hover {
     -fx-background-color: rgba(0, 50, 250, 0.2);
-}
-
-.button:selected {
-    -fx-background-color: #3e8e41;
-}
-
-.default-color0.chart-pie {
-    -fx-pie-color: #008000;
-}
-
-.default-color1.chart-pie {
-    -fx-pie-color: #ff0000;
-}
-
-.default-color1.chart-pie {
-    -fx-pie-color: 	#ababab;
 }

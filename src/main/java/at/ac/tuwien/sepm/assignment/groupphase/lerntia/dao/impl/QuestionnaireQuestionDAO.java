@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireQuestionDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion SET isDeleted=TRUE WHERE qid=? AND questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion SET qid=?, questionid=? WHERE qid=? AND questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
+    private static final String SQL_QUESTIoNNAIREQUESTION_READALL_STATEMENT = "SELECT * FROM Questionnairequestion WHERE isDeleted = FALSE ";
     private Connection connection;
 
     @Autowired
@@ -67,7 +70,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
                 while (rs.next()) {
                     questionnaireQuestion = new QuestionnaireQuestion();
-                    questionnaireQuestion.setQid(rs.getLong(1));
+                    questionnaireQuestion.setQid(searchparameters.getQid());
                     questionnaireQuestion.setQuestionid(rs.getLong(2));
                     questionnaireQuestion.setDeleted(rs.getBoolean(3));
                     searchresults.add(questionnaireQuestion);
@@ -120,7 +123,23 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public List<QuestionnaireQuestion> readAll() throws PersistenceException {
-        //currently no implementation of this method due to the indiciciveness of if it is necessary to have such a method. currently left empty
-        return null;
+        try {
+            LOG.info("Prepare Statement to read all available Questions of one Questionnaire from the Database.");
+            ArrayList<QuestionnaireQuestion> list = new ArrayList<>();
+            try (ResultSet rsReadAll = connection.prepareStatement(SQL_QUESTIoNNAIREQUESTION_READALL_STATEMENT).executeQuery()) {
+                QuestionnaireQuestion question;
+                while (rsReadAll.next()) {
+                    question = new QuestionnaireQuestion();
+                    question.setQid(rsReadAll.getLong(1));
+                    question.setQuestionid(rsReadAll.getLong(2));
+                    question.setDeleted(rsReadAll.getBoolean(3));
+                    list.add(question);
+                }
+                LOG.info("All Questionnairequestions found.");
+                return list;
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("QuestionnaireQuestionDAO READALL error: not all questions could have been found, check if connection to the Database is valid.");
+        }
     }
 }

@@ -97,8 +97,10 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             LOG.info("Prepare statement for learning questionnaire selection.");
             PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_SELECT_STATEMENT);
             try {
-                psUpdate.setLong(1, questionnaire.getId());
-                psUpdate.executeUpdate();
+                if (questionnaire != null) {
+                    psUpdate.setLong(1, questionnaire.getId());
+                    psUpdate.executeUpdate();
+                }
                 LOG.info("Learningquestionnaire successfully selected in Database.");
             } finally {
                 psUpdate.close();

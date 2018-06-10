@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.CheckBox;
 
 public class Question {
@@ -58,7 +59,12 @@ public class Question {
 
     public void setPicture(String picture) {
         this.picture = picture;
-        this.containPicture = new CheckBox();
+        JFXPanel fxPanel = new JFXPanel();
+        containPicture = new CheckBox();
+        if (picture != null && picture.equals("")) {
+            this.setContainPicture(false);
+            this.containPicture.setText(checked.Nein.toString());
+        }
         if (picture != null && picture.trim().length() > 0) {
             this.setContainPicture(true);
             this.containPicture.setText(checked.Ja.toString());
@@ -137,17 +143,29 @@ public class Question {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", questionText='" + questionText + '\'' +
-            ", picture='" + picture + '\'' +
-            ", answer1='" + answer1 + '\'' +
-            ", answer2='" + answer2 + '\'' +
-            ", answer3='" + answer3 + '\'' +
-            ", answer4='" + answer4 + '\'' +
-            ", answer5='" + answer5 + '\'' +
-            ", correctAnswers='" + correctAnswers + '\'' +
-            ", optionalFeedback='" + optionalFeedback + '\'' +
+            ", questionText='" + questionText + '\'' +"\n"+
+            ", picture='" + picture + '\'' +"\n"+
+            ", answer1='" + answer1 + '\'' +"\n"+
+            ", answer2='" + answer2 + '\'' +"\n"+
+            ", answer3='" + answer3 + '\'' +"\n"+
+            ", answer4='" + answer4 + '\'' +"\n"+
+            ", answer5='" + answer5 + '\'' +"\n"+
+            ", correctAnswers='" + correctAnswers + '\'' +"\n"+
+            ", optionalFeedback='" + optionalFeedback + '\'' +"\n"+
             ", isDeleted=" + isDeleted +
             '}';
+    }
+
+    public String toStringGUI(){
+        return "Question Text: '" + questionText + '\'' +"\n"+
+            "Picture: '" + picture + '\'' +"\n"+
+            "Answer 1: '" + answer1 + '\'' +"\n"+
+            "Answer 2: '" + answer2 + '\'' +"\n"+
+            "Answer 3: '" + answer3 + '\'' +"\n"+
+            "Answer 4: '" + answer4 + '\'' +"\n"+
+            "Answer 5: '" + answer5 + '\'' +"\n"+
+            "Correct Answers: '" + correctAnswers + '\'' +"\n"+
+            "Optional Feedback: '" + optionalFeedback + '\'';
     }
 
     public String getCheckedAnswers() {

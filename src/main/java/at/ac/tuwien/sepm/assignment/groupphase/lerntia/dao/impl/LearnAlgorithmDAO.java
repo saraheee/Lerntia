@@ -99,8 +99,8 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
         }
 
     }
-
-    private void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException {
+    @Override
+    public void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException {
         QuestionLearnAlgorithm questionLearnAlgorithm;
         while (rsReadAll.next()) {
             questionLearnAlgorithm = new QuestionLearnAlgorithm();
