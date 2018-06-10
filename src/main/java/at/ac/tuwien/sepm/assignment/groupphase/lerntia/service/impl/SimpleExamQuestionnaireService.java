@@ -28,8 +28,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.create(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -38,18 +38,18 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.update(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
     @Override
-    public void search(ExamQuestionnaire searchparameters) throws ServiceException {
+    public void search(ExamQuestionnaire searchParameters) throws ServiceException {
         try {
-            examQuestionnaireDAO.search(searchparameters);
+            examQuestionnaireDAO.search(searchParameters);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -58,8 +58,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.delete(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.select(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -87,7 +87,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.deselect(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
     }
 

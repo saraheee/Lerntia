@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
-
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ import java.util.Map;
  * The LearnAlgorithmService Class will handle the majority of calculation and value-management of the learn algorithm.
  * It will handle the successValue , failureValue and pointValue update. It will also sort all questions there are with the questions
  * with the lowest going up.
- * */
+ */
 public interface ILearnAlgorithmService {
 
     /**
@@ -22,7 +21,7 @@ public interface ILearnAlgorithmService {
      *
      * @param question The question which success quota has to be updated.
      * @throws ServiceException if the method can't update the success value
-     * */
+     */
     void updateSuccessValue(Question question) throws ServiceException;
 
     /**
@@ -33,7 +32,7 @@ public interface ILearnAlgorithmService {
      *
      * @param question The question which failure quota has to be updated.
      * @throws ServiceException if the method can't update the failure value
-     * */
+     */
     void updateFailureValue(Question question) throws ServiceException;
 
     /**
@@ -42,23 +41,28 @@ public interface ILearnAlgorithmService {
      * @param questionAlgorithmList list of questions
      * @return List with the sorted IDs of questions
      * @throws ServiceException if the method can't sort or retrieve the List.
-     *
-     * */
+     */
     List<Long> prepareQuestionValues(List<QuestionLearnAlgorithm> questionAlgorithmList) throws ServiceException;
 
+    /**
+     * Helper method that sorts the value map and returns it as a list.
+     *
+     * @param valueMap map of question values that need to be sorted.
+     * @return list of sorted question ids that will be used as an index.
+     */
     List<Long> sortValueMap(Map<Long, Double> valueMap);
 
     /**
      * Change the Values of Questions in the Database when another questionnaire has been selected or the program shuts down.
      *
      * @throws ServiceException if the method can't update those values and cant send them to the DAO layer.
-     * */
-    void changeAlgorithmValues()throws ServiceException;
+     */
+    void changeAlgorithmValues() throws ServiceException;
 
     /**
      * Updates the values of the current questionnaire so those values do not get lost
      *
      * @throws ServiceException if the method can't update those values and cant send them to the DAO layer.
-     * */
+     */
     void shutdown() throws ServiceException;
 }

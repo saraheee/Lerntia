@@ -44,6 +44,7 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Create Big Alert");
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
             headerBuilder.append(" ");
@@ -184,14 +185,15 @@ public class AlertController {
     }
 
 
-    public DialogPane showWrongAnswerAlert(String title, String header, String content) {
+    public boolean showWrongAnswerAlert(String title, String header, String content) {
         wrongAnswer = true;
         return showCorrectAnswerAlert(title, header, content);
     }
 
-    public DialogPane showCorrectAnswerAlert(String title, String header, String content) {
-        var alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initModality(Modality.NONE);
+    public boolean showCorrectAnswerAlert(String title, String header, String content) {
+        LOG.info("Create correct Answer Alert.");
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
@@ -236,16 +238,24 @@ public class AlertController {
         grid.add(headerLabel, 1, 0);
 
         dialogPane.setHeader(grid);
-        dialogPane.getButtonTypes().setAll(ButtonType.OK);
-
+        dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.SHOW.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.CONTINUE.toString());
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
         stage.setMaximized(true);
+
+        ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
+        for (var type : dialogPane.getButtonTypes()) {
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
+        }
         LOG.trace("Showing an answer alert with title: " + title);
-        return dialogPane;
+        stage.showAndWait();
+        return result.get() == ButtonType.YES;
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;

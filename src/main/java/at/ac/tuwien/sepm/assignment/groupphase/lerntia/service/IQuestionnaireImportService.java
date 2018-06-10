@@ -8,10 +8,8 @@ import java.io.IOException;
 
 public interface IQuestionnaireImportService {
 
-    // TODO - file should not be used here. only in the DAO layer.
     void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException;
 
-    // TODO - file should not be used here. only in the DAO layer.
     void importPictures(File file, String name) throws ServiceException, IOException;
 
 }

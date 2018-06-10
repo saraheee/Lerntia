@@ -10,7 +10,7 @@ public interface IQuestionnaireService {
      *
      * @param questionnaire Questionnaire that needs to be saved to the Database
      * @throws ServiceException if the method can't save the Questionnaire to the Database
-     * */
+     */
     void create(Questionnaire questionnaire) throws ServiceException;
 
     /**
@@ -18,13 +18,13 @@ public interface IQuestionnaireService {
      *
      * @param questionnaire the questionnaire in question that needs to be updated in the Database
      * @throws ServiceException if the method can't update the Questionnaire
-     * */
+     */
     void update(Questionnaire questionnaire) throws ServiceException;
 
     /**
      * Deselect every Questionnaire
      *
      * @throws ServiceException if the Questionnaires cannot be deselected
-     * */
+     */
     void deselectAllQuestionnaires() throws ServiceException;
 }

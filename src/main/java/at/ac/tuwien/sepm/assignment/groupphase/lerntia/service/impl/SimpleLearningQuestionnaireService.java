@@ -30,8 +30,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.create(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException("Persistence exception caught");
         }
     }
 
@@ -40,8 +40,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.update(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException("Persistence exception caught");
         }
     }
 
@@ -50,8 +50,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.search(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -60,18 +60,18 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.delete(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
     @Override
-    public List readAll() throws ServiceException {
+    public List<LearningQuestionnaire> readAll() throws ServiceException {
         try {
             return iLearningQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.select(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.deselect(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustommessage());
         }
     }
 

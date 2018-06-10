@@ -28,8 +28,8 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             iQuestionnaireQuestionDAO.create(questionnaireQuestion);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -38,18 +38,18 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             iQuestionnaireQuestionDAO.delete(questionnaireQuestion);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
     @Override
-    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionid) throws ServiceException {
+    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws ServiceException {
         try {
-            iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionid);
+            iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionId);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -58,18 +58,18 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
         try {
             return iQuestionnaireQuestionDAO.readAll();
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
     @Override
-    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws ServiceException {
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws ServiceException {
         try {
-            return iQuestionnaireQuestionDAO.search(searchparameters);
+            return iQuestionnaireQuestionDAO.search(searchParameters);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 }
