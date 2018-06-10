@@ -70,3 +70,7 @@
 .default-color1.chart-pie {
     -fx-pie-color: #ff0000;
 }
+
+.default-color1.chart-pie {
+    -fx-pie-color: 	#ababab;
+}
