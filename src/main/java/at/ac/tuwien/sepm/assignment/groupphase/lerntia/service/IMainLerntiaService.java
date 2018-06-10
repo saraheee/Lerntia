@@ -25,24 +25,24 @@ public interface IMainLerntiaService {
      *
      * @return first Question of the questionnaire
      * @throws ServiceException if the method can't select or get the first question
-     * */
+     */
     Question getFirstQuestion() throws ServiceException;
 
     /**
-     * Sets the customly choosen questions from the Edit Exam Window in the Questions List
+     * Sets the custom chosen questions from the Edit Exam Window in the Questions List
      *
      * @param customList custom list of questions that are set for the exam.
      * @throws ServiceException if the method can't obtain the questions or/and can't set them into the question list.
-     * */
-    void setCustomExamQuestions(ArrayList customList) throws ServiceException;
+     */
+    void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException;
 
     /**
      * Standard Exam Questionnaire question set method. Takes the questions linked with a specific Exam Questionnaire
-     * and sets those questions into the Programm
+     * and sets those questions into the program
      *
      * @param eQ Exam Questionnaire in question.
      * @throws ServiceException if the method can't obtain the questions or set them into the Question List
-     * */
+     */
     void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException;
 
     /**
@@ -77,11 +77,10 @@ public interface IMainLerntiaService {
     void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException;
 
     /**
-     *
      * Returns the list of current questions
      *
-     * @throws ServiceException if the method can't get the current list of questions
      * @return List of the currently used questions.
+     * @throws ServiceException if the method can't get the current list of questions
      */
     List<Question> getQuestions() throws ServiceException;
 
@@ -104,7 +103,7 @@ public interface IMainLerntiaService {
      * Stops the Learning algorithm and sends the updated values to the DB before closing.
      *
      * @throws ServiceException if the Learnalgorithm shutdown encounters an error during shutdown or during the sending of the value package to the Database
-     * */
+     */
     void stopAlgorithm() throws ServiceException;
 
     /**
@@ -145,15 +144,15 @@ public interface IMainLerntiaService {
      * and deciding to revert to all the questions from a questionnaire.
      *
      * @return first question of the restored list.
-     * */
+     */
     Question restoreQuestionsAndGetFirst();
 
 
-   /**
-    * Set the boolean value for the service layer that the exam mode is currently active or not.
-    *
-    * @param examMode boolean value which indicates if the programm is currently in the Exam mode or not.
-    * */
+    /**
+     * Set the boolean value for the service layer that the exam mode is currently active or not.
+     *
+     * @param examMode boolean value which indicates if the program is currently in the Exam mode or not.
+     */
     void setExamMode(boolean examMode);
 
 
@@ -161,7 +160,7 @@ public interface IMainLerntiaService {
      * Set current Exam Questionnaire
      *
      * @param selectedQuestionnaire questionnaire in question
-     * */
+     */
     void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire);
 
 
@@ -170,6 +169,6 @@ public interface IMainLerntiaService {
      *
      * @return first exam question
      * @throws ServiceException if the method can't obtain the first Exam Question.
-     * */
+     */
     Question getFirstExamQuestion() throws ServiceException;
 }

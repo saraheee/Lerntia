@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.lang.String?>
+
+<AnchorPane prefHeight="275.0" prefWidth="475.0" stylesheets="@/css/views.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ExportQuestionnaireController">
+   <children>
+   
+       <Label layoutX="53.0" layoutY="85.0" text="Fragebogen:" />
+       <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0">
+           <styleClass>
+               <String fx:value="combo-box" />
+           </styleClass>
+       </ComboBox>
+   
+       <Button defaultButton="true" layoutX="169.0" layoutY="170.0" mnemonicParsing="false" onAction="#selectQuestionnaire" pickOnBounds="false" prefHeight="41.0" prefWidth="188.0" text="Exportieren">
+           <styleClass>
+               <String fx:value="button" />
+           </styleClass>
+       </Button>
+   </children>
+    <styleClass>
+        <String fx:value="view" />
+    </styleClass>
+</AnchorPane>
