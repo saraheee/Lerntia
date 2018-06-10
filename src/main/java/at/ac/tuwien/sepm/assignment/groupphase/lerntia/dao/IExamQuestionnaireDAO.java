@@ -12,7 +12,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param examQuestionnaire ExamQuestionnaire that needs to be saved to the Database
      * @throws PersistenceException if the ExamQuestionnaire can't be created
-     * */
+     */
     void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
@@ -20,7 +20,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param examQuestionnaire the ExamQuestionnaire in question with the new or same parameters.
      * @throws PersistenceException if the method can't update the ExamQuestionnaire
-     * */
+     */
     void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
@@ -28,7 +28,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param searchparameters all or some searchparameters of the ExamQuestionnaire
      * @throws PersistenceException if the method can't render
-     * */
+     */
     void search(ExamQuestionnaire searchparameters) throws PersistenceException;
 
     /**
@@ -36,7 +36,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param examQuestionnaire ExamQuestionnaire in question that has to be deleted
      * @throws PersistenceException if the method can't delete the ExamQuestionnaire from the Database
-     * */
+     */
     void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
@@ -44,7 +44,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @return list of all ExamQuestionnaires
      * @throws PersistenceException if the list cannot be retrieved from the Database
-     * */
+     */
     List<ExamQuestionnaire> readAll() throws PersistenceException;
 
     /**
@@ -52,7 +52,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param examQuestionnaire the ExamQuestionnaire to be selected
      * @throws PersistenceException if the ExamQuestionnaire cannot be selected in the Database
-     * */
+     */
     void select(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
@@ -60,7 +60,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @param examQuestionnaire the ExamQuestionnaire to be deselected
      * @throws PersistenceException if the ExamQuestionnaire cannot be deselected in the Database
-     * */
+     */
     void deselect(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
@@ -68,7 +68,7 @@ public interface IExamQuestionnaireDAO {
      *
      * @return the selected ExamQuestionnaire
      * @throws PersistenceException if the selected ExamQuestionnaire cannot be retrieved from the Database
-     * */
+     */
     ExamQuestionnaire getSelected() throws PersistenceException;
 
 }

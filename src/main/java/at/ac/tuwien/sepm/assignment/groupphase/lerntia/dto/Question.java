@@ -161,13 +161,13 @@ public class Question {
 
     public String toStringGUI() {
         //the first three fields are mandatory
-        return "Frage: " + formatLines(questionText, new Locale ("de","AT")) +
+        return "Fragestellung: " + formatLines(questionText, new Locale ("de","AT")) +
             "Antwort 1: " + answer1 + "\n" +
             "Antwort 2: " + answer2 + "\n" +
             ((answer3 != null && answer3.trim().length() > 0) ? "Antwort 3: " + answer3 + "\n" : "") +
             ((answer4 != null && answer4.trim().length() > 0) ? "Antwort 4: " + answer4 + "\n" : "") +
             ((answer5 != null && answer5.trim().length() > 0) ? "Antwort 5: " + answer5 + "\n" : "") +
-            ((picture != null && picture.trim().length() > 0) ? "Bild: " + picture : "");
+            ((picture != null && picture.trim().length() > 0) ? "Bildname: " + picture : "");
     }
 
     public String getCheckedAnswers() {
