@@ -12,7 +12,7 @@ public interface ICourseService {
      *
      * @param course the new Course that is going to be created and sent to the Database
      * @throws ServiceException if Course can't be created.
-     * */
+     */
     void create(Course course) throws ServiceException;
 
     /**
@@ -20,7 +20,7 @@ public interface ICourseService {
      *
      * @param course the Course in Question with updated Values
      * @throws ServiceException if the method can't update the Course
-     * */
+     */
     void update(Course course) throws ServiceException;
 
     /**
@@ -28,7 +28,7 @@ public interface ICourseService {
      *
      * @param course the course that needs to be deleted
      * @throws ServiceException if the method can't delete the course in question
-     * */
+     */
     void delete(Course course) throws ServiceException;
 
     /**
@@ -36,7 +36,7 @@ public interface ICourseService {
      *
      * @return List with all courses
      * @throws ServiceException if it's not possible to get the List
-     * */
+     */
     List<Course> readAll() throws ServiceException;
 
     /**
@@ -44,7 +44,7 @@ public interface ICourseService {
      *
      * @param course the course to be validated
      * @throws ServiceException if the course failed the validation
-     * */
+     */
     void validate(Course course) throws ServiceException;
 
 }

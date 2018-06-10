@@ -53,16 +53,16 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     }
 
     @Override
-    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException {
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
             List<QuestionnaireQuestion> searchresults = new ArrayList<>();
             QuestionnaireQuestion questionnaireQuestion;
-            String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchparameters.getQid();
+            String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchParameters.getQid();
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
                 while (rs.next()) {
                     questionnaireQuestion = new QuestionnaireQuestion();
-                    questionnaireQuestion.setQid(searchparameters.getQid());
+                    questionnaireQuestion.setQid(searchParameters.getQid());
                     questionnaireQuestion.setQuestionid(rs.getLong(2));
                     questionnaireQuestion.setDeleted(rs.getBoolean(3));
                     searchresults.add(questionnaireQuestion);
@@ -89,13 +89,13 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     }
 
     @Override
-    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionid) throws PersistenceException {
+    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
             PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT);
             try {
                 psUpdate.setLong(1, newQid);
-                psUpdate.setLong(2, newQuestionid);
+                psUpdate.setLong(2, newQuestionId);
                 psUpdate.setLong(3, questionnaireQuestion.getQid());
                 psUpdate.setLong(4, questionnaireQuestion.getQuestionid());
                 psUpdate.executeUpdate();
