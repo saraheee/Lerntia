@@ -753,7 +753,8 @@ public class LerntiaMainController {
     public ImageView createPieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
             new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
-            new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()));
+            new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),
+            new PieChart.Data("Übersprungen", lerntiaService.getIgnoredAnswers()));
         PieChart pieChart = new PieChart(pieChartData);
         pieChart.setClockwise(false);
         pieChart.setLegendVisible(false);
@@ -766,6 +767,7 @@ public class LerntiaMainController {
         scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
         pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
         pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
+        pieChartData.get(2).getNode().setStyle("-fx-pie-color: #ababab;");
 
         WritableImage snapShot = scene.snapshot(null);
         try {
