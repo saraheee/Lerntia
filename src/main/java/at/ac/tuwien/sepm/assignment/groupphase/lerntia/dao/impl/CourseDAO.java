@@ -32,7 +32,7 @@ public class CourseDAO implements ICourseDAO {
             connection = jdbcConnectionManager.getConnection();
             LOG.info("Database connection for CourseDAO obtained.");
         } catch (PersistenceException e) {
-            LOG.error("Course Constructor failed while trying to get connection!");
+            LOG.error("CourseDAO Constructor failed while trying to get connection!");
             throw e;
         }
     }
@@ -84,11 +84,6 @@ public class CourseDAO implements ICourseDAO {
         }
     }
 
-    @Override
-    public void search(Course course) throws PersistenceException {
-        //this method is currently empty because its not yet determined if this method is even necessary for this programm.
-        //If so the method will be deleted
-    }
 
     @Override
     public void delete(Course course) throws PersistenceException {

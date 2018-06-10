@@ -9,7 +9,6 @@
     -fx-font-size: 26px;
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
 }
 
 .button {
@@ -71,4 +70,8 @@
 .check-box:selected:hover .box {
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, white, 20, -6, 0, 0);
+}
+
+.check-box:disabled, .check-box:disabled > * {
+    -fx-opacity: 0.85;
 }

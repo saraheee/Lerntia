@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-
-<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
-    <Menu mnemonicParsing="false" text="Menü">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css"
+         xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
+    <Menu mnemonicParsing="false" text="Menü" onAction="#onMenuClicked">
         <MenuItem mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/edit2.png" />
+                    <Image url="@/icons/edit2.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#selectQuestionnaire" text="Fragebogen auswählen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/select.png" />
+                    <Image url="@/icons/select.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#createCourse" text="LVA erstellen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/create.png" />
+                    <Image url="@/icons/create.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/csv-import.png" />
+                    <Image url="@/icons/csv-import.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
         <MenuItem mnemonicParsing="false" onAction="#exportQuestions" text="Fragen nach CSV exportieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/csv-export.png" />
+                    <Image url="@/icons/csv-export.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem fx:id="learnToExamButton" mnemonicParsing="false" onAction="#switchToExamMode" text="In den Prüfungsmodus wechseln">
+        <MenuItem fx:id="learnToExamButton" mnemonicParsing="false" onAction="#switchToExamMode"
+                  text="In den Prüfungsmodus wechseln">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/transfer2.png" />
+                    <Image url="@/icons/transfer2.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem fx:id="examToLearnButton" mnemonicParsing="false" onAction="#switchToLearnMode" text="In den Lernmodus wechseln">
+        <MenuItem fx:id="examToLearnButton" mnemonicParsing="false" onAction="#switchToLearnMode"
+                  text="In den Lernmodus wechseln">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/transfer.png" />
+                    <Image url="@/icons/transfer.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
     </Menu>
-    <Menu mnemonicParsing="false" text="Hilfe">
+    <Menu mnemonicParsing="false" text="Hilfe" onAction="#onHelpClicked">
         <MenuItem mnemonicParsing="false" onAction="#showAboutSection" text="Über Lerntia">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@/icons/about.png" />
+                    <Image url="@/icons/about.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>

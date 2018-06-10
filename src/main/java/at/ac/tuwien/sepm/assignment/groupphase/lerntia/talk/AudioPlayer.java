@@ -10,32 +10,22 @@ import java.lang.invoke.MethodHandles;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
+/*
  * This class is taken from a Youtube Tutorial. URL: https://www.youtube.com/watch?v=OLKxBorVwk8
  *
  * @author GOXR3PLUS
  */
-public class AudioPlayer extends Thread {
+public class AudioPlayer extends Thread implements IAudioPlayer {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public boolean finishedAudio = false;
     private AudioInputStream ais;
-    private LineListener lineListener;
     private SourceDataLine line;
-    private int outputMode;
     private Status status = Status.WAITING;
     private boolean exitRequested = false;
     private float gain = 1.0f;
 
-    /**
-     * AudioPlayer which can be used if audio stream is to be set separately, using setAudio().
-     */
-    public AudioPlayer() {
-    }
 
-    /**
-     * @param audio the audio to set
-     */
     public void setAudio(AudioInputStream audio) {
         if (status == Status.PLAYING) {
             throw new IllegalStateException("Cannot set audio while playing");
@@ -43,9 +33,8 @@ public class AudioPlayer extends Thread {
         this.ais = audio;
     }
 
-    /**
-     * Cancel the AudioPlayer which will cause the Thread to exit
-     */
+
+    //Cancel the AudioPlayer which will cause the Thread to exit
     public void cancel() {
         if (line != null) {
             line.stop();
@@ -53,25 +42,20 @@ public class AudioPlayer extends Thread {
         exitRequested = true;
     }
 
-    /**
-     * Returns the GainValue
-     */
+
     private float getGainValue() {
         return gain;
     }
 
-    /**
-     * Sets Gain value. Line should be opened before calling this method. Linear scale 0.0 <--> 1.0 Threshold Coef. : 1/2 to avoid saturation.
-     *
-     * @param fGain the gain value to set
-     */
+
+    //Sets Gain value. Line should be opened before calling this method. Linear scale 0.0 <--> 1.0 Threshold Coef. : 1/2 to avoid saturation.
     public void setGain(float fGain) {
         gain = fGain;
 
         // Better type
-        if (line != null && line.isControlSupported(FloatControl.Type.MASTER_GAIN))
+        if (line != null && line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             ((FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN)).setValue((float) (20 * Math.log10(fGain <= 0.0 ? 0.0000 : fGain)));
-
+        }
     }
 
     @Override
@@ -81,19 +65,12 @@ public class AudioPlayer extends Thread {
         finishedAudio = false;
         var audioFormat = ais.getFormat();
         if (audioFormat.getChannels() == 1) {
-            if (outputMode != 0) {
-                ais = new StereoAudioInputStream(ais, outputMode);
-                audioFormat = ais.getFormat();
-            }
+            ais = new StereoAudioInputStream(ais);
+            audioFormat = ais.getFormat();
+
         } else {
             assert audioFormat.getChannels() == 2 : "Unexpected number of channels: " + audioFormat.getChannels();
-            if (outputMode == 0) {
-                ais = new MonoAudioInputStream(ais);
-            } else if (outputMode == 1 || outputMode == 2) {
-                ais = new StereoAudioInputStream(ais, outputMode);
-            } else {
-                assert outputMode == 3 : "Unexpected output mode: " + outputMode;
-            }
+            ais = new MonoAudioInputStream(ais);
         }
 
         var info = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -112,9 +89,6 @@ public class AudioPlayer extends Thread {
                 }
                 info = new DataLine.Info(SourceDataLine.class, audioFormat);
                 line = (SourceDataLine) AudioSystem.getLine(info);
-            }
-            if (lineListener != null) {
-                line.addLineListener(lineListener);
             }
             line.open(audioFormat);
         } catch (Exception ex) {
@@ -145,7 +119,7 @@ public class AudioPlayer extends Thread {
         LOG.debug("Finished playing!");
     }
 
-    /**
+    /*
      * The status of the player
      *
      * @author GOXR3PLUS

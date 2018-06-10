@@ -24,7 +24,7 @@ public class IMainLerntiaServiceTest {
         try {
             connection = jdbcConnectionManager.getTestConnection();
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 

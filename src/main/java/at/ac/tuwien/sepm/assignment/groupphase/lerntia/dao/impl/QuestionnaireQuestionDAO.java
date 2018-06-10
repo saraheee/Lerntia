@@ -2,15 +2,12 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireQuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,34 +40,29 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT);
-            try {
-                psCreate.setLong(1, questionnaireQuestion.getQid());
-                psCreate.setLong(2, questionnaireQuestion.getQuestionid());
-                psCreate.setBoolean(3, false);
-                psCreate.execute();
-                LOG.info("Statement for new QuestionnaireQuestion entry successfully sent.");
-            } finally {
-                psCreate.close();
-            }
+        LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
+        try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT)) {
+            psCreate.setLong(1, questionnaireQuestion.getQid());
+            psCreate.setLong(2, questionnaireQuestion.getQuestionid());
+            psCreate.setBoolean(3, false);
+            psCreate.execute();
+            LOG.info("Statement for new QuestionnaireQuestion entry successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO CREATE error: item couldn't have been created, check if all mandatory values have been added and if the connection to the Database is valid.");
         }
     }
 
     @Override
-    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException {
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
             List<QuestionnaireQuestion> searchresults = new ArrayList<>();
             QuestionnaireQuestion questionnaireQuestion;
-            String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchparameters.getQid();
+            String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchParameters.getQid();
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
                 while (rs.next()) {
                     questionnaireQuestion = new QuestionnaireQuestion();
-                    questionnaireQuestion.setQid(searchparameters.getQid());
+                    questionnaireQuestion.setQid(searchParameters.getQid());
                     questionnaireQuestion.setQuestionid(rs.getLong(2));
                     questionnaireQuestion.setDeleted(rs.getBoolean(3));
                     searchresults.add(questionnaireQuestion);
@@ -85,30 +77,25 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public void delete(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
-            PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT);
-            try {
-                psDelete.setLong(1, questionnaireQuestion.getQid());
-                psDelete.setLong(2, questionnaireQuestion.getQuestionid());
-                psDelete.executeUpdate();
-                LOG.info("Statement for QuestionnaireQuestion Deletion successfully sent.");
-            } finally {
-                psDelete.close();
-            }
+        LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
+        try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT)) {
+            psDelete.setLong(1, questionnaireQuestion.getQid());
+            psDelete.setLong(2, questionnaireQuestion.getQuestionid());
+            psDelete.executeUpdate();
+            LOG.info("Statement for QuestionnaireQuestion Deletion successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO DELETE error: couldn't delete item in question, check if the connection to the Database is valid.");
         }
     }
 
     @Override
-    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionid) throws PersistenceException {
+    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
             PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT);
             try {
                 psUpdate.setLong(1, newQid);
-                psUpdate.setLong(2, newQuestionid);
+                psUpdate.setLong(2, newQuestionId);
                 psUpdate.setLong(3, questionnaireQuestion.getQid());
                 psUpdate.setLong(4, questionnaireQuestion.getQuestionid());
                 psUpdate.executeUpdate();
