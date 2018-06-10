@@ -436,7 +436,7 @@ public class LerntiaMainController implements Runnable {
         } catch (ServiceException e1) {
             if (examMode) {
                 alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                    "Die letzte Frage wurde erreicht. Wenn Fragen ausgelassen wurden, kann noch zu ihnen zurücknavigiert werden.\n\n" +
+                    "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, es kann noch zu ihnen zurücknavigiert werden.\n\n" +
                         "Nicht vergessen die Prüfung am Ende abzugeben!");
             } else {
 
