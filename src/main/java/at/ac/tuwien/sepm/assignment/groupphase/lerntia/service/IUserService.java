@@ -10,7 +10,7 @@ public interface IUserService {
      *
      * @param user the user that needs to be saved to the Database
      * @throws ServiceException if the method can't save the User to the Database
-     * */
+     */
     void create(User user) throws ServiceException;
 
     /**
@@ -18,7 +18,7 @@ public interface IUserService {
      *
      * @param user User that needs to be updated in the Database
      * @throws ServiceException if the method can't update the user
-     * */
+     */
     void update(User user) throws ServiceException;
 
     /**
@@ -26,7 +26,7 @@ public interface IUserService {
      *
      * @param user user in question
      * @throws ServiceException if the user can't be accessed
-     * */
+     */
     User read(User user) throws ServiceException;
 
     /**
@@ -34,6 +34,6 @@ public interface IUserService {
      *
      * @param user User that needs to be Deleted from the Database
      * @throws ServiceException if the method can't delete the user
-     * */
+     */
     void delete(User user) throws ServiceException;
 }

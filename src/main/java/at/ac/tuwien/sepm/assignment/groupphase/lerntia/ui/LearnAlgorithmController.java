@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class LearnAlgorithmController {
 
     @FXML
     private void initialize() {
-        learnAlgorithmButton.setText("Algorithmus AUS");
+        learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
     }
 
     @FXML
@@ -31,12 +32,12 @@ public class LearnAlgorithmController {
             LOG.info("Set Algorithm to OFF");
             selected = false;
             learnAlgorithmButton.defaultButtonProperty().setValue(false);
-            learnAlgorithmButton.setText("Algorithmus AUS");
+            learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
         } else {
             learnAlgorithmButton.defaultButtonProperty().setValue(true);
             LOG.info("Set Algorithm to ON");
             selected = true;
-            learnAlgorithmButton.setText("Algorithmus AN");
+            learnAlgorithmButton.setText(ButtonText.ALGORITHMON.toString());
         }
     }
 
@@ -47,6 +48,6 @@ public class LearnAlgorithmController {
     public void reset() {
         selected = false;
         learnAlgorithmButton.defaultButtonProperty().setValue(false);
-        learnAlgorithmButton.setText("Algorithmus AUS");
+        learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
     }
 }

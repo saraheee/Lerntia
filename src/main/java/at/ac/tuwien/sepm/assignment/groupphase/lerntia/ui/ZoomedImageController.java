@@ -40,7 +40,6 @@ public class ZoomedImageController {
     private boolean key3pressed = false;
     private boolean key4pressed = false;
     private boolean key5pressed = false;
-    private boolean keyCpressed = false;
 
     @Autowired
     public ZoomedImageController(AlertController alertController, WindowController windowController, AudioController audioController) {
@@ -176,7 +175,4 @@ public class ZoomedImageController {
         this.key5pressed = key5pressed;
     }
 
-    boolean isKeyCpressed() {
-        return keyCpressed;
-    }
 }

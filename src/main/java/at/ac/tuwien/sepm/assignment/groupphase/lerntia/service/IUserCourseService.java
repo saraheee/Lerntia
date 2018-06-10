@@ -10,6 +10,6 @@ public interface IUserCourseService {
      *
      * @param userCourse the user-course connection that needs to be saved to the Database
      * @throws ServiceException if the method can't save the UserCourse to the Database
-     * */
+     */
     void create(UserCourse userCourse) throws ServiceException;
 }

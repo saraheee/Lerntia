@@ -413,7 +413,7 @@ public class EditExamController {
             acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
             questionTable.setItems(FXCollections.observableArrayList(currentQuestionList));
             selectedQuestions.clear();
-            LOG.info("Questions transfered to accepted table.");
+            LOG.info("Questions transferred to accepted table.");
         }
     }
 
