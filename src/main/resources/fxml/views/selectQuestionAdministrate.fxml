@@ -10,6 +10,9 @@
         <String fx:value="view"/>
     </styleClass>
     <TableView fx:id="tv_questionTable" layoutX="14.0" layoutY="14.0" prefHeight="478.0" prefWidth="1155.0">
+        <placeholder>
+            <Label wrapText="true" text="Keine Fragen in der Tabelle vorhanden."/>
+        </placeholder>
         <columns>
             <TableColumn fx:id="tc_question" prefWidth="385." text="Frage"/>
             <TableColumn fx:id="tc_answer1" prefWidth="130.0" text="Antwort 1"/>

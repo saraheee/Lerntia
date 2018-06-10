@@ -10,6 +10,6 @@ public interface IUserQuestionnaireService {
      *
      * @param userQuestionnaire the user-questionnaire connection that needs to be saved to the Database
      * @throws ServiceException if the method can't save the UserQuestionnaire to the Database
-     * */
+     */
     void create(UserQuestionnaire userQuestionnaire) throws ServiceException;
 }

@@ -44,9 +44,9 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     }
 
     @Override
-    public void search(ExamQuestionnaire searchparameters) throws ServiceException {
+    public void search(ExamQuestionnaire searchParameters) throws ServiceException {
         try {
-            examQuestionnaireDAO.search(searchparameters);
+            examQuestionnaireDAO.search(searchParameters);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());

@@ -8,7 +8,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -27,13 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-
 import static org.springframework.util.Assert.notNull;
 
 @Controller
@@ -44,7 +41,6 @@ public class LerntiaMainController implements Runnable {
     private final ZoomedImageController zoomedImageController;
     private final AudioController audioController;
     private final AlertController alertController;
-    private final IQuestionnaireService questionnaireService;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private boolean onlyWrongQuestions = false;
@@ -103,7 +99,6 @@ public class LerntiaMainController implements Runnable {
         AlertController alertController,
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
-        IQuestionnaireService questionnaireService,
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController
     ) {
@@ -117,7 +112,6 @@ public class LerntiaMainController implements Runnable {
         this.alertController = alertController;
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.zoomedImageController = zoomedImageController;
-        this.questionnaireService = questionnaireService;
         this.iExamResultsWriterService = iExamResultsWriterService;
         this.learnAlgorithmController = learnAlgorithmController;
 
@@ -313,6 +307,7 @@ public class LerntiaMainController implements Runnable {
                         "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
                } */
             if (goToNextQuestion) {
+                removeColorsAndEnableAnswers();
                 getAndShowNextQuestion();
             } else {
                 showColorsAndDisableAnswers(question.getCorrectAnswers());
@@ -367,12 +362,19 @@ public class LerntiaMainController implements Runnable {
         answer5Controller.markBlack();
         questionColored = false;
 
-        //TODO: maybe enable everything in the end not now
-        answer1Controller.setDisabled(false);
-        answer2Controller.setDisabled(false);
-        answer3Controller.setDisabled(false);
-        answer4Controller.setDisabled(false);
-        answer5Controller.setDisabled(false);
+        if (!examMode) {
+            answer1Controller.setDisabled(false);
+            answer2Controller.setDisabled(false);
+            answer3Controller.setDisabled(false);
+            answer4Controller.setDisabled(false);
+            answer5Controller.setDisabled(false);
+
+            answer1Controller.setSelected(false);
+            answer2Controller.setSelected(false);
+            answer3Controller.setSelected(false);
+            answer4Controller.setSelected(false);
+            answer5Controller.setSelected(false);
+        }
     }
 
     private String formatAnswerNumbers(String answers) {
@@ -383,7 +385,7 @@ public class LerntiaMainController implements Runnable {
         try {
             question = lerntiaService.getFirstExamQuestion();
         } catch (ServiceException e) {
-            throw new ControllerException("Es gibt noch keine Prüfungs Fragen");
+            throw new ControllerException("Es gibt noch keine Prüfungsfragen!");
         }
         showQuestionAndAnswers();
     }
@@ -410,7 +412,7 @@ public class LerntiaMainController implements Runnable {
 
             showNoQuestionsAvailable();
 
-            throw new ControllerException("Es gibt noch keine Fragen");
+            throw new ControllerException("Es gibt noch keine Fragen!");
         }
         showQuestionAndAnswers();
     }
@@ -434,7 +436,7 @@ public class LerntiaMainController implements Runnable {
         } catch (ServiceException e1) {
             if (examMode) {
                 alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                    "Die letzte Frage wurde erreicht. Wenn Fragen ausgelassen wurden, kann noch zu ihnen zurücknavigiert werden.\n\n" +
+                    "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, es kann noch zu ihnen zurücknavigiert werden.\n\n" +
                         "Nicht vergessen die Prüfung am Ende abzugeben!");
             } else {
 
@@ -454,7 +456,7 @@ public class LerntiaMainController implements Runnable {
 
                 }
                 if (e1.getMessage().contains("List of wrong questions is Empty")) {
-                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                         "Es gibt keine falsch beantworteten Fragen mehr." +
                             "Die erste Frage wird wieder angezeigt.");
                     alertController.setOnlyWrongQuestions(false);
@@ -477,7 +479,7 @@ public class LerntiaMainController implements Runnable {
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
                     } else if (e.getMessage().contains("List of wrong questions is Empty.")) {
-                        alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr.", "Keine falsch beantworteten Fragen mehr.",
+                        alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                             "Es gibt keine falsch beantworteten Fragen mehr." +
                                 "Die erste Frage wird wieder angezeigt.");
 

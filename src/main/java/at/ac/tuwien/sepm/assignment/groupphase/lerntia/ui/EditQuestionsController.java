@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
@@ -161,7 +160,7 @@ public class EditQuestionsController {
                 e.printStackTrace();
             }
         } else {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
                 "Mindestens eines der Pflichtfelder ist leer.", null);
         }
     }
