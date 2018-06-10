@@ -94,7 +94,7 @@ public class SelectExamController {
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowStage = windowController.openNewWindow("Fragebogen auswählen und Studentendaten überprüfen", fxmlLoader);
+        windowStage = windowController.openNewWindow("Fragebogen auswählen und Studiendaten überprüfen", fxmlLoader);
 
         try {
             User student = simpleUserService.read();
@@ -102,9 +102,9 @@ public class SelectExamController {
             matriculationNumberLabel.setText(student.getMatriculationNumber());
             studyProgrammeLabel.setText(student.getStudyProgramme());
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studentendaten gefunden!",
-                "Bitte überprüfuen Sie die Config-Datei",
-                "Config-Datei mit dem Namen 'student.properties' muss vorhanden sein, um die Studentendaten " +
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studiendaten gefunden!",
+                "Bitte die Config-Datei überprüfen",
+                "Config-Datei mit dem Namen 'student.properties' muss vorhanden sein, um die Studiendaten " +
                     "anzeigen zu können.");
         }
 
