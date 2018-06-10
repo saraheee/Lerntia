@@ -29,25 +29,29 @@ public class SelectExamController {
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
+    private final EditExamController editExamController;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
     @FXML
     private ComboBox<String> cb_exam;
+    private Stage windowStage;
+    private boolean selectingCanceled = false;
 
     public SelectExamController(
         SimpleExamQuestionnaireService examQuestionnaireService,
         IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
-        AlertController alertController
-    )
-    {
+        AlertController alertController,
+        EditExamController editExamController
+    ) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.alertController = alertController;
+        this.editExamController = editExamController;
     }
 
     @FXML
@@ -57,7 +61,7 @@ public class SelectExamController {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungen lesen fehlgeschlagen",
-                "Fehler", "Die Prüfungen konnten nicht aus der Datenbank gelesen werden!");
+                "Fehler", "Die Prüfungen konnten nicht gelesen werden!");
         }
 
         for (ExamQuestionnaire anExamQuestionnaireList : examQuestionnaireList) {
@@ -67,23 +71,41 @@ public class SelectExamController {
         cb_exam.getSelectionModel().selectFirst();
     }
 
-    void showSelectExamWindow() {
+    void showSelectExamWindow() throws ControllerException {
 
         try {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            // TODO - finish exception handling
+            //Todo better exception handling
         }
 
-        if (examQuestionnaireList.isEmpty()){
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs Auswahl kann nicht angezeigt werden",
-                "Fehler", "Es ist noch keine Prüfung vorhanden");
-            return;
+        if (examQuestionnaireList.isEmpty()) {
+            throw new ControllerException("No Exams available");
         }
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+        windowStage = windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+
+        windowStage.setOnCloseRequest(event -> {
+            var alertController = new AlertController();
+            if (alertController.showStandardConfirmationAlert("Prüfungsauswahl abbrechen?",
+                "Soll die Auswahl einer Prüfung wirklich beendet werden?",
+                "")) {
+                LOG.debug("Canceled selecting an exam!");
+                selectingCanceled = true;
+                return;
+            }
+            event.consume();
+        });
+    }
+
+    public boolean getSelectingCanceled() {
+        return selectingCanceled;
+    }
+
+    public void setSelectingCanceled(boolean selectingCanceled) {
+        this.selectingCanceled = selectingCanceled;
     }
 
     public void selectExam(ActionEvent actionEvent) {
@@ -91,39 +113,28 @@ public class SelectExamController {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
 
-        // unselect all questionnaires
-
-        try {
-            iQuestionnaireService.deselectAllQuestionnaires();
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Fehler", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
-        }
-
-        // select questionnaire
-
-        try {
-            examQuestionnaireService.select(selectedQuestionnaire);
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung auswählen fehlgeschlagen",
-                "Fehler", "Die Prüfung konnte nicht ausgewählt werden!");
-        }
-
         // show first question of new questionnaire
 
         try {
             lerntiaMainController.setExamMode(true);
             lerntiaMainController.setExamName(selectedQuestionnaire.getName());
             lerntiaMainController.switchToExamMode();
-            lerntiaMainController.getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
-                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+            lerntiaMainController.prepareExamQuestionnaire(selectedQuestionnaire);
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungs modus anzeigen fehlgeschlagen.",
-                "Fehler","Nicht möglich in den Prüfungs Modus zu wechseln!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
+                "Fehler", "Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         }
 
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
+    public void selectExamAndEdit(ActionEvent actionEvent) {
+        int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
+        ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
+
+        editExamController.showSelectExamWindow(selectedQuestionnaire);
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();

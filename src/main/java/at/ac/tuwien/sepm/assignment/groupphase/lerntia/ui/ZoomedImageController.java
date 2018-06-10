@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -73,6 +74,8 @@ public class ZoomedImageController {
             }
         }));
         imageView.setOnMouseClicked((MouseEvent e) -> closeZoomedImageWindows());
+        imageView.setOnMouseEntered((MouseEvent e) -> imageScene.setCursor(javafx.scene.Cursor.HAND));
+        imageView.setOnMouseExited((MouseEvent e) -> imageScene.setCursor(Cursor.DEFAULT));
     }
 
     @FXML

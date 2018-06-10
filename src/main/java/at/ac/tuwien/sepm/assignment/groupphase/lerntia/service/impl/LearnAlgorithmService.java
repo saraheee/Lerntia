@@ -249,6 +249,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
     @Override
     public List<Long> prepareQuestionValues(List<QuestionLearnAlgorithm> questionAlgorithmList) throws ServiceException {
         try {
+            questionLearnAlgorithmList = questionAlgorithmList;
             LOG.info("Prepare Question Values of selected Learn Questionnaire.");
             successMap = new HashMap<>();
             failureMap = new HashMap<>();
@@ -256,11 +257,12 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             QuestionLearnAlgorithm questionLearnAlgorithm;
             questionAlgorithmList = learnAlgorithmDAO.search(questionAlgorithmList);
             while (!questionAlgorithmList.isEmpty()) {
-                questionLearnAlgorithm = questionAlgorithmList.get(0);
+                List<QuestionLearnAlgorithm> helper = questionAlgorithmList;
+                questionLearnAlgorithm = helper.get(0);
                 successMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getSuccessvalue());
                 failureMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getFailurevalue());
                 valueMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getPoints());
-                questionAlgorithmList.remove(0);
+                helper.remove(0);
             }
             List<Long> list = sortValueMap(valueMap);
             LOG.info("All Learn Algorithm Values have been found and added.");
@@ -270,8 +272,8 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
         }
     }
 
-    //Sorts the value Map by ascending value
-    private List<Long> sortValueMap(Map<Long, Double> valueMap) {
+    @Override
+    public List<Long> sortValueMap(Map<Long, Double> valueMap) {
         // 1. Convert the entry Map to a List
         LOG.info("Sort the Question values have been initiated.");
         LinkedHashMap<Long, Double> sortedMap = new LinkedHashMap<>();
