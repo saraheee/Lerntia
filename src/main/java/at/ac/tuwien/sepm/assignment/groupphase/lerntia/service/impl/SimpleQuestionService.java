@@ -36,8 +36,8 @@ public class SimpleQuestionService implements IQuestionService {
             validate(question);
             questionDAO.create(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -47,8 +47,8 @@ public class SimpleQuestionService implements IQuestionService {
             validate(question);
             questionDAO.update(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -57,8 +57,8 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             return questionDAO.search(questionList);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -67,8 +67,8 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             questionDAO.delete(question);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -77,8 +77,8 @@ public class SimpleQuestionService implements IQuestionService {
         try {
             return questionDAO.get(id);
         } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustommessage());
         }
     }
 
@@ -219,8 +219,8 @@ public class SimpleQuestionService implements IQuestionService {
             try {
                 return questionDAO.searchForQuestions(questionInput);
             } catch (PersistenceException e) {
-                LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
-                throw new ServiceException(e.getMessage());
+                LOG.warn("Persistence exception caught");
+                throw new ServiceException(e.getCustommessage());
             }
     }
 
