@@ -30,7 +30,7 @@ public class QuestionDAOTest {
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
@@ -54,7 +54,7 @@ public class QuestionDAOTest {
             questionDAO.create(firstQuestion);
             Assert.assertEquals(Long.valueOf(2), firstQuestion.getId());
         } catch (PersistenceException e) {
-            //throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
