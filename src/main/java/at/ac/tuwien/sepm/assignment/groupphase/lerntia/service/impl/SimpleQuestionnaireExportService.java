@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AlertController;
 import javafx.scene.control.Alert;
@@ -12,11 +13,14 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Component
-public class SimpleQuestionnaireExportService implements IQuestionnaireExportService{
+public class SimpleQuestionnaireExportService implements IQuestionnaireExportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IQuestionnaireService iQuestionnaireService;
@@ -38,10 +42,41 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
         this.lerntiaService = lerntiaService;
     }
     @Override
-    public void exportSelectedQuestionnaire() {
+    public void exportSelectedQuestionnaire(String fileName) {
+        List<Question> allQuestions = null;
         try {
-            List<Question> allQuestions = getAllData(simpleLearningQuestionnaireService.getSelected());
+            allQuestions = getAllData(simpleLearningQuestionnaireService.getSelected());
         } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+
+        //Creating the Export file.
+        String csvFile = null;
+        FileWriter writer = null;
+        try {
+            csvFile = new File(".").getCanonicalPath();
+            LOG.info("csvFile: "+csvFile);
+            writer = new FileWriter(csvFile+"/"+fileName+".csv");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Getting all the Questions
+        String csvOutput = "";
+        for(Question q: allQuestions){
+            csvOutput += q.getQuestionText()+";"+q.getAnswer1()+";"+q.getAnswer2()+";"+q.getAnswer3()+";"+q.getAnswer4()+";"+q.getAnswer5()+";"+q.getCorrectAnswers()+";"+
+                q.getPicture()+";\n";
+        }
+        try {
+            writer.append(csvOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Flush & Close
+        try {
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -60,12 +95,9 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
         LOG.info("Select the Questionnaire");
         try {
             simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
-            //lerntiaMainController.getAndShowTheFirstQuestion();
         } catch (ServiceException e) {
             LOG.error("Can't select Questionnaire");
-        }// catch (ControllerException e) {
-        // e.printStackTrace();
-        //}
+        }
 
         try {
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
