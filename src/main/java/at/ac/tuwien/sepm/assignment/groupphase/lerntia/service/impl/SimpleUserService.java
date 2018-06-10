@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
@@ -18,7 +17,7 @@ public class SimpleUserService implements IUserService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
-    public SimpleUserService(UserDAO userDAO) {
+    public SimpleUserService() {
         this.configReader = new ConfigReader("student");
     }
 
