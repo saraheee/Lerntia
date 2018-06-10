@@ -102,7 +102,10 @@ public class SelectExamController {
             matriculationNumberLabel.setText(student.getMatriculationNumber());
             studyProgrammeLabel.setText(student.getStudyProgramme());
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studentendaten gefunden!", "Bitte überprüfuen Sie die Config-Datei", "Config Datei mit dem name 'studen.properties' muss vorhanden sein.");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studentendaten gefunden!",
+                "Bitte überprüfuen Sie die Config-Datei",
+                "Config-Datei mit dem Namen 'student.properties' muss vorhanden sein, um die Studentendaten " +
+                    "anzeigen zu können.");
         }
 
         windowStage.setOnCloseRequest(event -> {
@@ -118,11 +121,11 @@ public class SelectExamController {
         });
     }
 
-    public boolean getSelectingCanceled() {
+    boolean getSelectingCanceled() {
         return selectingCanceled;
     }
 
-    public void setSelectingCanceled(boolean selectingCanceled) {
+    void setSelectingCanceled(boolean selectingCanceled) {
         this.selectingCanceled = selectingCanceled;
     }
 
@@ -155,10 +158,5 @@ public class SelectExamController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-    }
-
-    public void changeStudentInfo(ActionEvent actionEvent) {
-        // todo student data
-        LOG.debug("Clicked on change student data.");
     }
 }
