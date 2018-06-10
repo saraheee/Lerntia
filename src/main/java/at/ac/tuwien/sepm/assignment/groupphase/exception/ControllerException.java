@@ -6,6 +6,7 @@ public class ControllerException extends Exception {
 
     public ControllerException(String message) {
         super(message);
+        this.custommessage = message;
     }
 
     public ControllerException(String message, Throwable cause) {

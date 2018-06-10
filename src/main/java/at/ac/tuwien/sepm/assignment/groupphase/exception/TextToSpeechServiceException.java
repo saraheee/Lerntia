@@ -7,6 +7,7 @@ public class TextToSpeechServiceException extends ServiceException {
 
     public TextToSpeechServiceException(String message) {
         super(message);
+        this.custommessage = message;
     }
 
     public String getCustommessage() {
