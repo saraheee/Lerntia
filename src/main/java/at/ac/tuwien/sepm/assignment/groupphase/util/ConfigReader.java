@@ -1,31 +1,44 @@
 package at.ac.tuwien.sepm.assignment.groupphase.util;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.lang.invoke.MethodHandles;
 import java.util.Properties;
 
 public class ConfigReader {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     InputStream inputStream;
     Properties prop;
 
     public ConfigReader(String config){
 
-        String filePath = "config/" + config + ".properties";
+        String propsPath = System.getProperty("user.home");
+        propsPath += File.separator + "Lerntia" + File.separator + "config" + File.separator + config + ".properties";
 
         this.prop = new Properties();
-        this.inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
+        File propsFile = new File(propsPath);
+
+        LOG.debug("Reading config properties: propsPath: *{}* propsFile: *{}*", propsPath, propsFile);
 
         try {
-            this.prop.load( this.inputStream );
-        } catch (IOException e) {
-
+            this.inputStream = new FileInputStream(propsFile);
+            LOG.debug("Opened input stream: {}", inputStream);
             try {
-                this.inputStream.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+                this.prop.load( this.inputStream );
+            } catch (IOException e) {
 
+                try {
+                    this.inputStream.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
