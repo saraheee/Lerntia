@@ -53,7 +53,7 @@ public class UserCourseDAOTest {
         this.userDAO = userDAO;
     }
 
-    public void IUserCourseDAO(UserCourseDAO userCourseDAO) {
+    private void IUserCourseDAO(UserCourseDAO userCourseDAO) {
         this.userCourseDAO = userCourseDAO;
     }
 

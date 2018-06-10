@@ -44,9 +44,9 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
     }
 
     @Override
-    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionid) throws ServiceException {
+    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws ServiceException {
         try {
-            iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionid);
+            iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionId);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());
@@ -64,9 +64,9 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
     }
 
     @Override
-    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws ServiceException {
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws ServiceException {
         try {
-            return iQuestionnaireQuestionDAO.search(searchparameters);
+            return iQuestionnaireQuestionDAO.search(searchParameters);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught " + e.getLocalizedMessage());
             throw new ServiceException(e.getMessage());

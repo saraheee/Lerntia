@@ -37,7 +37,7 @@ public class UserDAOTest {
         }
     }
 
-    public void IUserDAO(UserDAO userDAO) {
+    private void IUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
