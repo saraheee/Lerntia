@@ -4,7 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.IQuestionnaireExportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -103,6 +103,7 @@ public class ExportQuestionnaireController {
         LearningQuestionnaire studyMode = null;
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
+            exportService.exportSelectedQuestionnaire(selectedLearningQuestionnaire.getName());
         } catch (ServiceException e) {
             LOG.error("Selected Questionnaire can't be retrieved.");
         }
@@ -110,7 +111,6 @@ public class ExportQuestionnaireController {
         alertController.showStandardAlert(Alert.AlertType.INFORMATION,
             "Fragenbogen Exportieren",selectedLearningQuestionnaire.getName()+" wurde erfolgreich exportiert",
             "");
-        exportService.exportSelectedQuestionnaire();
 
         //Refresh the StudyMode again.
         //SutdyMode is beginning Starting from the Beginning.
