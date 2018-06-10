@@ -11,7 +11,7 @@ public interface IExamQuestionnaireService {
      *
      * @param examQuestionnaire ExamQuestionnaire that needs to be saved
      * @throws ServiceException if the ExamQuestionnaire can't be created
-     * */
+     */
     void create(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
@@ -19,23 +19,23 @@ public interface IExamQuestionnaireService {
      *
      * @param examQuestionnaire the ExamQuestionnaire in question with the new or same parameters.
      * @throws ServiceException if the method can't update the ExamQuestionnaire
-     * */
+     */
     void update(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
-     * Search for ExamQuestionnaire with given searchparameters
+     * Search for ExamQuestionnaire with given search parameters
      *
-     * @param searchparameters all or some searchparameters of the ExamQuestionnaire
+     * @param searchParameters all or some search parameters of the ExamQuestionnaire
      * @throws ServiceException if the method can't render
-     * */
-    void search(ExamQuestionnaire searchparameters) throws ServiceException;
+     */
+    void search(ExamQuestionnaire searchParameters) throws ServiceException;
 
     /**
      * Delete ExamQuestionnaire
      *
      * @param examQuestionnaire ExamQuestionnaire in question that has to be deleted
      * @throws ServiceException if the method can't delete the ExamQuestionnaire
-     * */
+     */
     void delete(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
@@ -43,7 +43,7 @@ public interface IExamQuestionnaireService {
      *
      * @return list of all ExamQuestionnaires
      * @throws ServiceException if the list cannot be retrieved
-     * */
+     */
     List<ExamQuestionnaire> readAll() throws ServiceException;
 
     /**
@@ -51,7 +51,7 @@ public interface IExamQuestionnaireService {
      *
      * @param examQuestionnaire the ExamQuestionnaire to be selected
      * @throws ServiceException if the ExamQuestionnaire cannot be selected
-     * */
+     */
     void select(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
@@ -59,7 +59,7 @@ public interface IExamQuestionnaireService {
      *
      * @param examQuestionnaire the ExamQuestionnaire to be deselected
      * @throws ServiceException if the ExamQuestionnaire cannot be deselected
-     * */
+     */
     void deselect(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
@@ -67,6 +67,6 @@ public interface IExamQuestionnaireService {
      *
      * @return the selected ExamQuestionnaire
      * @throws ServiceException if the selected ExamQuestionnaire cannot be retrieved
-     * */
+     */
     ExamQuestionnaire getSelected() throws ServiceException;
 }
