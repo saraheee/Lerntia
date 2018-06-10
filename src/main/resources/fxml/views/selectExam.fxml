@@ -7,7 +7,7 @@
 <AnchorPane stylesheets="@/css/views.css" prefHeight="533.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectExamController">
-    <Label layoutX="90.0" layoutY="49.0" text="Bitte einen Fragebogen auswählen!">
+    <Label layoutX="90.0" layoutY="49.0" text="Bitte einen Fragebogen auswählen:">
         <font>
             <Font size="18.0"/>
         </font>
@@ -19,7 +19,7 @@
         </styleClass>
     </ComboBox>
 
-    <Label layoutX="90.0" layoutY="225.0" text="Bitte überprüfen Sie die Studentendaten:">
+    <Label layoutX="90.0" layoutY="225.0" text="Bitte die Studiendaten überprüfen:">
         <font>
             <Font size="18.0"/>
         </font>
