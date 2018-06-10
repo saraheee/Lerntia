@@ -32,7 +32,7 @@ public class CourseDAOTest {
             connection = jdbcConnectionManager.getTestConnection();
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
@@ -55,7 +55,7 @@ public class CourseDAOTest {
             course.setMark("124.119");
             courseDAO.create(course);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class CourseDAOTest {
             tgi.setMark(null);
             courseDAO.create(tgi);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
@@ -91,7 +91,7 @@ public class CourseDAOTest {
 
 
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
@@ -108,7 +108,7 @@ public class CourseDAOTest {
             tgidelete.setId(tgi.getId());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
@@ -123,7 +123,7 @@ public class CourseDAOTest {
             tgi.setId(null);
             courseDAO.delete(tgi);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 

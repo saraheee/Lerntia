@@ -304,7 +304,7 @@ public class LerntiaMainController implements Runnable {
                 } catch (ServiceException e) {
                     LOG.error("Could not check whether the answer was correct");
                     alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getCustommessage());
                } */
             if (goToNextQuestion) {
                 removeColorsAndEnableAnswers();
@@ -398,7 +398,7 @@ public class LerntiaMainController implements Runnable {
                 showNoQuestionsAvailable();
             }
         } catch (ServiceException e) {
-            //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            //LOG.warn("Could not get the first question to be displayed: " + e.getCustommessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
             showNoQuestionsAvailable();
         }
@@ -470,7 +470,7 @@ public class LerntiaMainController implements Runnable {
                     showQuestionAndAnswers();
                 } catch (ServiceException e) {
 
-                    if (e.getMessage().contains("No wrong Questions available")) {
+                    if (e.getCustommessage().contains("No wrong Questions available")) {
                         alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
                             "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
                                 + "Daher werden alle Fragen angezeigt.");
@@ -478,7 +478,7 @@ public class LerntiaMainController implements Runnable {
                         onlyWrongQuestions = false;
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
-                    } else if (e.getMessage().contains("List of wrong questions is Empty.")) {
+                    } else if (e.getCustommessage().contains("List of wrong questions is Empty.")) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                             "Es gibt keine falsch beantworteten Fragen mehr." +
                                 "Die erste Frage wird wieder angezeigt.");
@@ -592,7 +592,7 @@ public class LerntiaMainController implements Runnable {
                         LOG.info("Image for this question is displayed: '{}'", question.getPicture());
                     }
                 } catch (MalformedURLException e) {
-                    LOG.debug("Exception while trying to display image " + e.getMessage());
+                    LOG.debug("Exception while trying to display image");
                 }
             }
         }
@@ -678,7 +678,7 @@ public class LerntiaMainController implements Runnable {
             iExamResultsWriterService.writeExamResults(questionList, "");
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                "Error", e.getMessage());
+                "Error", e.getCustommessage());
         }
     }
 

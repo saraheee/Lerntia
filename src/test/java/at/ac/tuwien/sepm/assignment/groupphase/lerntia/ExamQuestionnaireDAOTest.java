@@ -42,7 +42,7 @@ public class ExamQuestionnaireDAOTest {
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
