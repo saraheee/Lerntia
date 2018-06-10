@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -25,7 +24,6 @@ public class SelectExamController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleExamQuestionnaireService examQuestionnaireService;
-    private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
@@ -35,19 +33,16 @@ public class SelectExamController {
 
     @FXML
     private ComboBox<String> cb_exam;
-    private Stage windowStage;
     private boolean selectingCanceled = false;
 
     public SelectExamController(
         SimpleExamQuestionnaireService examQuestionnaireService,
-        IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
         AlertController alertController,
         EditExamController editExamController
     ) {
         this.examQuestionnaireService = examQuestionnaireService;
-        this.iQuestionnaireService = iQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
         this.alertController = alertController;
@@ -85,7 +80,7 @@ public class SelectExamController {
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
-        windowStage = windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
+        Stage windowStage = windowController.openNewWindow("Fragebogen auswählen", fxmlLoader);
 
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();

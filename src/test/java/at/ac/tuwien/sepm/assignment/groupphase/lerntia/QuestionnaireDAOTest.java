@@ -49,7 +49,7 @@ public class QuestionnaireDAOTest {
 
     @Test
     public void createNewQuestionnaire() throws PersistenceException {
-        Long expected = Long.valueOf(0);
+        Long expected = 0L;
 
         Course tgi = new Course();
         tgi.setSemester(Semester.SS + "18");

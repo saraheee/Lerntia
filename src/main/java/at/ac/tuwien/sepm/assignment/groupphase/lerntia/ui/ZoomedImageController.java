@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.awt.*;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
@@ -41,7 +40,6 @@ public class ZoomedImageController {
     private boolean key3pressed = false;
     private boolean key4pressed = false;
     private boolean key5pressed = false;
-    private boolean keyCpressed = false;
 
     @Autowired
     public ZoomedImageController(AlertController alertController, WindowController windowController, AudioController audioController) {
@@ -177,7 +175,4 @@ public class ZoomedImageController {
         this.key5pressed = key5pressed;
     }
 
-    boolean isKeyCpressed() {
-        return keyCpressed;
-    }
 }
