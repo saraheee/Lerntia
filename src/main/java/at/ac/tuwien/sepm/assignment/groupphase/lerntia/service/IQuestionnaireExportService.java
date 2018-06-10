@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import org.springframework.stereotype.Service;
@@ -10,15 +11,18 @@ import java.util.List;
 public interface IQuestionnaireExportService {
 
     /**
-     * Exports the Selected Questionnaire as a CSV Data. After that, its select the StudyMode again as a Default.
-     * @param fileName, contains the FileName which is used for saving the File.
+     * Exports the selected questionnaire as a CSV file. After that, it selects the StudyMode again as a default.
      *
+     * @param fileName, contains the FileName which is used for saving the File.
+     * @throws ServiceException when exporting the file fails
      */
-    void exportSelectedQuestionnaire(String fileName);
+    void exportSelectedQuestionnaire(String fileName) throws ServiceException;
 
     /**
-     * This Fucntions gets every Question for the SelectedQuestionnaire
-     * @return all the Questions of the selectedQuestionnaire in form of a list
+     * Gets every question for the selected questionnaire
+     *
+     * @return all questions of the selected questionnaire in form of a list
+     * @throws ServiceException when getting all questions fails
      */
-    List<Question> getAllData(LearningQuestionnaire learningQuestionnaire);
+    List<Question> getAllData(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
 }
