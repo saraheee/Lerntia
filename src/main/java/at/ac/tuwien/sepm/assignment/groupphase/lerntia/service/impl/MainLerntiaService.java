@@ -291,7 +291,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
             return currentQuestion;
         } catch (IndexOutOfBoundsException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Index out of bounds");
         }
     }
 
@@ -362,7 +362,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 return currentQuestion;
             }
         } catch (IndexOutOfBoundsException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Index out of bounds");
         }
     }
 
