@@ -7,6 +7,7 @@ public class TextToSpeechServiceValidationException extends ServiceException {
 
     public TextToSpeechServiceValidationException(String message) {
         super(message);
+        this.custommessage = message;
     }
 
     public String getCustommessage() {
