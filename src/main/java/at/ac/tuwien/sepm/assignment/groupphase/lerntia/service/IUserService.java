@@ -6,14 +6,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 public interface IUserService {
 
     /**
-     * Create a new User and save it to the Database
-     *
-     * @param user the user that needs to be saved to the Database
-     * @throws ServiceException if the method can't save the User to the Database
-     * */
-    void create(User user) throws ServiceException;
-
-    /**
      * Update an existing ueser to the Database
      *
      * @param user User that needs to be updated in the Database
@@ -22,18 +14,10 @@ public interface IUserService {
     void update(User user) throws ServiceException;
 
     /**
-     * Read all information of an User
+     * Read all information of the user saved in the config file
      *
-     * @param user user in question
      * @throws ServiceException if the user can't be accessed
      * */
-    User read(User user) throws ServiceException;
+    User read() throws ServiceException;
 
-    /**
-     * Deletes an user from the Database
-     *
-     * @param user User that needs to be Deleted from the Database
-     * @throws ServiceException if the method can't delete the user
-     * */
-    void delete(User user) throws ServiceException;
 }

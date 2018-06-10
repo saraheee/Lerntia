@@ -3,8 +3,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleExamQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +27,7 @@ public class SelectExamController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    private final SimpleUserService simpleUserService;
     private final SimpleExamQuestionnaireService examQuestionnaireService;
     private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
@@ -33,7 +36,7 @@ public class SelectExamController {
     private final EditExamController editExamController;
     public Label studentNameLabel;
     public Label matriculationNumberLabel;
-    public Label programNumberLabel;
+    public Label studyProgrammeLabel;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 
@@ -48,7 +51,8 @@ public class SelectExamController {
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
         AlertController alertController,
-        EditExamController editExamController
+        EditExamController editExamController,
+        SimpleUserService simpleUserService
     ) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.iQuestionnaireService = iQuestionnaireService;
@@ -56,6 +60,7 @@ public class SelectExamController {
         this.windowController = windowController;
         this.alertController = alertController;
         this.editExamController = editExamController;
+        this.simpleUserService = simpleUserService;
     }
 
     @FXML
@@ -90,6 +95,15 @@ public class SelectExamController {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         windowStage = windowController.openNewWindow("Fragebogen auswählen und Studentendaten überprüfen", fxmlLoader);
+
+        try {
+            User student = simpleUserService.read();
+            studentNameLabel.setText(student.getName());
+            matriculationNumberLabel.setText(student.getMatriculationNumber());
+            studyProgrammeLabel.setText(student.getStudyProgramme());
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studentendaten gefunden!", "Bitte überprüfuen Sie die Config-Datei", "Config Datei mit dem name 'studen.properties' muss vorhanden sein.");
+        }
 
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();

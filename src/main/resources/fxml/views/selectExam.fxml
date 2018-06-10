@@ -29,7 +29,7 @@
     <Label layoutX="90.0" layoutY="305.0" text="Matrikelnummer:"/>
     <Label fx:id="matriculationNumberLabel" layoutX="260.0" layoutY="305.0" text="Keine vorhanden"/>
     <Label layoutX="90.0" layoutY="345.0" text="Studienkennzahl:"/>
-    <Label fx:id="programNumberLabel" layoutX="260.0" layoutY="345.0" text="Keine vorhanden"/>
+    <Label fx:id="studyProgrammeLabel" layoutX="260.0" layoutY="345.0" text="Keine vorhanden"/>
 
     <Button layoutX="50.0" layoutY="440.0" mnemonicParsing="false" onAction="#selectExamAndEdit"
             prefHeight="41.0" prefWidth="210.0" text="Prüfung bearbeiten" pickOnBounds="false">
