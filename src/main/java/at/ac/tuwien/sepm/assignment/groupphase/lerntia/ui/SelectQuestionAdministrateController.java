@@ -9,25 +9,21 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import javax.swing.*;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.function.Function;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 @Controller
@@ -74,8 +70,6 @@ public class SelectQuestionAdministrateController implements Runnable {
     private Stage stage;
     private LearningQuestionnaire administrateMode;
     @FXML
-    private AnchorPane anchorPane;
-    @FXML
     private Button deleteButton;
     @FXML
     private Button editButton;
@@ -84,6 +78,7 @@ public class SelectQuestionAdministrateController implements Runnable {
     private boolean editButtonClicked = false;
     private boolean searchButtonClicked = false;
     private boolean closedWindow = false;
+    private ReentrantLock lock = new ReentrantLock();
 
     @Autowired
     public SelectQuestionAdministrateController(
@@ -105,12 +100,6 @@ public class SelectQuestionAdministrateController implements Runnable {
         this.iLearningQuestionnaireService = iLearningQuestionnaireService;
     }
 
-    private static <S, T> TableColumn<S, T> column(String title, Function<S, Property<T>> property) {
-        TableColumn<S, T> col = new TableColumn<>(title);
-        col.setCellValueFactory(cellData -> property.apply(cellData.getValue()));
-        return col;
-    }
-
     public void initialize() {
         /*
          * The following line must stay there. It Refreshs the LerntiaService.
@@ -122,35 +111,39 @@ public class SelectQuestionAdministrateController implements Runnable {
         }
 
         //Fill the First Table.
-        tc_picture.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
         tc_question.setCellValueFactory(new PropertyValueFactory<>("questionText"));
         tc_answer1.setCellValueFactory(new PropertyValueFactory<>("answer1"));
         tc_answer2.setCellValueFactory(new PropertyValueFactory<>("answer2"));
         tc_answer3.setCellValueFactory(new PropertyValueFactory<>("answer3"));
         tc_answer4.setCellValueFactory(new PropertyValueFactory<>("answer4"));
         tc_answer5.setCellValueFactory(new PropertyValueFactory<>("answer5"));
+        tc_picture.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
         var content = this.getContent();
-
-        StringProperty hoveredProperty = new SimpleStringProperty();
-        tc_question.setCellFactory(tc -> new HoverCell(hoveredProperty));
-        tc_answer1.setCellFactory(tc -> new HoverCell(hoveredProperty));
-        tc_answer2.setCellFactory(tc -> new HoverCell(hoveredProperty));
-        tc_answer3.setCellFactory(tc -> new HoverCell(hoveredProperty));
-        tc_answer4.setCellFactory(tc -> new HoverCell(hoveredProperty));
-        tc_answer5.setCellFactory(tc -> new HoverCell(hoveredProperty));
-
-        var currentHover = new Label();
-        currentHover.textProperty().bind(hoveredProperty);
 
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        AnchorPane.setTopAnchor(currentHover, 1.0);
 
-        editButtonClicked = false;
-        deleteButtonClicked = false;
-        searchButtonClicked = false;
         var buttonThread = new Thread(this);
         buttonThread.start();
+        tv_questionTable.setRowFactory(tv -> {
+            TableRow<Question> row = new TableRow<>();
+            showHoverText(row);
+            return row;
+        });
+    }
+
+    private void showHoverText(TableRow<Question> row) {
+        row.hoverProperty().addListener(event -> {
+            if (!row.isEmpty()) {
+                ToolTipManager.sharedInstance().setInitialDelay(10);
+                var delay = Integer.MAX_VALUE;
+                ToolTipManager.sharedInstance().setDismissDelay(delay);
+                final var t = new Tooltip();
+                var q = row.getItem();
+                t.setText(q.toStringGUI());
+                row.setTooltip(t);
+            }
+        });
     }
 
     /**
@@ -173,9 +166,6 @@ public class SelectQuestionAdministrateController implements Runnable {
             iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
 
-            editButtonClicked = false;
-            deleteButtonClicked = false;
-            searchButtonClicked = false;
             var buttonThread = new Thread(this);
             buttonThread.start();
 
@@ -269,7 +259,6 @@ public class SelectQuestionAdministrateController implements Runnable {
 
             LOG.info("Delete Complete - Start Refreshing");
             //Close Window and Open information Window
-            //stage.close();
             alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
 
@@ -291,6 +280,10 @@ public class SelectQuestionAdministrateController implements Runnable {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
+        stage.setOnCloseRequest(event -> closedWindow = true);
+
+        var buttonThread = new Thread(this);
+        buttonThread.start();
     }
 
     /**
@@ -325,6 +318,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+        stage.setOnCloseRequest(event -> closedWindow = true);
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(newContent);
     }
@@ -335,33 +329,35 @@ public class SelectQuestionAdministrateController implements Runnable {
 
     @Override
     public void run() {
+        resetValues();
         while (!closedWindow && !deleteButtonClicked && !editButtonClicked && !searchButtonClicked) {
-            var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
-            if (selectedItems.size() < 1) {
-                editButton.setDisable(true);
-                deleteButton.setDisable(true);
+            lock.lock();
+            try {
+                var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+                if (selectedItems.size() < 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(true);
+                }
+                if (selectedItems.size() == 1) {
+                    editButton.setDisable(false);
+                    deleteButton.setDisable(false);
+                }
+                if (selectedItems.size() > 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(false);
+                }
+            } finally {
+                lock.unlock();
             }
-            if (selectedItems.size() == 1) {
-                editButton.setDisable(false);
-                deleteButton.setDisable(false);
-            }
-            if (selectedItems.size() > 1) {
-                editButton.setDisable(true);
-                deleteButton.setDisable(false);
-            }
+
         }
     }
 
-    private class HoverCell extends TableCell<Question, String> {
-        HoverCell(StringProperty hoveredProperty) {
-            setOnMouseEntered(e -> hoveredProperty.set(getItem()));
-            setOnMouseExited(e -> hoveredProperty.set(null));
-        }
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(empty ? null : item);
-        }
+    private void resetValues() {
+        closedWindow = false;
+        editButtonClicked = false;
+        deleteButtonClicked = false;
+        searchButtonClicked = false;
     }
+
 }

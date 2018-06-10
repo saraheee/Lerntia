@@ -10,7 +10,7 @@ public interface IUserCourseDAO {
      *
      * @param userCourse the user-course connection that needs to be saved to the Database
      * @throws PersistenceException if the method can't save the UserCourse to the Database
-     * */
+     */
     void create(UserCourse userCourse) throws PersistenceException;
     // from stories unclear what methods will be needed for this DAO - todo discuss at the next team meeting
 }

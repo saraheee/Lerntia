@@ -12,7 +12,7 @@ public interface IQuestionDAO {
      *
      * @param question that is going to be sent to the Database
      * @throws PersistenceException if the Question can't be saved to the Database
-     * */
+     */
     void create(Question question) throws PersistenceException;
 
     /**
@@ -20,16 +20,16 @@ public interface IQuestionDAO {
      *
      * @param question the Question with the updated values
      * @throws PersistenceException if the method can't update the Question
-     * */
+     */
     void update(Question question) throws PersistenceException;
 
     /**
      * Search for Question with specific parameters
      *
-     * @param questionList Question with searchparameters
-     * @throws PersistenceException if the method can't search for the question
+     * @param questionList Question with search parameters
      * @return List of found questions
-     * */
+     * @throws PersistenceException if the method can't search for the question
+     */
 
     List<Question> search(List<Question> questionList) throws PersistenceException;
 
@@ -38,7 +38,7 @@ public interface IQuestionDAO {
      *
      * @param question Question that needs to be deleted from the Database
      * @throws PersistenceException if the method can't delete the Question
-     * */
+     */
     void delete(Question question) throws PersistenceException;
 
     /**
@@ -47,12 +47,11 @@ public interface IQuestionDAO {
      * @param id of the question
      * @return returns Question which matches with the ID
      * @throws PersistenceException if the method can't get the Question
-     * */
+     */
     Question get(long id) throws PersistenceException;
 
     /**
-     *
-     * @param questionInput contains a part of a Question that is used to finde the Questions
+     * @param questionInput contains a part of a Question that is used to find the Questions
      * @return list which contains all the Question that contain a part of the questionInput
      */
     List<Question> searchForQuestions(Question questionInput) throws PersistenceException;
