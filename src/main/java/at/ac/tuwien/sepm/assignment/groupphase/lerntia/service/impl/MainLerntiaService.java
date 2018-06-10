@@ -51,8 +51,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     private ILearningQuestionnaireService learningQuestionnaireService;
     private IQuestionService questionService;
     private IQuestionnaireQuestionService questionnaireQuestionService;
-    private IUserCourseService userCourseService;
-    private IUserQuestionnaireService userQuestionnaireService;
     private ILearnAlgorithmService learnAlgorithmService;
     private LearnAlgorithmController learnAlgorithmController;
     private AlertController alertController;
@@ -61,7 +59,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     public MainLerntiaService(ICourseService courseService, IUserService userService, IQuestionnaireService questionnaireService,
                               IExamQuestionnaireService examQuestionnaireService, ILearningQuestionnaireService learningQuestionnaireService,
                               IQuestionService questionService, IQuestionnaireQuestionService questionnaireQuestionService,
-                              IUserCourseService userCourseService, IUserQuestionnaireService userQuestionnaireService,
                               ILearnAlgorithmService learnAlgorithmService, LearnAlgorithmController learnAlgorithmController, AlertController alertController) {
         this.courseService = courseService;
         this.userService = userService;
@@ -70,8 +67,6 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
-        this.userCourseService = userCourseService;
-        this.userQuestionnaireService = userQuestionnaireService;
         this.learnAlgorithmService = learnAlgorithmService;
         this.learnAlgorithmController = learnAlgorithmController;
         this.alertController = alertController;

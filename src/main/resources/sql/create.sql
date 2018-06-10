@@ -1,10 +1,3 @@
-CREATE TABLE IF NOT EXISTS PUser ( -- "User" is a reserved SQL word
-  name                VARCHAR(255),
-  matriculationNumber VARCHAR(255) PRIMARY KEY,
-  studyProgramme      VARCHAR(255),
-  isDeleted           BOOLEAN DEFAULT FALSE
-);
-
 CREATE TABLE IF NOT EXISTS Course (
   id bigint auto_increment primary key,
   mark      VARCHAR(255) not null,
@@ -13,26 +6,12 @@ CREATE TABLE IF NOT EXISTS Course (
   isDeleted BOOLEAN DEFAULT FALSE,
 );
 
-CREATE TABLE IF NOT EXISTS PUserCourse (
-  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
-  courseid             bigint references Course (id),
-  isDeleted           BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (matriculationNumber, courseid)
-);
-
 CREATE TABLE IF NOT EXISTS Questionnaire (
   courseid  bigint REFERENCES Course (id),
   id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
   name      VARCHAR(255) NOT NULL,
   selected    BOOLEAN DEFAULT FALSE,
   isDeleted BOOLEAN DEFAULT FALSE
-);
-
-CREATE TABLE IF NOT EXISTS PUserQuestionnaire (
-  matriculationNumber VARCHAR(255) REFERENCES PUser (matriculationNumber),
-  qid                 BIGINT REFERENCES Questionnaire (id),
-  isDeleted           BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (matriculationNumber, qid)
 );
 
 CREATE TABLE IF NOT EXISTS LearningQuestionnaire (
