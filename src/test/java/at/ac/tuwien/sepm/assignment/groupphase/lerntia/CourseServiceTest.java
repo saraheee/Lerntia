@@ -31,7 +31,7 @@ public class CourseServiceTest {
         try {
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 

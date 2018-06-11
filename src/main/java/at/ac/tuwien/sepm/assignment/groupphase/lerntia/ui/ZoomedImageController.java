@@ -60,7 +60,7 @@ public class ZoomedImageController {
         try {
             image = (new Image(imageFile.toURI().toURL().toExternalForm()));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
         var imageView = new ImageView();
         if (image != null) {

@@ -39,7 +39,7 @@ public class QuestionServiceTest {
         try {
             this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))));
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 

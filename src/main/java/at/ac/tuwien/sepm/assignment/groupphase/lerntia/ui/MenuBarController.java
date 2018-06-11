@@ -137,7 +137,7 @@ public class MenuBarController implements Runnable {
 
             }
         } catch (ControllerException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -153,12 +153,7 @@ public class MenuBarController implements Runnable {
 
     @FXML
     private void exportQuestions() {
-        //TODO: remove alert, when it's implemented
         exportQuestionnaireController.showExportQuestionnaireWindow();
-        /*alertController.showBigAlert(Alert.AlertType.INFORMATION,
-            "Nicht verfügbar",
-            "Diese Funktionalität ist noch nicht verfügbar.",
-            "Bitte bis zur nächsten Version 'Lerntia 3.0' gedulden.");*/
     }
 
     @FXML

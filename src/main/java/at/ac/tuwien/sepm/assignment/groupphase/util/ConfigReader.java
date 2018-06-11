@@ -36,13 +36,13 @@ public class ConfigReader {
                 try {
                     this.inputStream.close();
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
 
-                e.printStackTrace();
+                // TODO - show alert or throw new exception
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -62,7 +62,7 @@ public class ConfigReader {
         try {
             this.inputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 }
