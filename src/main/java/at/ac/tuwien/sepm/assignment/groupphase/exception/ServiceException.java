@@ -6,6 +6,7 @@ public class ServiceException extends Exception {
 
     public ServiceException(String message) {
         super(message);
+        this.custommessage = message;
     }
 
     public ServiceException(String message, Throwable cause) {

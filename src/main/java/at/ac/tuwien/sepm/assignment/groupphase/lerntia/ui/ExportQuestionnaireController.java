@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,16 +100,39 @@ public class ExportQuestionnaireController {
         LearningQuestionnaire studyMode = null;
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
-            exportService.exportSelectedQuestionnaire(selectedLearningQuestionnaire.getName());
+            exportService.exportSelectedQuestionnaire(selectedLearningQuestionnaire);
+
             stage.close();
             LOG.info("Successfully exported the questionnaire.");
             alertController.showStandardAlert(Alert.AlertType.INFORMATION,
                 "Fragenbogen exportieren", "Der Fragebogen '" + selectedLearningQuestionnaire.getName()
                     + "' wurde erfolgreich exportiert!", "");
+
         } catch (ServiceException e) {
             LOG.error("Failed to export the questionnaire.");
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen kann nicht exportiert werden",
                 "Fehler!", "Der ausgewählte Fragebogen konnte nicht exportiert werden!");
+
+        } catch (FileExistsException e) {
+            LOG.info("File already exists exported the questionnaire.");
+            if (alertController.showStandardConfirmationAlert("Fragenbogen exportieren", "Ein Fragebogen mit dem Namen '"
+                + selectedLearningQuestionnaire.getName() + "' existiert bereits. Soll dieser überschrieben werden?", "")) {
+
+                try { //overwrite file
+                    exportService.overwriteFile(selectedLearningQuestionnaire);
+
+                    stage.close();
+                    LOG.info("Successfully exported the questionnaire.");
+                    alertController.showStandardAlert(Alert.AlertType.INFORMATION,
+                        "Fragenbogen exportieren", "Der Fragebogen '" + selectedLearningQuestionnaire.getName()
+                            + "' wurde erfolgreich exportiert!", "");
+
+                } catch (ServiceException | FileExistsException e1) {
+                    LOG.error("Failed to overwrite the export questionnaire.");
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen kann nicht überschrieben werden",
+                        "Fehler!", "Der ausgewählte Fragebogen konnte beim Exportieren nicht überschrieben werden!");
+                }
+            }
         }
         if (studyMode != null) {
             LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
