@@ -327,7 +327,7 @@ public class EditExamController {
             examQuestionList = FXCollections.observableArrayList(currentQuestionList);
             questionTable.setItems(FXCollections.observableArrayList(examQuestionList));
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 

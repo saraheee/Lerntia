@@ -101,7 +101,7 @@ public class QuestionnaireQuestionDAOTest {
             firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
             questionnaireQuestionDAO.create(firstQuestionFirstChapter);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -167,7 +167,7 @@ public class QuestionnaireQuestionDAOTest {
             secondQuestionFirstChapter.setQuestionid(secondQuestion.getId());
             questionnaireQuestionDAO.create(secondQuestionFirstChapter);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -229,7 +229,7 @@ public class QuestionnaireQuestionDAOTest {
             List list = questionnaireQuestionDAO.search(searchParameters);
             Assert.assertEquals(2, list.size());
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 

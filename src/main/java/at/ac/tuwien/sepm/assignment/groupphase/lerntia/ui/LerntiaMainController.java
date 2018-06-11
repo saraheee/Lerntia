@@ -256,10 +256,9 @@ public class LerntiaMainController implements Runnable {
             LOG.info("Save values to Algorithm");
             if (answersCorrect) {
                 try {
-
                     lerntiaService.recordCheckedAnswers(question, answersCorrect);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
@@ -289,7 +288,7 @@ public class LerntiaMainController implements Runnable {
                 try {
                     lerntiaService.recordCheckedAnswers(question, answersCorrect);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
@@ -540,15 +539,6 @@ public class LerntiaMainController implements Runnable {
 
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine vorherigen Fragen",
                 "Das ist die erste Frage.", "Keine vorherigen Fragen vorhanden.");
-
-            // TODO - code can probably be deleted.
-            /*
-            try {
-                getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
-                e.printStackTrace();
-            }
-            */
         }
     }
 
@@ -598,7 +588,7 @@ public class LerntiaMainController implements Runnable {
                     try {
                         selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
                     } catch (ServiceException e) {
-                        e.printStackTrace();
+                        // TODO - show alert or throw new exception
                     }
                     if (selectedLearningQuestionnaire != null) {
                         String imagePath =
@@ -700,7 +690,7 @@ public class LerntiaMainController implements Runnable {
         try {
             filePath = directoryChooserController.showFileSaveDirectoryChooser();
         } catch (ControllerException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         try {
@@ -785,7 +775,7 @@ public class LerntiaMainController implements Runnable {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -816,7 +806,7 @@ public class LerntiaMainController implements Runnable {
             ImageView imageView = new ImageView(image);
             return imageView;
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
             return null;
         } finally {
             stage.close();

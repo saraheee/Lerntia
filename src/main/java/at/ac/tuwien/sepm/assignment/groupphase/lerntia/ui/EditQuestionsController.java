@@ -157,7 +157,7 @@ public class EditQuestionsController {
                 alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);
             } catch (ControllerException e) {
-                e.printStackTrace();
+                // TODO - show alert or throw new exception
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
