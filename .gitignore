@@ -61,6 +61,7 @@ hs_err_pid*
 img/
 img_original/playground
 csv/playground
+csv_export
 
 ###################
 ### Build-Tools ###
