@@ -68,7 +68,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             return examQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaire = examQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         return examQuestionnaire;

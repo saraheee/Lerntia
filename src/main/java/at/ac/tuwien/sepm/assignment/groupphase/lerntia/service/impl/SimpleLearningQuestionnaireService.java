@@ -101,7 +101,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         return selectedLearningQuestionnaire;
