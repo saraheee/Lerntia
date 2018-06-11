@@ -3,27 +3,21 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Controller
@@ -44,6 +38,11 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         LOG.info("Create Big Alert");
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
@@ -102,6 +101,10 @@ public class AlertController {
         stage.getIcons().add(new Image("/icons/main.png"));
 
         LOG.trace("Showing a big alert with title: " + title);
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
+    }
+
+    private void checkConfirmation(Alert.AlertType alertType, Alert alert, ButtonType btnAll, ButtonType btnFalse, Stage stage) {
         if (alertType == Alert.AlertType.CONFIRMATION) {
             var result = alert.showAndWait();
             if (result.isPresent() && result.get() == btnAll) {
@@ -172,16 +175,7 @@ public class AlertController {
         alert.setGraphic(imageView);
 
         LOG.trace("Showing a big alert with title: " + title);
-        if (alertType == Alert.AlertType.CONFIRMATION) {
-            var result = alert.showAndWait();
-            if (result.isPresent() && result.get() == btnAll) {
-                onlyWrongQuestions = true;
-            } else if (result.isPresent() && result.get() == btnFalse) {
-                onlyWrongQuestions = false;
-            }
-        } else {
-            stage.showAndWait();
-        }
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
     }
 
 
@@ -392,6 +386,11 @@ public class AlertController {
     }
 
     public boolean showBigConfirmationAlert(String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
