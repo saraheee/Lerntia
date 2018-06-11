@@ -15,11 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -29,9 +26,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +39,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
+
 import static org.springframework.util.Assert.notNull;
 
 @Controller
@@ -58,8 +54,8 @@ public class LerntiaMainController implements Runnable {
     private final AlertController alertController;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
-    private boolean onlyWrongQuestions = false;
     private final DirectoryChooserController directoryChooserController;
+    private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
 
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
@@ -455,20 +451,26 @@ public class LerntiaMainController implements Runnable {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             if (examMode) {
-                alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                    "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, es kann noch zu ihnen zurücknavigiert werden.\n\n" +
-                        "Nicht vergessen die Prüfung am Ende abzugeben!");
-            } else {
+                if (lerntiaService.getIgnoredAnswers() != 0) {
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
+                        "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, zu denen jetzt noch zurücknavigiert werden kann.\n\n" +
+                            "Nicht vergessen die Prüfung am Ende abzugeben!");
+                } else {
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
+                        "Die letzte Frage wurde erreicht. Es wurden keine Fragen ausgelassen. Die Antworten können jetzt noch überprüft werden.\n\n" +
+                            "Nicht vergessen die Prüfung am Ende abzugeben!");
+                }
 
+            } else {
                 LOG.warn("No next question to be displayed.");
 
-            if (!onlyWrongQuestions) {
-                alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                    "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
-                        + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
-                        + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.\n"
-                    + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
-                    "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
+                if (!onlyWrongQuestions) {
+                    alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
+                            + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.\n"
+                            + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
+                        "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
 
                 } else if (!e1.getMessage().contains("List of wrong questions is Empty")) {
                     alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
@@ -762,12 +764,12 @@ public class LerntiaMainController implements Runnable {
         lerntiaService.stopAlgorithm();
     }
 
-    public void setExamName(String examName){
-        this.examName = examName;
+    public String getExamName() {
+        return this.examName;
     }
 
-    public String getExamName(){
-        return this.examName;
+    public void setExamName(String examName) {
+        this.examName = examName;
     }
 
     public void prepareExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
@@ -797,9 +799,13 @@ public class LerntiaMainController implements Runnable {
         stage.show();
 
         scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
-        pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
-        pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
-        pieChartData.get(2).getNode().setStyle("-fx-pie-color: #ababab;");
+        pieChartData.get(0).getNode().getStyleClass().add("default-color0.chart-pie");
+        pieChartData.get(1).getNode().getStyleClass().add("default-color1.chart-pie");
+        pieChartData.get(2).getNode().getStyleClass().add("default-color2.chart-pie");
+
+        //pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
+        //pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
+        //pieChartData.get(2).getNode().setStyle("-fx-pie-color: #ababab;");
 
         WritableImage snapShot = scene.snapshot(null);
         try {

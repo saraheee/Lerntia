@@ -154,10 +154,11 @@ public class EditQuestionsController {
                 selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectQuestionAdministrateController.getAdministrateMode());
                 selectQuestionAdministrateController.refresh();
             } catch (ServiceException e) {
-                alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);
             } catch (ControllerException e) {
-                // TODO - show alert or throw new exception
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Aktualisierung fehlgeschlagen",
+                    "Der aktuelle Fragebogen konnte nicht geladen werden.", "");
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
