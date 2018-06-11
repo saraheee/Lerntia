@@ -1,9 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -29,10 +32,15 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    private final SimpleUserService simpleUserService;
     private final SimpleQuestionService questionService;
 
-    public ExamResultsWriterDAO(SimpleQuestionService questionService) {
+    public ExamResultsWriterDAO(
+        SimpleQuestionService questionService,
+        SimpleUserService simpleUserService
+    ) {
         this.questionService = questionService;
+        this.simpleUserService = simpleUserService;
     }
 
     @Override
@@ -46,9 +54,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             //PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
             PdfWriter.getInstance(document, new FileOutputStream(path));
         } catch (DocumentException e) {
-            throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden");
+            throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         } catch (FileNotFoundException e) {
-            throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden");
+            throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         }
         document.open();
 
@@ -58,14 +66,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Image img_checked = null;
         try {
-            //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box_checked.png")));
-            //img_checked = Image.getInstance("src/main/resources/icons/exam_report_box_checked.png");
             img_checked = Image.getInstance(Resource.class.getResource("/icons/exam_report_box_checked.png"));
             img_checked.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
-            e.printStackTrace();
+            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
         }
 
         PdfPCell cell_checked = new PdfPCell(img_checked, false);
@@ -75,14 +81,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Image img_box = null;
         try {
-            //img_checked = Image.getInstance(String.valueOf(getClass().getResourceAsStream("/icons/exam_report_box.png")));
-            //img_box = Image.getInstance("src/main/resources/icons/exam_report_box.png");
             img_box = Image.getInstance(Resource.class.getResource("/icons/exam_report_box.png"));
             img_box.scaleAbsolute((float) 12.0, (float) 12.0);
         } catch (BadElementException e) {
-            e.printStackTrace();
+            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
         }
 
         PdfPCell cell_box = new PdfPCell(img_box, false);
@@ -121,7 +125,14 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: TODO\nMatrikelnummer: TODO", fontStudentInfo);
+        User student = null;
+        try {
+            student = simpleUserService.read();
+        } catch (ServiceException e) {
+            throw new PersistenceException("Die Daten des Studenten konnten für die PDF Datei nicht geladen werden.");
+        }
+
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: "+student.getName()+"\nMatrikelnummer: "+student.getMatriculationNumber(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
@@ -129,7 +140,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         try {
             document.add(headerContainerParagraph);
         } catch (DocumentException e) {
-            e.printStackTrace();
+            throw new PersistenceException("Der Header konnte nicht in das PDF integriert werden.");
         }
 
         // Each question is added to a table as well as an indicator if the answer was correct or not
@@ -168,9 +179,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                 try {
                     imgQuestion = Image.getInstance(imagePath);
                 } catch (BadElementException e) {
-                    e.printStackTrace();
+                    throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
                 }
 
                 // there have been problems with adding the image directly.
@@ -216,7 +227,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             try {
                 table.setWidths(new float[] { 8, (float) 1.25, (float) 1.5, (float) 1});
             } catch (DocumentException e) {
-                e.printStackTrace();
+                throw new PersistenceException("Eine Tabelle konnte nicht für das PDF formatiert werden.");
             }
 
             table.addCell("Antworten");
@@ -240,6 +251,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
                 boolean answerWasCecked;
 
+                // skipped questions are treated as false
+
                 try{
                     answerWasCecked = checkedAnswers.contains(indexStr);
                 } catch (NullPointerException e){
@@ -260,7 +273,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             try {
                 document.add(container);
             } catch (DocumentException e) {
-                throw new PersistenceException("Die Ergebnisse konnte nicht in das Dokument eingefügt werden");
+                throw new PersistenceException("Die Ergebnisse konnte nicht in das Dokument eingefügt werden.");
             }
         }
 
