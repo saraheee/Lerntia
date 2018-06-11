@@ -6,15 +6,23 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -24,6 +32,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     private final IQuestionnaireService iQuestionnaireService;
     private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
     private final IMainLerntiaService lerntiaService;
+    private boolean overwriteFile;
 
     @Autowired
     public SimpleQuestionnaireExportService(
@@ -37,22 +46,47 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     }
 
     @Override
-    public void exportSelectedQuestionnaire(String fileName) throws ServiceException {
+    public void exportSelectedQuestionnaire(LearningQuestionnaire questionnaire) throws ServiceException, FileExistsException {
         List<Question> allQuestions;
         allQuestions = getAllData(simpleLearningQuestionnaireService.getSelected());
 
-        //Creating the Export file.
-        String csvFile;
+        var csvPath = Paths.get(System.getProperty("user.dir") + File.separator + "csv_export");
+        var csvDir = new File(String.valueOf(csvPath));
+
+        //Create export directory
+        if (!Files.exists(csvPath)) {
+            if (!csvDir.mkdir()) {
+                throw new ServiceException("Failed to create export directory!");
+            }
+            LOG.info("Created a new export directory for the CSV.");
+        }
+
+        if (!overwriteFile) {
+            //Check if file exists
+            FileFilter fileFilter = new WildcardFileFilter("*.CSV", IOCase.INSENSITIVE);
+            var fileList = csvDir.listFiles(fileFilter);
+            if (fileList != null && fileList.length > 0) {
+                Arrays.sort(fileList, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+                for (var f : fileList) {
+                    LOG.debug("Existing file names: " + f.getName());
+                    if (f.getName().equals(questionnaire.getName() + ".csv")) {
+                        LOG.debug("File already exists for this questionnaire.");
+                        throw new FileExistsException("Dieser Name existiert bereits!");
+                    }
+                }
+            }
+        }
+        overwriteFile = false;
+
+        //Create the export file
         FileWriter writer;
         try {
-            csvFile = new File(".").getCanonicalPath();
-            LOG.info("csvFile: " + csvFile);
-            writer = new FileWriter(csvFile + "/" + fileName + ".csv");
+            writer = new FileWriter(csvPath + File.separator + questionnaire.getName() + ".csv");
         } catch (IOException e) {
             LOG.error("Failed to create the export file.");
             throw new ServiceException("Failed to create the CSV export file.");
         }
-        //Getting all the Questions
+        //Get all questions
         var csvOutput = new StringBuilder();
         if (allQuestions != null) {
             for (var q : allQuestions) {
@@ -83,6 +117,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
         }
     }
 
+
     @Override
     public List<Question> getAllData(LearningQuestionnaire selectedLearningQuestionnaire) throws ServiceException {
         LOG.info("Unselect all the Other Questionnaire");
@@ -94,5 +129,11 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
         lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         lerntiaService.getFirstQuestion();
         return lerntiaService.getQuestionList();
+    }
+
+    @Override
+    public void overwriteFile(LearningQuestionnaire questionnaire) throws ServiceException, FileExistsException {
+        overwriteFile = true;
+        exportSelectedQuestionnaire(questionnaire);
     }
 }
