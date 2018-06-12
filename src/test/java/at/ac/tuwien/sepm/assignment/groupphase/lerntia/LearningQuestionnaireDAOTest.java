@@ -39,7 +39,7 @@ public class LearningQuestionnaireDAOTest {
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
@@ -80,7 +80,7 @@ public class LearningQuestionnaireDAOTest {
 
             Assert.assertEquals(expected, chapter2.getId());
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 

@@ -41,7 +41,7 @@ public class QuestionnaireQuestionDAOTest {
             this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
@@ -80,20 +80,28 @@ public class QuestionnaireQuestionDAOTest {
             chapter1.setCourseID(tgi.getId());
             examQuestionnaireDAO.create(chapter1);
 
+            Question refQuestion = new Question();
+            refQuestion.setQuestionText("How you doing");
+            refQuestion.setAnswer1("No");
+            refQuestion.setAnswer2("yes");
+            refQuestion.setCorrectAnswers("1");
+            questionDAO.create(refQuestion);
+            long refId = refQuestion.getId();
+
             Question firstQuestion = new Question();
             firstQuestion.setQuestionText("How you doing");
             firstQuestion.setAnswer1("No");
             firstQuestion.setAnswer2("yes");
             firstQuestion.setCorrectAnswers("1");
             questionDAO.create(firstQuestion);
-            Assert.assertEquals(Long.valueOf(3), firstQuestion.getId());
+            Assert.assertEquals(Long.valueOf(refId+1), firstQuestion.getId());
 
             QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
             firstQuestionFirstChapter.setQid(chapter1.getId());
             firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
             questionnaireQuestionDAO.create(firstQuestionFirstChapter);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -106,7 +114,7 @@ public class QuestionnaireQuestionDAOTest {
             questionnaireQuestionDAO.create(firstQuestionFirstChapter);
             Assert.assertEquals(Long.valueOf(1), firstQuestionFirstChapter.getQid());
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
+            throw new PersistenceException(e.getCustommessage());
         }
     }
 
@@ -125,13 +133,21 @@ public class QuestionnaireQuestionDAOTest {
             chapter1.setCourseID(course.getId());
             examQuestionnaireDAO.create(chapter1);
 
+            Question refQuestion = new Question();
+            refQuestion.setQuestionText("How you doing");
+            refQuestion.setAnswer1("Dont know");
+            refQuestion.setAnswer2("yes");
+            refQuestion.setCorrectAnswers("1");
+            questionDAO.create(refQuestion);
+            long refId = refQuestion.getId();
+
             Question firstQuestion = new Question();
             firstQuestion.setQuestionText("How you doing");
             firstQuestion.setAnswer1("Dont know");
             firstQuestion.setAnswer2("yes");
             firstQuestion.setCorrectAnswers("1");
             questionDAO.create(firstQuestion);
-            Assert.assertEquals(Long.valueOf(6), firstQuestion.getId());
+            Assert.assertEquals(Long.valueOf(refId+1), firstQuestion.getId());
 
             QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
             firstQuestionFirstChapter.setQid(chapter1.getId());
@@ -144,14 +160,14 @@ public class QuestionnaireQuestionDAOTest {
             secondQuestion.setAnswer2("Monday");
             secondQuestion.setCorrectAnswers("1");
             questionDAO.create(secondQuestion);
-            Assert.assertEquals(Long.valueOf(7), secondQuestion.getId());
+            Assert.assertEquals(Long.valueOf(refId+2), secondQuestion.getId());
 
             QuestionnaireQuestion secondQuestionFirstChapter = new QuestionnaireQuestion();
             secondQuestionFirstChapter.setQid(chapter1.getId());
             secondQuestionFirstChapter.setQuestionid(secondQuestion.getId());
             questionnaireQuestionDAO.create(secondQuestionFirstChapter);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 
@@ -213,7 +229,7 @@ public class QuestionnaireQuestionDAOTest {
             List list = questionnaireQuestionDAO.search(searchParameters);
             Assert.assertEquals(2, list.size());
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 

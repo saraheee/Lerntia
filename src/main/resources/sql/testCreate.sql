@@ -65,3 +65,10 @@ CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
   isDeleted  BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (qid, questionid)
 );
+
+CREATE TABLE IF NOT EXISTS QuestionAlgoValue(
+  questionid bigint primary key references Question(id),
+  successvalue INTEGER not null,
+  failurevalue INTEGER not null,
+  points double not null,
+);
