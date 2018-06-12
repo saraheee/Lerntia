@@ -51,7 +51,6 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
         }
     }
 
-
     @Override
     public List<Question> getAllData(LearningQuestionnaire selectedLearningQuestionnaire) throws ServiceException {
         LOG.info("Unselect all the Other Questionnaire");
