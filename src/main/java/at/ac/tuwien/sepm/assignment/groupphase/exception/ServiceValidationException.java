@@ -1,13 +1,20 @@
 package at.ac.tuwien.sepm.assignment.groupphase.exception;
 
-
-public class TextToSpeechServiceException extends ServiceException {
+public class ServiceValidationException extends Exception {
 
     private String custommessage;
 
-    public TextToSpeechServiceException(String message) {
+    public ServiceValidationException(String message) {
         super(message);
         this.custommessage = message;
+    }
+
+    public ServiceValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ServiceValidationException(Throwable cause) {
+        super(cause);
     }
 
     public String getCustommessage() {
@@ -19,5 +26,3 @@ public class TextToSpeechServiceException extends ServiceException {
     }
 
 }
-
-
