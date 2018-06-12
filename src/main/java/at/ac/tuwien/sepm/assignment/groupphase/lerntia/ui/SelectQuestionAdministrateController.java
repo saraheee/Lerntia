@@ -107,7 +107,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         try {
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         //Fill the First Table.
@@ -253,7 +253,7 @@ public class SelectQuestionAdministrateController implements Runnable {
                     qq.setQuestionid(selectedItem.getId());
                     questionnaireQuestionService.delete(qq);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
             }
 
@@ -266,7 +266,7 @@ public class SelectQuestionAdministrateController implements Runnable {
             try {
                 lerntiaMainController.getAndShowTheFirstQuestion();
             } catch (ControllerException e) {
-                e.printStackTrace();
+                // TODO - show alert or throw new exception
             }
 
             this.refresh();
@@ -310,7 +310,7 @@ public class SelectQuestionAdministrateController implements Runnable {
 
             LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         //Open the prev. Window and close the Current one

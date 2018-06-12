@@ -30,7 +30,7 @@ public class WindowController {
             LOG.debug("Successfully opened a new window with title: " + title);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
             LOG.error("Failed to open a new window with title: " + title);
         }
         return stage;

@@ -51,8 +51,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     private ILearningQuestionnaireService learningQuestionnaireService;
     private IQuestionService questionService;
     private IQuestionnaireQuestionService questionnaireQuestionService;
-    private IUserCourseService userCourseService;
-    private IUserQuestionnaireService userQuestionnaireService;
     private ILearnAlgorithmService learnAlgorithmService;
     private LearnAlgorithmController learnAlgorithmController;
     private AlertController alertController;
@@ -61,7 +59,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     public MainLerntiaService(ICourseService courseService, IUserService userService, IQuestionnaireService questionnaireService,
                               IExamQuestionnaireService examQuestionnaireService, ILearningQuestionnaireService learningQuestionnaireService,
                               IQuestionService questionService, IQuestionnaireQuestionService questionnaireQuestionService,
-                              IUserCourseService userCourseService, IUserQuestionnaireService userQuestionnaireService,
                               ILearnAlgorithmService learnAlgorithmService, LearnAlgorithmController learnAlgorithmController, AlertController alertController) {
         this.courseService = courseService;
         this.userService = userService;
@@ -70,8 +67,6 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
-        this.userCourseService = userCourseService;
-        this.userQuestionnaireService = userQuestionnaireService;
         this.learnAlgorithmService = learnAlgorithmService;
         this.learnAlgorithmController = learnAlgorithmController;
         this.alertController = alertController;
@@ -296,7 +291,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
             return currentQuestion;
         } catch (IndexOutOfBoundsException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Index out of bounds");
         }
     }
 
@@ -367,7 +362,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 return currentQuestion;
             }
         } catch (IndexOutOfBoundsException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Index out of bounds");
         }
     }
 
@@ -423,7 +418,7 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public void stopAlgorithm() throws ServiceException {
-        LOG.info("Turn off Algorithm,");
+        LOG.info("Turn off Algorithm while its on Exam Mode.");
         currentAlgorithmQuestionIndex = 0;
         showOnlyWrongQuestions = false;
         learnAlgorithm = false;
@@ -534,10 +529,13 @@ public class MainLerntiaService implements IMainLerntiaService {
     public double getPercent() {
         double share = (double) getCorrectAnswers();
         double base = (double) questionList.size() - getIgnoredAnswers();
+        if (base <= 0) {
+            return 0.0;
+        }
         double percent = base != 0 ? (share / base) * 100.00 : 0;
         LOG.info("Get Percentage of correctly answered questions");
-        return percent;
-
+        int temp = (int)(percent * Math.pow(10 , 2));
+        return ((double)temp)/Math.pow(10 , 2);
     }
 
 }

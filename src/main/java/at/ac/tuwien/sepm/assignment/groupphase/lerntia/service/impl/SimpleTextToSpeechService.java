@@ -23,11 +23,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
 
-    private final String WELCOME = configReaderSpeech.getValue("welcomeText");
-    private final String ANSWER = configReaderSpeech.getValue("answerPrefix");
-    private final String VOICE = configReaderSpeech.getValue("voice");
-    private final String BREAK = configReaderSpeech.getValue("break");
-    private final boolean playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+    private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
+    private String ANSWER = "Antwort nummer";
+    private String VOICE = "bits3-hsmm";
+    private String BREAK = "....";
+    private boolean playWelcomeText = false;
 
     private AudioPlayer audioPlayer;
     private MaryInterface maryTTS;
@@ -36,6 +36,14 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
+        if (configReaderSpeech != null) {
+            WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
+            ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
+            VOICE = configReaderSpeech.getValue("voice")         != null ? configReaderSpeech.getValue("voice") : VOICE;
+            BREAK = configReaderSpeech.getValue("break")         != null ? configReaderSpeech.getValue("break") : BREAK;
+            playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+        }
+
         LOG.trace("Entering method playWelcomeText.");
         try {
             maryTTS = new LocalMaryInterface();
@@ -138,9 +146,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     public String replaceUmlauts(String text) {
         return text.replace("ae", "\u00e4")
-                   .replace("oe", "\u00f6")
-                   .replace("ue", "\u00fc")
-                   .replace("sz", "\u00DF");
+            .replace("oe", "\u00f6")
+            .replace("ue", "\u00fc")
+            .replace("sz", "\u00DF");
     }
 
     @Override

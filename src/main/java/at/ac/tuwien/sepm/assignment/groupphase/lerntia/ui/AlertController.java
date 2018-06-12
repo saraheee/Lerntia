@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+
 import java.lang.invoke.MethodHandles;
 
 @Controller
@@ -37,6 +38,11 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         LOG.info("Create Big Alert");
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
@@ -95,6 +101,10 @@ public class AlertController {
         stage.getIcons().add(new Image("/icons/main.png"));
 
         LOG.trace("Showing a big alert with title: " + title);
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
+    }
+
+    private void checkConfirmation(Alert.AlertType alertType, Alert alert, ButtonType btnAll, ButtonType btnFalse, Stage stage) {
         if (alertType == Alert.AlertType.CONFIRMATION) {
             var result = alert.showAndWait();
             if (result.isPresent() && result.get() == btnAll) {
@@ -105,6 +115,67 @@ public class AlertController {
         } else {
             stage.showAndWait();
         }
+    }
+
+    public void showBigAlertWithDiagram(Alert.AlertType alertType, String title, String header, String content, ImageView imageView) {
+        this.imageView = imageView;
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+        var alert = new Alert(alertType);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
+        alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        getAlertImage(alertType);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        headerLabel.getStyleClass().add("dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        //used only for repeating questions
+        var btnAll = new ButtonType(ButtonText.WRONGQUESTIONS.toString(), ButtonBar.ButtonData.YES);
+        var btnFalse = new ButtonType(ButtonText.ALLQUESTIONS.toString(), ButtonBar.ButtonData.NO);
+
+        dialogPane.setHeader(grid);
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            dialogPane.getButtonTypes().setAll(btnAll, btnFalse);
+        } else {
+            dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        }
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        alert.setGraphic(imageView);
+
+        LOG.trace("Showing a big alert with title: " + title);
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
     }
 
 
@@ -120,6 +191,7 @@ public class AlertController {
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(ButtonText.CONTINUE.toString());
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
@@ -314,6 +386,11 @@ public class AlertController {
     }
 
     public boolean showBigConfirmationAlert(String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);

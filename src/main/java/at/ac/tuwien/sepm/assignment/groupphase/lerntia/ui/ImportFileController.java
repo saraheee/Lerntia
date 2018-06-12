@@ -123,7 +123,6 @@ public class ImportFileController {
             try {
                 qservice.importPictures(directory, name);
             } catch (IOException e) {
-                // TODO - e.getMessage()
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
             }
@@ -141,7 +140,6 @@ public class ImportFileController {
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
             } catch (Exception e) {
-                // TODO - e.getMessage()
                 qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
             }
@@ -158,7 +156,7 @@ public class ImportFileController {
         try {
             coursedata = cservice.readAll();
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getMessage());
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getCustommessage());
             return;
         }
 

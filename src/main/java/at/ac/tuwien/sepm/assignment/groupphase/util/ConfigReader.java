@@ -1,52 +1,68 @@
 package at.ac.tuwien.sepm.assignment.groupphase.util;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.lang.invoke.MethodHandles;
 import java.util.Properties;
 
 public class ConfigReader {
 
-    InputStream inputStream;
-    Properties prop;
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private InputStream inputStream;
+    private Properties prop;
 
-    public ConfigReader(String config){
+    public ConfigReader(String config) {
 
-        String filePath = "config/" + config + ".properties";
+        String propsPath = System.getProperty("user.home");
+        propsPath += File.separator + "Lerntia" + File.separator + "config" + File.separator + config + ".properties";
+
+        //String propsPath = System.getProperty("user.dir");
+        //propsPath += File.separator + "config" + File.separator + config + ".properties";
 
         this.prop = new Properties();
-        this.inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
+        File propsFile = new File(propsPath);
+
+        LOG.debug("Reading config properties: propsPath: *{}* propsFile: *{}*", propsPath, propsFile);
 
         try {
-            this.prop.load( this.inputStream );
-        } catch (IOException e) {
-
+            this.inputStream = new FileInputStream(propsFile);
+            LOG.debug("Opened input stream: {}", inputStream);
             try {
-                this.inputStream.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+                this.prop.load(this.inputStream);
+            } catch (IOException e) {
 
-            e.printStackTrace();
+                try {
+                    this.inputStream.close();
+                } catch (IOException e1) {
+                    // TODO - show alert or throw new exception
+                }
+
+                // TODO - show alert or throw new exception
+            }
+        } catch (FileNotFoundException e) {
+            // TODO - show alert or throw new exception
         }
     }
 
-    public String getValue(String key){
+    public String getValue(String key) {
         return this.prop.getProperty(key);
     }
 
-    public int getValueInt(String key){
+    public int getValueInt(String key) {
         return Integer.parseInt(this.prop.getProperty(key));
     }
 
-    public boolean getValueBoolean(String key){
+    public boolean getValueBoolean(String key) {
         return Boolean.valueOf(this.prop.getProperty(key));
     }
 
-    public void close(){
+    public void close() {
         try {
             this.inputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
     }
 }

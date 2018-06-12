@@ -10,27 +10,38 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
+
 import static org.springframework.util.Assert.notNull;
 
 @Controller
@@ -43,10 +54,13 @@ public class LerntiaMainController implements Runnable {
     private final AlertController alertController;
     private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IExamResultsWriterService iExamResultsWriterService;
+    private final DirectoryChooserController directoryChooserController;
     private boolean onlyWrongQuestions = false;
     private boolean learnAlgorithmStatus;
+
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
     private final String BREAK = configReaderSpeech.getValue("break");
+
     @FXML
     private GridPane mainWindow;
     @FXML
@@ -91,6 +105,7 @@ public class LerntiaMainController implements Runnable {
     private boolean examMode;
     private boolean questionColored = false;
     private ReentrantLock lock = new ReentrantLock();
+    private String examName;
 
     @Autowired
     public LerntiaMainController(
@@ -100,7 +115,8 @@ public class LerntiaMainController implements Runnable {
         ILearningQuestionnaireService learningQuestionnaireService,
         ZoomedImageController zoomedImageController,
         IExamResultsWriterService iExamResultsWriterService,
-        LearnAlgorithmController learnAlgorithmController
+        LearnAlgorithmController learnAlgorithmController,
+        DirectoryChooserController directoryChooserController
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -114,6 +130,7 @@ public class LerntiaMainController implements Runnable {
         this.zoomedImageController = zoomedImageController;
         this.iExamResultsWriterService = iExamResultsWriterService;
         this.learnAlgorithmController = learnAlgorithmController;
+        this.directoryChooserController = directoryChooserController;
 
         this.learnAlgorithmStatus = false;
     }
@@ -235,10 +252,9 @@ public class LerntiaMainController implements Runnable {
             LOG.info("Save values to Algorithm");
             if (answersCorrect) {
                 try {
-
                     lerntiaService.recordCheckedAnswers(question, answersCorrect);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
@@ -268,7 +284,7 @@ public class LerntiaMainController implements Runnable {
                 try {
                     lerntiaService.recordCheckedAnswers(question, answersCorrect);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
@@ -304,7 +320,7 @@ public class LerntiaMainController implements Runnable {
                 } catch (ServiceException e) {
                     LOG.error("Could not check whether the answer was correct");
                     alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getLocalizedMessage());
+                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getCustommessage());
                } */
             if (goToNextQuestion) {
                 removeColorsAndEnableAnswers();
@@ -398,7 +414,7 @@ public class LerntiaMainController implements Runnable {
                 showNoQuestionsAvailable();
             }
         } catch (ServiceException e) {
-            //LOG.warn("Could not get the first question to be displayed: " + e.getLocalizedMessage());
+            //LOG.warn("Could not get the first question to be displayed: " + e.getCustommessage());
             //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
             showNoQuestionsAvailable();
         }
@@ -435,18 +451,26 @@ public class LerntiaMainController implements Runnable {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             if (examMode) {
-                alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                    "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, es kann noch zu ihnen zurücknavigiert werden.\n\n" +
-                        "Nicht vergessen die Prüfung am Ende abzugeben!");
-            } else {
+                if (lerntiaService.getIgnoredAnswers() != 0) {
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
+                        "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, zu denen jetzt noch zurücknavigiert werden kann.\n\n" +
+                            "Nicht vergessen die Prüfung am Ende abzugeben!");
+                } else {
+                    alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
+                        "Die letzte Frage wurde erreicht. Es wurden keine Fragen ausgelassen. Die Antworten können jetzt noch überprüft werden.\n\n" +
+                            "Nicht vergessen die Prüfung am Ende abzugeben!");
+                }
 
+            } else {
                 LOG.warn("No next question to be displayed.");
 
                 if (!onlyWrongQuestions) {
-                    alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
-                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers() + "\n" + "Falsch: "
-                            + lerntiaService.getWrongAnswers() + "\nÜbersprungen: " + lerntiaService.getIgnoredAnswers() + "\n" + lerntiaService.getPercent() + "% der Fragen wurden korrekt beantwortet.",
-                        "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?");
+                    alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
+                            + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.\n"
+                            + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
+                        "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
 
                 } else if (!e1.getMessage().contains("List of wrong questions is Empty")) {
                     alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
@@ -470,7 +494,7 @@ public class LerntiaMainController implements Runnable {
                     showQuestionAndAnswers();
                 } catch (ServiceException e) {
 
-                    if (e.getMessage().contains("No wrong Questions available")) {
+                    if (e.getCustommessage().contains("No wrong Questions available")) {
                         alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
                             "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
                                 + "Daher werden alle Fragen angezeigt.");
@@ -478,7 +502,7 @@ public class LerntiaMainController implements Runnable {
                         onlyWrongQuestions = false;
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
-                    } else if (e.getMessage().contains("List of wrong questions is Empty.")) {
+                    } else if (e.getCustommessage().contains("List of wrong questions is Empty.")) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                             "Es gibt keine falsch beantworteten Fragen mehr." +
                                 "Die erste Frage wird wieder angezeigt.");
@@ -517,15 +541,6 @@ public class LerntiaMainController implements Runnable {
 
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine vorherigen Fragen",
                 "Das ist die erste Frage.", "Keine vorherigen Fragen vorhanden.");
-
-            // TODO - code can probably be deleted.
-            /*
-            try {
-                getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
-                e.printStackTrace();
-            }
-            */
         }
     }
 
@@ -575,7 +590,7 @@ public class LerntiaMainController implements Runnable {
                     try {
                         selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
                     } catch (ServiceException e) {
-                        e.printStackTrace();
+                        // TODO - show alert or throw new exception
                     }
                     if (selectedLearningQuestionnaire != null) {
                         String imagePath =
@@ -592,7 +607,7 @@ public class LerntiaMainController implements Runnable {
                         LOG.info("Image for this question is displayed: '{}'", question.getPicture());
                     }
                 } catch (MalformedURLException e) {
-                    LOG.debug("Exception while trying to display image " + e.getMessage());
+                    LOG.debug("Exception while trying to display image");
                 }
             }
         }
@@ -672,13 +687,19 @@ public class LerntiaMainController implements Runnable {
             return;
         }
 
-        // TODO - ask the user where the report should be saved
+        String filePath = null;
 
         try {
-            iExamResultsWriterService.writeExamResults(questionList, "");
+            filePath = directoryChooserController.showFileSaveDirectoryChooser();
+        } catch (ControllerException e) {
+            // TODO - show alert or throw new exception
+        }
+
+        try {
+            iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), filePath);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                "Error", e.getMessage());
+                "Error", e.getCustommessage());
         }
     }
 
@@ -716,6 +737,9 @@ public class LerntiaMainController implements Runnable {
 
     private void saveAnswerState() {
         String checkedAnswers = getCheckedAnswers();
+        if (checkedAnswers == null) {
+            question.setCheckedAnswers("");
+        }
         question.setCheckedAnswers(checkedAnswers);
     }
 
@@ -740,6 +764,14 @@ public class LerntiaMainController implements Runnable {
         lerntiaService.stopAlgorithm();
     }
 
+    public String getExamName() {
+        return this.examName;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
+    }
+
     public void prepareExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
         try {
             lerntiaService.getQuestionsFromExamQuestionnaire(selectedQuestionnaire);
@@ -748,7 +780,45 @@ public class LerntiaMainController implements Runnable {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
+        }
+    }
+
+    public ImageView createPieChart() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+            new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
+            new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),
+            new PieChart.Data("Übersprungen", lerntiaService.getIgnoredAnswers()));
+        PieChart pieChart = new PieChart(pieChartData);
+        pieChart.setClockwise(false);
+        pieChart.setLegendVisible(false);
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(pieChart);
+        stage.setScene(scene);
+        stage.show();
+
+        scene.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        pieChartData.get(0).getNode().getStyleClass().add("default-color0.chart-pie");
+        pieChartData.get(1).getNode().getStyleClass().add("default-color1.chart-pie");
+        pieChartData.get(2).getNode().getStyleClass().add("default-color2.chart-pie");
+
+        //pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
+        //pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
+        //pieChartData.get(2).getNode().setStyle("-fx-pie-color: #ababab;");
+
+        WritableImage snapShot = scene.snapshot(null);
+        try {
+            File f = new File(System.getProperty("user.dir") + File.separator + "statistik.png");
+            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", f);
+            Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistik.png"));
+            ImageView imageView = new ImageView(image);
+            return imageView;
+        } catch (IOException e) {
+            // TODO - show alert or throw new exception
+            return null;
+        } finally {
+            stage.close();
         }
     }
 
