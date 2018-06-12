@@ -103,6 +103,8 @@ public class ExportQuestionnaireController {
         LearningQuestionnaire studyMode = null;
         try {
             studyMode = simpleLearningQuestionnaireService.getSelected();
+            iQuestionnaireService.deselectAllQuestionnaires();
+            simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
             exportService.exportSelectedQuestionnaire(selectedLearningQuestionnaire.getName());
         } catch (ServiceException e) {
             LOG.error("Selected Questionnaire can't be retrieved.");
