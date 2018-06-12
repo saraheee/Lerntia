@@ -20,8 +20,10 @@ public interface IQuestionnaireExportService {
      */
     void exportSelectedQuestionnaire(LearningQuestionnaire questionnaire) throws ServiceException, ServiceValidationException;
 
-
     /**
+     * Get all data to export
+     *
+     * @param learningQuestionnaire the questionnaire to export
      * @return all questions of the selected questionnaire in form of a list
      * @throws ServiceException when getting all questions fails
      */

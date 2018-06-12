@@ -239,9 +239,6 @@ public class LerntiaMainController implements Runnable {
     private void checkIfQuestionWasCorrect() {
         audioController.stopReading();
         audioController.deselectAudioButton();
-        if (questionColored) {
-            removeColorsAndEnableAnswers();
-        }
 
         // gather the info about the checked answers
         try {
@@ -251,10 +248,13 @@ public class LerntiaMainController implements Runnable {
             //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
             LOG.info("Save values to Algorithm");
             if (answersCorrect) {
-                try {
-                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
-                } catch (ServiceException e) {
-                    // TODO - show alert or throw new exception
+                if (!questionColored) {
+                    try {
+                        lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                    } catch (ServiceException e) {
+                        alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
+                            "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
+                    }
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
@@ -281,10 +281,13 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
                 }
             } else {
-                try {
-                    lerntiaService.recordCheckedAnswers(question, answersCorrect);
-                } catch (ServiceException e) {
-                    // TODO - show alert or throw new exception
+                if (!questionColored) {
+                    try {
+                        lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                    } catch (ServiceException e) {
+                        alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
+                            "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
+                    }
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                     var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
@@ -310,18 +313,6 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
                 }
             }
-            /* send checked answers to service (in order to use it for statistics and learning algorithm)
-                try {
-                  mockQuestion.setId(question.getId());
-                  mockQuestion.setCorrectAnswers(checkedAnswers);
-                LOG.info("Trying to send {} answers on question \"{}\"",
-                  mockQuestion.getCorrectAnswers(), mockQuestion.getId());
-                    lerntiaService.recordCheckedAnswers(mockQuestion, answersCorrect);
-                } catch (ServiceException e) {
-                    LOG.error("Could not check whether the answer was correct");
-                    alertController.showBigAlert(Alert.AlertType.ERROR, "Überprüfung fehlgeschlagen",
-                        "Das Resultat konnte nicht zur Serviceschicht geschickt werden", e.getCustommessage());
-               } */
             if (goToNextQuestion) {
                 removeColorsAndEnableAnswers();
                 getAndShowNextQuestion();
