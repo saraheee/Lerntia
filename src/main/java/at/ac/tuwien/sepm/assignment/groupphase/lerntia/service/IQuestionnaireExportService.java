@@ -16,8 +16,11 @@ public interface IQuestionnaireExportService {
      */
     void exportSelectedQuestionnaire(String fileName);
 
+
     /**
+     *
      * This Fucntions gets every Question for the SelectedQuestionnaire
+     * @param learningQuestionnaire is used to get the Name of the learningQuestionnare
      * @return all the Questions of the selectedQuestionnaire in form of a list
      */
     List<Question> getAllData(LearningQuestionnaire learningQuestionnaire);
