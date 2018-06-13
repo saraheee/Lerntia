@@ -15,6 +15,6 @@ public interface IExamResultsWriterDAO {
      * @param path the path where the exam results should be saved
      * @throws PersistenceException if the exam results cannot be written
      * */
-    public void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException;
+    void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException;
 
 }

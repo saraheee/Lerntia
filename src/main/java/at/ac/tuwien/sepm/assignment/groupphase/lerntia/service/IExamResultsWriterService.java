@@ -15,6 +15,6 @@ public interface IExamResultsWriterService {
      * @param path      the path where the exam results should be saved
      * @throws ServiceException if the exam results cannot be written
      */
-    public void writeExamResults(List<Question> questions, String name, String path) throws ServiceException;
+    void writeExamResults(List<Question> questions, String name, String path) throws ServiceException;
 
 }
