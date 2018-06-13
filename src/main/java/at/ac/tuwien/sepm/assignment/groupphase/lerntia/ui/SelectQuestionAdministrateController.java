@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import javax.swing.*;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -33,7 +34,7 @@ public class SelectQuestionAdministrateController implements Runnable {
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
-    private final IQuestionService questionDAO;
+    private final IQuestionService questionService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
@@ -85,7 +86,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         IMainLerntiaService lerntiaService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
-        IQuestionService questionDAO,
+        IQuestionService questionService,
         EditQuestionsController editQuestionsController,
         IQuestionnaireQuestionService questionnaireQuestionService,
         AlertController alertController,
@@ -93,7 +94,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
-        this.questionDAO = questionDAO;
+        this.questionService = questionService;
         this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.alertController = alertController;
@@ -247,7 +248,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         if (press) {
             for (Question selectedItem : selectedItems) {
                 try {
-                    questionDAO.delete(selectedItem);
+                    questionService.delete(selectedItem);
                     QuestionnaireQuestion qq = new QuestionnaireQuestion();
                     qq.setQid(administrateMode.getId());
                     qq.setQuestionid(selectedItem.getId());
@@ -302,7 +303,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         ObservableList<Question> newContent = FXCollections.observableArrayList();
         try {
             //Get the List and Load it into the TableView
-            List<Question> searchedQuestions = questionDAO.searchForQuestions(questionInput);
+            List<Question> searchedQuestions = questionService.searchForQuestions(questionInput);
             newContent.addAll(searchedQuestions);
             for (int i = 0; i < tv_questionTable.getItems().size(); i++) {
                 tv_questionTable.getItems().clear();
