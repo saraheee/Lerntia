@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class User {
-    private String name;
-    private String matriculationNumber;
-    private String studyProgramme;
-    private Boolean isDeleted;
+    private String name; // name of user
+    private String matriculationNumber; // id
+    private String studyProgramme; // field of study
+    private Boolean isDeleted; // if deleted
 
     public User() {
         this.isDeleted = false;

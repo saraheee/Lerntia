@@ -1,10 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class QuestionLearnAlgorithm {
-    private long ID;
-    private Integer successvalue;
-    private Integer failurevalue;
-    private double points;
+    private long ID; // distinc key
+    private Integer successvalue; // how often a question is answered correctly
+    private Integer failurevalue; // how often a questions is answered wrong
+    private double points; // calculated with values
 
     public QuestionLearnAlgorithm() {
         this.setSuccessvalue(0);

@@ -1,15 +1,15 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class Speech {
-    private String question;
-    private String answer1;
-    private String answer2;
-    private String answer3;
-    private String answer4;
-    private String answer5;
-    private String voice;
-    private String singleAnswer;
-    private String feedbackText;
+    private String question; // question
+    private String answer1; // first answer
+    private String answer2; // second answer
+    private String answer3; // third answer
+    private String answer4; // fourth answer
+    private String answer5; // fifth answer
+    private String voice; // which voice should speak
+    private String singleAnswer; // only one answer
+    private String feedbackText; // feedback after answered question
 
     public Speech() {
     }
