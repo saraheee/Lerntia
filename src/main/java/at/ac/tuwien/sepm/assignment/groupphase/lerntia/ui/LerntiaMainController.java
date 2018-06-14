@@ -728,8 +728,8 @@ public class LerntiaMainController implements Runnable {
 
     private void saveAnswerState() {
         String checkedAnswers = getCheckedAnswers();
-        if (checkedAnswers == null) {
-            question.setCheckedAnswers("");
+        if (question == null) {
+            return;
         }
         question.setCheckedAnswers(checkedAnswers);
     }
