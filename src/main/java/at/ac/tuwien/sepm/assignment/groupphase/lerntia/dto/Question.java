@@ -7,20 +7,20 @@ import java.text.BreakIterator;
 import java.util.Locale;
 
 public class Question {
-    private Long id;
-    private String questionText;
-    private String picture;
-    private String answer1;
-    private String answer2;
-    private String answer3;
-    private String answer4;
-    private String answer5;
-    private String correctAnswers;
-    private String optionalFeedback;
-    private Boolean isDeleted;
-    private CheckBox containPicture;
+    private Long id; // distinct key
+    private String questionText; // the question
+    private String picture; // name of the file of the picture
+    private String answer1; // first answer
+    private String answer2; // second answer
+    private String answer3; // third answer
+    private String answer4; // fourth answer
+    private String answer5; // fifth answer
+    private String correctAnswers; // which answers are correct
+    private String optionalFeedback; // feedback that is shown after answered question
+    private Boolean isDeleted; // if question is deleted
+    private CheckBox containPicture; // if question contains picture
 
-    private String checkedAnswers;
+    private String checkedAnswers; // selected answers
 
     public Question() {
     }

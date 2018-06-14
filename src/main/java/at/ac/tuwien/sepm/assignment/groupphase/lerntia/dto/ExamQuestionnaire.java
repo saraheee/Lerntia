@@ -3,7 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 import java.time.LocalDate;
 
 public class ExamQuestionnaire extends Questionnaire {
-    private LocalDate date;
+    private LocalDate date; // date of creation
 
     public ExamQuestionnaire() {}
 
