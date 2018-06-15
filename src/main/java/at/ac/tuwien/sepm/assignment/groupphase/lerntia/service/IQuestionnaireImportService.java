@@ -14,7 +14,7 @@ public interface IQuestionnaireImportService {
      * @param file a csv-file
      * @param course the course where the questions should be added
      * @param name the name of the questionnaire
-     * @throws ServiceException if an error occured
+     * @throws ServiceException if an error occurred
      */
     void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException;
 
