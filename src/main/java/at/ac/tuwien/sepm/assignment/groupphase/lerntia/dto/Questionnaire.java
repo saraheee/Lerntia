@@ -5,7 +5,7 @@ public abstract class Questionnaire {
     private Long courseID; // foreign key of course
     private Long id; // distinct key
     private String name; // name of questionnaire
-    private Boolean selected; // if actual selected
+    private Boolean selected; // if currently selected
     private Boolean isDeleted; // if it is deleted
 
     public Questionnaire() {}

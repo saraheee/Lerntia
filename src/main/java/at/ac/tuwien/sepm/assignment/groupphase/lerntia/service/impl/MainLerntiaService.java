@@ -335,7 +335,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentWrongQuestionIndex = 0;
                 LOG.info("First Question Found");
                 return currentQuestion;
-            } else if (learnAlgorithm && showOnlyWrongQuestions && wrongQuestions.size() == 0) {
+            } else if (learnAlgorithm && showOnlyWrongQuestions) { // wrongQuestions.size() is zero
                 currentAlgorithmQuestionIndex = 0;
                 throw new ServiceException("No wrong Questions available");
             } else if (learnAlgorithm) {
@@ -350,7 +350,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentQuestion = wrongQuestions.get(0);
                 currentWrongQuestionIndex = 0;
                 return currentQuestion;
-            } else if (showOnlyWrongQuestions && wrongQuestions.size() == 0) {
+            } else if (showOnlyWrongQuestions) { // wrongQuestions.size() is zero
                 throw new ServiceException("No wrong Questions available");
             } else {
                 LOG.info("Get first Question of the Question List.");
@@ -378,7 +378,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                     wrongQuestions.remove(question);
                     currentWrongQuestionIndex--;
                 }
-            } else if (!answersCorrect) {
+            } else { // answers not correct
                 LOG.info("Send to failure Map");
                 learnAlgorithmService.updateFailureValue(question);
                 if (!wrongQuestions.contains(question)) {

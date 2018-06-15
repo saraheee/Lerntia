@@ -7,8 +7,8 @@ public class Speech {
     private String answer3; // third answer
     private String answer4; // fourth answer
     private String answer5; // fifth answer
-    private String voice; // which voice should speak
-    private String singleAnswer; // only one answer
+    private String voice; // used voice
+    private String singleAnswer; // text of a single answer to read
     private String feedbackText; // feedback after answered question
 
     public Speech() {

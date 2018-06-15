@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class Course {
     private Long id; // distinct key
-    private String mark; // number of yourse
-    private String semester; // ws or ss plus year
+    private String mark; // course number (eg. 123.456)
+    private String semester; // WS or SS and year (eg. WS2018 or SS2018)
     private String name; // name of the course
     private Boolean isDeleted; // if course is deleted
 

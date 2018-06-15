@@ -73,7 +73,7 @@ public class ImportFileController {
         LOG.debug("Initialize ImportFileController");
         coursedata = cservice.readAll();
         courses = FXCollections.observableArrayList(coursedata);
-        choices.removeAll(choices);
+        choices.removeAll();
         for (Course course : courses) {
             choices.add(course.getName());
         }
@@ -83,7 +83,7 @@ public class ImportFileController {
     }
 
     @FXML
-    public void selectFile(ActionEvent actionEvent) {
+    public void selectFile() {
         LOG.info("Open new FileChooser.");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("[Lerntia] Verzeichnis");
@@ -97,7 +97,7 @@ public class ImportFileController {
     }
 
     @FXML
-    public void selectDirectory(ActionEvent actionEvent) {
+    public void selectDirectory() {
         LOG.info("Open new DirectoryChooser.");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("[Lerntia] Bildordner");
@@ -125,6 +125,8 @@ public class ImportFileController {
             } catch (IOException e) {
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
+            } catch (ServiceException e) {
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Import fehlgeschlagen!", "Der Import konnte nicht durchgeführt werden!");
             }
         }
         if (file != null) {

@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class User {
     private String name; // name of user
-    private String matriculationNumber; // id
-    private String studyProgramme; // field of study
+    private String matriculationNumber; // student id (e.g. 01234567)
+    private String studyProgramme; // study number (e.g. E 033 123)
     private Boolean isDeleted; // if deleted
 
     public User() {

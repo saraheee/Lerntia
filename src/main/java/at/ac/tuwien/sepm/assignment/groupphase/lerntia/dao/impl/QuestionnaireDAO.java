@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 
@@ -27,12 +28,12 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
     @Autowired
     public QuestionnaireDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for QuestionnaireDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Successfully found connection for QuestionnaireDAO!");
-        } catch (PersistenceException e) {
-            LOG.error("Couldn't find connection for QuestionnaireDAO!");
-            throw e;
+            LOG.info("Connection for QuestionnaireDAO retrieved.");
         }
     }
 
@@ -49,7 +50,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
                     generatedKeys.next();
                     questionnaire.setId(generatedKeys.getLong(1));
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 throw new PersistenceException("QuestionnaireDAO CREATE error: questionnaire couldn't been created, check if all mandatory values have been added, or if the connection to the Database is valid.");
             }
         } catch (SQLException e) {
