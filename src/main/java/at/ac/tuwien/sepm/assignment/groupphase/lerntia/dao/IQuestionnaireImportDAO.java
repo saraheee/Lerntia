@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ public interface IQuestionnaireImportDAO {
      * @param file a directory with all images
      * @param name the name of the file
      * @throws IOException if the File cannot be read
+     * @throws PersistenceException if the directory can't be created
      */
-    void importPictures(File file, String name) throws IOException;
+    void importPictures(File file, String name) throws IOException, PersistenceException;
 
 }

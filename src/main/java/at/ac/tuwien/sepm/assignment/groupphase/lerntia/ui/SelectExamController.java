@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleExamQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import javafx.event.ActionEvent;

@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public class DirectoryChooserController {
 
         Stage stage = new Stage();
 
-        String filePath = null;
+        String filePath;
 
         // because of the .toString() we get a NullPointerException if the dialog is cancelled.
 

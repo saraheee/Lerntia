@@ -1,14 +1,14 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class QuestionLearnAlgorithm {
-    private long ID; // distinc key
-    private Integer successvalue; // how often a question is answered correctly
-    private Integer failurevalue; // how often a questions is answered wrong
+    private long ID; // distinct key
+    private Integer successValue; // how often a question is answered correctly
+    private Integer failureValue; // how often a question is answered wrong
     private double points; // calculated with values
 
     public QuestionLearnAlgorithm() {
-        this.setSuccessvalue(0);
-        this.setFailurevalue(0);
+        this.setSuccessValue(0);
+        this.setFailureValue(0);
         this.setPoints(100.0);
 
     }
@@ -22,20 +22,20 @@ public class QuestionLearnAlgorithm {
         this.ID = ID;
     }
 
-    public Integer getSuccessvalue() {
-        return successvalue;
+    public Integer getSuccessValue() {
+        return successValue;
     }
 
-    public void setSuccessvalue(Integer successvalue) {
-        this.successvalue = successvalue;
+    public void setSuccessValue(Integer successValue) {
+        this.successValue = successValue;
     }
 
-    public Integer getFailurevalue() {
-        return failurevalue;
+    public Integer getFailureValue() {
+        return failureValue;
     }
 
-    public void setFailurevalue(Integer failurevalue) {
-        this.failurevalue = failurevalue;
+    public void setFailureValue(Integer failureValue) {
+        this.failureValue = failureValue;
     }
 
     public double getPoints() {
@@ -50,8 +50,8 @@ public class QuestionLearnAlgorithm {
     public String toString() {
         return "QuestionLearnAlgorithm{" +
             "ID=" + ID +
-            ", successvalue=" + successvalue +
-            ", failurevalue=" + failurevalue +
+            ", successValue=" + successValue +
+            ", failureValue=" + failureValue +
             ", points=" + points +
             '}';
     }

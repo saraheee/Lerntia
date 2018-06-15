@@ -1,10 +1,12 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireImportDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -43,18 +45,22 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
     }
 
     @Override
-    public void importPictures(File file, String name) throws IOException {
+    public void importPictures(File file, String name) throws IOException, PersistenceException {
 
         Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
         File imgDir = new File(String.valueOf(imgPath));
 
         if (!Files.exists(imgPath)) {
             LOG.info("Image directory not found - will be created");
-            imgDir.mkdir();
+            if (!imgDir.mkdir()) {
+                throw new PersistenceException("Das Bilder Verzeichnis 'img' konnte nicht angelegt werden!");
+            }
         }
 
         File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
-        dir.mkdir();
+        if (!dir.mkdir()) {
+            throw new PersistenceException("Das Bilder Verzeichnis für den Fragebogen konnte nicht angelegt werden!");
+        }
         File[] files = file.listFiles();
         if (files != null) {
             for (File child : files) {

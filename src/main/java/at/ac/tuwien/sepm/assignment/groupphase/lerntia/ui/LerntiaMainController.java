@@ -13,7 +13,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -173,7 +172,7 @@ public class LerntiaMainController implements Runnable {
                 if (!examMode) {
                     checkIfQuestionWasCorrect();
                 } else {
-                    handIn(null);
+                    handIn();
                 }
             }
             if (e.getCode() == KeyCode.G) {
@@ -250,7 +249,7 @@ public class LerntiaMainController implements Runnable {
             if (answersCorrect) {
                 if (!questionColored) {
                     try {
-                        lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                        lerntiaService.recordCheckedAnswers(question, true);
                     } catch (ServiceException e) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
                             "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
@@ -283,7 +282,7 @@ public class LerntiaMainController implements Runnable {
             } else {
                 if (!questionColored) {
                     try {
-                        lerntiaService.recordCheckedAnswers(question, answersCorrect);
+                        lerntiaService.recordCheckedAnswers(question, false);
                     } catch (ServiceException e) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
                             "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
@@ -397,7 +396,7 @@ public class LerntiaMainController implements Runnable {
         showQuestionAndAnswers();
     }
 
-    public void getAndShowTheFirstQuestion() throws ControllerException {
+    public void getAndShowTheFirstQuestion() {
         try {
             question = null;
             question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
@@ -405,14 +404,12 @@ public class LerntiaMainController implements Runnable {
                 showNoQuestionsAvailable();
             }
         } catch (ServiceException e) {
-            //LOG.warn("Could not get the first question to be displayed: " + e.getCustommessage());
-            //showAnAlert(Alert.AlertType.WARNING, "Keine erste Frage", "Es wurden keine Fragen gefunden", "Sind die Fragen implementiert und mit einem Fragebogen verbunden?");
             showNoQuestionsAvailable();
         }
         showQuestionAndAnswers();
     }
 
-    public void getAndShowTheFirstQuestionFirstTime() throws ControllerException {
+    private void getAndShowTheFirstQuestionFirstTime() throws ControllerException {
         try {
             question = lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
@@ -501,11 +498,7 @@ public class LerntiaMainController implements Runnable {
                         alertController.setOnlyWrongQuestions(false);
                         onlyWrongQuestions = false;
 
-                        try {
-                            getAndShowTheFirstQuestion();
-                        } catch (ControllerException e2) {
-                            e2.printStackTrace();
-                        }
+                        getAndShowTheFirstQuestion();
                     }
                 }
             }
@@ -654,7 +647,7 @@ public class LerntiaMainController implements Runnable {
         buttonBar.getButtons().remove(handInButton);
     }
 
-    public void handIn(ActionEvent actionEvent) {
+    public void handIn() {
 
         // the state of the current question has to be saved here as well.
         saveAnswerState();
@@ -667,9 +660,9 @@ public class LerntiaMainController implements Runnable {
         }
     }
 
-    public void evaluateExam() {
+    private void evaluateExam() {
 
-        List<Question> questionList = null;
+        List<Question> questionList;
         try {
             questionList = lerntiaService.getQuestions();
         } catch (ServiceException e) {
@@ -803,8 +796,7 @@ public class LerntiaMainController implements Runnable {
             File f = new File(System.getProperty("user.dir") + File.separator + "statistik.png");
             ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", f);
             Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistik.png"));
-            ImageView imageView = new ImageView(image);
-            return imageView;
+            return new ImageView(image);
         } catch (IOException e) {
             // TODO - show alert or throw new exception
             return null;

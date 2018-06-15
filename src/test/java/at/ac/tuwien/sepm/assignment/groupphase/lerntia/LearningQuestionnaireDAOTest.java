@@ -11,6 +11,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class LearningQuestionnaireDAOTest {
 
@@ -33,6 +35,7 @@ public class LearningQuestionnaireDAOTest {
     @Before
     public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ILearningQuestionnaireDAO(new LearningQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
@@ -40,6 +43,13 @@ public class LearningQuestionnaireDAOTest {
 
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
+        }
+    }
+
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
         }
     }
 
@@ -58,7 +68,7 @@ public class LearningQuestionnaireDAOTest {
     @Test
     public void createNewLearningQuestionnaire() throws PersistenceException {
         try {
-            Long expected = 0L;
+            Long expected;
 
             Course tgi = new Course();
             tgi.setSemester(Semester.SS + "15");

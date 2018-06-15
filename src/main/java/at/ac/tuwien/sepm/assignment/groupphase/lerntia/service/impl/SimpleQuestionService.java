@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private QuestionDAO questionDAO;
+    private IQuestionDAO questionDAO;
 
     private ConfigReader configReaderQuestions = new ConfigReader("questions");
 
@@ -155,7 +156,7 @@ public class SimpleQuestionService implements IQuestionService {
         // -------------------------------------------------------------------------------------------------------------
 
         String correctAnswers = question.getCorrectAnswers();
-        var currentCorrectAnswerIndex = 0;
+        int currentCorrectAnswerIndex;
 
         //check if the correct answers can be parsed to an integer
         if(!isInteger(correctAnswers)) {
@@ -194,7 +195,7 @@ public class SimpleQuestionService implements IQuestionService {
         // -------------------------------------------------------------------------------------------------------------
 
         // TODO - more image validation?
-        FileInputStream input = null;
+        FileInputStream input;
         try {
             if(question.getPicture() != null) {
                 input = new FileInputStream(question.getPicture());

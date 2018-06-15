@@ -262,12 +262,11 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             QuestionLearnAlgorithm questionLearnAlgorithm;
             questionAlgorithmList = learnAlgorithmDAO.search(questionAlgorithmList);
             while (!questionAlgorithmList.isEmpty()) {
-                List<QuestionLearnAlgorithm> helper = questionAlgorithmList;
-                questionLearnAlgorithm = helper.get(0);
-                successMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getSuccessvalue());
-                failureMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getFailurevalue());
+                questionLearnAlgorithm = questionAlgorithmList.get(0);
+                successMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getSuccessValue());
+                failureMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getFailureValue());
                 valueMap.put(questionLearnAlgorithm.getID(), questionLearnAlgorithm.getPoints());
-                helper.remove(0);
+                questionAlgorithmList.remove(0);
             }
             List<Long> list = sortValueMap(valueMap);
             LOG.info("All Learn Algorithm Values have been found and added.");
@@ -301,8 +300,8 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                 for (Map.Entry<Long, Integer> entry : successMap.entrySet()) {
                     questionLearnAlgorithm = new QuestionLearnAlgorithm();
                     questionLearnAlgorithm.setID(entry.getKey());
-                    questionLearnAlgorithm.setSuccessvalue(entry.getValue());
-                    questionLearnAlgorithm.setFailurevalue(failureMap.get(entry.getKey()));
+                    questionLearnAlgorithm.setSuccessValue(entry.getValue());
+                    questionLearnAlgorithm.setFailureValue(failureMap.get(entry.getKey()));
                     questionLearnAlgorithm.setPoints(valueMap.get(entry.getKey()));
                     updatedValues.add(questionLearnAlgorithm);
                 }
