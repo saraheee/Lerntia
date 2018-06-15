@@ -84,43 +84,56 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void validate(Course course) throws ServiceException {
         LOG.info("Check if all mandatory values are valid.");
+        boolean error = false;
+        String message = "";
         if (course.getMark().equals("")) {
-            throw new ServiceException("Die LVA-Nummer ist leer");
+            error = true;
+            message += "Die LVA-Nummer ist leer\n";
         }
 
         if (course.getMark().length() > configReaderCourse.getValueInt("maxLengthCourseMark")) {
-            throw new ServiceException("Die LVA-Nummer ist zu lang");
+            error = true;
+            message += "Die LVA-Nummer ist zu lang\n";
         }
 
         if (course.getName().equals("")) {
-            throw new ServiceException("Der Name ist leer");
+            error = true;
+            message += "Der Name ist leer\n";
         }
 
         if (course.getName().length() > configReaderCourse.getValueInt("maxLengthCourseName")) {
-            throw new ServiceException("Der Name ist zu lang");
+            error = true;
+            message += "Der Name ist zu lang\n";
         }
 
         if (
             !course.getSemester().startsWith(Semester.WS.toString()) &&
                 !course.getSemester().startsWith(Semester.SS.toString())
             ) {
-            throw new ServiceException("Das Semester sollte mit 'WS' oder 'SS' beginnen");
+            error = true;
+            message += "Das Semester sollte mit 'WS' oder 'SS' beginnen\n";
         }
 
         try {
             String yearStr = course.getSemester().substring(2);
 
             if (yearStr.length() != 4) {
-                throw new ServiceException("Das Jahr sollte eine Zahl mit 4 Ziffern sein");
+                error = true;
+                message += "Das Jahr sollte eine Zahl mit 4 Ziffern sein\n";
             }
             int yearInt = Integer.parseInt(yearStr);
             if (yearInt < 0) {
-                throw new ServiceException("Das Jahr sollte nicht negativ sein");
+                error = true;
+                message += "Das Jahr sollte nicht negativ sein\n";
             }
             course.setSemester(course.getSemester().substring(0, 2) + yearStr.substring(2, 4));
             LOG.info("All course values are valid.");
         } catch (NumberFormatException e) {
-            throw new ServiceException("Das Jahr sollte eine Zahl sein mit 4 Ziffern sein");
+            error = true;
+            message += "Das Jahr ist keine Zahl\n";
+        }
+        if (error == true) {
+            throw new ServiceException(message);
         }
     }
 
