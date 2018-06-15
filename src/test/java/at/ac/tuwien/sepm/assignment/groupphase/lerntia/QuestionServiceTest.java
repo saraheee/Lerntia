@@ -61,7 +61,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void createCorrectQuestion() throws PersistenceException, ServiceException {
+    public void createCorrectQuestion() throws ServiceException {
         Question q1 = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q1);
         long id1 = q1.getId();
@@ -76,7 +76,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void updateCorrectCourse() throws ServiceException, PersistenceException {
+    public void updateCorrectCourse() throws ServiceException {
         Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q);
         String old = q.getQuestionText();
@@ -93,7 +93,7 @@ public class QuestionServiceTest {
 
     @Ignore
     @Test
-    public void searchQuestions() throws PersistenceException, ServiceException {
+    public void searchQuestions() throws ServiceException {
         List<Question> questionlist = new ArrayList<>();
         Question q1 = new Question();
         q1.setQuestionText("asdf");
@@ -126,7 +126,7 @@ public class QuestionServiceTest {
     // delete
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void deleteQuestion() throws ServiceException, PersistenceException {
+    public void deleteQuestion() throws ServiceException {
         Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q);
         boolean before = q.getDeleted();
@@ -140,7 +140,7 @@ public class QuestionServiceTest {
     // get
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void getQuestionwithId() throws ServiceException, PersistenceException {
+    public void getQuestionwithId() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -160,7 +160,7 @@ public class QuestionServiceTest {
     // getAllAnswers
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void getAllAnswersOfQuestion() throws ServiceException, PersistenceException {
+    public void getAllAnswersOfQuestion() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -293,7 +293,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void searchForQuestionsWithTwoResults() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithTwoResults() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -320,7 +320,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForQuestionsWithOneResult() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithOneResult() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -346,7 +346,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForQuestionsWithNoResult() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithNoResult() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -363,7 +363,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForDeletedQuestion() throws PersistenceException, ServiceException {
+    public void searchForDeletedQuestion() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
