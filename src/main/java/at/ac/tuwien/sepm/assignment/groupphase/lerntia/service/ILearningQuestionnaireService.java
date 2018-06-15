@@ -44,7 +44,7 @@ public interface ILearningQuestionnaireService {
      * @return List with all LearningQuestionnaire
      * @throws ServiceException if it's not possible to get the List
      */
-    List readAll() throws ServiceException;
+    List<LearningQuestionnaire> readAll() throws ServiceException;
 
     /**
      * Select an LearningQuestionnaire to be used

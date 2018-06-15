@@ -28,12 +28,12 @@ public class CourseDAO implements ICourseDAO {
 
     @Autowired
     public CourseDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for CourseDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Database connection for CourseDAO obtained.");
-        } catch (PersistenceException e) {
-            LOG.error("CourseDAO Constructor failed while trying to get connection!");
-            throw e;
+            LOG.info("Connection for CourseDAO retrieved.");
         }
     }
 
@@ -41,23 +41,17 @@ public class CourseDAO implements ICourseDAO {
     public void create(Course course) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for new Course Creation.");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS);
-            try {
+            try (PreparedStatement psCreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
                 psCreate.setString(1, course.getName());
                 psCreate.setString(2, course.getMark());
                 psCreate.setString(3, course.getSemester());
                 psCreate.executeUpdate();
-                ResultSet generatedKeys = psCreate.getGeneratedKeys();
-                try {
+                try (ResultSet generatedKeys = psCreate.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         course.setId(generatedKeys.getLong(1));
                     }
-                } finally {
-                    generatedKeys.close();
                 }
                 LOG.info("Course successfully added to the database.");
-            } finally {
-                psCreate.close();
             }
         } catch (SQLException e) {
             throw new PersistenceException("CourseDAO CREATE error: New Course couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
@@ -68,16 +62,13 @@ public class CourseDAO implements ICourseDAO {
     public void update(Course course) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Course Update.");
-            PreparedStatement psUpdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT);
-            try {
+            try (PreparedStatement psUpdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT)) {
                 psUpdate.setString(1, course.getMark());
                 psUpdate.setString(2, course.getSemester());
                 psUpdate.setString(3, course.getName());
                 psUpdate.setLong(4, course.getId());
                 psUpdate.executeUpdate();
                 LOG.info("Course succefsully updated in Database.");
-            } finally {
-                psUpdate.close();
             }
         } catch (SQLException e) {
             throw new PersistenceException("CourseDAO UPDATE error: Selected Course couldn't be updated, check if all mandatory values have been inserted or if connection to the Database is valid.");
@@ -89,13 +80,10 @@ public class CourseDAO implements ICourseDAO {
     public void delete(Course course) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for Course Deletion");
-            PreparedStatement psDelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT);
-            try {
+            try (PreparedStatement psDelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT)) {
                 psDelete.setLong(1, course.getId());
                 psDelete.executeUpdate();
                 LOG.info("Course in question soft-deleted in Database.");
-            } finally {
-                psDelete.close();
             }
         } catch (SQLException e) {
             throw new PersistenceException("CourseDAO DELETE error: Selected Course couldn't be deleted, check if the connection to the Database is valid.");

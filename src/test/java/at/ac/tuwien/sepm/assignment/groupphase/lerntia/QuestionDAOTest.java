@@ -27,6 +27,7 @@ public class QuestionDAOTest {
     @Before
     public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
@@ -40,7 +41,9 @@ public class QuestionDAOTest {
 
     @After
     public void rollback() throws SQLException {
-        connection.rollback();
+        if (connection != null) {
+            connection.rollback();
+        }
     }
 
     @Test

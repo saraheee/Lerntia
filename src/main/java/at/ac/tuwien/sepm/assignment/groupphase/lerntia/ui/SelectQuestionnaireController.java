@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
@@ -15,6 +14,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class SelectQuestionnaireController {
                 "Fehler beim Lesen der Fragebögen!", "");
         }
 
-        if (learningQuestionnaireList.isEmpty()){
+        if (learningQuestionnaireList.isEmpty()) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
                 "Fehler!", "Es ist noch kein Fragebogen vorhanden");
             return;
@@ -111,12 +111,7 @@ public class SelectQuestionnaireController {
 
         // show first question of new questionnaire
 
-        try {
-            lerntiaMainController.getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen anzeigen fehlgeschlagen",
-                "Error", "Der ausgewählte Fragebogen kann nicht angezeigt werden");
-        }
+        lerntiaMainController.getAndShowTheFirstQuestion();
 
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();

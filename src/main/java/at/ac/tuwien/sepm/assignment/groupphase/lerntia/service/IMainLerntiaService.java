@@ -80,9 +80,8 @@ public interface IMainLerntiaService {
      * Returns the list of current questions
      *
      * @return List of the currently used questions.
-     * @throws ServiceException if the method can't get the current list of questions
      */
-    List<Question> getQuestions() throws ServiceException;
+    List<Question> getQuestions();
 
     /**
      * Returns the Size of the ListCounter

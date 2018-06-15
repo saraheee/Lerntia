@@ -8,8 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,19 +22,20 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String SQL_LEARNINGQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO LearningQuestionnaire(id) VALUES (?)";
-    private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = false)";
+    private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = FALSE)";
 
     private Connection connection;
     private QuestionnaireDAO questionnaireDAO;
 
     @Autowired
     public LearningQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
-            this.questionnaireDAO = questionnaireDAO;
+        this.questionnaireDAO = questionnaireDAO;
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for LearningQuestionnaireDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Connection successfully found for LearningQuestionnaireDAO.");
-        } catch (PersistenceException e) {
-            throw new PersistenceException("Connection couldn't be found for LearningQuestionnaireDAO!");
+            LOG.info("Connection for LearningQuestionnaireDAO retrieved.");
         }
     }
 
@@ -51,7 +56,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
                 throw new PersistenceException("LearningQuestionnaireDAO CREATE error: LearningQuestionnaire couldn't be created, check if all mandatory values have been added or the connection to the Database is valid.");
             }
 
-        } catch (PersistenceException e){
+        } catch (PersistenceException e) {
             throw new PersistenceException("LearningQuestionnaireDAO CREATE error: Questionnaire couldn't be created so the LearningQuestionnaire entry couldn't be created either.");
         }
     }
@@ -77,15 +82,15 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");
             ArrayList<LearningQuestionnaire> list = new ArrayList<>();
             try (ResultSet rsReadAll = connection.prepareStatement(SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT).executeQuery()) {
-                    LearningQuestionnaire learning;
-                    while (rsReadAll.next()) {
-                        learning = new LearningQuestionnaire();
-                        learning.setId(rsReadAll.getLong(1));
-                        learning.setName(questionnaireDAO.getQuestionnaireName(rsReadAll.getLong(1)));
-                        list.add(learning);
-                    }
-                    LOG.info("All LearningQuestionnaires found.");
-                    return list;
+                LearningQuestionnaire learning;
+                while (rsReadAll.next()) {
+                    learning = new LearningQuestionnaire();
+                    learning.setId(rsReadAll.getLong(1));
+                    learning.setName(questionnaireDAO.getQuestionnaireName(rsReadAll.getLong(1)));
+                    list.add(learning);
+                }
+                LOG.info("All LearningQuestionnaires found.");
+                return list;
             }
         } catch (SQLException e) {
             throw new PersistenceException("LearningQuestionnaireDAO READALL error: not all LearningQuestionnaire have been found, check if the connection to the Database is valid.");

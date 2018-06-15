@@ -25,13 +25,13 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
 
     @Autowired
     public ExamQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
-            this.questionnaireDAO = questionnaireDAO;
+        this.questionnaireDAO = questionnaireDAO;
+        if(jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for ExamQuestionnaireDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Connection for the ExamQuestionnaireDAO created.");
-        } catch (PersistenceException e) {
-            LOG.error("Connection for the ExamQuestionnaireDAO couldn't be created!");
-            throw e;
+            LOG.info("Connection for ExamQuestionnaireDAO retrieved.");
         }
     }
 
@@ -43,14 +43,11 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
             LOG.info("Entry for general Questionnaire successful.");
             Timestamp timestamp = Timestamp.valueOf(examQuestionnaire.getDate().atStartOfDay());
             LOG.info("Prepare Statement for ExamQuestionnaire...");
-            PreparedStatement psCreate = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT);
-            try {
+            try (PreparedStatement psCreate = connection.prepareStatement(SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT)) {
                 psCreate.setLong(1, examQuestionnaire.getId());
                 psCreate.setTimestamp(2, timestamp);
                 psCreate.executeUpdate();
                 LOG.info("Statement successfully sent.");
-            } finally {
-                psCreate.close();
             }
         } catch (SQLException e) {
             throw new PersistenceException("ExamQuestionnaireDAO CREATE error: ExamQuestionnaire couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
@@ -63,7 +60,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
     }
 
     @Override
-    public void search(ExamQuestionnaire searchparameters) throws PersistenceException {
+    public void search(ExamQuestionnaire searchParameters) throws PersistenceException {
         //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 

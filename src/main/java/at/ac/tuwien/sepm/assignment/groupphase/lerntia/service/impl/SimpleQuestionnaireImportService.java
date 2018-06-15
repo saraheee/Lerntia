@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
@@ -47,8 +48,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         // TODO - fix duplicate code
 
         if (isExam) {
-            List<ExamQuestionnaire> questionnaires = null;
-            questionnaires = simpleExamQuestionnaireService.readAll();
+            List<ExamQuestionnaire> questionnaires = simpleExamQuestionnaireService.readAll();
 
             for (ExamQuestionnaire questionnaire : questionnaires) {
                 if (name.equals(questionnaire.getName())) {
@@ -57,8 +57,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             }
 
         } else {
-            List<LearningQuestionnaire> questionnaires = null;
-            questionnaires = simpleLearningQuestionnaireService.readAll();
+            List<LearningQuestionnaire> questionnaires = simpleLearningQuestionnaireService.readAll();
 
             for (LearningQuestionnaire questionnaire : questionnaires) {
                 if (name.equals(questionnaire.getName())) {
@@ -69,7 +68,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         // get questionnaire file content
 
-        ArrayList<String> fileContent = new ArrayList<>();
+        ArrayList<String> fileContent;
 
         try {
             fileContent = questionnaireImportDAO.getContents(pathStr);
@@ -82,7 +81,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         for (String aFileContent : fileContent) {
 
-            // split the rows, the seperator is ";"
+            // split the rows, the separator is ";"
             String[] lineParts = aFileContent.split(";");
 
             // check if there are too many columns
@@ -166,8 +165,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     }
 
     @Override
-    public void importPictures(File file, String name) throws IOException {
-        questionnaireImportDAO.importPictures(file, name);
+    public void importPictures(File file, String name) throws IOException, ServiceException {
+        try {
+            questionnaireImportDAO.importPictures(file, name);
+        } catch (PersistenceException e) {
+            throw new ServiceException("Failed to import pictures.");
+        }
     }
 
     public void deletePictures(File file) {

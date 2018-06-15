@@ -36,6 +36,7 @@ public class ExamQuestionnaireDAOTest {
     @Before
     public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
@@ -48,7 +49,9 @@ public class ExamQuestionnaireDAOTest {
 
     @After
     public void rollback() throws SQLException {
-        connection.rollback();
+        if (connection != null) {
+            connection.rollback();
+        }
     }
 
     private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
@@ -65,10 +68,10 @@ public class ExamQuestionnaireDAOTest {
 
     @Test
     public void createNewExamQuestionnaire() throws PersistenceException {
-        Long expected = 0L;
+        Long expected;
 
         Course course = new Course();
-        course.setSemester(Semester.WS + "18");
+        course.setSemester(Semester.WS + "2018");
         course.setMark("123.14232");
         course.setName("asdf");
         courseDAO.create(course);

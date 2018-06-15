@@ -62,7 +62,7 @@ public class Question {
 
     public void setPicture(String picture) {
         this.picture = picture;
-        JFXPanel fxPanel = new JFXPanel();
+        JFXPanel fxPanel = new JFXPanel(); //needed for tests
         containPicture = new CheckBox();
         if (picture != null && picture.trim().equals("")) {
             this.setContainPicture(false);

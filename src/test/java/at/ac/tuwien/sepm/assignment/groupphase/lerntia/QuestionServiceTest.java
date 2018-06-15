@@ -4,31 +4,31 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearnAlgorithmDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
-import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDate;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 public class QuestionServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private IQuestionService questionService;
-
+    private Connection connection;
     private ConfigReader configReaderQuestions;
 
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
@@ -37,9 +37,18 @@ public class QuestionServiceTest {
     public void setUp() {
         configReaderQuestions = new ConfigReader("questions");
         try {
-            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))));
+            JDBCConnectionManager.setIsTestConnection(true);
+            connection = jdbcConnectionManager.getTestConnection();
+            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))));
         } catch (PersistenceException e) {
-            // TODO - show alert or throw new exception
+            LOG.error("Failed to get connection to test-database");
+        }
+    }
+
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
         }
     }
 
@@ -52,7 +61,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void createCorrectQuestion() throws PersistenceException, ServiceException {
+    public void createCorrectQuestion() throws ServiceException {
         Question q1 = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q1);
         long id1 = q1.getId();
@@ -67,7 +76,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void updateCorrectCourse() throws ServiceException, PersistenceException {
+    public void updateCorrectCourse() throws ServiceException {
         Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q);
         String old = q.getQuestionText();
@@ -84,7 +93,7 @@ public class QuestionServiceTest {
 
     @Ignore
     @Test
-    public void searchQuestions() throws PersistenceException, ServiceException {
+    public void searchQuestions() throws ServiceException {
         List<Question> questionlist = new ArrayList<>();
         Question q1 = new Question();
         q1.setQuestionText("asdf");
@@ -117,21 +126,21 @@ public class QuestionServiceTest {
     // delete
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void deleteQuestion() throws ServiceException, PersistenceException {
+    public void deleteQuestion() throws ServiceException {
         Question q = new Question((long) 0, "asdf", "", "a1", "a2", "a3", "a4", "a5", "23", "feedback", false);
         questionService.create(q);
         boolean before = q.getDeleted();
         questionService.delete(q);
         boolean after = q.getDeleted();
-        assertTrue(before == false);
-        assertTrue(after == true);
+        assertTrue(!before);
+        assertTrue(after);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // get
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void getQuestionwithId() throws ServiceException, PersistenceException {
+    public void getQuestionwithId() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -151,7 +160,7 @@ public class QuestionServiceTest {
     // getAllAnswers
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void getAllAnswersOfQuestion() throws ServiceException, PersistenceException {
+    public void getAllAnswersOfQuestion() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -198,11 +207,11 @@ public class QuestionServiceTest {
 
         var maxLength = this.configReaderQuestions.getValueInt("maxLengthQuestion");
 
-        String tooLongQuestionText = "";
+        StringBuilder tooLongQuestionText = new StringBuilder();
         for (var i = 0; i < maxLength + 1; i++) {
-            tooLongQuestionText += "a";
+            tooLongQuestionText.append("a");
         }
-        q.setQuestionText(tooLongQuestionText);
+        q.setQuestionText(tooLongQuestionText.toString());
 
         questionService.validate(q);
     }
@@ -223,11 +232,11 @@ public class QuestionServiceTest {
 
         var maxLength = this.configReaderQuestions.getValueInt("maxLengthAnswer");
 
-        String tooLongAnswer = "";
+        StringBuilder tooLongAnswer = new StringBuilder();
         for (var i = 0; i < maxLength + 1; i++) {
-            tooLongAnswer += "a";
+            tooLongAnswer.append("a");
         }
-        q.setAnswer1(tooLongAnswer);
+        q.setAnswer1(tooLongAnswer.toString());
 
         questionService.validate(q);
     }
@@ -284,7 +293,7 @@ public class QuestionServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     @Test
-    public void searchForQuestionsWithTwoResults() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithTwoResults() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -311,7 +320,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForQuestionsWithOneResult() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithOneResult() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -337,7 +346,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForQuestionsWithNoResult() throws PersistenceException, ServiceException {
+    public void searchForQuestionsWithNoResult() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
@@ -354,7 +363,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void searchForDeletedQuestion() throws PersistenceException, ServiceException {
+    public void searchForDeletedQuestion() throws ServiceException {
         Question q1 = new Question();
         q1.setQuestionText("asdf");
         q1.setAnswer1("a1");
