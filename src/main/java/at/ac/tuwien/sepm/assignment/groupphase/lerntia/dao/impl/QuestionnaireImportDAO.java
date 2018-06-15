@@ -57,9 +57,12 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
             }
         }
 
-        File dir = new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
-        if (!dir.mkdir()) {
-            throw new PersistenceException("Das Bilder Verzeichnis für den Fragebogen konnte nicht angelegt werden!");
+        Path dirPath = Paths.get(System.getProperty("user.dir") + File.separator + "img" + File.separator + name);
+        File dir = new File(String.valueOf(dirPath));
+        if (!Files.exists(dirPath)) {
+            if (!dir.mkdir()) {
+                throw new PersistenceException("Das Bilder Verzeichnis für den Fragebogen '" + name + "' konnte nicht angelegt werden!");
+            }
         }
         File[] files = file.listFiles();
         if (files != null) {
