@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
 INSERT INTO Course
    SELECT * FROM (
       SELECT * FROM Course WHERE FALSE
-        UNION SELECT 1, '1', 'SS18', 'SEPM', false
+        UNION SELECT 1, '1', 'SS2018', 'SEPM', false
   )
 WHERE NOT EXISTS (SELECT * FROM Course);
 
@@ -78,7 +78,7 @@ WHERE NOT EXISTS (SELECT * FROM Course);
 
 CREATE TABLE IF NOT EXISTS QuestionAlgoValue(
   questionid bigint primary key references Question(id),
-  successvalue INTEGER not null,
-  failurevalue INTEGER not null,
+  successValue INTEGER not null,
+  failureValue INTEGER not null,
   points double not null,
 );

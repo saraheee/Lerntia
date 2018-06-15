@@ -5,6 +5,7 @@ import org.h2.tools.RunScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
@@ -23,9 +24,17 @@ public class JDBCConnectionManager {
     private static Connection connection;
     private static boolean isTestConnection;
 
+    public static void setIsTestConnection(boolean isTestConnection) {
+        JDBCConnectionManager.isTestConnection = isTestConnection;
+    }
+
     public Connection getConnection() throws PersistenceException {
         if (connection == null) {
-            LOG.info("Trying to initialize the database");
+            if (isTestConnection()) {
+                LOG.info("Trying to initialize the test database");
+            } else {
+                LOG.info("Trying to initialize the database");
+            }
             initDatabase();
         }
         return connection;
@@ -43,17 +52,20 @@ public class JDBCConnectionManager {
                 connection = DriverManager.getConnection(TEST_CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + TEST_RESOURCE + "'", "sa", "");
             } else {
                 connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
+
+                var inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
+                if (inputStream == null) {
+                    LOG.error("Input stream for create statements is null!");
+                } else {
+                    RunScript.execute(connection, new InputStreamReader(inputStream));
+                    LOG.info("Reading initial commands from input stream.");
+                }
             }
-            var inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
-            if (inputStream == null) {
-                LOG.error("Input stream for create statements is null!");
-            } else {
-                RunScript.execute(connection, new InputStreamReader(inputStream));
-                LOG.info("Reading initial commands from input stream.");
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            LOG.debug("Could not initialize the database.");
-            throw new PersistenceException("Could not initialize the database.");
+        } catch (SQLException e) {
+            closeConnection();
+            throw new PersistenceException("Could not initialize the database: " + e.getLocalizedMessage());
+        } catch (ClassNotFoundException e) {
+            throw new PersistenceException("Could not initialize the database. Class not found!");
         }
     }
 
@@ -68,4 +80,7 @@ public class JDBCConnectionManager {
         }
     }
 
+    public boolean isTestConnection() {
+        return isTestConnection;
+    }
 }

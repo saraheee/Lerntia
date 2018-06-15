@@ -25,6 +25,8 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class ImportFileController {
         LOG.debug("Initialize ImportFileController");
         coursedata = cservice.readAll();
         courses = FXCollections.observableArrayList(coursedata);
-        choices.removeAll(choices);
+        choices.removeAll();
         for (Course course : courses) {
             choices.add(course.getName());
         }
@@ -83,11 +85,17 @@ public class ImportFileController {
     }
 
     @FXML
-    public void selectFile(ActionEvent actionEvent) {
+    public void selectFile() {
         LOG.info("Open new FileChooser.");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("[Lerntia] Verzeichnis");
-        fileChooser.setInitialDirectory(new File(CSVPATH));
+        if (!Files.exists(Paths.get(CSVPATH))) {
+            if (new File(String.valueOf(CSVPATH)).mkdir()) { //initial directory created
+                fileChooser.setInitialDirectory(new File(CSVPATH));
+            }
+        } else { //initial directory exists
+            fileChooser.setInitialDirectory(new File(CSVPATH));
+        }
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
         Stage stage = new Stage();
         file = fileChooser.showOpenDialog(stage);
@@ -97,11 +105,17 @@ public class ImportFileController {
     }
 
     @FXML
-    public void selectDirectory(ActionEvent actionEvent) {
+    public void selectDirectory() {
         LOG.info("Open new DirectoryChooser.");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("[Lerntia] Bildordner");
-        directoryChooser.setInitialDirectory(new File(IMGPATH));
+        if (!Files.exists(Paths.get(IMGPATH))) {
+            if (new File(String.valueOf(IMGPATH)).mkdir()) { //initial directory created
+                directoryChooser.setInitialDirectory(new File(IMGPATH));
+            }
+        } else { //initial directory exists
+            directoryChooser.setInitialDirectory(new File(IMGPATH));
+        }
         Stage stage = new Stage();
         directory = directoryChooser.showDialog(stage);
         if (directory != null) {
@@ -125,6 +139,8 @@ public class ImportFileController {
             } catch (IOException e) {
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
+            } catch (ServiceException e) {
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Import fehlgeschlagen!", "Der Import konnte nicht durchgeführt werden!");
             }
         }
         if (file != null) {

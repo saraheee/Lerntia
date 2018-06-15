@@ -68,9 +68,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             return examQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            // TODO - show alert or throw new exception
+            throw new ServiceException("Failed to read all questionnaires!");
         }
-        return null;
     }
 
     @Override
@@ -94,12 +93,12 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     @Override
     public ExamQuestionnaire getSelected() throws ServiceException {
 
-        ExamQuestionnaire examQuestionnaire = null;
+        ExamQuestionnaire examQuestionnaire;
 
         try {
             examQuestionnaire = examQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            // TODO - show alert or throw new exception
+            throw new ServiceException("Failed to get the selected questionnaire!");
         }
 
         return examQuestionnaire;

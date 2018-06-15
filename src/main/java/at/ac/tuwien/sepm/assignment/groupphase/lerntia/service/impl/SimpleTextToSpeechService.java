@@ -202,7 +202,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
 
     public enum answerNumber {
-        eins, zwei, drei, vier, fünf
+        eins, zwei, drei, vier
     }
 
 }

@@ -4,10 +4,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
-<Button fx:id="zoomButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#onZoomButtonClicked" prefHeight="120.0"
+<Button fx:id="zoomButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="120.0"
         prefWidth="150.0" stylesheets="@/css/square-button.css" text="Zoomen" xmlns="http://javafx.com/javafx/8.0.121"
-        xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ZoomButtonController">
+        xmlns:fx="http://javafx.com/fxml/1">
     <graphic>
         <ImageView fitHeight="80.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/icons/zoom.png"/>

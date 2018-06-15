@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class QuestionnaireDAOTest {
@@ -31,11 +33,19 @@ public class QuestionnaireDAOTest {
     @Before
     public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
+        }
+    }
+
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
         }
     }
 
@@ -49,10 +59,10 @@ public class QuestionnaireDAOTest {
 
     @Test
     public void createNewQuestionnaire() throws PersistenceException {
-        Long expected = 0L;
+        Long expected;
 
         Course tgi = new Course();
-        tgi.setSemester(Semester.SS + "18");
+        tgi.setSemester(Semester.SS + "2018");
         tgi.setMark("999.349");
         tgi.setName("TGI");
         courseDAO.create(tgi);
@@ -76,8 +86,6 @@ public class QuestionnaireDAOTest {
     public void createNewQuestionnaireError() throws PersistenceException {
         LearningQuestionnaire chapter1 = new LearningQuestionnaire();
         chapter1.setName("Chapter 1");
-        //chapter1.setCmark("123.349");
-        //chapter1.setSemester(Semester.SS+"18");
         questionnaireDAO.create(chapter1);
     }
 

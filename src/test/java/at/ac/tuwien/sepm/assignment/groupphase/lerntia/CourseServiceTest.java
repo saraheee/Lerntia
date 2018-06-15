@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -24,14 +26,24 @@ public class CourseServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ICourseService courseService;
+    private Connection connection;
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
+            connection = jdbcConnectionManager.getTestConnection();
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             // TODO - show alert or throw new exception
+        }
+    }
+
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
         }
     }
 
@@ -46,10 +58,10 @@ public class CourseServiceTest {
     @Test
     public void createCorrectCourse() throws ServiceException {
         int before = courseService.readAll().size();
-        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
         courseService.create(course);
         int after = courseService.readAll().size();
-        String mark = courseService.readAll().get(after-1).getMark();
+        String mark = courseService.readAll().get(after - 1).getMark();
         assertTrue(before < after);
         assertTrue(mark.equals("asdf"));
     }
@@ -60,14 +72,14 @@ public class CourseServiceTest {
 
     @Test
     public void updateCorrectCourse() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
         courseService.create(course);
-        String old = course.getSemester().toString();
-        String after = Semester.WS+"2018";
+        String old = course.getSemester();
+        String after = Semester.WS + "2018";
         course.setSemester(after);
         courseService.update(course);
         assertTrue(!old.equals(after));
-        assertTrue(course.getSemester().equals(Semester.WS+"2018"));
+        assertTrue(course.getSemester().equals(Semester.WS + "2018"));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -80,7 +92,7 @@ public class CourseServiceTest {
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void deleteCorrectCourse() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
         courseService.create(course);
         int before = courseService.readAll().size();
         courseService.delete(course);
@@ -94,15 +106,15 @@ public class CourseServiceTest {
     @Test
     public void readAllCourses() throws ServiceException {
         int before = courseService.readAll().size();
-        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
         courseService.create(course);
         List<Course> list = courseService.readAll();
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
             count++;
         }
-        assertEquals(before+1, count);
-        assertTrue(list.get(count-1).getMark().equals("asdf"));
+        assertEquals(before + 1, count);
+        assertTrue(list.get(count - 1).getMark().equals("asdf"));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -113,7 +125,7 @@ public class CourseServiceTest {
 
     @Test
     public void validateCorrectCourse() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"2018", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
         courseService.validate(course);
     }
 
@@ -121,7 +133,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateNoMark() throws ServiceException {
-        Course course = new Course("", Semester.SS+"18", "asdf", false);
+        Course course = new Course("", Semester.SS + "18", "asdf", false);
         courseService.validate(course);
     }
 
@@ -129,7 +141,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateNoName() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"18", "", false);
+        Course course = new Course("asdf", Semester.SS + "18", "", false);
         courseService.validate(course);
     }
 
@@ -145,7 +157,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateYearIsNotAnInteger() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"asdf", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "asdf", "asdf", false);
         courseService.validate(course);
     }
 
@@ -153,7 +165,7 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateYearIsNotFourDigits() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"12345", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "12345", "asdf", false);
         courseService.validate(course);
     }
 
@@ -161,12 +173,12 @@ public class CourseServiceTest {
 
     @Test(expected = ServiceException.class)
     public void validateYearIsNegative() throws ServiceException {
-        Course course = new Course("asdf", Semester.SS+"-123", "asdf", false);
+        Course course = new Course("asdf", Semester.SS + "-123", "asdf", false);
         courseService.validate(course);
     }
 
     @After
-    public void wrapUp(){
+    public void wrapUp() {
 
     }
 }

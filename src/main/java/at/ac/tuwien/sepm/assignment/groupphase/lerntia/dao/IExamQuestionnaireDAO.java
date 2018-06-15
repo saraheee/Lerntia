@@ -24,12 +24,12 @@ public interface IExamQuestionnaireDAO {
     void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
-     * Search for ExamQuestionnaire with given searchparameters in the Database
+     * Search for ExamQuestionnaire with given searchParameters in the Database
      *
-     * @param searchparameters all or some searchparameters of the ExamQuestionnaire
+     * @param searchParameters all or some searchParameters of the ExamQuestionnaire
      * @throws PersistenceException if the method can't render
      */
-    void search(ExamQuestionnaire searchparameters) throws PersistenceException;
+    void search(ExamQuestionnaire searchParameters) throws PersistenceException;
 
     /**
      * Delete ExamQuestionnaire from the Database

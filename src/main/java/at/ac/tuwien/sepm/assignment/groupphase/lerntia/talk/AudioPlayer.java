@@ -132,7 +132,7 @@ public class AudioPlayer extends Thread implements IAudioPlayer {
         /**
          *
          */
-        PLAYING;
+        PLAYING
     }
 }
 

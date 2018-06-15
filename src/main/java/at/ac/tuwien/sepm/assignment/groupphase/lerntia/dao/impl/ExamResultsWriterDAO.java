@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,9 +52,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         try {
             //PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
             PdfWriter.getInstance(document, new FileOutputStream(path));
-        } catch (DocumentException e) {
-            throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
-        } catch (FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         }
         document.open();
@@ -64,14 +61,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         // these two images are loaded here and placed in a cell.
         // later these cells are added to the table of answers.
 
-        Image img_checked = null;
+        Image img_checked;
         try {
             img_checked = Image.getInstance(Resource.class.getResource("/icons/exam_report_box_checked.png"));
             img_checked.scaleAbsolute((float) 12.0, (float) 12.0);
-        } catch (BadElementException e) {
-            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
-        } catch (IOException e) {
-            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
+        } catch (BadElementException | IOException e) {
+            throw new PersistenceException("Die Ressourcen für die PDF Datei konnten nicht geladen werden.");
         }
 
         PdfPCell cell_checked = new PdfPCell(img_checked, false);
@@ -79,14 +74,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         cell_checked.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell_checked.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-        Image img_box = null;
+        Image img_box;
         try {
             img_box = Image.getInstance(Resource.class.getResource("/icons/exam_report_box.png"));
             img_box.scaleAbsolute((float) 12.0, (float) 12.0);
-        } catch (BadElementException e) {
-            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
-        } catch (IOException e) {
-            throw new PersistenceException("Die Recourcen für die PDF Datei konnten nicht geladen werden.");
+        } catch (BadElementException | IOException e) {
+            throw new PersistenceException("Die Ressourcen für die PDF Datei konnten nicht geladen werden.");
         }
 
         PdfPCell cell_box = new PdfPCell(img_box, false);
@@ -96,9 +89,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         // prepare the fonts used in the document
 
-        Font fontTitle       = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
-        Font fontExamName    = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
-        Font fontExamDate    = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
+        Font fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        Font fontExamDate = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
         Font fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
 
         LOG.info("Prepare report");
@@ -125,7 +118,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        User student = null;
+        User student;
         try {
             student = simpleUserService.read();
         } catch (ServiceException e) {
@@ -167,9 +160,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
             // add an image if the question has one
 
-            if (questions.get(i).getPicture() != "") {
+            if (!questions.get(i).getPicture().equals("")) {
 
-                Image imgQuestion = null;
+                Image imgQuestion;
 
                 String imagePath =
                     System.getProperty("user.dir") + File.separator + "img" + File.separator +
@@ -178,9 +171,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
                 try {
                     imgQuestion = Image.getInstance(imagePath);
-                } catch (BadElementException e) {
-                    throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
-                } catch (IOException e) {
+                } catch (BadElementException | IOException e) {
                     throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
                 }
 
@@ -196,7 +187,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                 // very wide images get a smaller height. if this is not done, the image would
                 // be too big and reach out of the bounds of the pdf file.
 
-                if (imgQuestion.getWidth() > ( imgQuestion.getHeight()*2 )) {
+                if (imgQuestion.getWidth() > (imgQuestion.getHeight() * 2)) {
                     cellImgQuestion.setFixedHeight(80);
                 } else {
                     cellImgQuestion.setFixedHeight(180);
@@ -225,7 +216,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             table.setWidthPercentage(100);
 
             try {
-                table.setWidths(new float[] { 8, (float) 1.25, (float) 1.5, (float) 1});
+                table.setWidths(new float[]{8, (float) 1.25, (float) 1.5, (float) 1});
             } catch (DocumentException e) {
                 throw new PersistenceException("Eine Tabelle konnte nicht für das PDF formatiert werden.");
             }
@@ -237,7 +228,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
             ArrayList<String> allAnswers = questionService.getAllAnswers(questions.get(i));
 
-            for (int j = 0; j < allAnswers.size(); j++){
+            for (int j = 0; j < allAnswers.size(); j++) {
 
                 table.addCell(allAnswers.get(j));
 
@@ -245,23 +236,23 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
                 String checkedAnswers = questions.get(i).getCheckedAnswers();
 
                 // we have to start with 1 because the answers also start with 1
-                String indexStr = Integer.toString(j+1);
+                String indexStr = Integer.toString(j + 1);
 
                 boolean answerWasCorrect = correctAnswers.contains(indexStr);
 
-                boolean answerWasCecked;
+                boolean answerWasChecked;
 
                 // skipped questions are treated as false
 
-                try{
-                    answerWasCecked = checkedAnswers.contains(indexStr);
-                } catch (NullPointerException e){
-                    answerWasCecked = false;
+                try {
+                    answerWasChecked = checkedAnswers.contains(indexStr);
+                } catch (NullPointerException e) {
+                    answerWasChecked = false;
                 }
 
-                table.addCell( (answerWasCorrect) ? cell_checked : cell_box );
-                table.addCell( (answerWasCecked) ? cell_checked : cell_box );
-                table.addCell( (answerWasCorrect == answerWasCecked) ? cell_checked : cell_box );
+                table.addCell((answerWasCorrect) ? cell_checked : cell_box);
+                table.addCell((answerWasChecked) ? cell_checked : cell_box);
+                table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
             }
 
             PdfPCell cell = new PdfPCell(table);
@@ -273,7 +264,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             try {
                 document.add(container);
             } catch (DocumentException e) {
-                throw new PersistenceException("Die Ergebnisse konnte nicht in das Dokument eingefügt werden.");
+                throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden.");
             }
         }
 

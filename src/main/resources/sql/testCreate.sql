@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
 
 CREATE TABLE IF NOT EXISTS QuestionAlgoValue(
   questionid bigint primary key references Question(id),
-  successvalue INTEGER not null,
-  failurevalue INTEGER not null,
+  successValue INTEGER not null,
+  failureValue INTEGER not null,
   points double not null,
 );
