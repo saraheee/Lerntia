@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,12 +30,12 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Autowired
     public QuestionnaireQuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for CourseDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Connection for QuestionnaireQuestionDAO found.");
-        } catch (PersistenceException e) {
-            LOG.error("Couldn't find connection for QuestionnaireQuestionDAO!");
-            throw e;
+            LOG.info("Connection for CourseDAO retrieved.");
         }
     }
 
@@ -56,7 +57,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
-            List<QuestionnaireQuestion> searchresults = new ArrayList<>();
+            List<QuestionnaireQuestion> searchResults = new ArrayList<>();
             QuestionnaireQuestion questionnaireQuestion;
             String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchParameters.getQid();
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
@@ -65,13 +66,13 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                     questionnaireQuestion.setQid(searchParameters.getQid());
                     questionnaireQuestion.setQuestionid(rs.getLong(2));
                     questionnaireQuestion.setDeleted(rs.getBoolean(3));
-                    searchresults.add(questionnaireQuestion);
+                    searchResults.add(questionnaireQuestion);
                 }
-                LOG.info("All QuestionnaireQuestion matching the searchparameters found.");
-                return searchresults;
+                LOG.info("All QuestionnaireQuestion matching the searchParameters found.");
+                return searchResults;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchparameters are valid and if the connection to the database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchParameters are valid and if the connection to the database is valid.");
         }
     }
 
@@ -92,16 +93,13 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
-            PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT);
-            try {
+            try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT)) {
                 psUpdate.setLong(1, newQid);
                 psUpdate.setLong(2, newQuestionId);
                 psUpdate.setLong(3, questionnaireQuestion.getQid());
                 psUpdate.setLong(4, questionnaireQuestion.getQuestionid());
                 psUpdate.executeUpdate();
                 LOG.info("Statement for QuestionnaireQuestion Update successfully sent.");
-            } finally {
-                psUpdate.close();
             }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO UPDATE error: item couldn't be updated, check if mandatory values have been added or if the connection to the Database is valid.");

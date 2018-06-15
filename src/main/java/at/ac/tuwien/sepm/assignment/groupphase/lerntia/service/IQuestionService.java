@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 public interface IQuestionService {
 
-    void create(Question question) throws ServiceException, PersistenceException;
+    void create(Question question) throws ServiceException;
 
     /**
      * Update an existing Question in the Database with new Values
@@ -51,9 +50,8 @@ public interface IQuestionService {
      *
      * @param question the Question for which the answers should be retrieved
      * @return a list of all the answers of the corresponding Question
-     * @throws ServiceException if the answers cannot be retrieved
      */
-    ArrayList<String> getAllAnswers(Question question) throws ServiceException;
+    ArrayList<String> getAllAnswers(Question question);
 
     /**
      * Validate a Question

@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -172,8 +171,6 @@ public class SelectQuestionAdministrateController implements Runnable {
 
         } catch (ServiceException e) {
             LOG.debug("Failed to refresh the table!");
-        } catch (ControllerException e) {
-            LOG.debug("Failed to update the learn questionnaire!");
         }
     }
 
@@ -264,11 +261,7 @@ public class SelectQuestionAdministrateController implements Runnable {
                 "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
 
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
-            try {
-                lerntiaMainController.getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
-                // TODO - show alert or throw new exception
-            }
+            lerntiaMainController.getAndShowTheFirstQuestion();
 
             this.refresh();
         }

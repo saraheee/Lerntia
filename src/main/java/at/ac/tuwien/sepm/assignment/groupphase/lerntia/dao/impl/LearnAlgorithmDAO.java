@@ -6,7 +6,9 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorith
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,13 +29,14 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
     private static final String SQL_QUESTIONLEARNALGORITHM_SEARCH_STATEMENT = "SELECT * FROM QUESTIONALGOVALUE";
     private Connection connection;
 
-
-    public LearnAlgorithmDAO(JDBCConnectionManager jdbcConnectionManager) {
-        try {
+    @Autowired
+    public LearnAlgorithmDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for LearnAlgorithmDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Created connection for LearnAlgorithmDAO");
-        } catch (PersistenceException e) {
-            LOG.error("Connection Database error for LearnAlgorithmDAO");
+            LOG.info("Connection for LearnAlgorithmDAO retrieved.");
         }
     }
 
@@ -56,8 +59,8 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_UPDATE_STATEMENT)) {
             LOG.info("Create list of update statements for QuestionLearnAlgorithms");
             for (QuestionLearnAlgorithm questionLearnAlgorithm : questionLearnAlgorithmList) {
-                psUpdate.setInt(1, questionLearnAlgorithm.getSuccessvalue());
-                psUpdate.setInt(2, questionLearnAlgorithm.getFailurevalue());
+                psUpdate.setInt(1, questionLearnAlgorithm.getSuccessValue());
+                psUpdate.setInt(2, questionLearnAlgorithm.getFailureValue());
                 psUpdate.setDouble(3, questionLearnAlgorithm.getPoints());
                 psUpdate.setLong(4, questionLearnAlgorithm.getID());
                 psUpdate.executeUpdate();
@@ -98,14 +101,15 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
         }
 
     }
+
     @Override
     public void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException {
         QuestionLearnAlgorithm questionLearnAlgorithm;
         while (rsReadAll.next()) {
             questionLearnAlgorithm = new QuestionLearnAlgorithm();
             questionLearnAlgorithm.setID(rsReadAll.getLong(1));
-            questionLearnAlgorithm.setSuccessvalue(rsReadAll.getInt(2));
-            questionLearnAlgorithm.setFailurevalue(rsReadAll.getInt(3));
+            questionLearnAlgorithm.setSuccessValue(rsReadAll.getInt(2));
+            questionLearnAlgorithm.setFailureValue(rsReadAll.getInt(3));
             questionLearnAlgorithm.setPoints(rsReadAll.getDouble(4));
             readResults.add(questionLearnAlgorithm);
         }
