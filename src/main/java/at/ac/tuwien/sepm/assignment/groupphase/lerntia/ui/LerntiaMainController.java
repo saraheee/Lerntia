@@ -663,13 +663,7 @@ public class LerntiaMainController implements Runnable {
     private void evaluateExam() {
 
         List<Question> questionList;
-        try {
-            questionList = lerntiaService.getQuestions();
-        } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Die Prüfung kann nicht verarbeitet werden",
-                "Error", "Die Prüfung kann nicht verarbeitet werden");
-            return;
-        }
+        questionList = lerntiaService.getQuestions();
 
         String filePath = null;
 
@@ -768,7 +762,7 @@ public class LerntiaMainController implements Runnable {
         }
     }
 
-    public ImageView createPieChart() {
+    private ImageView createPieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
             new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
             new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),

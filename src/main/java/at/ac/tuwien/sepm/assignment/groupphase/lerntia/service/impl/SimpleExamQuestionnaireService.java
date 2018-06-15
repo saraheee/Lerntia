@@ -93,7 +93,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     @Override
     public ExamQuestionnaire getSelected() throws ServiceException {
 
-        ExamQuestionnaire examQuestionnaire = null;
+        ExamQuestionnaire examQuestionnaire;
 
         try {
             examQuestionnaire = examQuestionnaireDAO.getSelected();
