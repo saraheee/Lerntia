@@ -96,12 +96,12 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
     @Override
     public LearningQuestionnaire getSelected() throws ServiceException {
 
-        LearningQuestionnaire selectedLearningQuestionnaire = null;
+        LearningQuestionnaire selectedLearningQuestionnaire;
 
         try {
             selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            // TODO - show alert or throw new exception
+            throw new ServiceException("Failed to get the selected questionnaire!");
         }
 
         return selectedLearningQuestionnaire;

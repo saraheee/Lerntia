@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
@@ -156,9 +155,6 @@ public class EditQuestionsController {
             } catch (ServiceException e) {
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
                     "Die Bearbeitung ist fehlgeschlagen!", null);
-            } catch (ControllerException e) {
-                alertController.showStandardAlert(Alert.AlertType.ERROR, "Aktualisierung fehlgeschlagen",
-                    "Der aktuelle Fragebogen konnte nicht geladen werden.", "");
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -123,21 +124,17 @@ public class MenuBarController implements Runnable {
 
     @FXML
     public void switchToLearnMode() {
-        try {
-            boolean clicked = alertController.showStandardConfirmationAlert("In den Lernmodus wechseln.",
-                "Soll der Prüfungsmodus wirklich verlassen werden?",
-                "Alle Fragen und Antworten werden zurückgesetzt!");
+        boolean clicked = alertController.showStandardConfirmationAlert("In den Lernmodus wechseln.",
+            "Soll der Prüfungsmodus wirklich verlassen werden?",
+            "Alle Fragen und Antworten werden zurückgesetzt!");
 
-            if (clicked) {
-                learnToExamButton.setDisable(false);
-                examToLearnButton.setDisable(true);
-                lerntiaMainController.setExamMode(false);
-                lerntiaMainController.switchToLearnMode();
-                lerntiaMainController.getAndShowTheFirstQuestion();
+        if (clicked) {
+            learnToExamButton.setDisable(false);
+            examToLearnButton.setDisable(true);
+            lerntiaMainController.setExamMode(false);
+            lerntiaMainController.switchToLearnMode();
+            lerntiaMainController.getAndShowTheFirstQuestion();
 
-            }
-        } catch (ControllerException e) {
-            // TODO - show alert or throw new exception
         }
     }
 
