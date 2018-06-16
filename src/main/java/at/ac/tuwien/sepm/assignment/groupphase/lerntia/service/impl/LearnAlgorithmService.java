@@ -272,7 +272,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
             LOG.info("All Learn Algorithm Values have been found and added.");
             return list;
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -309,7 +309,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                 LOG.info("All Algorithm values have been successfully sent to the next layer.");
             }
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
 
     }

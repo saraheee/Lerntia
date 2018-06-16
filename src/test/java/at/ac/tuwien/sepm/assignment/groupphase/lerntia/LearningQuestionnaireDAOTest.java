@@ -90,7 +90,7 @@ public class LearningQuestionnaireDAOTest {
 
             Assert.assertEquals(expected, chapter2.getId());
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 

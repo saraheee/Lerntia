@@ -32,7 +32,6 @@ public class AdministrateQuestionnaireController {
     public ComboBox<String> cb_questionnaire;
     private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
-    private LearningQuestionnaire selectedLearningQuestionnaire;
     private List learningQuestionnaireList;
 
     @Autowired
@@ -81,7 +80,7 @@ public class AdministrateQuestionnaireController {
             return;
         }
         //Get the Selected Item.
-        selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        LearningQuestionnaire selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
         editQuestionsController.setQuestionnaire(selectedLearningQuestionnaire);
         LearningQuestionnaire studyMode = null;
         try {
