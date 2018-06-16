@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
@@ -36,7 +37,7 @@ public class CourseServiceTest {
             connection = jdbcConnectionManager.getTestConnection();
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
-            // TODO - show alert or throw new exception
+            LOG.error("Failed to get connection to test-database");
         }
     }
 
@@ -131,23 +132,51 @@ public class CourseServiceTest {
 
     // mark missing
 
-    @Test(expected = StringIndexOutOfBoundsException.class)
+    @Test(expected = ServiceException.class)
     public void validateNoMark() throws ServiceException {
         Course course = new Course("", Semester.SS + "18", "asdf", false);
         courseService.validate(course);
     }
 
+    //mark too long
+
+    @Test(expected = ServiceException.class)
+    public void validateMarkTooLong() throws ServiceException {
+        StringBuilder mark = new StringBuilder();
+        ConfigReader configReaderCourse = new ConfigReader("course");
+        int maxLength = configReaderCourse.getValueInt("maxLengthCourseMark");
+        while (mark.length() < maxLength + 2) {
+            mark.append("a");
+        }
+        Course course = new Course(mark.toString(), Semester.SS + "asdf", "asdf", false);
+        courseService.validate(course);
+    }
+
     // name missing
 
-    @Test(expected = StringIndexOutOfBoundsException.class)
+    @Test(expected = ServiceException.class)
     public void validateNoName() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "18", "", false);
         courseService.validate(course);
     }
 
+    //name too long
+
+    @Test(expected = ServiceException.class)
+    public void validateNameTooLong() throws ServiceException {
+        StringBuilder name = new StringBuilder();
+        ConfigReader configReaderCourse = new ConfigReader("course");
+        int maxLength = configReaderCourse.getValueInt("maxLengthCourseName");
+        while (name.length() < maxLength + 5) {
+            name.append("a");
+        }
+        Course course = new Course("asdf", Semester.SS + "asdf", name.toString(), false);
+        courseService.validate(course);
+    }
+
     // semester format not correct
 
-    @Test(expected = StringIndexOutOfBoundsException.class)
+    @Test(expected = ServiceException.class)
     public void validateSemesterDoesntEndWithWOrS() throws ServiceException {
         Course course = new Course("asdf", "FF18", "asdf", false);
         courseService.validate(course);

@@ -258,7 +258,7 @@ public class QuestionServiceTest {
 
     // answer is marked as correct with index 0
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = ServiceException.class)
     public void validateCorrectAnswerWithIndexZero() throws ServiceException {
         Question q = new Question();
         q.setQuestionText("asdf");
@@ -272,9 +272,22 @@ public class QuestionServiceTest {
         questionService.validate(q);
     }
 
+    // answer is marked as correct that doesn't exist
+
+    @Test(expected = ServiceException.class)
+    public void validateCorrectAnswerWithoutAnswerText() throws ServiceException {
+        Question q = new Question();
+        q.setQuestionText("Question");
+        q.setAnswer1("answer");
+        q.setAnswer2("another answer");
+        q.setCorrectAnswers("123");
+        q.setOptionalFeedback("feedback");
+        questionService.validate(q);
+    }
+
     // answer is marked as correct with index higher than 5
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = ServiceException.class)
     public void validateCorrectAnswerWithIndexHigherThanFive() throws ServiceException {
         Question q = new Question();
         q.setQuestionText("asdf");
