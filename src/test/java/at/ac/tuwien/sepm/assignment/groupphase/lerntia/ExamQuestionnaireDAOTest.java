@@ -98,8 +98,6 @@ public class ExamQuestionnaireDAOTest {
     public void createNewExamQuestionnaireError() throws PersistenceException {
         ExamQuestionnaire chapter1 = new ExamQuestionnaire();
         chapter1.setDate(LocalDate.now());
-        //chapter1.setCmark("123.349");
-        //chapter1.setSemester(Semester.SS+"15");
         examQuestionnaireDAO.create(chapter1);
 
     }
