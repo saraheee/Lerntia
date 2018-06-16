@@ -63,7 +63,7 @@ public final class MainApplication extends Application implements Runnable {
 
         var loader = new FXMLLoader(getClass().getResource("/fxml/lerntia.fxml"));
         loader.setControllerFactory(context::getBean);
-        Parent root = loader.load();
+        Parent root = loader.load(); //needed for loading the main window
         controller = loader.getController();
 
         var scene = new Scene((Parent) fxmlLoader.load(getClass().getResourceAsStream("/fxml/lerntia.fxml")));
