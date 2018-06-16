@@ -73,13 +73,15 @@ public class ImportFileController {
     @FXML
     private void initialize() throws ServiceException {
         LOG.debug("Initialize ImportFileController");
+        coursedata.clear();
         coursedata = cservice.readAll();
         courses = FXCollections.observableArrayList(coursedata);
         choices.removeAll();
+        choices.clear();
         for (Course course : courses) {
             choices.add(course.getName());
         }
-
+        cb_course.getItems().clear();
         cb_course.setItems(choices);
         cb_course.getSelectionModel().select(0);
     }
