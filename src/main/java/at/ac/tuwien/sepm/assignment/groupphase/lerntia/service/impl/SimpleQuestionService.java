@@ -136,9 +136,9 @@ public class SimpleQuestionService implements IQuestionService {
 
         // check for every possible answer check if text is present
         for (var i = 0; i < allAnswers.size(); i++){
-
+            LOG.debug("All answers: " + allAnswers);
             // count the number of answers that are present
-            if ( !allAnswers.get(i).trim().equals("") ) {
+            if (allAnswers.get(i) != null && !allAnswers.get(i).trim().equals("")) {
                 numberOfAnswersPresent++;
             }
         }
@@ -152,7 +152,7 @@ public class SimpleQuestionService implements IQuestionService {
         for (var i = 0; i < allAnswers.size(); i++) {
 
             // answer is not "" and longer than 200 chars
-            if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > maxLengthAnswer )) {
+            if ((allAnswers.get(i) != null && !allAnswers.get(i).equals("") ) && (allAnswers.get(i).length() > maxLengthAnswer)) {
                 error = true;
                 message.append("Antwort ").append(i).append(" ist zu lang und kann daher nicht angezeigt werden!\n");
             }
@@ -182,13 +182,14 @@ public class SimpleQuestionService implements IQuestionService {
             if (currentCorrectAnswerIndex == 0){
                 error = true;
                 message.append("Die Antwortnummern beginnen mit 1, nicht mit 0!\n");
+                throw new ServiceException(message.toString());
             }
 
             // index is to high
             if (currentCorrectAnswerIndex > 5){
                 error = true;
-                // TODO - better error text
                 message.append("Es kann nur bis zu 5 korrekte Antworten geben. Die Angabe einer größeren Antwortnummer, ist daher nicht möglich!\n");
+                throw new ServiceException(message.toString());
             }
 
             // check if the corresponding answer does in fact exist
@@ -196,7 +197,7 @@ public class SimpleQuestionService implements IQuestionService {
             // the ArrayList index starts at 0. the answers however start with 1.
             // so we have to decrement the index that we get from the correct answer string so we can
             // access the ArrayList.
-            if (allAnswers.get(currentCorrectAnswerIndex - 1).equals("")){
+            if (allAnswers.get(currentCorrectAnswerIndex - 1) == null || allAnswers.get(currentCorrectAnswerIndex - 1).equals("")){
                 error = true;
                 message.append("Eine Antwort, die als korrekt angegeben wurde, existiert nicht!\n");
             }
@@ -206,7 +207,6 @@ public class SimpleQuestionService implements IQuestionService {
         // validate image
         // -------------------------------------------------------------------------------------------------------------
 
-        // TODO - more image validation?
         FileInputStream input;
         try {
             if(question.getPicture() != null) {
