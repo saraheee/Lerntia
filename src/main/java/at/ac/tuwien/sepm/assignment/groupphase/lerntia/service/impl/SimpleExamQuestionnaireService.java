@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -19,6 +20,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
 
     private final IExamQuestionnaireDAO examQuestionnaireDAO;
 
+    @Autowired
     public SimpleExamQuestionnaireService(IExamQuestionnaireDAO examQuestionnaireDAO){
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
@@ -29,7 +31,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
             examQuestionnaireDAO.create(examQuestionnaire);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -47,7 +49,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.select(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -56,7 +58,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.deselect(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 

@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     private final SimpleExamQuestionnaireService simpleExamQuestionnaireService;
     private final SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
+    @Autowired
     public SimpleQuestionnaireImportService(
         QuestionnaireImportDAO questionnaireImportDAO,
         SimpleQuestionService simpleQuestionService,

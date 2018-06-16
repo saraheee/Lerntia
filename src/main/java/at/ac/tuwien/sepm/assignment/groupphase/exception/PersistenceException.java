@@ -2,11 +2,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.exception;
 
 public class PersistenceException extends Exception {
 
-    private String custommessage;
+    private String customMessage;
 
     public PersistenceException(String message) {
         super(message);
-        this.custommessage = message;
+        this.customMessage = message;
     }
 
     public PersistenceException(String message, Throwable cause) {
@@ -17,12 +17,12 @@ public class PersistenceException extends Exception {
         super(cause);
     }
 
-    public String getCustommessage() {
-        return custommessage;
+    public String getCustomMessage() {
+        return customMessage;
     }
 
-    public void setCustommessage(String custommessage) {
-        this.custommessage = custommessage;
+    public void setCustomMessage(String customMessage) {
+        this.customMessage = customMessage;
     }
 
 }

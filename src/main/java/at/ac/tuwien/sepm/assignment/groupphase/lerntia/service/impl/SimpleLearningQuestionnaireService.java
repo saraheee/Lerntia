@@ -41,7 +41,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
             iLearningQuestionnaireDAO.delete(learningQuestionnaire);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
             return iLearningQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.select(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.deselect(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
