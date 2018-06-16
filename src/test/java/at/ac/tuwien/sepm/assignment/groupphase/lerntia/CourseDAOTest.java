@@ -58,7 +58,7 @@ public class CourseDAOTest {
             course.setMark("124.119");
             courseDAO.create(course);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class CourseDAOTest {
             tgi.setMark(null);
             courseDAO.create(tgi);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class CourseDAOTest {
 
 
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 
@@ -111,7 +111,7 @@ public class CourseDAOTest {
             tgidelete.setId(tgi.getId());
             courseDAO.delete(tgidelete);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 
@@ -126,7 +126,7 @@ public class CourseDAOTest {
             tgi.setId(null);
             courseDAO.delete(tgi);
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 

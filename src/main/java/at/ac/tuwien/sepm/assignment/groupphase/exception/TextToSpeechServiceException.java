@@ -3,19 +3,19 @@ package at.ac.tuwien.sepm.assignment.groupphase.exception;
 
 public class TextToSpeechServiceException extends ServiceException {
 
-    private String custommessage;
+    private String customMessage;
 
     public TextToSpeechServiceException(String message) {
         super(message);
-        this.custommessage = message;
+        this.customMessage = message;
     }
 
-    public String getCustommessage() {
-        return custommessage;
+    public String getCustomMessage() {
+        return customMessage;
     }
 
-    public void setCustommessage(String custommessage) {
-        this.custommessage = custommessage;
+    public void setCustomMessage(String customMessage) {
+        this.customMessage = customMessage;
     }
 
 }

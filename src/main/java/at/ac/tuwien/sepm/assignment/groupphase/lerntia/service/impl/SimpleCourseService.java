@@ -34,7 +34,7 @@ public class SimpleCourseService implements ICourseService {
             LOG.info("New course created: {}", course);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class SimpleCourseService implements ICourseService {
             LOG.info("Course successfully updated.");
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class SimpleCourseService implements ICourseService {
             LOG.info("Course successfully deleted.");
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class SimpleCourseService implements ICourseService {
             courses = courseDAO.readAll();
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
 
         if (courses.isEmpty()) {

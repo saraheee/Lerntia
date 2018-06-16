@@ -81,7 +81,7 @@ public class CreateCourseController {
 
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "LVA erstellen fehlgeschlagen", "Fehler",
-                e.getCustommessage());
+                e.getCustomMessage());
         }
     }
 }

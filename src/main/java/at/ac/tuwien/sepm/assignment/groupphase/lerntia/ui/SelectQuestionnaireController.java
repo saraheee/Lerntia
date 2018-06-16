@@ -11,17 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Controller
 public class SelectQuestionnaireController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
     private final IQuestionnaireService iQuestionnaireService;
@@ -58,8 +53,8 @@ public class SelectQuestionnaireController {
                 "Error", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
         }
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
-            cb_questionnaire.getItems().add(learningQuestionnaireList.get(i).getName());
+        for (LearningQuestionnaire aLearningQuestionnaireList : learningQuestionnaireList) {
+            cb_questionnaire.getItems().add(aLearningQuestionnaireList.getName());
         }
 
         cb_questionnaire.getSelectionModel().selectFirst();
