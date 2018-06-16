@@ -34,6 +34,16 @@ public class MenuBarController implements Runnable {
     private MenuItem examToLearnButton;
     @FXML
     private MenuItem learnToExamButton;
+    @FXML
+    private MenuItem administrateQuestionnaireButton;
+    @FXML
+    private MenuItem selectQuestionnaireButton;
+    @FXML
+    private MenuItem createLectureButton;
+    @FXML
+    private MenuItem csvImportButton;
+    @FXML
+    private MenuItem csvExportButton;
 
     @Autowired
     MenuBarController(
@@ -88,6 +98,11 @@ public class MenuBarController implements Runnable {
             selectExamController.showSelectExamWindow();
             examToLearnButton.setDisable(false);
             learnToExamButton.setDisable(true);
+            administrateQuestionnaireButton.setDisable(true);
+            selectQuestionnaireButton.setDisable(true);
+            createLectureButton.setDisable(true);
+            csvImportButton.setDisable(true);
+            csvExportButton.setDisable(true);
 
             selectExamController.setSelectingCanceled(false);
             editExamController.setEditingCanceled(false);
@@ -112,6 +127,11 @@ public class MenuBarController implements Runnable {
                 if (selectExamController.getSelectingCanceled() || editExamController.getEditingCanceled()) {
                     examToLearnButton.setDisable(true);
                     learnToExamButton.setDisable(false);
+                    administrateQuestionnaireButton.setDisable(false);
+                    selectQuestionnaireButton.setDisable(false);
+                    createLectureButton.setDisable(false);
+                    csvImportButton.setDisable(false);
+                    csvExportButton.setDisable(false);
                     LOG.debug("Exam canceled!");
                     return;
                 }
@@ -129,8 +149,14 @@ public class MenuBarController implements Runnable {
             "Alle Fragen und Antworten werden zurückgesetzt!");
 
         if (clicked) {
-            learnToExamButton.setDisable(false);
             examToLearnButton.setDisable(true);
+            learnToExamButton.setDisable(false);
+            administrateQuestionnaireButton.setDisable(false);
+            selectQuestionnaireButton.setDisable(false);
+            createLectureButton.setDisable(false);
+            csvImportButton.setDisable(false);
+            csvExportButton.setDisable(false);
+
             lerntiaMainController.setExamMode(false);
             lerntiaMainController.switchToLearnMode();
             lerntiaMainController.getAndShowTheFirstQuestion();
