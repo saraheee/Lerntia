@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +35,32 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private final SimpleUserService simpleUserService;
     private final SimpleQuestionService questionService;
 
+    private PdfPCell cell_checked;
+    private PdfPCell cell_box;
+
+    private Font fontTitle;
+    private Font fontExamName;
+    private Font fontExamDate;
+    private Font fontStudentInfo;
+
     public ExamResultsWriterDAO(
         SimpleQuestionService questionService,
         SimpleUserService simpleUserService
-    ) {
+    ) throws PersistenceException {
         this.questionService = questionService;
         this.simpleUserService = simpleUserService;
+
+        // images are used to show if an answer has been selected or not.
+        // these two images are loaded here and placed in a cell.
+        // later these cells are added to the table of answers.
+
+        this.cell_checked = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"));
+        this.cell_box = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"));
+
+        this.fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
+        this.fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        this.fontExamDate = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        this.fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
     }
 
     @Override
@@ -50,53 +71,41 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         LOG.info("Create new Document for new report");
         Document document = new Document();
         try {
-            //PdfWriter.getInstance(document, new FileOutputStream("exam_report.pdf"));
             PdfWriter.getInstance(document, new FileOutputStream(path));
         } catch (DocumentException | FileNotFoundException e) {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         }
         document.open();
 
-        // images are used to show if an answer has been selected or not.
-        // these two images are loaded here and placed in a cell.
-        // later these cells are added to the table of answers.
-
-        Image img_checked;
-        try {
-            img_checked = Image.getInstance(Resource.class.getResource("/icons/exam_report_box_checked.png"));
-            img_checked.scaleAbsolute((float) 12.0, (float) 12.0);
-        } catch (BadElementException | IOException e) {
-            throw new PersistenceException("Die Ressourcen für die PDF Datei konnten nicht geladen werden.");
-        }
-
-        PdfPCell cell_checked = new PdfPCell(img_checked, false);
-        cell_checked.setFixedHeight(12);
-        cell_checked.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell_checked.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-        Image img_box;
-        try {
-            img_box = Image.getInstance(Resource.class.getResource("/icons/exam_report_box.png"));
-            img_box.scaleAbsolute((float) 12.0, (float) 12.0);
-        } catch (BadElementException | IOException e) {
-            throw new PersistenceException("Die Ressourcen für die PDF Datei konnten nicht geladen werden.");
-        }
-
-        PdfPCell cell_box = new PdfPCell(img_box, false);
-        cell_box.setFixedHeight(12);
-        cell_box.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell_box.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
         // prepare the fonts used in the document
-
-        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
-        Font fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
-        Font fontExamDate = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
-        Font fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
 
         LOG.info("Prepare report");
 
         // at first we create the header with exam name, student info and so on
+
+        try {
+            Paragraph headerContainerParagraph = getHeader(name);
+            document.add(headerContainerParagraph);
+        } catch (DocumentException e) {
+            throw new PersistenceException("Der Header konnte nicht in das PDF integriert werden.");
+        }
+
+        // Each question is added to a table as well as an indicator if the answer was correct or not
+
+        for (var i = 0; i < questions.size(); i++){
+
+            try {
+                Paragraph container = getQuestionParagraph(questions.get(i), name, i);
+                document.add(container);
+            } catch (DocumentException e) {
+                throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden.");
+            }
+        }
+
+        document.close();
+    }
+
+    public Paragraph getHeader(String name) throws PersistenceException{
 
         // the container is used to ensure that the text is not split over two pages
         // highly unlikely, but just to be sure.
@@ -130,144 +139,167 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(studentInfoParagraph);
 
+        return headerContainerParagraph;
+    }
+
+    public Paragraph getQuestionParagraph(Question question, String name, int i) throws PersistenceException {
+
+        // at first the question text is added to the document.
+        // afterwards a table is created where each row holds an answer and the
+        // expected state as well as the actual state of the checkbox.
+
+        // the container is used to hold the question as well as the table with the answers.
+        // this is done to ensure, that the question is on a different page than the answers.
+
+        Paragraph container = new Paragraph();
+
+        Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
+        paragraphQuestionNumber.setSpacingBefore(15);
+
+        Paragraph paragraphQuestionText = new Paragraph(question.getQuestionText());
+        paragraphQuestionText.setSpacingAfter(5);
+
+        container.add(paragraphQuestionNumber);
+        container.add(paragraphQuestionText);
+
+        // add an image if the question has one
+
+        if (!question.getPicture().equals("")) {
+
+            PdfPCell cellImgQuestion = getImageCellQuestions(name, question.getPicture());
+
+            // there have been problems with adding the image directly.
+            // as a workaround a table is created with a single cell that holds the image.
+
+            PdfPTable imgTable = new PdfPTable(1);
+
+            imgTable.setWidthPercentage(100);
+
+            imgTable.addCell(cellImgQuestion);
+            imgTable.setSpacingAfter(5);
+
+            container.add(imgTable);
+        }
+
+        container.setSpacingAfter(15);
+        container.setKeepTogether(true);
+
+        // a nesting table is needed to ensure that a table is not split over two pages.
+
+        PdfPTable nesting = new PdfPTable(1);
+        nesting.setWidthPercentage(100);
+
+        PdfPTable answerTable = getAnswerTable(question);
+
+        PdfPCell cell = new PdfPCell(answerTable);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        nesting.addCell(cell);
+
+        container.add(nesting);
+
+        return container;
+
+    }
+
+    public PdfPTable getAnswerTable(Question question) throws PersistenceException{
+
+        // create a table with 4 columns and stretch it to 100% of the page width
+
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(100);
+
         try {
-            document.add(headerContainerParagraph);
+            table.setWidths(new float[]{8, (float) 1.25, (float) 1.5, (float) 1});
         } catch (DocumentException e) {
-            throw new PersistenceException("Der Header konnte nicht in das PDF integriert werden.");
+            throw new PersistenceException("Eine Tabelle konnte nicht für das PDF formatiert werden.");
         }
 
-        // Each question is added to a table as well as an indicator if the answer was correct or not
+        table.addCell("Antworten");
+        table.addCell("Erwartet");
+        table.addCell("Ausgewählt");
+        table.addCell("Richtig");
 
-        for (var i = 0; i < questions.size(); i++){
+        ArrayList<String> allAnswers = questionService.getAllAnswers(question);
 
-            // at first the question text is added to the document.
-            // afterwards a table is created where each row holds an answer and the
-            // expected state as well as the actual state of the checkbox.
+        for (int j = 0; j < allAnswers.size(); j++) {
 
-            // the container is used to hold the question as well as the table with the answers.
-            // this is done to ensure, that the question is on a different page than the answers.
+            table.addCell(allAnswers.get(j));
 
-            Paragraph container = new Paragraph();
+            String correctAnswers = question.getCorrectAnswers();
+            String checkedAnswers = question.getCheckedAnswers();
 
-            Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
-            paragraphQuestionNumber.setSpacingBefore(15);
+            // we have to start with 1 because the answers also start with 1
+            String indexStr = Integer.toString(j + 1);
 
-            Paragraph paragraphQuestionText = new Paragraph(questions.get(i).getQuestionText());
-            paragraphQuestionText.setSpacingAfter(5);
+            boolean answerWasCorrect = correctAnswers.contains(indexStr);
 
-            container.add(paragraphQuestionNumber);
-            container.add(paragraphQuestionText);
+            boolean answerWasChecked;
 
-            // add an image if the question has one
-
-            if (!questions.get(i).getPicture().equals("")) {
-
-                Image imgQuestion;
-
-                String imagePath =
-                    System.getProperty("user.dir") + File.separator + "img" + File.separator +
-                        name + File.separator +
-                        questions.get(i).getPicture();
-
-                try {
-                    imgQuestion = Image.getInstance(imagePath);
-                } catch (BadElementException | IOException e) {
-                    throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
-                }
-
-                // there have been problems with adding the image directly.
-                // as a workaround a table is created with a single cell that holds the image.
-
-                PdfPTable imgTable = new PdfPTable(1);
-
-                imgTable.setWidthPercentage(100);
-
-                PdfPCell cellImgQuestion = new PdfPCell(imgQuestion, false);
-
-                // very wide images get a smaller height. if this is not done, the image would
-                // be too big and reach out of the bounds of the pdf file.
-
-                if (imgQuestion.getWidth() > (imgQuestion.getHeight() * 2)) {
-                    cellImgQuestion.setFixedHeight(80);
-                } else {
-                    cellImgQuestion.setFixedHeight(180);
-                }
-
-                cellImgQuestion.setHorizontalAlignment(Element.ALIGN_LEFT);
-                cellImgQuestion.setBorder(PdfPCell.NO_BORDER);
-
-                imgTable.addCell(cellImgQuestion);
-                imgTable.setSpacingAfter(5);
-
-                container.add(imgTable);
-            }
-
-            container.setSpacingAfter(15);
-            container.setKeepTogether(true);
-
-            // a nesting table is needed to ensure that a table is not split over two pages.
-
-            PdfPTable nesting = new PdfPTable(1);
-            nesting.setWidthPercentage(100);
-
-            // create a table with 4 columns and stretch it to 100% of the page width
-
-            PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(100);
+            // skipped questions are treated as false
 
             try {
-                table.setWidths(new float[]{8, (float) 1.25, (float) 1.5, (float) 1});
-            } catch (DocumentException e) {
-                throw new PersistenceException("Eine Tabelle konnte nicht für das PDF formatiert werden.");
+                answerWasChecked = checkedAnswers.contains(indexStr);
+            } catch (NullPointerException e) {
+                answerWasChecked = false;
             }
 
-            table.addCell("Antworten");
-            table.addCell("Erwartet");
-            table.addCell("Ausgewählt");
-            table.addCell("Richtig");
-
-            ArrayList<String> allAnswers = questionService.getAllAnswers(questions.get(i));
-
-            for (int j = 0; j < allAnswers.size(); j++) {
-
-                table.addCell(allAnswers.get(j));
-
-                String correctAnswers = questions.get(i).getCorrectAnswers();
-                String checkedAnswers = questions.get(i).getCheckedAnswers();
-
-                // we have to start with 1 because the answers also start with 1
-                String indexStr = Integer.toString(j + 1);
-
-                boolean answerWasCorrect = correctAnswers.contains(indexStr);
-
-                boolean answerWasChecked;
-
-                // skipped questions are treated as false
-
-                try {
-                    answerWasChecked = checkedAnswers.contains(indexStr);
-                } catch (NullPointerException e) {
-                    answerWasChecked = false;
-                }
-
-                table.addCell((answerWasCorrect) ? cell_checked : cell_box);
-                table.addCell((answerWasChecked) ? cell_checked : cell_box);
-                table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
-            }
-
-            PdfPCell cell = new PdfPCell(table);
-            cell.setBorder(PdfPCell.NO_BORDER);
-            nesting.addCell(cell);
-
-            container.add(nesting);
-
-            try {
-                document.add(container);
-            } catch (DocumentException e) {
-                throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden.");
-            }
+            table.addCell((answerWasCorrect) ? cell_checked : cell_box);
+            table.addCell((answerWasChecked) ? cell_checked : cell_box);
+            table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
         }
 
-        document.close();
+        return table;
+    }
+
+    public PdfPCell getImageCellBox(URL path) throws PersistenceException{
+
+        Image img;
+        try {
+            img = Image.getInstance(path);
+            img.scaleAbsolute((float) 12.0, (float) 12.0);
+        } catch (BadElementException | IOException e) {
+            throw new PersistenceException("Die Ressourcen für die PDF Datei konnten nicht geladen werden.");
+        }
+
+        PdfPCell cell = new PdfPCell(img, false);
+
+        cell.setFixedHeight(12);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        return cell;
+    }
+
+    public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException{
+
+        Image img;
+
+        String imagePath =
+            System.getProperty("user.dir") + File.separator + "img" + File.separator +
+                name + File.separator +
+                picture;
+
+        try {
+            img = Image.getInstance(imagePath);
+        } catch (BadElementException | IOException e) {
+            throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
+        }
+
+        PdfPCell cell = new PdfPCell(img, false);
+
+        // very wide images get a smaller height. if this is not done, the image would
+        // be too big and reach out of the bounds of the pdf file.
+
+        if (img.getWidth() > (img.getHeight() * 2)) {
+            cell.setFixedHeight(80);
+        } else {
+            cell.setFixedHeight(180);
+        }
+
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(PdfPCell.NO_BORDER);
+
+        return cell;
     }
 }
+
