@@ -206,8 +206,4 @@ public class CourseServiceTest {
         courseService.validate(course);
     }
 
-    @After
-    public void wrapUp() {
-
-    }
 }

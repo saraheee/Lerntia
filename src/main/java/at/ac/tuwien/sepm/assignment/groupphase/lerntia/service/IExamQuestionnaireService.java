@@ -15,30 +15,6 @@ public interface IExamQuestionnaireService {
     void create(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
     /**
-     * Update an existing ExamQuestionnaire with new Parameters
-     *
-     * @param examQuestionnaire the ExamQuestionnaire in question with the new or same parameters.
-     * @throws ServiceException if the method can't update the ExamQuestionnaire
-     */
-    void update(ExamQuestionnaire examQuestionnaire) throws ServiceException;
-
-    /**
-     * Search for ExamQuestionnaire with given search parameters
-     *
-     * @param searchParameters all or some search parameters of the ExamQuestionnaire
-     * @throws ServiceException if the method can't render
-     */
-    void search(ExamQuestionnaire searchParameters) throws ServiceException;
-
-    /**
-     * Delete ExamQuestionnaire
-     *
-     * @param examQuestionnaire ExamQuestionnaire in question that has to be deleted
-     * @throws ServiceException if the method can't delete the ExamQuestionnaire
-     */
-    void delete(ExamQuestionnaire examQuestionnaire) throws ServiceException;
-
-    /**
      * Read all ExamQuestionnaires
      *
      * @return list of all ExamQuestionnaires

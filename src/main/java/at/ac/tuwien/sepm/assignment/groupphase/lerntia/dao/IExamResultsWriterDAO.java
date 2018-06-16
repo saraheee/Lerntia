@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -55,7 +54,7 @@ public interface IExamResultsWriterDAO {
      * Get cells containing an image used to display the state of an answer
      *
      * @param path the path where the image can be found
-     * @return the cell with the iamge
+     * @return the cell with the image
      * @throws PersistenceException if the cell cannot be created
      * */
     PdfPCell getImageCellBox( URL path ) throws PersistenceException;
@@ -65,7 +64,7 @@ public interface IExamResultsWriterDAO {
      *
      * @param name the name of the exam
      * @param picture the name of the picture
-     * @return the cell with the iamge
+     * @return the cell with the image
      * @throws PersistenceException if the cell cannot be created
      * */
     PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException;

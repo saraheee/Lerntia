@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,12 +24,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Map<Long, Question> questionMap;
     private boolean learnAlgorithm;
-    private boolean learningMode = true;
     private boolean showOnlyWrongQuestions = false;
-    private List<LearningQuestionnaire> allLQs;
-    private LearningQuestionnaire currentLQ;
-    private List<ExamQuestionnaire> allEQs;
-    private List<QuestionLearnAlgorithm> checker;
     private ExamQuestionnaire currentEQ;
     private List<QuestionnaireQuestion> questionnaireQuestionsList;
     private List<Question> questionList;
@@ -37,17 +33,11 @@ public class MainLerntiaService implements IMainLerntiaService {
     private int algorithmListCounter;
     private int currentAlgorithmQuestionIndex;
     private int currentWrongQuestionIndex;
-    private int wrongQuestionListCounter;
     private Question currentQuestion;
     private int listCounter;
     private int currentQuestionIndex;
-    private List<QuestionLearnAlgorithm> questionLearnAlgorithmList;
     private boolean examMode;
 
-    private ICourseService courseService;
-    private IUserService userService;
-    private IQuestionnaireService questionnaireService;
-    private IExamQuestionnaireService examQuestionnaireService;
     private ILearningQuestionnaireService learningQuestionnaireService;
     private IQuestionService questionService;
     private IQuestionnaireQuestionService questionnaireQuestionService;
@@ -56,14 +46,9 @@ public class MainLerntiaService implements IMainLerntiaService {
     private AlertController alertController;
 
     @Autowired
-    public MainLerntiaService(ICourseService courseService, IUserService userService, IQuestionnaireService questionnaireService,
-                              IExamQuestionnaireService examQuestionnaireService, ILearningQuestionnaireService learningQuestionnaireService,
-                              IQuestionService questionService, IQuestionnaireQuestionService questionnaireQuestionService,
-                              ILearnAlgorithmService learnAlgorithmService, LearnAlgorithmController learnAlgorithmController, AlertController alertController) {
-        this.courseService = courseService;
-        this.userService = userService;
-        this.questionnaireService = questionnaireService;
-        this.examQuestionnaireService = examQuestionnaireService;
+    public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
+                              IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService,
+                              LearnAlgorithmController learnAlgorithmController, AlertController alertController) {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
@@ -95,7 +80,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             questionnaireQuestionsList = new ArrayList<>();
             questionList = new ArrayList<>();
             List<Question> searchParameters = new ArrayList<>();
-            Question question;
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
             questionnaireQuestion.setQid(eQ.getId());
             questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
@@ -104,7 +88,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             LOG.info("All Exam Questionnaire Questions info found.");
             LOG.info("Send required question search parameters to retrieve");
             questionList = questionService.search(searchParameters);
-            for (Question q : questionList) {
+            for (Question ignored : questionList) {
                 listCounter++;
             }
             currentQuestionIndex = -1;
@@ -153,11 +137,9 @@ public class MainLerntiaService implements IMainLerntiaService {
         listCounter = 0;
         algorithmListCounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
-        questionLearnAlgorithmList = new ArrayList<>();
+        List<QuestionLearnAlgorithm> questionLearnAlgorithmList = new ArrayList<>();
         questionList = new ArrayList<>();
         List<Question> searchParameters = new ArrayList<>();
-        Question question;
-        QuestionLearnAlgorithm questionLearnAlgorithm;
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(lQ.getId());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
@@ -166,7 +148,6 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("All questions from the selected LearningQuestionnaire found.");
         LOG.info("Search for questions in the Database.");
         questionList = questionService.search(searchParameters);
-        checker = questionLearnAlgorithmList;
         algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
         for (Question q : questionList) {
             listCounter++;
@@ -301,11 +282,10 @@ public class MainLerntiaService implements IMainLerntiaService {
         if (wrongQuestions == null) {
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
-            wrongQuestionListCounter = 0;
         } else {
             resetWrongQuestionList();
         }
-        currentLQ = learningQuestionnaireService.getSelected();
+        LearningQuestionnaire currentLQ = learningQuestionnaireService.getSelected();
         if (currentEQ != null) {
             currentEQ = null;
         }
@@ -344,7 +324,6 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 wrongQuestions = new ArrayList<>();
                 currentWrongQuestionIndex = 0;
-                wrongQuestionListCounter = 0;
                 return currentQuestion;
             } else if (showOnlyWrongQuestions && wrongQuestions.size() > 0) {
                 currentQuestion = wrongQuestions.get(0);
@@ -358,7 +337,6 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentQuestionIndex = 0;
                 wrongQuestions = new ArrayList<>();
                 currentWrongQuestionIndex = 0;
-                wrongQuestionListCounter = 0;
                 return currentQuestion;
             }
         } catch (IndexOutOfBoundsException e) {
@@ -456,7 +434,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
-            wrongQuestionListCounter = 0;
             showOnlyWrongQuestions = false;
             alertController.setOnlyWrongQuestions(false);
             return currentQuestion;
@@ -466,7 +443,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             currentQuestionIndex = 0;
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
-            wrongQuestionListCounter = 0;
             showOnlyWrongQuestions = false;
             alertController.setOnlyWrongQuestions(false);
             return currentQuestion;
@@ -479,16 +455,15 @@ public class MainLerntiaService implements IMainLerntiaService {
         showOnlyWrongQuestions = false;
         wrongQuestions.clear();
         currentWrongQuestionIndex = 0;
-        wrongQuestionListCounter = 0;
     }
 
 
     @Override
     public int getCorrectAnswers() {
         int count = 0;
-        for (int i = 0; i < questionList.size(); i++) {
-            String givenAnswers = questionList.get(i).getCheckedAnswers();
-            String correctAnswers = questionList.get(i).getCorrectAnswers();
+        for (Question aQuestionList : questionList) {
+            String givenAnswers = aQuestionList.getCheckedAnswers();
+            String correctAnswers = aQuestionList.getCorrectAnswers();
             if (givenAnswers.equals(correctAnswers)) {
                 count++;
             }
@@ -500,9 +475,9 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public int getWrongAnswers() {
         int count = 0;
-        for (int i = 0; i < questionList.size(); i++) {
-            String givenAnswers = questionList.get(i).getCheckedAnswers();
-            String correctAnswers = questionList.get(i).getCorrectAnswers();
+        for (Question aQuestionList : questionList) {
+            String givenAnswers = aQuestionList.getCheckedAnswers();
+            String correctAnswers = aQuestionList.getCorrectAnswers();
             if (!givenAnswers.equals(correctAnswers)) {
                 count++;
             }
@@ -515,8 +490,8 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public int getIgnoredAnswers() {
         int count = 0;
-        for (int i = 0; i < questionList.size(); i++) {
-            String givenAnswers = questionList.get(i).getCheckedAnswers();
+        for (Question aQuestionList : questionList) {
+            String givenAnswers = aQuestionList.getCheckedAnswers();
             if (givenAnswers.equals("")) {
                 count++;
             }
@@ -534,8 +509,8 @@ public class MainLerntiaService implements IMainLerntiaService {
         }
         double percent = base != 0 ? (share / base) * 100.00 : 0;
         LOG.info("Get Percentage of correctly answered questions");
-        int temp = (int)(percent * Math.pow(10 , 2));
-        return ((double)temp)/Math.pow(10 , 2);
+        int temp = (int) (percent * Math.pow(10, 2));
+        return ((double) temp) / Math.pow(10, 2);
     }
 
 }

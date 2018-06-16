@@ -62,16 +62,6 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     }
 
     @Override
-    public void update(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
-    }
-
-    @Override
-    public void search(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
-    }
-
-    @Override
     public void delete(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }

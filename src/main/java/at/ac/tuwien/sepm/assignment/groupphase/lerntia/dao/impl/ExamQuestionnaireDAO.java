@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
     @Autowired
     public ExamQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         this.questionnaireDAO = questionnaireDAO;
-        if(jdbcConnectionManager.isTestConnection()) {
+        if (jdbcConnectionManager.isTestConnection()) {
             connection = jdbcConnectionManager.getTestConnection();
             LOG.info("Test database connection for ExamQuestionnaireDAO retrieved.");
         } else {
@@ -52,21 +53,6 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
         } catch (SQLException e) {
             throw new PersistenceException("ExamQuestionnaireDAO CREATE error: ExamQuestionnaire couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
         }
-    }
-
-    @Override
-    public void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
-    }
-
-    @Override
-    public void search(ExamQuestionnaire searchParameters) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
-    }
-
-    @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
     }
 
     @Override
