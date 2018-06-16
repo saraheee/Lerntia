@@ -258,7 +258,7 @@ public class QuestionServiceTest {
 
     // answer is marked as correct with index 0
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void validateCorrectAnswerWithIndexZero() throws ServiceException {
         Question q = new Question();
         q.setQuestionText("asdf");
@@ -274,7 +274,7 @@ public class QuestionServiceTest {
 
     // answer is marked as correct with index higher than 5
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void validateCorrectAnswerWithIndexHigherThanFive() throws ServiceException {
         Question q = new Question();
         q.setQuestionText("asdf");
