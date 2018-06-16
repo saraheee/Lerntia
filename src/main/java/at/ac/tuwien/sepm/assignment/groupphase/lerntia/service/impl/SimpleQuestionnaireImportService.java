@@ -43,17 +43,17 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         this.simpleQuestionnaireQuestionService = simpleQuestionnaireQuestionService;
     }
 
-    public void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException {
+    public void importQuestionnaire(ImportQuestionnaire importQuestionnaire) throws ServiceException {
 
-        String pathStr = file.getAbsolutePath();
+        String pathStr = importQuestionnaire.getFile().getAbsolutePath();
 
         // TODO - fix duplicate code
 
-        if (isExam) {
+        if (importQuestionnaire.getIsExam()) {
             List<ExamQuestionnaire> questionnaires = simpleExamQuestionnaireService.readAll();
 
             for (ExamQuestionnaire questionnaire : questionnaires) {
-                if (name.equals(questionnaire.getName())) {
+                if (importQuestionnaire.getName().equals(questionnaire.getName())) {
                     throw new ServiceException("Dieser Name existiert schon!");
                 }
             }
@@ -62,7 +62,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             List<LearningQuestionnaire> questionnaires = simpleLearningQuestionnaireService.readAll();
 
             for (LearningQuestionnaire questionnaire : questionnaires) {
-                if (name.equals(questionnaire.getName())) {
+                if (importQuestionnaire.getName().equals(questionnaire.getName())) {
                     throw new ServiceException("Dieser Name existiert schon!");
                 }
             }
@@ -103,7 +103,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             try {
                 if (!lineParts[7].equals("")) {
                     picture = lineParts[7];
-                    String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + name + File.separator + picture;
+                    String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + importQuestionnaire.getName() + File.separator + picture;
                     File f = new File(path);
                     if (!f.exists()) {
                         throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
@@ -144,12 +144,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         Long questionnaireID;
 
-        if (isExam) {
-            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(course.getId(), (long) 0, false, name, false, LocalDate.now());
+        if (importQuestionnaire.getIsExam()) {
+            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire(importQuestionnaire.getCourse().getId(), (long) 0, false, importQuestionnaire.getName(), false, LocalDate.now());
             simpleExamQuestionnaireService.create(examQuestionnaire);
             questionnaireID = examQuestionnaire.getId();
         } else {
-            LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(course.getId(), (long) 0, false, name, false);
+            LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire(importQuestionnaire.getCourse().getId(), (long) 0, false, importQuestionnaire.getName(), false);
             simpleLearningQuestionnaireService.create(learningQuestionnaire);
             questionnaireID = learningQuestionnaire.getId();
         }
