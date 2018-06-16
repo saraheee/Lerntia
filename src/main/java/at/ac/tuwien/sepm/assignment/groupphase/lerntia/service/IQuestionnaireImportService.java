@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +12,10 @@ public interface IQuestionnaireImportService {
     /**
      * import file
      *
-     * @param file a csv-file
-     * @param course the course where the questions should be added
-     * @param name the name of the questionnaire
+     * @param importQuestionnaire object with needed infos for importing
      * @throws ServiceException if an error occurred
      */
-    void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException;
+    void importQuestionnaire(ImportQuestionnaire importQuestionnaire) throws ServiceException;
 
     /**
      * copy given files in new directory

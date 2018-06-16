@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireImportService;
 import javafx.collections.FXCollections;
@@ -151,7 +152,8 @@ public class ImportFileController {
                 int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
                 Course selectedCourse = courses.get(cb_courseIndex);
 
-                qservice.importQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
+                ImportQuestionnaire iq = new ImportQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
+                qservice.importQuestionnaire(iq);
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert!");
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
