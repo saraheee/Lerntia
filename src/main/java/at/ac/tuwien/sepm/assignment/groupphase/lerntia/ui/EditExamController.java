@@ -80,12 +80,6 @@ public class EditExamController {
     @FXML
     private TableColumn<Question, String> questionColumn;
     @FXML
-    private TableColumn<Integer, Integer> columnList;
-    @FXML
-    private Button tableViewButton;
-    @FXML
-    private Button randomButton;
-    @FXML
     private Button resetButton;
     @FXML
     private Button removeQuestions;
@@ -407,7 +401,7 @@ public class EditExamController {
                 }
             }
 
-            ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
+            FXCollections.observableArrayList(currentQuestionList);
             resetButton.setDisable(false);
             addQuestions.setDisable(true);
             acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));
@@ -432,7 +426,7 @@ public class EditExamController {
                 }
             }
 
-            ObservableList<Question> newList = FXCollections.observableArrayList(currentQuestionList);
+            FXCollections.observableArrayList(currentQuestionList);
             resetButton.setDisable(false);
             removeQuestions.setDisable(true);
             acceptedTable.setItems(FXCollections.observableArrayList(acceptedQuestionList));

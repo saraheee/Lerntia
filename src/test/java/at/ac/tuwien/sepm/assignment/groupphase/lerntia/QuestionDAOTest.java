@@ -67,7 +67,7 @@ public class QuestionDAOTest {
             questionDAO.create(firstQuestion);
             Assert.assertEquals(Long.valueOf(refId+1), firstQuestion.getId());
         } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustommessage());
+            throw new PersistenceException(e.getCustomMessage());
         }
     }
 
