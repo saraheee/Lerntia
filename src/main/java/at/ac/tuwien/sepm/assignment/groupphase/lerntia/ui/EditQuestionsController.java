@@ -154,7 +154,7 @@ public class EditQuestionsController {
                 selectQuestionAdministrateController.refresh();
             } catch (ServiceException e) {
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
-                    "Die Bearbeitung ist fehlgeschlagen!", null);
+                    "Die Bearbeitung ist fehlgeschlagen!", e.getCustommessage());
             }
         } else {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
