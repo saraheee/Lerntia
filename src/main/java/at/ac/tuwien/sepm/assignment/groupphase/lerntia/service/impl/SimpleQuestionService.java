@@ -38,7 +38,7 @@ public class SimpleQuestionService implements IQuestionService {
             questionDAO.create(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -49,7 +49,7 @@ public class SimpleQuestionService implements IQuestionService {
             questionDAO.update(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class SimpleQuestionService implements IQuestionService {
             return questionDAO.search(questionList);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class SimpleQuestionService implements IQuestionService {
             questionDAO.delete(question);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class SimpleQuestionService implements IQuestionService {
             return questionDAO.get(id);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -136,7 +136,6 @@ public class SimpleQuestionService implements IQuestionService {
 
         // check for every possible answer check if text is present
         for (var i = 0; i < allAnswers.size(); i++){
-            LOG.debug("All answers: " + allAnswers);
             // count the number of answers that are present
             if (allAnswers.get(i) != null && !allAnswers.get(i).trim().equals("")) {
                 numberOfAnswersPresent++;
@@ -238,7 +237,7 @@ public class SimpleQuestionService implements IQuestionService {
                 return questionDAO.searchForQuestions(questionInput);
             } catch (PersistenceException e) {
                 LOG.warn("Persistence exception caught");
-                throw new ServiceException(e.getCustommessage());
+                throw new ServiceException(e.getCustomMessage());
             }
     }
 

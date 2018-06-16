@@ -148,7 +148,7 @@ public class SelectExamController {
     public void selectExamAndEdit(ActionEvent actionEvent) {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
-
+        lerntiaMainController.setExamName(selectedQuestionnaire.getName());
         editExamController.showSelectExamWindow(selectedQuestionnaire);
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();

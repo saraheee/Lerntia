@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class SimpleQuestionnaireService implements IQuestionnaireService {
     private final ILearningQuestionnaireService iLearningQuestionnaire;
     private final IExamQuestionnaireService iExamQuestionnaireService;
 
+    @Autowired
     public SimpleQuestionnaireService(
         ILearningQuestionnaireService iLearningQuestionnaire,
         IExamQuestionnaireService iExamQuestionnaireService

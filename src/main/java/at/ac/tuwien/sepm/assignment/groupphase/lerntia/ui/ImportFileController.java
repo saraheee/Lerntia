@@ -145,7 +145,6 @@ public class ImportFileController {
         }
         if (file != null) {
             try {
-                String course = cb_course.getSelectionModel().getSelectedItem();
 
                 int cb_courseIndex = cb_course.getSelectionModel().getSelectedIndex();
                 Course selectedCourse = courses.get(cb_courseIndex);
@@ -172,7 +171,7 @@ public class ImportFileController {
         try {
             coursedata = cservice.readAll();
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getCustommessage());
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getCustomMessage());
             return;
         }
 

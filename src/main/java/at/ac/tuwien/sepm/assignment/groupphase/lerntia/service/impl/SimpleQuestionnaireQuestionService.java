@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -19,6 +20,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
 
     private final IQuestionnaireQuestionDAO iQuestionnaireQuestionDAO;
 
+    @Autowired
     public SimpleQuestionnaireQuestionService(IQuestionnaireQuestionDAO iQuestionnaireQuestionDAO) {
         this.iQuestionnaireQuestionDAO = iQuestionnaireQuestionDAO;
     }
@@ -29,7 +31,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
             iQuestionnaireQuestionDAO.create(questionnaireQuestion);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -39,7 +41,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
             iQuestionnaireQuestionDAO.delete(questionnaireQuestion);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -49,7 +51,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
             iQuestionnaireQuestionDAO.update(questionnaireQuestion, newQid, newQuestionId);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -59,7 +61,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
             return iQuestionnaireQuestionDAO.readAll();
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -69,7 +71,7 @@ public class SimpleQuestionnaireQuestionService implements IQuestionnaireQuestio
             return iQuestionnaireQuestionDAO.search(searchParameters);
         } catch (PersistenceException e) {
             LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 }

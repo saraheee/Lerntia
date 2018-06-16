@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.maven.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -43,10 +44,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private Font fontExamDate;
     private Font fontStudentInfo;
 
-    public ExamResultsWriterDAO(
-        SimpleQuestionService questionService,
-        SimpleUserService simpleUserService
-    ) throws PersistenceException {
+    @Autowired
+    public ExamResultsWriterDAO(SimpleQuestionService questionService, SimpleUserService simpleUserService) throws PersistenceException {
         this.questionService = questionService;
         this.simpleUserService = simpleUserService;
 
@@ -275,9 +274,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         Image img;
 
         String imagePath =
-            System.getProperty("user.dir") + File.separator + "img" + File.separator +
-                name + File.separator +
-                picture;
+            System.getProperty("user.dir") + File.separator + "img" + File.separator + name + File.separator + picture;
 
         try {
             img = Image.getInstance(imagePath);
