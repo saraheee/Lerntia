@@ -88,14 +88,14 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
             // check if there are too many columns
             if (lineParts.length > 9) {
-                throw new ServiceException("Zu viele Spalten");
+                throw new ServiceException("Zu viele Spalten!");
             }
 
             // index 6 has the right answers. this is an integer
             try {
                 int rightAnswers = Integer.parseInt(lineParts[6]);
             } catch (NumberFormatException e) {
-                throw new ServiceException("Richtige Antwort fehlt");
+                throw new ServiceException("Richtige Antwort fehlt!");
             }
 
             // index 7 is the image (optional)
@@ -106,7 +106,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
                     String path = System.getProperty("user.dir") + File.separator + "img" + File.separator + importQuestionnaire.getName() + File.separator + picture;
                     File f = new File(path);
                     if (!f.exists()) {
-                        throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden");
+                        throw new ServiceException("Mindestens ein Bild aus csv-Datei wurde nicht gefunden!");
                     }
                 }
             } catch (IndexOutOfBoundsException e) {

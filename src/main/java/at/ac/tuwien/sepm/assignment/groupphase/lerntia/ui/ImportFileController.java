@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -103,7 +104,11 @@ public class ImportFileController {
         Stage stage = new Stage();
         file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            t_filename.setText(file.getName());
+            if (file.getName().length() > 20) {
+                t_filename.setText(file.getName().substring(0, 20) + "..");
+            } else {
+                t_filename.setText(file.getName());
+            }
         }
     }
 
@@ -122,7 +127,11 @@ public class ImportFileController {
         Stage stage = new Stage();
         directory = directoryChooser.showDialog(stage);
         if (directory != null) {
-            t_directoryname.setText(directory.getName());
+            if (directory.getName().length() > 20) {
+                t_directoryname.setText(directory.getName().substring(0, 20) + "..");
+            } else {
+                t_directoryname.setText(directory.getName());
+            }
         }
     }
 
