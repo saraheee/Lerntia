@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationExcept
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireExportDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
@@ -23,7 +24,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IQuestionnaireService iQuestionnaireService;
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final ILearningQuestionnaireService iLearningQuestionnaireService;
     private final IMainLerntiaService lerntiaService;
     private final IQuestionnaireExportDAO iQuestionnaireExportDAO;
 
@@ -31,10 +32,10 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     public SimpleQuestionnaireExportService(
         IMainLerntiaService lerntiaService,
         IQuestionnaireService iQuestionnaireService,
-        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        ILearningQuestionnaireService simpleLearningQuestionnaireService,
         IQuestionnaireExportDAO iQuestionnaireExportDAO) {
         this.iQuestionnaireService = iQuestionnaireService;
-        this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.iLearningQuestionnaireService = simpleLearningQuestionnaireService;
         this.lerntiaService = lerntiaService;
         this.iQuestionnaireExportDAO = iQuestionnaireExportDAO;
     }
@@ -42,7 +43,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     @Override
     public void exportSelectedQuestionnaire(LearningQuestionnaire questionnaire) throws ServiceException, ServiceValidationException {
         try {
-            iQuestionnaireExportDAO.exportQuestionnaire(questionnaire, getAllData(simpleLearningQuestionnaireService.getSelected()));
+            iQuestionnaireExportDAO.exportQuestionnaire(questionnaire, getAllData(iLearningQuestionnaireService.getSelected()));
         } catch (PersistenceException e) {
             throw new ServiceException("Failed to export file.");
 
@@ -58,7 +59,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
 
         //Select the Questionnaire which is Selected from the User
         LOG.info("Select the Questionnaire");
-        simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
+        iLearningQuestionnaireService.select(selectedLearningQuestionnaire);
         lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         lerntiaService.getFirstQuestion();
         return lerntiaService.getQuestionList();
@@ -67,7 +68,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     @Override
     public void overwriteFile(LearningQuestionnaire questionnaire) throws ServiceException, ServiceValidationException {
         try {
-            iQuestionnaireExportDAO.overwriteFile(questionnaire, getAllData(simpleLearningQuestionnaireService.getSelected()));
+            iQuestionnaireExportDAO.overwriteFile(questionnaire, getAllData(iLearningQuestionnaireService.getSelected()));
         } catch (PersistenceException e) {
             throw new ServiceException("Failed to export file.");
 

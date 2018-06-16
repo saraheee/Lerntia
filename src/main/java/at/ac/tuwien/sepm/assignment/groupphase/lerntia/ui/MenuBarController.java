@@ -95,10 +95,10 @@ public class MenuBarController implements Runnable {
             examEditThread.start();
 
         } catch (ControllerException e) {
-            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Prüfungsfragebögen",
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Prüfungsfragebögen",
                 "Keine Prüfungsfragebögen vorhanden",
-                "Es gibt noch keine Prüfungsfragenbögen. Bitte zuerst einen Fragebogen importieren\n" +
-                    "Hinweis: Beim Import nicht vergessen, die entsprechende Checkbox zu markieren!");
+                "Es gibt noch keine Prüfungsfragenbögen.\nBitte zuerst einen Fragebogen importieren!\n\n" +
+                    "Hinweis: Beim Importieren nicht vergessen, die entsprechende Checkbox zu markieren!");
         }
     }
 

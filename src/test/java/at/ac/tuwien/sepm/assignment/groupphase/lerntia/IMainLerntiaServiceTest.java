@@ -40,7 +40,7 @@ public class IMainLerntiaServiceTest {
         }
     }
 
-    @Test
+    @Test // TODO: remove this test after testing the class MainLerntiaService
     public void testSimpleLerntiaService() throws ServiceException {
         Assert.assertThat(42, is(42));
     }

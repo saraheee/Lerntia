@@ -122,10 +122,6 @@ public class AdministrateQuestionnaireController {
         stage.close();
     }
 
-    public LearningQuestionnaire getSelectedQuestionnaire() {
-        return this.selectedLearningQuestionnaire;
-    }
-
     /**
      * Opens the first window in the AdministrateQuestionnaire operation.
      * Opens a window in which the user is allowed to choose a Questionnaire.

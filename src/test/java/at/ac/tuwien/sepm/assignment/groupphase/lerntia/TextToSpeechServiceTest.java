@@ -6,19 +6,13 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.invoke.MethodHandles;
 
 
 public class TextToSpeechServiceTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ITextToSpeechService textToSpeechService;
 
     @Before
@@ -51,6 +45,12 @@ public class TextToSpeechServiceTest {
         speech.setQuestion("Eine weitere Frage?");
         speech.setAnswer1("Eine weitere Antwort!");
         speech.setAnswer2("Noch eine weitere Antwort!");
+        textToSpeechService.readQuestionAndAnswers(speech);
+    }
+
+    @Test
+    public void readQuestionAndAnswersWithAllAnswersShouldPersist() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        var speech = new Speech("frage", "a1", "a2", "a3", "a4", "a5", "voice");
         textToSpeechService.readQuestionAndAnswers(speech);
     }
 
@@ -205,9 +205,4 @@ public class TextToSpeechServiceTest {
         Assert.assertEquals(service.isValidText("  "), false);
     }
 
-
-    @After
-    public void wrapUp() {
-
-    }
 }

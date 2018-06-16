@@ -282,7 +282,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         try {
             img = Image.getInstance(imagePath);
         } catch (BadElementException | IOException e) {
-            throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden.");
+            throw new PersistenceException("Ein Bild konnte nicht für das PDF geladen werden: " + imagePath);
         }
 
         PdfPCell cell = new PdfPCell(img, false);

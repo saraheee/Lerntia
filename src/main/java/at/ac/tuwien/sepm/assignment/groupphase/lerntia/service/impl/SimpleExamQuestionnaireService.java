@@ -34,36 +34,6 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     }
 
     @Override
-    public void update(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.update(examQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
-        }
-    }
-
-    @Override
-    public void search(ExamQuestionnaire searchParameters) throws ServiceException {
-        try {
-            examQuestionnaireDAO.search(searchParameters);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
-        }
-    }
-
-    @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.delete(examQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustommessage());
-        }
-    }
-
-    @Override
     public List<ExamQuestionnaire> readAll() throws ServiceException {
         try {
             return examQuestionnaireDAO.readAll();

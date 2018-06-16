@@ -5,21 +5,12 @@ import java.time.LocalDate;
 public class ExamQuestionnaire extends Questionnaire {
     private LocalDate date; // date of creation
 
-    public ExamQuestionnaire() {}
+    public ExamQuestionnaire() {
+    }
 
     public ExamQuestionnaire(Long courseID, Long id, Boolean isDeleted, String name, boolean selected, LocalDate date) {
         super(courseID, id, name, selected, isDeleted);
         this.date = date;
-    }
-
-    @Override
-    public Boolean getSelected() {
-        return super.getSelected();
-    }
-
-    @Override
-    public void setSelected(Boolean selected) {
-        super.setSelected(selected);
     }
 
     public LocalDate getDate() {
@@ -44,7 +35,7 @@ public class ExamQuestionnaire extends Questionnaire {
     public String toString() {
         return "ExamQuestionnaire{" +
             "courseID='" + super.getCourseID() + '\'' +
-            ", id=" + super.getId()+
+            ", id=" + super.getId() +
             ", date=" + date +
             ", name=" + super.getName() +
             ", selected=" + super.getSelected() +

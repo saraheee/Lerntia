@@ -59,11 +59,6 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     }
 
     @Override
-    public void update(Questionnaire questionnaire) throws PersistenceException {
-        //method not yet implemented because feature regarding that method hasn't been started implementing yet
-    }
-
-    @Override
     public String getQuestionnaireName(Long id) throws PersistenceException {
         LOG.info("Prepare Statement to get Questionnaire Name from the Database.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIRE_GETNAME_STATEMENT)) {
@@ -99,12 +94,14 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     @Override
     public void deselect(Questionnaire questionnaire) throws PersistenceException {
         LOG.info("Prepare statement for learning questionnaire selection.");
-        try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_DESELECT_STATEMENT)) {
-            psUpdate.setLong(1, questionnaire.getId());
-            psUpdate.executeUpdate();
-            LOG.info("Learning questionnaire successfully deselected in Database.");
-        } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireDAO DESELECT error");
+        if(questionnaire != null) {
+            try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_DESELECT_STATEMENT)) {
+                psUpdate.setLong(1, questionnaire.getId());
+                psUpdate.executeUpdate();
+                LOG.info("Learning questionnaire successfully deselected in Database.");
+            } catch (SQLException e) {
+                throw new PersistenceException("QuestionnaireDAO DESELECT error");
+            }
         }
     }
 

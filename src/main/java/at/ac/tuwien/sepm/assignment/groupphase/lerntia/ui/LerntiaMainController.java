@@ -319,8 +319,8 @@ public class LerntiaMainController implements Runnable {
                 showColorsAndDisableAnswers(question.getCorrectAnswers());
             }
         } catch (NullPointerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
-                "Überprüfen ist nicht möglich da keine Frage angezeigt wurde.");
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
+                "Überprüfen ist nicht möglich da keine Frage vorhanden ist.");
         }
     }
 
