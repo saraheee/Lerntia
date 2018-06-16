@@ -50,7 +50,7 @@ public class SelectQuestionnaireController {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebögen lesen fehlgeschlagen",
-                "Error", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
+                "Fehler", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
         }
 
         for (LearningQuestionnaire aLearningQuestionnaireList : learningQuestionnaireList) {
@@ -101,7 +101,7 @@ public class SelectQuestionnaireController {
             learningQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen auswählen fehlgeschlagen",
-                "Error", "Der Fragebogen konnte nicht ausgewählt werden!");
+                "Fehler!", "Der Fragebogen konnte nicht ausgewählt werden!");
         }
 
         // show first question of new questionnaire
