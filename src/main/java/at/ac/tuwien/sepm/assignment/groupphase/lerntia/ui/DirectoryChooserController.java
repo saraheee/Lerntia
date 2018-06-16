@@ -33,11 +33,11 @@ public class DirectoryChooserController {
         try {
             filePath = fileChooser.showSaveDialog(stage).toString();
         } catch (NullPointerException e) {
-            throw new ControllerException("Keine Datei angegeben");
+            throw new ControllerException("Keine Datei angegeben!");
         }
 
         if (filePath == null) {
-            throw new ControllerException("Keine Datei angegeben");
+            throw new ControllerException("Keine Datei angegeben!");
         }
 
         return filePath;

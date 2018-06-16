@@ -659,16 +659,18 @@ public class LerntiaMainController implements Runnable {
             filePath = directoryChooserController.showFileSaveDirectoryChooser();
         } catch (ControllerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                "Error", e.getCustomMessage());
+                "Fehler", e.getCustomMessage());
         }
 
         try {
-            iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), filePath);
-            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
-                "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
+            if (filePath != null) {
+                iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), filePath);
+                alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
+                    "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
+            }
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                "Error", e.getCustomMessage());
+                "Fehler", e.getCustomMessage());
         }
     }
 
