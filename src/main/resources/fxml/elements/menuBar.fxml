@@ -6,35 +6,35 @@
          xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
          fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
     <Menu mnemonicParsing="false" text="Menü" onAction="#onMenuClicked">
-        <MenuItem mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
+        <MenuItem fx:id="administrateQuestionnaireButton" mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/edit2.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" onAction="#selectQuestionnaire" text="Fragebogen auswählen">
+        <MenuItem fx:id="selectQuestionnaireButton" mnemonicParsing="false" onAction="#selectQuestionnaire" text="Fragebogen auswählen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/select.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" onAction="#createCourse" text="LVA erstellen">
+        <MenuItem fx:id="createLectureButton" mnemonicParsing="false" onAction="#createCourse" text="LVA erstellen">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/create.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren">
+        <MenuItem fx:id="csvImportButton" mnemonicParsing="false" onAction="#importQuestions" text="Fragen von CSV importieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/csv-import.png"/>
                 </ImageView>
             </graphic>
         </MenuItem>
-        <MenuItem mnemonicParsing="false" onAction="#exportQuestions" text="Fragen nach CSV exportieren">
+        <MenuItem fx:id="csvExportButton" mnemonicParsing="false" onAction="#exportQuestions" text="Fragen nach CSV exportieren">
             <graphic>
                 <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@/icons/csv-export.png"/>
