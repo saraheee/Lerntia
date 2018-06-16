@@ -116,14 +116,14 @@ public class SimpleQuestionService implements IQuestionService {
         boolean error = false;
         StringBuilder message = new StringBuilder();
 
-        if (question.getQuestionText().equals("")){
+        if (question.getQuestionText().trim().equals("")){
             error = true;
-            message.append("The Question has no question text\n");
+            message.append("Ein Fragetext muss angegeben werden!\n");
         }
 
         if (question.getQuestionText().length() > maxLengthQuestion){
             error = true;
-            message.append("The Question is too long and cannot be displayed in the user interface\n");
+            message.append("Die Frage ist zu lang und kann daher nicht angezeigt werden!\n");
         }
 
         // -------------------------------------------------------------------------------------------------------------
@@ -138,14 +138,14 @@ public class SimpleQuestionService implements IQuestionService {
         for (var i = 0; i < allAnswers.size(); i++){
 
             // count the number of answers that are present
-            if ( ! allAnswers.get(i).equals("") ) {
+            if ( !allAnswers.get(i).trim().equals("") ) {
                 numberOfAnswersPresent++;
             }
         }
 
         if (numberOfAnswersPresent < 2) {
             error = true;
-            message.append("There have to be at least 2 answers present\n");
+            message.append("Es müssen mindestens 2 Antwortmöglichkeiten vorhanden sein!\n");
         }
 
         // answers not too long
@@ -154,7 +154,7 @@ public class SimpleQuestionService implements IQuestionService {
             // answer is not "" and longer than 200 chars
             if (( ! allAnswers.get(i).equals("") ) && ( allAnswers.get(i).length() > maxLengthAnswer )) {
                 error = true;
-                message.append("Answer ").append(i).append(" is too long and cannot be displayed in the user interface\n");
+                message.append("Antwort ").append(i).append(" ist zu lang und kann daher nicht angezeigt werden!\n");
             }
         }
 
@@ -168,7 +168,7 @@ public class SimpleQuestionService implements IQuestionService {
         //check if the correct answers can be parsed to an integer
         if(!isInteger(correctAnswers)) {
             error = true;
-            message.append("The Answers contain invalid characters.\n");
+            message.append("Die Antwortnummern beinhalten ungültige Zeichen!\n");
             throw new ServiceException(message.toString());
         }
 
@@ -181,14 +181,14 @@ public class SimpleQuestionService implements IQuestionService {
             // index is 0
             if (currentCorrectAnswerIndex == 0){
                 error = true;
-                message.append("The Answers are numbered starting with 1 and not 0\n");
+                message.append("Die Antwortnummern beginnen mit 1, nicht mit 0!\n");
             }
 
             // index is to high
             if (currentCorrectAnswerIndex > 5){
                 error = true;
                 // TODO - better error text
-                message.append("There can only be 5 correct answers. However a number with a higher index has been marked as correct\n");
+                message.append("Es kann nur bis zu 5 korrekte Antworten geben. Die Angabe einer größeren Antwortnummer, ist daher nicht möglich!\n");
             }
 
             // check if the corresponding answer does in fact exist
@@ -198,7 +198,7 @@ public class SimpleQuestionService implements IQuestionService {
             // access the ArrayList.
             if (allAnswers.get(currentCorrectAnswerIndex - 1).equals("")){
                 error = true;
-                message.append("A Answer marked as correct does not exist\n");
+                message.append("Eine Antwort, die als korrekt angegeben wurde, existiert nicht!\n");
             }
         }
 
@@ -216,12 +216,12 @@ public class SimpleQuestionService implements IQuestionService {
                 if (image.getHeight() < maxHeightPicture) {
                     error = true;
                     LOG.error("image has too small height");
-                    message.append("Das Bild muss mindestens 200x200 Pixel haben\n");
+                    message.append("Das Bild muss mindestens 200x200 Pixel haben!\n");
                 }
                 if (image.getWidth() < maxWidthPicture) {
                     error = true;
                     LOG.error("image has too small width");
-                    message.append("Das Bild muss mindestens 200x200 Pixel haben\n");
+                    message.append("Das Bild muss mindestens 200x200 Pixel haben!\n");
                 }
             }
         } catch (FileNotFoundException e) {
