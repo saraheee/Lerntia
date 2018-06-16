@@ -105,7 +105,7 @@ public class QuestionDAO implements IQuestionDAO {
     @Override
     public List<Question> search(List<Question> questionList) throws PersistenceException {
         try {
-            LOG.info("Prepare searchparameters for the Question search.");
+            LOG.info("Prepare search parameters for the Question search.");
             List<Question> searchResults = new ArrayList<>();
             Question questionParameter;
             Question foundQuestion;
@@ -137,7 +137,7 @@ public class QuestionDAO implements IQuestionDAO {
             LOG.info("All Questions matching the parameters found.");
             return searchResults;
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO SEARCH error: questions couldn't have been found. Check if the searchparameters are not null or/and if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO SEARCH error: questions couldn't have been found. Check if the search parameters are not null or/and if the connection to the Database is valid.");
         }
     }
 
@@ -213,7 +213,7 @@ public class QuestionDAO implements IQuestionDAO {
                     q.setOptionalFeedback(rs.getString(10));
                     results.add(q);
                 }
-                LOG.info("All questions matching the searchparameter found.");
+                LOG.info("All questions matching the search parameter found.");
             }
             return results;
         } catch (SQLException e) {

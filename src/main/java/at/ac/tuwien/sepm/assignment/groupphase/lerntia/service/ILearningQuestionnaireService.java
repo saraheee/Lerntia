@@ -15,22 +15,6 @@ public interface ILearningQuestionnaireService {
     void create(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
 
     /**
-     * Update an existing LearningQuestionnaire with new parameters
-     *
-     * @param learningQuestionnaire LearningQuestionnaire with updated values
-     * @throws ServiceException if the LearningQuestionnaire can't be updated
-     */
-    void update(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
-
-    /**
-     * Search for specific LearningQuestionnaire with specific parameters
-     *
-     * @param learningQuestionnaire LearningQuestionnaire with searchparameters
-     * @throws ServiceException if the method can't render or there is an error while searching
-     */
-    void search(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
-
-    /**
      * Delete LearningQuestionnaires
      *
      * @param learningQuestionnaire LearningQuestionnaire that needs to be deleted

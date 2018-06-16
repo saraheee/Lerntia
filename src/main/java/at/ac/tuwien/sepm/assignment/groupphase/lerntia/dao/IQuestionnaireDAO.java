@@ -15,14 +15,6 @@ public interface IQuestionnaireDAO {
     void create(Questionnaire questionnaire) throws PersistenceException;
 
     /**
-     * Update an existing Questionnaire in the Database
-     *
-     * @param questionnaire the questionnaire in question that needs to be updated in the Database
-     * @throws PersistenceException if the method can't update the Questionnaire
-     */
-    void update(Questionnaire questionnaire) throws PersistenceException;
-
-    /**
      * Select a Questionnaire from the Database using an id
      *
      * @param id the id for which a Questionnaire should be retrieved from the Database

@@ -16,30 +16,6 @@ public interface IExamQuestionnaireDAO {
     void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
 
     /**
-     * Update an existing ExamQuestionnaire with new Parameters and save those to the Database
-     *
-     * @param examQuestionnaire the ExamQuestionnaire in question with the new or same parameters.
-     * @throws PersistenceException if the method can't update the ExamQuestionnaire
-     */
-    void update(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
-
-    /**
-     * Search for ExamQuestionnaire with given searchParameters in the Database
-     *
-     * @param searchParameters all or some searchParameters of the ExamQuestionnaire
-     * @throws PersistenceException if the method can't render
-     */
-    void search(ExamQuestionnaire searchParameters) throws PersistenceException;
-
-    /**
-     * Delete ExamQuestionnaire from the Database
-     *
-     * @param examQuestionnaire ExamQuestionnaire in question that has to be deleted
-     * @throws PersistenceException if the method can't delete the ExamQuestionnaire from the Database
-     */
-    void delete(ExamQuestionnaire examQuestionnaire) throws PersistenceException;
-
-    /**
      * Read all ExamQuestionnaires from the Database
      *
      * @return list of all ExamQuestionnaires
