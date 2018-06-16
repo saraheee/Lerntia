@@ -131,7 +131,7 @@ public class CourseServiceTest {
 
     // mark missing
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void validateNoMark() throws ServiceException {
         Course course = new Course("", Semester.SS + "18", "asdf", false);
         courseService.validate(course);
@@ -139,7 +139,7 @@ public class CourseServiceTest {
 
     // name missing
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void validateNoName() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "18", "", false);
         courseService.validate(course);
@@ -147,7 +147,7 @@ public class CourseServiceTest {
 
     // semester format not correct
 
-    @Test(expected = ServiceException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void validateSemesterDoesntEndWithWOrS() throws ServiceException {
         Course course = new Course("asdf", "FF18", "asdf", false);
         courseService.validate(course);
