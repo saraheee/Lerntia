@@ -17,7 +17,7 @@
     <Label layoutX="28.0" layoutY="93.0" text="Name des Fragebogens:"/>
     <TextField fx:id="tf_questionnaire" layoutX="231.0" layoutY="88.0" prefHeight="26.0" prefWidth="215.0"/>
     <Text fx:id="t_filename" layoutX="28.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0"
-          text="Keine Datei ausgewählt"/>
+          text="Keine Datei ausgewählt" wrappingWidth="200"/>
     <Button layoutX="231.0" layoutY="138.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="26.0"
             prefWidth="215.0" text="csv auswählen.." pickOnBounds="false">
         <styleClass>
@@ -25,7 +25,7 @@
         </styleClass>
     </Button>
     <Text fx:id="t_directoryname" layoutX="28.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0"
-          text="Kein Ordner ausgewählt"/>
+          text="Kein Ordner ausgewählt" wrappingWidth="200"/>
     <Button layoutX="231.0" layoutY="188.0" mnemonicParsing="false" onAction="#selectDirectory" prefHeight="26.0"
             prefWidth="215.0" text="Bilder auswählen.." pickOnBounds="false">
         <styleClass>
