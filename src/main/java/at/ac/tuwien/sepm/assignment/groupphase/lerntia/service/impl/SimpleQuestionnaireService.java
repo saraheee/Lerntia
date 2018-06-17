@@ -35,10 +35,5 @@ public class SimpleQuestionnaireService implements IQuestionnaireService {
             iLearningQuestionnaire.deselect(aLearningQuestionnaireList);
         }
 
-        List<ExamQuestionnaire> examQuestionnaireList = iExamQuestionnaireService.readAll();
-
-        for (ExamQuestionnaire anExamQuestionnaireList : examQuestionnaireList) {
-            iExamQuestionnaireService.deselect(anExamQuestionnaireList);
-        }
     }
 }
