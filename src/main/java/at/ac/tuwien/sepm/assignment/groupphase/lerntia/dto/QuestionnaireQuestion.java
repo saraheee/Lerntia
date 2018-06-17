@@ -1,11 +1,11 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 public class QuestionnaireQuestion {
-    private String cmark;
-    private String semester;
-    private Long qid;
-    private Long questionid;
-    private Boolean isDeleted;
+    private String cmark; // course number (eg. 123.456)
+    private String semester; // WS or SS and year (eg. WS2018 or SS2018)
+    private Long qid; // id of questionnaire
+    private Long questionid; // id of question
+    private Boolean isDeleted; // if deleted
 
     public QuestionnaireQuestion() {}
 

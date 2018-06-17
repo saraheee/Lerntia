@@ -6,19 +6,13 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.invoke.MethodHandles;
 
 
 public class TextToSpeechServiceTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ITextToSpeechService textToSpeechService;
 
     @Before
@@ -40,6 +34,25 @@ public class TextToSpeechServiceTest {
         textToSpeechService.readQuestionAndAnswers(speech);
     }
 
+    @Test
+    public void playWelcomeAndQuestionAndAnswersShouldPersist() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        textToSpeechService.playWelcomeText();
+        var speech = new Speech();
+        speech.setQuestion("Eine erste Frage?");
+        speech.setAnswer1("Eine Antwort!");
+        speech.setAnswer2("Noch eine Antwort!");
+        textToSpeechService.readQuestionAndAnswers(speech);
+        speech.setQuestion("Eine weitere Frage?");
+        speech.setAnswer1("Eine weitere Antwort!");
+        speech.setAnswer2("Noch eine weitere Antwort!");
+        textToSpeechService.readQuestionAndAnswers(speech);
+    }
+
+    @Test
+    public void readQuestionAndAnswersWithAllAnswersShouldPersist() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        var speech = new Speech("frage", "a1", "a2", "a3", "a4", "a5", "voice");
+        textToSpeechService.readQuestionAndAnswers(speech);
+    }
 
     @Test(expected = TextToSpeechServiceValidationException.class)
     public void readQuestionAndAnswersWithEmptyValuesShouldFail() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
@@ -67,15 +80,68 @@ public class TextToSpeechServiceTest {
     }
 
     @Test
-    public void filterTextInParenthesisShouldPersist() throws TextToSpeechServiceException {
+    public void readFeedbackTextShouldPersist() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
+        var speech = new Speech();
+        speech.setFeedbackText("Feedback!");
+        textToSpeechService.readFeedbackText(speech);
+    }
+
+    @Test
+    public void setVoiceShouldPersist() throws TextToSpeechServiceException {
+        textToSpeechService.playWelcomeText();
+        var speech = new Speech();
+        speech.setVoice("bits3-hsmm");
+        textToSpeechService.setVoice(speech);
+    }
+
+    @Test
+    public void noCurrentAudioShouldReturnTrue() {
+        Assert.assertEquals(textToSpeechService.noCurrentAudio(), true);
+    }
+
+    @Test
+    public void noCurrentAudioShouldReturnFalse() throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        var speech = new Speech();
+        speech.setFeedbackText("Text zum Lesen!");
+        textToSpeechService.readFeedbackText(speech);
+        Assert.assertEquals(textToSpeechService.noCurrentAudio(), false);
+    }
+
+    @Test
+    public void stopSpeakingWithAudioShouldPersist() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
+        var speech = new Speech();
+        speech.setFeedbackText("Feedback text!");
+        textToSpeechService.readFeedbackText(speech);
+        textToSpeechService.stopSpeaking();
+    }
+
+    @Test
+    public void stopSpeakingWithoutAudioShouldPersist() {
+        textToSpeechService.stopSpeaking();
+    }
+
+    @Test
+    public void filterTextInParenthesisShouldPersist() {
         var service = new SimpleTextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("Hallo (a)b"), "Hallo b");
     }
 
     @Test
-    public void filterTextInNestedParenthesisShouldPersist() throws TextToSpeechServiceException {
+    public void filterTextInNestedParenthesisShouldPersist() {
         var service = new SimpleTextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("((Hallo (a)b) c)i"), "i");
+    }
+
+    @Test
+    public void replaceUmlautsInTextWithUmlautsShouldPersist() {
+        var service = new SimpleTextToSpeechService();
+        Assert.assertEquals(service.replaceUmlauts("Möhren-Gemuese Kuchen"), "M\u00f6hren-Gem\u00fcse Kuchen");
+    }
+
+    @Test
+    public void replaceUmlautsInTextWithoutUmlautsShouldPersist() {
+        var service = new SimpleTextToSpeechService();
+        Assert.assertEquals(service.replaceUmlauts("Bei mir gibt es keine Umlaute."), "Bei mir gibt es keine Umlaute.");
     }
 
     @Test
@@ -88,25 +154,25 @@ public class TextToSpeechServiceTest {
         var speech = new Speech();
 
         var question = "Wann ist das Semester vorbei?";
-        var antwort1 = "Bald.";
-        var antwort2 = "Sehr bald.";
-        var antwort3 = "Kurz bevor die Sommerferien anfangen.";
-        var antwort4 = "Am 29.Juni 2018 um 23:59.";
-        var antwort5 = "Keine der genannten Antworten.";
+        var answer1 = "Bald.";
+        var answer2 = "Sehr bald.";
+        var answer3 = "Kurz bevor die Sommerferien anfangen.";
+        var answer4 = "Am 29.Juni 2018 um 23:59.";
+        var answer5 = "Keine der genannten Antworten.";
 
         speech.setQuestion(question);
-        speech.setAnswer1(antwort1);
-        speech.setAnswer2(antwort2);
-        speech.setAnswer3(antwort3);
-        speech.setAnswer4(antwort4);
-        speech.setAnswer5(antwort5);
+        speech.setAnswer1(answer1);
+        speech.setAnswer2(answer2);
+        speech.setAnswer3(answer3);
+        speech.setAnswer4(answer4);
+        speech.setAnswer5(answer5);
 
-        Assert.assertEquals(service.getText(speech), question
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + antwort1 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + antwort2 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + antwort3 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + antwort4 + '\n'
-            + BREAK + antwort5 + '\n');
+        Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'
+            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + answer4 + '\n'
+            + BREAK + answer5 + '\n');
     }
 
     @Test
@@ -139,9 +205,4 @@ public class TextToSpeechServiceTest {
         Assert.assertEquals(service.isValidText("  "), false);
     }
 
-
-    @After
-    public void wrapUp() {
-
-    }
 }

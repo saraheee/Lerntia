@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
@@ -31,6 +30,7 @@ public class EditQuestionsController {
     private final IQuestionService questionService;
     private final WindowController windowController;
     private final AlertController alertController;
+    private final LerntiaMainController lerntiaMainController;
     @FXML
     public TextField tf_question;
     @FXML
@@ -52,17 +52,22 @@ public class EditQuestionsController {
     private Question selectedQuestion;
     private Stage stage;
     private LearningQuestionnaire learningQuestionnaire;
+    private SelectQuestionAdministrateController selectQuestionAdministrateController;
     @FXML
     private Label noImageLabel;
     private String imageName;
+    @FXML
+    private Label imgNameLabel;
 
     @Autowired
     public EditQuestionsController(IQuestionService questionService,
                                    WindowController windowController,
-                                   AlertController alertController) {
+                                   AlertController alertController,
+                                   LerntiaMainController lerntiaMainController) {
         this.questionService = questionService;
         this.windowController = windowController;
         this.alertController = alertController;
+        this.lerntiaMainController = lerntiaMainController;
     }
 
 
@@ -71,11 +76,6 @@ public class EditQuestionsController {
         tf_question.setText("Frage");
         tf_answer1.setText("Antwort 1");
         tf_answer2.setText("Antwort 2");
-        tf_answer3.setText("Antwort 3");
-        tf_answer4.setText("Antwort 4");
-        tf_answer5.setText("Antwort 5");
-        tf_correctAnswer.setText("Correct Answer");
-        tf_optionalFeedback.setText("Optional Feedback");
         PATH = System.getProperty("user.dir") + File.separator + "img" + File.separator +
             learningQuestionnaire.getName() + File.separator;
     }
@@ -84,7 +84,8 @@ public class EditQuestionsController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showEditQuestionsControllerWindow(Question selectedQuestion) {
+    public void showEditQuestionsControllerWindow(Question selectedQuestion, SelectQuestionAdministrateController selectQuestionAdministrateController) {
+        this.selectQuestionAdministrateController = selectQuestionAdministrateController;
         LOG.info("Open Edit Questions Controller Window.");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editQuestion.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
@@ -96,10 +97,13 @@ public class EditQuestionsController {
         tf_answer3.setText(selectedQuestion.getAnswer3());
         tf_answer4.setText(selectedQuestion.getAnswer4());
         tf_answer5.setText(selectedQuestion.getAnswer5());
+        imgNameLabel.setText(selectedQuestion.getPicture());
         tf_correctAnswer.setText(selectedQuestion.getCorrectAnswers());
         tf_optionalFeedback.setText(selectedQuestion.getOptionalFeedback());
+
         if (selectedQuestion.getPicture() != null && selectedQuestion.getPicture().trim().length() > 0) {
             noImageLabel.setVisible(false);
+            imageName = selectedQuestion.getPicture();
             loadImage(PATH + selectedQuestion.getPicture(), iv_image);
         } else {
             noImageLabel.setVisible(true);
@@ -120,16 +124,17 @@ public class EditQuestionsController {
         if (notEmpty(tf_question.getText()) && notEmpty(tf_answer1.getText()) && notEmpty(tf_answer2.getText())
             && notEmpty(tf_correctAnswer.getText())) {
             var newData = new Question();
-            newData.setQuestionText(tf_question.getText());
-            newData.setAnswer1(tf_answer1.getText());
-            newData.setAnswer2(tf_answer2.getText());
-            newData.setAnswer3(tf_answer3.getText());
-            newData.setAnswer4(tf_answer4.getText());
-            newData.setAnswer5(tf_answer5.getText());
-            newData.setCorrectAnswers(tf_correctAnswer.getText());
-            newData.setOptionalFeedback(tf_optionalFeedback.getText());
+            newData.setQuestionText(tf_question.getText().trim());
+            newData.setAnswer1(tf_answer1.getText().trim());
+            newData.setAnswer2(tf_answer2.getText().trim());
+            newData.setAnswer3(tf_answer3.getText().trim());
+            newData.setAnswer4(tf_answer4.getText().trim());
+            newData.setAnswer5(tf_answer5.getText().trim());
+            newData.setCorrectAnswers(tf_correctAnswer.getText().trim());
+            newData.setOptionalFeedback(tf_optionalFeedback.getText().trim());
             newData.setId(selectedQuestion.getId());
             newData.setPicture(imageName);
+            LOG.debug("image name: " + imageName);
 
             try {
                 questionService.update(newData);
@@ -137,12 +142,17 @@ public class EditQuestionsController {
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Erfolgreich bearbeitet",
                     "Die Frage wurde erfolgreich bearbeitet.", null);
                 this.stage.close();
+                lerntiaMainController.getAndShowTheFirstQuestion();
+
+                //Show the Last Scene
+                selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectQuestionAdministrateController.getAdministrateMode());
+                selectQuestionAdministrateController.refresh();
             } catch (ServiceException e) {
-                alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitung fehlgeschlagen",
-                    "Die Bearbeitung ist fehlgeschlagen!", null);
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
+                    "Die Bearbeitung ist fehlgeschlagen!", e.getCustomMessage());
             }
         } else {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen.",
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Bearbeitung fehlgeschlagen",
                 "Mindestens eines der Pflichtfelder ist leer.", null);
         }
     }
@@ -165,6 +175,7 @@ public class EditQuestionsController {
             imageName = file.getName();
             loadImage(PATH + imageName, iv_image);
             LOG.debug("Selected image: " + imageName);
+            imgNameLabel.setText(imageName);
             noImageLabel.setVisible(false);
         } else {
             LOG.debug("Canceled image selection.");

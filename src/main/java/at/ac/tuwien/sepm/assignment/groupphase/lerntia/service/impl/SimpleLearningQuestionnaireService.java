@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +21,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
     private final ILearningQuestionnaireDAO iLearningQuestionnaireDAO;
 
     @Autowired
-    public SimpleLearningQuestionnaireService(ILearningQuestionnaireDAO iLearningQuestionnaireDAO){
+    public SimpleLearningQuestionnaireService(ILearningQuestionnaireDAO iLearningQuestionnaireDAO) {
         this.iLearningQuestionnaireDAO = iLearningQuestionnaireDAO;
     }
 
@@ -33,28 +30,8 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.create(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void update(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
-        try {
-            iLearningQuestionnaireDAO.update(learningQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void search(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
-        try {
-            iLearningQuestionnaireDAO.search(learningQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException("Persistence exception caught");
         }
     }
 
@@ -63,18 +40,18 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.delete(learningQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
     @Override
-    public List readAll() throws ServiceException {
+    public List<LearningQuestionnaire> readAll() throws ServiceException {
         try {
             return iLearningQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -83,7 +60,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.select(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -92,19 +69,19 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
         try {
             iLearningQuestionnaireDAO.deselect(learningQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
     @Override
     public LearningQuestionnaire getSelected() throws ServiceException {
 
-        LearningQuestionnaire selectedLearningQuestionnaire = null;
+        LearningQuestionnaire selectedLearningQuestionnaire;
 
         try {
             selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            throw new ServiceException("Failed to get the selected questionnaire!");
         }
 
         return selectedLearningQuestionnaire;

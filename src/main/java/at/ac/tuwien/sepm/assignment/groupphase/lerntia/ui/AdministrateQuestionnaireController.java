@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -30,10 +29,9 @@ public class AdministrateQuestionnaireController {
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
     @FXML
-    public ComboBox cb_questionnaire;
+    public ComboBox<String> cb_questionnaire;
     private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
-    private LearningQuestionnaire selectedLearningQuestionnaire;
     private List learningQuestionnaireList;
 
     @Autowired
@@ -60,8 +58,8 @@ public class AdministrateQuestionnaireController {
             LOG.error("Failed to initialize AdministrateQuestionnaireController");
         }
 
-        for (int i = 0; i < learningQuestionnaires.size(); i++) {
-            cb_questionnaire.getItems().add(learningQuestionnaires.get(i).getName());
+        for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
+            cb_questionnaire.getItems().add(learningQuestionnaire.getName());
         }
         cb_questionnaire.getSelectionModel().selectFirst();
     }
@@ -82,7 +80,7 @@ public class AdministrateQuestionnaireController {
             return;
         }
         //Get the Selected Item.
-        selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
+        LearningQuestionnaire selectedLearningQuestionnaire = learningQuestionnaires.get(cb_questionnaire.getSelectionModel().getSelectedIndex());
         editQuestionsController.setQuestionnaire(selectedLearningQuestionnaire);
         LearningQuestionnaire studyMode = null;
         try {
@@ -91,43 +89,41 @@ public class AdministrateQuestionnaireController {
             LOG.error("Selected Questionnaire can't be retrieved.");
         }
 
-        LOG.info("Unselect all the Other Questionnaire");
-        for (int i = 0; i < learningQuestionnaires.size(); i++) {
+        LOG.info("Deselect all the other questionnaires");
+        for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
             try {
-                simpleLearningQuestionnaireService.deselect(learningQuestionnaires.get(i));
+                simpleLearningQuestionnaireService.deselect(learningQuestionnaire);
             } catch (ServiceException e) {
                 LOG.error("Failed to deselect a questionnaire.");
             }
         }
 
-        LOG.info("Select the Questionnaire");
+        LOG.info("Select the questionnaire");
         try {
             simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
         } catch (ServiceException e) {
             LOG.error("Can't select Questionnaire");
         }
-        LOG.info("Open the New Window which contains a TableView and all Questions.");
+        LOG.info("Open the new window which contains a table view and all questions.");
         selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
         try {
             simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
             simpleLearningQuestionnaireService.select(studyMode);
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
             //Delete this Line if not Needed
-            LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+            if (studyMode != null) {
+                LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
+            }
 
         } catch (ServiceException e) {
-            LOG.error("Failed to open the Question managing window.");
+            LOG.error("Failed to open the question administrative window.");
         }
         stage.close();
     }
 
-    public LearningQuestionnaire getSelectedQuestionnaire() {
-        return this.selectedLearningQuestionnaire;
-    }
-
     /**
-     * Opens the first Window in the AdministrateQuestionnare operation.
-     * Opens a window in which the user is allowed to choose a Questionnare.
+     * Opens the first window in the AdministrateQuestionnaire operation.
+     * Opens a window in which the user is allowed to choose a questionnaire.
      */
     public void showAdministrateQuestionnaireWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/administrateQuestionnaire.fxml"));

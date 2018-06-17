@@ -6,7 +6,7 @@
 
     <groupId>at.ac.tuwien.sepm.assignment.groupphase</groupId>
     <artifactId>ss18_sepm_qse_08<!-- add your semester and group number here --></artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
 
     <properties>
         <!-- build properties -->
@@ -18,7 +18,7 @@
         <spring.version>5.0.5.RELEASE</spring.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>
         <mary.version>5.2</mary.version>
-        <itextpdf.version>5.5.10</itextpdf.version>
+        <itextpdf.version>5.5.2</itextpdf.version>
         <pdfbox.version>2.0.4</pdfbox.version>
         <!-- runtime dependencies -->
         <h2.version>1.4.197</h2.version>
@@ -172,8 +172,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source></source>
-                    <target></target>
+                    <source/>
+                    <target/>
                 </configuration>
             </plugin>
         </plugins>

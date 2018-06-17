@@ -2,11 +2,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto;
 
 
 public abstract class Questionnaire {
-    private Long courseID;
-    private Long id;
-    private String name;
-    private Boolean selected;
-    private Boolean isDeleted;
+    private Long courseID; // foreign key of course
+    private Long id; // distinct key
+    private String name; // name of questionnaire
+    private Boolean selected; // if currently selected
+    private Boolean isDeleted; // if it is deleted
 
     public Questionnaire() {}
 
