@@ -89,7 +89,7 @@ public class AdministrateQuestionnaireController {
             LOG.error("Selected Questionnaire can't be retrieved.");
         }
 
-        LOG.info("Unselect all the Other Questionnaire");
+        LOG.info("Deselect all the other questionnaires");
         for (LearningQuestionnaire learningQuestionnaire : learningQuestionnaires) {
             try {
                 simpleLearningQuestionnaireService.deselect(learningQuestionnaire);
@@ -98,13 +98,13 @@ public class AdministrateQuestionnaireController {
             }
         }
 
-        LOG.info("Select the Questionnaire");
+        LOG.info("Select the questionnaire");
         try {
             simpleLearningQuestionnaireService.select(selectedLearningQuestionnaire);
         } catch (ServiceException e) {
             LOG.error("Can't select Questionnaire");
         }
-        LOG.info("Open the New Window which contains a TableView and all Questions.");
+        LOG.info("Open the new window which contains a table view and all questions.");
         selectQuestionAdministrateController.showSelectQuestionAdministrateWindow(selectedLearningQuestionnaire);
         try {
             simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
@@ -116,14 +116,14 @@ public class AdministrateQuestionnaireController {
             }
 
         } catch (ServiceException e) {
-            LOG.error("Failed to open the Question managing window.");
+            LOG.error("Failed to open the question administrative window.");
         }
         stage.close();
     }
 
     /**
      * Opens the first window in the AdministrateQuestionnaire operation.
-     * Opens a window in which the user is allowed to choose a Questionnaire.
+     * Opens a window in which the user is allowed to choose a questionnaire.
      */
     public void showAdministrateQuestionnaireWindow() {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/administrateQuestionnaire.fxml"));

@@ -13,7 +13,7 @@ import java.util.List;
 public interface IMainLerntiaService {
 
     /**
-     * Loads selected Questionnaire and gets first question of that questionnaire
+     * Loads selected questionnaire and gets first question of that questionnaire
      *
      * @return first question of the newly selected Questionnaire
      * @throws ServiceException if the method can't get the questionnaire or select the first question
@@ -21,7 +21,7 @@ public interface IMainLerntiaService {
     Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException;
 
     /**
-     * Get first question of the selected Questionnaire on startup or when the questionnaire has been passed through
+     * Get first question of the selected questionnaire on startup or when the questionnaire has been passed through
      *
      * @return first Question of the questionnaire
      * @throws ServiceException if the method can't select or get the first question
@@ -29,7 +29,7 @@ public interface IMainLerntiaService {
     Question getFirstQuestion() throws ServiceException;
 
     /**
-     * Sets the custom chosen questions from the Edit Exam Window in the Questions List
+     * Sets the custom chosen questions from the Edit Exam Window in the questions List
      *
      * @param customList custom list of questions that are set for the exam.
      * @throws ServiceException if the method can't obtain the questions or/and can't set them into the question list.
@@ -37,10 +37,10 @@ public interface IMainLerntiaService {
     void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException;
 
     /**
-     * Standard Exam Questionnaire question set method. Takes the questions linked with a specific Exam Questionnaire
+     * Standard exam-questionnaire question set method. Takes the questions linked with a specific exam-questionnaire
      * and sets those questions into the program
      *
-     * @param eQ Exam Questionnaire in question.
+     * @param eQ exam-questionnaire in question.
      * @throws ServiceException if the method can't obtain the questions or set them into the Question List
      */
     void getQuestionsFromExamQuestionnaire(ExamQuestionnaire eQ) throws ServiceException;
@@ -84,24 +84,16 @@ public interface IMainLerntiaService {
     List<Question> getQuestions();
 
     /**
-     * Returns the Size of the ListCounter
-     *
-     * @return Integer of the counter of a specific list.
-     */
-    int getListCounter();
-
-    /**
      * Returns the QuestionList
      *
      * @return list of questions.
      */
     List<Question> getQuestionList();
 
-
     /**
      * Stops the Learning algorithm and sends the updated values to the DB before closing.
      *
-     * @throws ServiceException if the Learnalgorithm shutdown encounters an error during shutdown or during the sending of the value package to the Database
+     * @throws ServiceException if the learn algorithm shutdown encounters an error during shutdown or during the sending of the value package to the database
      */
     void stopAlgorithm() throws ServiceException;
 
@@ -132,7 +124,7 @@ public interface IMainLerntiaService {
     double getPercent();
 
     /**
-     * Set if the programm has to rerun the questionnaire with only the wrongly answered questions or not.
+     * Set if the program has to rerun the questionnaire with only the wrongly answered questions or not.
      *
      * @param onlyWrongQuestions boolean flag which determines if it needs only wrong questions or all in general.
      */
@@ -146,22 +138,12 @@ public interface IMainLerntiaService {
      */
     Question restoreQuestionsAndGetFirst();
 
-
     /**
      * Set the boolean value for the service layer that the exam mode is currently active or not.
      *
      * @param examMode boolean value which indicates if the program is currently in the Exam mode or not.
      */
     void setExamMode(boolean examMode);
-
-
-    /**
-     * Set current Exam Questionnaire
-     *
-     * @param selectedQuestionnaire questionnaire in question
-     */
-    void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire);
-
 
     /**
      * Returns the first Question of an Exam Questionnaire
