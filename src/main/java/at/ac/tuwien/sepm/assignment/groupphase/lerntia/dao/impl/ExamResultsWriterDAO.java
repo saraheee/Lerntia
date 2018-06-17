@@ -27,14 +27,12 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private final SimpleUserService simpleUserService;
-    private final SimpleQuestionService questionService;
 
     private PdfPCell cell_checked;
     private PdfPCell cell_box;
@@ -44,10 +42,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private Font fontExamDate;
     private Font fontStudentInfo;
 
+    private User student;
+
     @Autowired
-    public ExamResultsWriterDAO(SimpleQuestionService questionService, SimpleUserService simpleUserService) throws PersistenceException {
-        this.questionService = questionService;
-        this.simpleUserService = simpleUserService;
+    public ExamResultsWriterDAO() throws PersistenceException {
 
         // images are used to show if an answer has been selected or not.
         // these two images are loaded here and placed in a cell.
@@ -64,6 +62,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     @Override
     public void writeExamResults(ExamWriter examwriter) throws PersistenceException {
+
+        this.student = examwriter.getUser();
 
         // create the document
 
@@ -126,14 +126,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        User student;
-        try {
-            student = simpleUserService.read();
-        } catch (ServiceException e) {
-            throw new PersistenceException("Die Daten des Studenten konnten für die PDF Datei nicht geladen werden.");
-        }
-
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + student.getName() + "\nMatrikelnummer: " + student.getMatriculationNumber(), fontStudentInfo);
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
@@ -197,7 +190,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         container.add(nesting);
 
         return container;
-
     }
 
     public PdfPTable getAnswerTable(Question question) throws PersistenceException {
@@ -218,7 +210,43 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         table.addCell("Ausgewählt");
         table.addCell("Richtig");
 
-        ArrayList<String> allAnswers = questionService.getAllAnswers(question);
+        ArrayList<String> allAnswers = new ArrayList<>();
+
+        try {
+            if (!question.getAnswer1().equals("")) {
+                allAnswers.add(question.getAnswer1());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer2().equals("")) {
+                allAnswers.add(question.getAnswer2());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer3().equals("")) {
+                allAnswers.add(question.getAnswer3());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer4().equals("")) {
+                allAnswers.add(question.getAnswer4());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer5().equals("")) {
+                allAnswers.add(question.getAnswer5());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
 
         for (int j = 0; j < allAnswers.size(); j++) {
 
