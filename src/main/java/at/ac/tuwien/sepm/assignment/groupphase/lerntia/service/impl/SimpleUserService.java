@@ -1,43 +1,31 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.UserDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import org.springframework.stereotype.Service;
-
-import java.lang.invoke.MethodHandles;
 
 @Service
 public class SimpleUserService implements IUserService {
 
-    private final UserDAO userDAO;
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final ConfigReader configReader;
 
 
-    public SimpleUserService(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public SimpleUserService() {
+        this.configReader = new ConfigReader("student");
     }
 
     @Override
-    public void create(User user) throws ServiceException {
+    public User read() throws ServiceException {
+        User user = new User(configReader.getValue("name"), configReader.getValue("matriculationNumber"),
+            configReader.getValue("studyProgramme"), false);
+        if (user.getName() == null || user.getName().trim().isEmpty() || user.getMatriculationNumber() == null ||
+            user.getMatriculationNumber().trim().isEmpty() || user.getStudyProgramme() == null ||
+            user.getStudyProgramme().trim().isEmpty()) {
+            throw new ServiceException("Some student data could not be read. Is student.properties file provided?");
+        }
 
-    }
-
-    @Override
-    public void update(User user) throws ServiceException {
-
-    }
-
-    @Override
-    public User read(User user) throws ServiceException {
-        return null;
-    }
-
-    @Override
-    public void delete(User user) throws ServiceException {
-
+        return user;
     }
 }

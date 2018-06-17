@@ -1,125 +1,185 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireQuestionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
+import javax.swing.*;
 import java.lang.invoke.MethodHandles;
-import java.util.Optional;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 @Controller
-public class SelectQuestionAdministrateController {
+public class SelectQuestionAdministrateController implements Runnable {
 
-    @FXML public TableView<Question> tv_questionTable;
-    @FXML public TableColumn<Question, Long> tc_id;
-    @FXML public TableColumn<Question, String> tc_question;
-    @FXML public TableColumn<Question, String> tc_answer1;
-    @FXML public TableColumn<Question, String> tc_answer2;
-    @FXML public TableColumn<Question, String> tc_answer3;
-    @FXML public TableColumn<Question, String> tc_answer4;
-    @FXML public TableColumn<Question, String> tc_answer5;
-
-    //For the Searching Operation
-    @FXML public TextField tf_searchQuestion;
-    @FXML public TextField tf_searchAnswer1;
-    @FXML public TextField tf_searchAnswer2;
-    @FXML public TextField tf_searchAnswer3;
-    @FXML public TextField tf_searchAnswer4;
-    @FXML public TextField tf_searchAnswer5;
-
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final LerntiaMainController lerntiaMainController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
-    private final IQuestionService questionDAO;
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final IQuestionService questionService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
-
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final EditQuestionsController editQuestionsController;
+    private final AlertController alertController;
+    private final ILearningQuestionnaireService iLearningQuestionnaireService;
+    @FXML
+    public TableView<Question> tv_questionTable;
+    @FXML
+    public TableColumn<Question, CheckBox> tc_picture;
+    @FXML
+    public TableColumn<Question, String> tc_question;
+    @FXML
+    public TableColumn<Question, String> tc_answer1;
+    @FXML
+    public TableColumn<Question, String> tc_answer2;
+    @FXML
+    public TableColumn<Question, String> tc_answer3;
+    @FXML
+    public TableColumn<Question, String> tc_answer4;
+    @FXML
+    public TableColumn<Question, String> tc_answer5;
+    //For the Searching Operation
+    @FXML
+    public TextField tf_searchQuestion;
+    @FXML
+    public TextField tf_searchAnswer1;
+    @FXML
+    public TextField tf_searchAnswer2;
+    @FXML
+    public TextField tf_searchAnswer3;
+    @FXML
+    public TextField tf_searchAnswer4;
+    @FXML
+    public TextField tf_searchAnswer5;
     private Stage stage;
     private LearningQuestionnaire administrateMode;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button editButton;
 
-    public SelectQuestionAdministrateController(IMainLerntiaService lerntiaService,
-                                                LerntiaMainController lerntiaMainController,
-                                                WindowController windowController,
-                                                IQuestionService questionDAO,
-                                                SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
-                                                IQuestionnaireQuestionService questionnaireQuestionService)
-    {
+    private boolean deleteButtonClicked = false;
+    private boolean editButtonClicked = false;
+    private boolean searchButtonClicked = false;
+    private boolean closedWindow = false;
+    private ReentrantLock lock = new ReentrantLock();
+
+    @Autowired
+    public SelectQuestionAdministrateController(
+        IMainLerntiaService lerntiaService,
+        LerntiaMainController lerntiaMainController,
+        WindowController windowController,
+        IQuestionService questionService,
+        EditQuestionsController editQuestionsController,
+        IQuestionnaireQuestionService questionnaireQuestionService,
+        AlertController alertController,
+        ILearningQuestionnaireService iLearningQuestionnaireService) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
-        this.questionDAO = questionDAO;
-        this.simpleLearningQuestionnaireService = simpleLearningQuestionnaireService;
+        this.questionService = questionService;
+        this.editQuestionsController = editQuestionsController;
         this.questionnaireQuestionService = questionnaireQuestionService;
+        this.alertController = alertController;
+        this.iLearningQuestionnaireService = iLearningQuestionnaireService;
     }
 
-    public void initialize(){
-        /**
+    public void initialize() {
+        /*
          * The following line must stay there. It Refreshs the LerntiaService.
          */
-
         try {
-            lerntiaService.getFirstQuestion();
+            lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
+
         //Fill the First Table.
-        //tc_id.setCellValueFactory(new PropertyValueFactory<Question, Long>("id"));
-        tc_question.setCellValueFactory(new PropertyValueFactory<Question, String>("questionText"));
-        tc_answer1.setCellValueFactory(new PropertyValueFactory<Question, String>("answer1"));
-        tc_answer2.setCellValueFactory(new PropertyValueFactory<Question, String>("answer2"));
-        tc_answer3.setCellValueFactory(new PropertyValueFactory<Question, String>("answer3"));
-        tc_answer4.setCellValueFactory(new PropertyValueFactory<Question, String>("answer4"));
-        tc_answer5.setCellValueFactory(new PropertyValueFactory<Question, String>("answer5"));
-        ObservableList<Question> content = this.getContent();
+        tc_question.setCellValueFactory(new PropertyValueFactory<>("questionText"));
+        tc_answer1.setCellValueFactory(new PropertyValueFactory<>("answer1"));
+        tc_answer2.setCellValueFactory(new PropertyValueFactory<>("answer2"));
+        tc_answer3.setCellValueFactory(new PropertyValueFactory<>("answer3"));
+        tc_answer4.setCellValueFactory(new PropertyValueFactory<>("answer4"));
+        tc_answer5.setCellValueFactory(new PropertyValueFactory<>("answer5"));
+        tc_picture.setCellValueFactory(new PropertyValueFactory<>("containPicture"));
+        var content = this.getContent();
+
         tv_questionTable.getItems().addAll(content);
         tv_questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        var buttonThread = new Thread(this);
+        buttonThread.start();
+        tv_questionTable.setRowFactory(tv -> {
+            TableRow<Question> row = new TableRow<>();
+            showHoverText(row);
+            return row;
+        });
     }
+
+    private void showHoverText(TableRow<Question> row) {
+        row.hoverProperty().addListener(event -> {
+            if (!row.isEmpty()) {
+                ToolTipManager.sharedInstance().setInitialDelay(10);
+                var delay = Integer.MAX_VALUE;
+                ToolTipManager.sharedInstance().setDismissDelay(delay);
+                final var t = new Tooltip();
+                var q = row.getItem();
+                t.setText(q.toStringGUI());
+                row.setTooltip(t);
+            }
+        });
+    }
+
     /**
-     * Loads the Data into the TableView
+     * Refreshs the Data and the lertiaMainController
      */
-    public void refresh(){
-        //Clear the Table and Load the new Data
-        tv_questionTable.getItems().clear();
-        tv_questionTable.getItems().addAll(getContent());
+    public void refresh() {
+        LearningQuestionnaire studyMode;
         try {
+            studyMode = iLearningQuestionnaireService.getSelected();
+            iLearningQuestionnaireService.deselect(studyMode);
+            iLearningQuestionnaireService.select(administrateMode);
+            this.stage.close();
+            var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
+            fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
+            this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+            stage.setOnCloseRequest(event -> closedWindow = true);
+            tv_questionTable.getItems().clear();
+            tv_questionTable.getItems().addAll(getContent());
+            iLearningQuestionnaireService.deselect(administrateMode);
+            iLearningQuestionnaireService.select(studyMode);
             lerntiaMainController.getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-            e.printStackTrace();
+
+            var buttonThread = new Thread(this);
+            buttonThread.start();
+
+        } catch (ServiceException e) {
+            LOG.debug("Failed to refresh the table!");
         }
     }
 
-    public ObservableList<Question> getContent(){
+    /**
+     * @return the Content for the Table in form of a ObservableList<Question>
+     */
+    private ObservableList<Question> getContent() {
         ObservableList<Question> content = FXCollections.observableArrayList();
-        for(int i = 0;i<lerntiaService.getQuestionList().size();i++){
-            content.add(lerntiaService.getQuestionList().get(i));
-        }
+        content.addAll(lerntiaService.getQuestionList());
         return content;
     }
 
@@ -127,117 +187,125 @@ public class SelectQuestionAdministrateController {
      * Opens the first Window in the SelectQuestionAdministrate operation.
      * Opens a window in which the user can See all the Questions .
      */
-    public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode){
+    public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode) {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
         this.administrateMode = administrateMode;
+        stage.setOnCloseRequest(event -> closedWindow = true);
     }
 
     @FXML
-    public void editQuestion(ActionEvent actionEvent) {
-        //TODO Editing Questions.
-    }
-
-    @FXML
-    public void deleteQuestions(ActionEvent actionEvent) {
-        LOG.info("Delete Button Clicked");
+    public void editQuestion() {
+        editButtonClicked = true;
+        //Check if there is at Least and not more than one element is Selected
         ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
-        if(selectedItems.size() == 0){
-            //Nothing is selected -> Show a warning window
-            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
-            warningAlert.setTitle("Fragen löschen");
-            warningAlert.setHeaderText("Min 1.Frage auswählen");
-            warningAlert.setContentText(null);
-            warningAlert.show();
+        if (selectedItems.size() < 1) {
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler",
+                "Bitte mindestens eine Frage zum Bearbeiten auswählen!", null);
             return;
         }
 
-        //If min. 1 question is selected.
-        Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        infoAlert.setTitle("Fragen löschen");
-        infoAlert.setHeaderText("Sollen die ausgewählte/n Frage/n gelöscht werden?");
-        String allQuestions = "";
-        for(int i = 0;i<selectedItems.size();i++){
-            Question q = selectedItems.get(i);
-            allQuestions+= "Es wurden: "+selectedItems.size()+" ausgewählt";
+        if (selectedItems.size() > 1) {
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Bearbeitungsfehler",
+                "Das Bearbeiten von mehr als einer Frage glechzeitig ist nicht möglich.",
+                "Bitte genau eine Frage auswählen!");
+            return;
         }
-        infoAlert.setContentText(allQuestions);
-        Optional<ButtonType> result = infoAlert.showAndWait();
-        if(result.get() == ButtonType.OK){
-            LOG.info("LookHere: Es wird gelöscht");
-            for(int i = 0;i<selectedItems.size();i++){
+        Question selectedQuestion = selectedItems.get(0);
+        LOG.info(selectedQuestion.toString());
+
+        //Open the New Question.
+        stage.close();
+        editQuestionsController.showEditQuestionsControllerWindow(selectedItems.get(0), this);
+    }
+
+    @FXML
+    public void deleteQuestions() {
+        deleteButtonClicked = true;
+        LOG.info("Delete Button Clicked");
+        ObservableList<Question> selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+        if (selectedItems.size() == 0) {
+            //Nothing is selected -> Show a warning window
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Fragen löschen",
+                "Bitte mindestens eine Frage zum Löschen auswählen!", null);
+            return;
+        }
+
+        boolean press;
+        //One question was selected
+        if (selectedItems.size() == 1) {
+            press = alertController.showStandardConfirmationAlert("Frage löschen",
+                "Soll die ausgewählte Frage wirklich gelöscht werden?", "Diese Änderung kann nicht rückgängig gemacht werden!");
+        } else {
+            press = alertController.showStandardConfirmationAlert("Fragen löschen",
+                "Sollen die ausgewählten Fragen wirklich gelöscht werden?", "Es wurden " + selectedItems.size() + " Fragen ausgewählt.\n" +
+                    "Diese Änderung kann nicht rückgängig gemacht werden!");
+        }
+        if (press) {
+            for (Question selectedItem : selectedItems) {
                 try {
-                    questionDAO.delete(selectedItems.get(i));
+                    questionService.delete(selectedItem);
                     QuestionnaireQuestion qq = new QuestionnaireQuestion();
                     qq.setQid(administrateMode.getId());
-                    qq.setQuestionid(selectedItems.get(i).getId());
+                    qq.setQuestionid(selectedItem.getId());
                     questionnaireQuestionService.delete(qq);
                 } catch (ServiceException e) {
-                    e.printStackTrace();
+                    // TODO - show alert or throw new exception
                 }
             }
 
             LOG.info("Delete Complete - Start Refreshing");
-            //Close Window and Open informationen Window
-            stage.close();
-            Alert deleteInfo = new Alert(Alert.AlertType.INFORMATION);
-            deleteInfo.setTitle(null);
-            deleteInfo.setHeaderText("Fragen wurden gelöscht");
-            deleteInfo.setContentText(null);
-            deleteInfo.show();
-            //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
+            //Close Window and Open information Window
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Löschvorgang abgeschlossen",
+                "Erfolgreich gelöscht!", "Die ausgewählen Fragen wurden erfolgreich gelöscht!");
 
-            try {
-                lerntiaMainController.getAndShowTheFirstQuestion();
-            } catch (ControllerException e) {
-                e.printStackTrace();
-            }
-        }else{
-            LOG.info("Cancled Delete Operation");
+            //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
+            lerntiaMainController.getAndShowTheFirstQuestion();
+
+            this.refresh();
         }
     }
 
     @FXML
-    public void markForExam(ActionEvent actionEvent) {
-        //Todo Mark for Exam
-    }
-
-    @FXML
-    public void searchQuestion(ActionEvent actionEvent) {
+    public void searchQuestion() {
+        searchButtonClicked = true;
         this.stage.close();
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/searchQuestions.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Frage suchen", fxmlLoader);
-        //Todo - Searching for Questions/Answers
+        stage.setOnCloseRequest(event -> closedWindow = true);
+
+        var buttonThread = new Thread(this);
+        buttonThread.start();
     }
 
     /**
      * Is a Helping Function used for the Search operation
-     * @param actionEvent
      */
     @FXML
-    public void onSearchButtonClicked(ActionEvent actionEvent) {
+    public void onSearchButtonClicked() {
+        searchButtonClicked = true;
         Question questionInput = new Question();
-        questionInput.setQuestionText(tf_searchQuestion.getText());
-        questionInput.setAnswer1(tf_searchAnswer1.getText());
-        questionInput.setAnswer2(tf_searchAnswer2.getText());
-        questionInput.setAnswer3(tf_searchAnswer3.getText());
-        questionInput.setAnswer4(tf_searchAnswer4.getText());
-        questionInput.setAnswer5(tf_searchAnswer5.getText());
+        questionInput.setQuestionText(tf_searchQuestion.getText().trim());
+        questionInput.setAnswer1(tf_searchAnswer1.getText().trim());
+        questionInput.setAnswer2(tf_searchAnswer2.getText().trim());
+        questionInput.setAnswer3(tf_searchAnswer3.getText().trim());
+        questionInput.setAnswer4(tf_searchAnswer4.getText().trim());
+        questionInput.setAnswer5(tf_searchAnswer5.getText().trim());
         ObservableList<Question> newContent = FXCollections.observableArrayList();
 
         try {
             //Get the List and Load it into the TableView
-            List<Question> searchedQuestions = questionDAO.searchForQuestions(questionInput);
+            List<Question> searchedQuestions = questionService.searchForQuestions(questionInput);
             newContent.addAll(searchedQuestions);
-            for(int i =0;i<tv_questionTable.getItems().size();i++){
+            for (int i = 0; i < tv_questionTable.getItems().size(); i++) {
                 tv_questionTable.getItems().clear();
             }
 
-            LOG.info("HABIBI: "+getContent().size()+" HBUBUB: "+newContent.size());
+            LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            // TODO - show alert or throw new exception
         }
 
         //Open the prev. Window and close the Current one
@@ -245,7 +313,46 @@ public class SelectQuestionAdministrateController {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         this.stage = windowController.openNewWindow("Fragebogen verwalten", fxmlLoader);
+        stage.setOnCloseRequest(event -> closedWindow = true);
         tv_questionTable.getItems().clear();
         tv_questionTable.getItems().addAll(newContent);
     }
+
+    public LearningQuestionnaire getAdministrateMode() {
+        return this.administrateMode;
+    }
+
+    @Override
+    public void run() {
+        resetValues();
+        while (!closedWindow && !deleteButtonClicked && !editButtonClicked && !searchButtonClicked) {
+            lock.lock();
+            try {
+                var selectedItems = tv_questionTable.getSelectionModel().getSelectedItems();
+                if (selectedItems.size() < 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(true);
+                }
+                if (selectedItems.size() == 1) {
+                    editButton.setDisable(false);
+                    deleteButton.setDisable(false);
+                }
+                if (selectedItems.size() > 1) {
+                    editButton.setDisable(true);
+                    deleteButton.setDisable(false);
+                }
+            } finally {
+                lock.unlock();
+            }
+
+        }
+    }
+
+    private void resetValues() {
+        closedWindow = false;
+        editButtonClicked = false;
+        deleteButtonClicked = false;
+        searchButtonClicked = false;
+    }
+
 }

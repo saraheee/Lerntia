@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
@@ -12,17 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Controller
 public class SelectQuestionnaireController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final SimpleLearningQuestionnaireService learningQuestionnaireService;
     private final IQuestionnaireService iQuestionnaireService;
@@ -56,17 +50,30 @@ public class SelectQuestionnaireController {
             learningQuestionnaireList = learningQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebögen lesen fehlgeschlagen",
-                "Error", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
+                "Fehler", "Die Fragebögen konnten nicht aus der Datenbank gelesen werden!");
         }
 
-        for (int i = 0; i < learningQuestionnaireList.size(); i++) {
-            cb_questionnaire.getItems().add(learningQuestionnaireList.get(i).getName());
+        for (LearningQuestionnaire aLearningQuestionnaireList : learningQuestionnaireList) {
+            cb_questionnaire.getItems().add(aLearningQuestionnaireList.getName());
         }
 
         cb_questionnaire.getSelectionModel().selectFirst();
     }
 
     void showSelectQuestionnaireWindow() {
+
+        try {
+            learningQuestionnaireList = learningQuestionnaireService.readAll();
+        } catch (ServiceException e) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Lesen der Fragebögen fehlgeschlagen",
+                "Fehler beim Lesen der Fragebögen!", "");
+        }
+
+        if (learningQuestionnaireList.isEmpty()) {
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
+                "Fehler!", "Es ist noch kein Fragebogen vorhanden");
+            return;
+        }
 
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionnaire.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
@@ -85,7 +92,7 @@ public class SelectQuestionnaireController {
             iQuestionnaireService.deselectAllQuestionnaires();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen vergessen fehlgeschlagen",
-                "Error", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
+                "Fehler!", "Der zuvor ausgewählte Fragebogen konnte nicht vergessen werden.");
         }
 
         // select questionnaire
@@ -94,17 +101,12 @@ public class SelectQuestionnaireController {
             learningQuestionnaireService.select(selectedQuestionnaire);
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen auswählen fehlgeschlagen",
-                "Error", "Der Fragebogen konnte nicht ausgewählt werden!");
+                "Fehler!", "Der Fragebogen konnte nicht ausgewählt werden!");
         }
 
         // show first question of new questionnaire
 
-        try {
-            lerntiaMainController.getAndShowTheFirstQuestion();
-        } catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen anzeigen fehlgeschlagen",
-                "Error", "Der ausgewählte Fragebogen kann nicht angezeigt werden");
-        }
+        lerntiaMainController.getAndShowTheFirstQuestion();
 
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();

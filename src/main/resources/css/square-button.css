@@ -12,6 +12,14 @@
     -fx-text-fill: #333333;
 }
 
+.label-xsmall{
+    -fx-font-size: 17px;
+    -fx-font-family: "Lora-Bold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+
+}
+
 .button {
     -fx-width: 80%;
     -fx-background-color: white;

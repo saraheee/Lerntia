@@ -19,6 +19,7 @@
 
 .button:hover {
     -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-font-size: 28px;
 }
 
 .button:focused {
@@ -30,9 +31,34 @@
 }
 
 .button:default {
-    -fx-background-color: rgba(0, 250, 50, 0.4);
+    -fx-background-color: rgba(0, 250, 50, 0.25);
 }
 
 .button:default:hover {
     -fx-background-color: rgba(0, 250, 50, 0.55);
+    -fx-font-size: 28px;
+}
+
+.button:default:focused {
+    -fx-background-color: rgba(0, 250, 50, 0.45);
+}
+
+.button:default:focused:hover {
+    -fx-background-color: rgba(0, 250, 50, 0.55);
+}
+
+.button:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:focused:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
 }

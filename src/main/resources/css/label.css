@@ -9,12 +9,12 @@
     -fx-font-size: 26px;
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
 }
 
 .button {
     -fx-width: 80%;
     -fx-background-color: rgba(51, 0, 102, 0.09);
+    -fx-font-size: 26px;
 }
 
 .button:hover {
@@ -22,11 +22,27 @@
 }
 
 .button:focused {
+    -fx-background-color: rgba(0, 50, 250, 0.1);
+}
+
+.button:selected {
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
-.button:focused:hover {
+.button:selected:hover {
     -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:selected {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+}
+
+.button:focused:selected:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.02);
 }
 
 .check-box .box {
@@ -54,4 +70,8 @@
 .check-box:selected:hover .box {
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, white, 20, -6, 0, 0);
+}
+
+.check-box:disabled, .check-box:disabled > * {
+    -fx-opacity: 0.85;
 }
