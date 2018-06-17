@@ -17,14 +17,6 @@ public interface ILearningQuestionnaireDAO {
     void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
 
     /**
-     * Delete LearningQuestionnaire from the Database
-     *
-     * @param learningQuestionnaire LearningQuestionnaire that needs to be deleted
-     * @throws PersistenceException if the method can't delete the LearningQuestionnaire
-     */
-    void delete(LearningQuestionnaire learningQuestionnaire) throws PersistenceException;
-
-    /**
      * Reads all LearningQuestionnaire from the Database
      *
      * @return List with all LearningQuestionnaire

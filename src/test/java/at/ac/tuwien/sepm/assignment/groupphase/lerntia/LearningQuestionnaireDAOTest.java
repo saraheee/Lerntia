@@ -107,6 +107,26 @@ public class LearningQuestionnaireDAOTest {
     }
 
     @Test
+    public void readAllLearningQuestionnaire() throws PersistenceException {
+        int before = learningQuestionnaireDAO.readAll().size();
+
+        Course course = new Course();
+        course.setSemester(Semester.WS + "2018");
+        course.setMark("123.14232");
+        course.setName("asdf");
+        courseDAO.create(course);
+
+        LearningQuestionnaire chapter1 = new LearningQuestionnaire();
+        chapter1.setCourseID(course.getId());
+        chapter1.setName("Chapter 1");
+        learningQuestionnaireDAO.create(chapter1);
+
+        int after = learningQuestionnaireDAO.readAll().size();
+
+        assertTrue(before+1 == after);
+    }
+
+    @Test
     public void checkSelectAndDeselect() throws PersistenceException {
         Course course = new Course();
         course.setSemester(Semester.WS + "2018");
