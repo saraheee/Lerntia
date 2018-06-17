@@ -318,7 +318,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         try {
             //Get the List and Load it into the TableView
             List<Question> searchedQuestions = questionService.searchForQuestions(questionInput);
-            newContent.addAll(searchedQuestions);
+
             for (int i = 0; i < tv_questionTable.getItems().size(); i++) {
                 tv_questionTable.getItems().clear();
             }
@@ -329,7 +329,7 @@ public class SelectQuestionAdministrateController implements Runnable {
                     searchedQuestions.remove(searchedQuestions.get(i));
                 }
             }
-
+            newContent.addAll(searchedQuestions);
             LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Suche fehlgeschlagen",
