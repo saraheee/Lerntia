@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
@@ -31,6 +30,7 @@ public class WindowController {
             LOG.debug("Successfully opened a new window with title: " + title);
             stage.show();
         } catch (IOException e) {
+            // TODO - show alert or throw new exception
             LOG.error("Failed to open a new window with title: " + title);
         }
         return stage;

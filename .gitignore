@@ -58,8 +58,11 @@ hs_err_pid*
 *.db
 
 ### Testdata-Files ###
-evcbogen/
 img/
+img_original/playground
+csv/playground
+csv_export
+statistik.png
 
 ###################
 ### Build-Tools ###
