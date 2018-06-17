@@ -36,16 +36,6 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
     }
 
     @Override
-    public void delete(LearningQuestionnaire learningQuestionnaire) throws ServiceException {
-        try {
-            iLearningQuestionnaireDAO.delete(learningQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistence exception caught");
-            throw new ServiceException(e.getCustomMessage());
-        }
-    }
-
-    @Override
     public List<LearningQuestionnaire> readAll() throws ServiceException {
         try {
             return iLearningQuestionnaireDAO.readAll();
