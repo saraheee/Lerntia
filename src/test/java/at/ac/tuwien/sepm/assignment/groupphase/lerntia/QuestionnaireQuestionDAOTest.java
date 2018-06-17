@@ -350,6 +350,7 @@ public class QuestionnaireQuestionDAOTest {
 
     @Test
     public void readAllQuestionnaireQuestion() throws PersistenceException {
+        int before = questionnaireQuestionDAO.readAll().size();
         Course tgi = new Course();
         tgi.setSemester(Semester.SS + "2015");
         tgi.setMark("123.349");
@@ -374,7 +375,7 @@ public class QuestionnaireQuestionDAOTest {
         firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
         questionnaireQuestionDAO.create(firstQuestionFirstChapter);
 
-        int currentNumber = questionnaireQuestionDAO.readAll().size();
-        assertEquals(currentNumber, 1);
+        int after = questionnaireQuestionDAO.readAll().size();
+        assertTrue(before < after);
     }
 }
