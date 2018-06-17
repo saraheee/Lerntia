@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
@@ -63,14 +64,14 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     @Override
-    public void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException {
+    public void writeExamResults(ExamWriter examwriter) throws PersistenceException {
 
         // create the document
 
         LOG.info("Create new Document for new report");
         Document document = new Document();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(path));
+            PdfWriter.getInstance(document, new FileOutputStream(examwriter.getPath()));
         } catch (DocumentException | FileNotFoundException e) {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         }
@@ -83,7 +84,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         // at first we create the header with exam name, student info and so on
 
         try {
-            Paragraph headerContainerParagraph = getHeader(name);
+            Paragraph headerContainerParagraph = getHeader(examwriter.getName());
             document.add(headerContainerParagraph);
         } catch (DocumentException e) {
             throw new PersistenceException("Der Header konnte nicht in das PDF integriert werden.");
@@ -91,10 +92,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         // Each question is added to a table as well as an indicator if the answer was correct or not
 
-        for (var i = 0; i < questions.size(); i++){
+        for (var i = 0; i < examwriter.getQuestions().size(); i++){
 
             try {
-                Paragraph container = getQuestionParagraph(questions.get(i), name, i);
+                Paragraph container = getQuestionParagraph(examwriter.getQuestions().get(i), examwriter.getName(), i);
                 document.add(container);
             } catch (DocumentException e) {
                 throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden.");

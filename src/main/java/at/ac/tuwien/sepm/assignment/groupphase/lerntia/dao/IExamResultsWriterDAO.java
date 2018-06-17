@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -14,12 +15,10 @@ public interface IExamResultsWriterDAO {
     /**
      * Write the exam results to a file for future reference
      *
-     * @param questions a list of all the questions used in the exam
-     * @param name the name of the exam
-     * @param path the path where the exam results should be saved
+     * @param examwriter includes questions, name and path of exam
      * @throws PersistenceException if the exam results cannot be written
      * */
-    void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException;
+    void writeExamResults(ExamWriter examwriter) throws PersistenceException;
 
     /**
      * Get the header of the exam
