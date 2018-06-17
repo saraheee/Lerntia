@@ -11,7 +11,7 @@ public interface IQuestionnaireImportService {
     /**
      * import file
      *
-     * @param importQuestionnaire object with needed infos for importing
+     * @param importQuestionnaire object with needed info for importing
      * @throws ServiceException if an error occurred
      */
     void importQuestionnaire(ImportQuestionnaire importQuestionnaire) throws ServiceException;
