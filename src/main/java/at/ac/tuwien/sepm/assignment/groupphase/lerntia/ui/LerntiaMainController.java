@@ -430,7 +430,7 @@ public class LerntiaMainController implements Runnable {
                             "Nicht vergessen die Prüfung am Ende abzugeben!");
                 } else if (lerntiaService.getIgnoredAnswers() == 1) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                        "Die letzte Frage wurde erreicht. Es wurde noch genau eine Frage ausgelassen, zu der jetzt noch zurücknavigiert werden kann.\n\n" +
+                        "Die letzte Frage wurde erreicht. Es wurde genau eine Frage ausgelassen, zu der jetzt noch zurücknavigiert werden kann.\n\n" +
                             "Nicht vergessen die Prüfung am Ende abzugeben!");
                 } else {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
@@ -732,7 +732,7 @@ public class LerntiaMainController implements Runnable {
             getAndShowTheFirstExamQuestion();
         } catch (ControllerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
-                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden");
+                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden!");
         } catch (ServiceException e) {
             // TODO - show alert or throw new exception
         }

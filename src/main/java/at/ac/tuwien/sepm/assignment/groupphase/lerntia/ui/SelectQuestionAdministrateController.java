@@ -287,12 +287,12 @@ public class SelectQuestionAdministrateController implements Runnable {
     public void onSearchButtonClicked() {
         searchButtonClicked = true;
         Question questionInput = new Question();
-        questionInput.setQuestionText(tf_searchQuestion.getText());
-        questionInput.setAnswer1(tf_searchAnswer1.getText());
-        questionInput.setAnswer2(tf_searchAnswer2.getText());
-        questionInput.setAnswer3(tf_searchAnswer3.getText());
-        questionInput.setAnswer4(tf_searchAnswer4.getText());
-        questionInput.setAnswer5(tf_searchAnswer5.getText());
+        questionInput.setQuestionText(tf_searchQuestion.getText().trim());
+        questionInput.setAnswer1(tf_searchAnswer1.getText().trim());
+        questionInput.setAnswer2(tf_searchAnswer2.getText().trim());
+        questionInput.setAnswer3(tf_searchAnswer3.getText().trim());
+        questionInput.setAnswer4(tf_searchAnswer4.getText().trim());
+        questionInput.setAnswer5(tf_searchAnswer5.getText().trim());
         ObservableList<Question> newContent = FXCollections.observableArrayList();
         try {
             //Get the List and Load it into the TableView
