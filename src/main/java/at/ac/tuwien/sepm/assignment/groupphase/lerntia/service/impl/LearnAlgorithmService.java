@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                         successMap.put(question.getId(), 10);
                         break;
                     default:
-                        successMap.put(question.getId(),0);
+                        successMap.put(question.getId(), 0);
                         break;
                 }
             } else {
@@ -113,7 +114,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                         failureMap.put(question.getId(), 0);
                         break;
                     default:
-                        successMap.put(question.getId(),0);
+                        successMap.put(question.getId(), 0);
                         break;
                 }
             }
@@ -146,6 +147,9 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
     @Override
     public void updateFailureValue(Question question) throws ServiceException {
         LOG.info("Update the Failure of the current question.");
+        if (successMap == null) {
+            throw new ServiceException("Success map of the algorithm is null!");
+        }
         if (successMap.get(question.getId()) == 0) {
             switch (failureMap.get(question.getId())) {
                 case 0:
@@ -180,7 +184,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                     failureMap.put(question.getId(), 10);
                     break;
                 default:
-                    failureMap.put(question.getId(),0);
+                    failureMap.put(question.getId(), 0);
                     break;
             }
         } else {
@@ -224,7 +228,7 @@ public class LearnAlgorithmService implements ILearnAlgorithmService {
                     successMap.put(question.getId(), successMap.get(question.getId()) - 3);
                     break;
                 default:
-                    failureMap.put(question.getId(),0);
+                    failureMap.put(question.getId(), 0);
                     break;
             }
         }
