@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
@@ -33,9 +34,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final SimpleUserService simpleUserService;
-    private final SimpleQuestionService questionService;
-
     private PdfPCell cell_checked;
     private PdfPCell cell_box;
 
@@ -44,10 +42,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private Font fontExamDate;
     private Font fontStudentInfo;
 
+    private User student;
+
     @Autowired
-    public ExamResultsWriterDAO(SimpleQuestionService questionService, SimpleUserService simpleUserService) throws PersistenceException {
-        this.questionService = questionService;
-        this.simpleUserService = simpleUserService;
+    public ExamResultsWriterDAO() throws PersistenceException {
 
         // images are used to show if an answer has been selected or not.
         // these two images are loaded here and placed in a cell.
@@ -63,14 +61,16 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     @Override
-    public void writeExamResults(List<Question> questions, String name, String path) throws PersistenceException {
+    public void writeExamResults(ExamWriter examwriter) throws PersistenceException {
+
+        this.student = examwriter.getUser();
 
         // create the document
 
         LOG.info("Create new Document for new report");
         Document document = new Document();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(path));
+            PdfWriter.getInstance(document, new FileOutputStream(examwriter.getPath()));
         } catch (DocumentException | FileNotFoundException e) {
             throw new PersistenceException("Das PDF-Dokument konnte nicht erstellt werden.");
         }
@@ -83,7 +83,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         // at first we create the header with exam name, student info and so on
 
         try {
-            Paragraph headerContainerParagraph = getHeader(name);
+            Paragraph headerContainerParagraph = getHeader(examwriter.getName());
             document.add(headerContainerParagraph);
         } catch (DocumentException e) {
             throw new PersistenceException("Der Header konnte nicht in das PDF integriert werden.");
@@ -91,10 +91,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         // Each question is added to a table as well as an indicator if the answer was correct or not
 
-        for (var i = 0; i < questions.size(); i++){
+        for (var i = 0; i < examwriter.getQuestions().size(); i++) {
 
             try {
-                Paragraph container = getQuestionParagraph(questions.get(i), name, i);
+                Paragraph container = getQuestionParagraph(examwriter.getQuestions().get(i), examwriter.getName(), i);
                 document.add(container);
             } catch (DocumentException e) {
                 throw new PersistenceException("Die Ergebnisse konnten nicht in das Dokument eingefügt werden.");
@@ -104,7 +104,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         document.close();
     }
 
-    public Paragraph getHeader(String name) throws PersistenceException{
+    public Paragraph getHeader(String name) throws PersistenceException {
 
         // the container is used to ensure that the text is not split over two pages
         // highly unlikely, but just to be sure.
@@ -126,14 +126,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        User student;
-        try {
-            student = simpleUserService.read();
-        } catch (ServiceException e) {
-            throw new PersistenceException("Die Daten des Studenten konnten für die PDF Datei nicht geladen werden.");
-        }
-
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: "+student.getName()+"\nMatrikelnummer: "+student.getMatriculationNumber(), fontStudentInfo);
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
@@ -152,7 +145,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Paragraph container = new Paragraph();
 
-        Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
+        Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i + 1) + ":");
         paragraphQuestionNumber.setSpacingBefore(15);
 
         Paragraph paragraphQuestionText = new Paragraph(question.getQuestionText());
@@ -197,10 +190,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         container.add(nesting);
 
         return container;
-
     }
 
-    public PdfPTable getAnswerTable(Question question) throws PersistenceException{
+    public PdfPTable getAnswerTable(Question question) throws PersistenceException {
 
         // create a table with 4 columns and stretch it to 100% of the page width
 
@@ -218,7 +210,43 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         table.addCell("Ausgewählt");
         table.addCell("Richtig");
 
-        ArrayList<String> allAnswers = questionService.getAllAnswers(question);
+        ArrayList<String> allAnswers = new ArrayList<>();
+
+        try {
+            if (!question.getAnswer1().equals("")) {
+                allAnswers.add(question.getAnswer1());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer2().equals("")) {
+                allAnswers.add(question.getAnswer2());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer3().equals("")) {
+                allAnswers.add(question.getAnswer3());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer4().equals("")) {
+                allAnswers.add(question.getAnswer4());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer5().equals("")) {
+                allAnswers.add(question.getAnswer5());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
 
         for (int j = 0; j < allAnswers.size(); j++) {
 
@@ -250,7 +278,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         return table;
     }
 
-    public PdfPCell getImageCellBox(URL path) throws PersistenceException{
+    public PdfPCell getImageCellBox(URL path) throws PersistenceException {
 
         Image img;
         try {
@@ -269,7 +297,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         return cell;
     }
 
-    public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException{
+    public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException {
 
         Image img;
 

@@ -22,27 +22,5 @@ public interface IExamQuestionnaireService {
      */
     List<ExamQuestionnaire> readAll() throws ServiceException;
 
-    /**
-     * Select an ExamQuestionnaire to be used for an exam
-     *
-     * @param examQuestionnaire the ExamQuestionnaire to be selected
-     * @throws ServiceException if the ExamQuestionnaire cannot be selected
-     */
-    void select(ExamQuestionnaire examQuestionnaire) throws ServiceException;
 
-    /**
-     * Deselect an ExamQuestionnaire that was previously used
-     *
-     * @param examQuestionnaire the ExamQuestionnaire to be deselected
-     * @throws ServiceException if the ExamQuestionnaire cannot be deselected
-     */
-    void deselect(ExamQuestionnaire examQuestionnaire) throws ServiceException;
-
-    /**
-     * Get the selected ExamQuestionnaire
-     *
-     * @return the selected ExamQuestionnaire
-     * @throws ServiceException if the selected ExamQuestionnaire cannot be retrieved
-     */
-    ExamQuestionnaire getSelected() throws ServiceException;
 }

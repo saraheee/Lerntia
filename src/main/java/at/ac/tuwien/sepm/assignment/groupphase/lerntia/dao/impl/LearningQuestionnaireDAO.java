@@ -42,7 +42,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     @Override
     public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         try {
-            LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
+            LOG.info("Create preparation for LearningQuestionnaire and Questionnaire.");
             questionnaireDAO.create(learningQuestionnaire);
             LOG.info("Entry for general Questionnaire successful.");
             LOG.info("Prepare Statement for LearningQuestionnaire...");
