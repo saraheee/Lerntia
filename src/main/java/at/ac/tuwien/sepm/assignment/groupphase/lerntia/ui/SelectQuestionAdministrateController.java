@@ -291,7 +291,7 @@ public class SelectQuestionAdministrateController implements Runnable {
      */
     @FXML
     public void onSearchButtonClicked() {
-
+        searchButtonClicked = true;
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(administrateMode.getId());
         List<QuestionnaireQuestion> tableQuestions;
@@ -302,10 +302,10 @@ public class SelectQuestionAdministrateController implements Runnable {
                 allIDs.add(tableQuestion.getQuestionid());
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Suche fehlgeschlagen",
+                "Suchoperation fehlgeschlagen", e.getCustomMessage());
+            return;
         }
-
-        searchButtonClicked = true;
         Question questionInput = new Question();
         questionInput.setQuestionText(tf_searchQuestion.getText().trim());
         questionInput.setAnswer1(tf_searchAnswer1.getText().trim());
