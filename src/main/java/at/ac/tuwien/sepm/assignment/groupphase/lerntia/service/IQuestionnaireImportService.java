@@ -1,16 +1,29 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface IQuestionnaireImportService {
 
-    // TODO - file should not be used here. only in the DAO layer.
-    public void importQuestionnaire(File file, Course course, String name, boolean isExam) throws ServiceException;
+    /**
+     * import file
+     *
+     * @param importQuestionnaire object with needed infos for importing
+     * @throws ServiceException if an error occurred
+     */
+    void importQuestionnaire(ImportQuestionnaire importQuestionnaire) throws ServiceException;
 
-    // TODO - file should not be used here. only in the DAO layer.
-    public void importPictures(File file, String name) throws ServiceException;
+    /**
+     * copy given files in new directory
+     *
+     * @param file a directory with all images
+     * @param name the name of the file
+     * @throws ServiceException if an error occurred
+     * @throws IOException      if the File cannot be read
+     */
+    void importPictures(File file, String name) throws ServiceException, IOException;
 
 }

@@ -28,6 +28,7 @@ public class AboutSectionController {
     }
 
     void showAboutSection() {
+        LOG.info("Showing the About Section");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/showAboutSection.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
 

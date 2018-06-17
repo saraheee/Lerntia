@@ -4,11 +4,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
-import javafx.collections.ObservableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -21,6 +20,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
 
     private final IExamQuestionnaireDAO examQuestionnaireDAO;
 
+    @Autowired
     public SimpleExamQuestionnaireService(IExamQuestionnaireDAO examQuestionnaireDAO){
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
@@ -30,38 +30,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.create(examQuestionnaire);
         } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void update(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.update(examQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void search(ExamQuestionnaire searchparameters) throws ServiceException {
-        try {
-            examQuestionnaireDAO.search(searchparameters);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void delete(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.delete(examQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.warn("Persistance exception caught " + e.getLocalizedMessage());
-            throw new ServiceException(e.getMessage());
+            LOG.warn("Persistence exception caught");
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -70,9 +40,8 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             return examQuestionnaireDAO.readAll();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            throw new ServiceException("Failed to read all questionnaires!");
         }
-        return null;
     }
 
     @Override
@@ -80,7 +49,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.select(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
@@ -89,19 +58,19 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         try {
             examQuestionnaireDAO.deselect(examQuestionnaire);
         } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 
     @Override
     public ExamQuestionnaire getSelected() throws ServiceException {
 
-        ExamQuestionnaire examQuestionnaire = null;
+        ExamQuestionnaire examQuestionnaire;
 
         try {
             examQuestionnaire = examQuestionnaireDAO.getSelected();
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            throw new ServiceException("Failed to get the selected questionnaire!");
         }
 
         return examQuestionnaire;

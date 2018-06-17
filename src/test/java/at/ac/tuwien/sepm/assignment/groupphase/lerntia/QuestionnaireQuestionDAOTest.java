@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,31 +36,39 @@ public class QuestionnaireQuestionDAOTest {
     @Before
     public void setUp() {
         try {
+            JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireQuestionDAO(new QuestionnaireQuestionDAO(jdbcConnectionManager));
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.IExamQuestionnaireDAO(new ExamQuestionaireDAO((QuestionnaireDAO) questionnaireDAO,jdbcConnectionManager));
-            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
+            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database '{}'", e.getMessage(), e);
+            LOG.error("Failed to get connection to test-database");
+        }
+    }
+
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
         }
     }
 
     private void IQuestionDAO(QuestionDAO questionDAO) {
-        this.questionDAO=questionDAO;
+        this.questionDAO = questionDAO;
     }
 
     private void ICourseDAO(CourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IExamQuestionnaireDAO(ExamQuestionaireDAO examQuestionaireDAO) {
-        this.examQuestionnaireDAO=examQuestionaireDAO;
+    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+        this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
     private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
-        this.questionnaireDAO=questionnaireDAO;
+        this.questionnaireDAO = questionnaireDAO;
     }
 
     private void IQuestionnaireQuestionDAO(QuestionnaireQuestionDAO questionnaireQuestionDAO) {
@@ -66,203 +76,200 @@ public class QuestionnaireQuestionDAOTest {
     }
 
     @Test
-    public void createNewQuestionnaireQuestion(){
-        try {
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"15");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
+    public void createNewQuestionnaireQuestion() throws PersistenceException {
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2015");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
 
-            ExamQuestionnaire chapter1 = new ExamQuestionnaire();
-            chapter1.setDate(LocalDate.now());
-            chapter1.setName("asdf");
-            chapter1.setCourseID(tgi.getId());
-            examQuestionnaireDAO.create(chapter1);
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf");
+        chapter1.setCourseID(tgi.getId());
+        examQuestionnaireDAO.create(chapter1);
 
-            Question firstquestion = new Question();
-            firstquestion.setQuestionText("How you doing");
-            firstquestion.setAnswer1("No");
-            firstquestion.setAnswer2("yes");
-            firstquestion.setCorrectAnswers("1");
-            questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(3),firstquestion.getId());
+        Question refQuestion = new Question();
+        refQuestion.setQuestionText("How you doing");
+        refQuestion.setAnswer1("No");
+        refQuestion.setAnswer2("yes");
+        refQuestion.setCorrectAnswers("1");
+        questionDAO.create(refQuestion);
+        long refId = refQuestion.getId();
 
-            QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(chapter1.getId());
-            firstquestionfirstchapter.setQuestionid(firstquestion.getId());
-            questionnaireQuestionDAO.create(firstquestionfirstchapter);
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("No");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+        Assert.assertEquals(Long.valueOf(refId + 1), firstQuestion.getId());
+
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
     }
 
     @Test(expected = PersistenceException.class)
     public void createNewQuestionnaireQuestionError() throws PersistenceException {
-        try {
-            QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(Long.valueOf(1));
-            firstquestionfirstchapter.setQuestionid(Long.valueOf(34));
-            questionnaireQuestionDAO.create(firstquestionfirstchapter);
-            Assert.assertEquals(Long.valueOf(1),firstquestionfirstchapter.getQid());
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
-        }
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(1L);
+        firstQuestionFirstChapter.setQuestionid(34L);
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
+        Assert.assertEquals(Long.valueOf(1), firstQuestionFirstChapter.getQid());
     }
 
     @Test
-    public void checkpersistenceQuestionnaireQuestionDAO(){
-        try {
-            Course course = new Course();
-            course.setSemester(Semester.SS+"13");
-            course.setMark("123.555");
-            course.setName("name");
-            courseDAO.create(course);
+    public void checkPersistenceQuestionnaireQuestionDAO() throws PersistenceException {
+        Course course = new Course();
+        course.setSemester(Semester.SS + "2013");
+        course.setMark("123.555");
+        course.setName("name");
+        courseDAO.create(course);
 
-            ExamQuestionnaire chapter1 = new ExamQuestionnaire();
-            chapter1.setDate(LocalDate.now());
-            chapter1.setName("asdf3");
-            chapter1.setCourseID(course.getId());
-            examQuestionnaireDAO.create(chapter1);
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf3");
+        chapter1.setCourseID(course.getId());
+        examQuestionnaireDAO.create(chapter1);
 
-            Question firstquestion = new Question();
-            firstquestion.setQuestionText("How you doing");
-            firstquestion.setAnswer1("Dont know");
-            firstquestion.setAnswer2("yes");
-            firstquestion.setCorrectAnswers("1");
-            questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(6),firstquestion.getId());
+        Question refQuestion = new Question();
+        refQuestion.setQuestionText("How you doing");
+        refQuestion.setAnswer1("Dont know");
+        refQuestion.setAnswer2("yes");
+        refQuestion.setCorrectAnswers("1");
+        questionDAO.create(refQuestion);
+        long refId = refQuestion.getId();
 
-            QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(chapter1.getId());
-            firstquestionfirstchapter.setQuestionid(firstquestion.getId());
-            questionnaireQuestionDAO.create(firstquestionfirstchapter);
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("Dont know");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+        Assert.assertEquals(Long.valueOf(refId + 1), firstQuestion.getId());
 
-            Question secondquestion = new Question();
-            secondquestion.setQuestionText("What day is it?");
-            secondquestion.setAnswer1("Saturday");
-            secondquestion.setAnswer2("Monday");
-            secondquestion.setCorrectAnswers("1");
-            questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(7),secondquestion.getId());
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
 
-            QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
-            secondquestionfirstchapter.setQid(chapter1.getId());
-            secondquestionfirstchapter.setQuestionid(secondquestion.getId());
-            questionnaireQuestionDAO.create(secondquestionfirstchapter);
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+        Question secondQuestion = new Question();
+        secondQuestion.setQuestionText("What day is it?");
+        secondQuestion.setAnswer1("Saturday");
+        secondQuestion.setAnswer2("Monday");
+        secondQuestion.setCorrectAnswers("1");
+        questionDAO.create(secondQuestion);
+        Assert.assertEquals(Long.valueOf(refId + 2), secondQuestion.getId());
+
+        QuestionnaireQuestion secondQuestionFirstChapter = new QuestionnaireQuestion();
+        secondQuestionFirstChapter.setQid(chapter1.getId());
+        secondQuestionFirstChapter.setQuestionid(secondQuestion.getId());
+        questionnaireQuestionDAO.create(secondQuestionFirstChapter);
     }
 
     // search for the questions associated with an exam questionnaire
     // we expect that 2 questions will be found
 
     @Test
-    public void searchQuestionnaireQuestions(){
-        try {
-            Long examQuestionnaireID = Long.valueOf(0);
-            Long firstquestionID = Long.valueOf(0);
-            Long secondquestionID = Long.valueOf(0);
+    public void searchQuestionnaireQuestions() throws PersistenceException {
+        Long examQuestionnaireID;
+        Long firstQuestionID;
+        Long secondQuestionID;
 
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"10");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2010");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
 
-            ExamQuestionnaire chapter1 = new ExamQuestionnaire();
-            chapter1.setDate(LocalDate.now());
-            chapter1.setName("asdf2");
-            chapter1.setCourseID(tgi.getId());
-            examQuestionnaireDAO.create(chapter1);
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf2");
+        chapter1.setCourseID(tgi.getId());
+        examQuestionnaireDAO.create(chapter1);
 
-            examQuestionnaireID = chapter1.getId();
+        examQuestionnaireID = chapter1.getId();
 
-            Question firstquestion = new Question();
-            firstquestion.setQuestionText("How you doing");
-            firstquestion.setAnswer1("Dont know");
-            firstquestion.setAnswer2("yes");
-            firstquestion.setCorrectAnswers("1");
-            questionDAO.create(firstquestion);
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("Dont know");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
 
-            firstquestionID = firstquestion.getId();
+        firstQuestionID = firstQuestion.getId();
 
-            QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(chapter1.getId());
-            firstquestionfirstchapter.setQuestionid(firstquestion.getId());
-            questionnaireQuestionDAO.create(firstquestionfirstchapter);
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
 
-            Question secondquestion = new Question();
-            secondquestion.setQuestionText("What day is it?");
-            secondquestion.setAnswer1("Saturday");
-            secondquestion.setAnswer2("Monday");
-            secondquestion.setCorrectAnswers("12");
-            questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(firstquestionID+1),secondquestion.getId());
+        Question secondQuestion = new Question();
+        secondQuestion.setQuestionText("What day is it?");
+        secondQuestion.setAnswer1("Saturday");
+        secondQuestion.setAnswer2("Monday");
+        secondQuestion.setCorrectAnswers("12");
+        questionDAO.create(secondQuestion);
+        Assert.assertEquals(Long.valueOf(firstQuestionID + 1), secondQuestion.getId());
 
-            secondquestionID = secondquestion.getId();
+        secondQuestionID = secondQuestion.getId();
 
-            QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
-            secondquestionfirstchapter.setQid(chapter1.getId());
-            secondquestionfirstchapter.setQuestionid(secondquestion.getId());
-            questionnaireQuestionDAO.create(secondquestionfirstchapter);
-            QuestionnaireQuestion searchparameters = new QuestionnaireQuestion();
-            searchparameters.setQid(examQuestionnaireID);
+        QuestionnaireQuestion secondQuestionFirstChapter = new QuestionnaireQuestion();
+        secondQuestionFirstChapter.setQid(chapter1.getId());
+        secondQuestionFirstChapter.setQuestionid(secondQuestionID);
+        questionnaireQuestionDAO.create(secondQuestionFirstChapter);
+        QuestionnaireQuestion searchParameters = new QuestionnaireQuestion();
+        searchParameters.setQid(examQuestionnaireID);
 
-            List list = questionnaireQuestionDAO.search(searchparameters);
-            Assert.assertEquals(2,list.size());
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+        List list = questionnaireQuestionDAO.search(searchParameters);
+        Assert.assertEquals(2, list.size());
     }
 
     @Test(expected = Exception.class)
     public void deleteQuestionnaireQuestionError() throws PersistenceException {
 
-        try {
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS+"15");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2015");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
 
-            ExamQuestionnaire chapter1 = new ExamQuestionnaire();
-            chapter1.setDate(LocalDate.now());
-            //chapter1.setCmark("123.349");
-            //chapter1.setSemester("2015S");
-            examQuestionnaireDAO.create(chapter1);
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        //chapter1.setCmark("123.349");
+        //chapter1.setSemester("2015S");
+        examQuestionnaireDAO.create(chapter1);
 
-            Question firstquestion = new Question();
-            firstquestion.setQuestionText("How you doing");
-            firstquestion.setAnswer1("Dont know");
-            firstquestion.setAnswer2("yes");
-            firstquestion.setCorrectAnswers("1");
-            questionDAO.create(firstquestion);
-            Assert.assertEquals(Long.valueOf(1),firstquestion.getId());
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("Dont know");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+        Assert.assertEquals(Long.valueOf(1), firstQuestion.getId());
 
-            QuestionnaireQuestion firstquestionfirstchapter = new QuestionnaireQuestion();
-            firstquestionfirstchapter.setQid(chapter1.getId());
-            firstquestionfirstchapter.setQuestionid(firstquestion.getId());
-            questionnaireQuestionDAO.create(firstquestionfirstchapter);
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
 
-            Question secondquestion = new Question();
-            secondquestion.setQuestionText("What day is it?");
-            secondquestion.setAnswer1("Saturday");
-            secondquestion.setAnswer2("Monday");
-            secondquestion.setCorrectAnswers("12");
-            questionDAO.create(secondquestion);
-            Assert.assertEquals(Long.valueOf(2),secondquestion.getId());
+        Question secondQuestion = new Question();
+        secondQuestion.setQuestionText("What day is it?");
+        secondQuestion.setAnswer1("Saturday");
+        secondQuestion.setAnswer2("Monday");
+        secondQuestion.setCorrectAnswers("12");
+        questionDAO.create(secondQuestion);
+        Assert.assertEquals(Long.valueOf(2), secondQuestion.getId());
 
-            QuestionnaireQuestion secondquestionfirstchapter = new QuestionnaireQuestion();
-            secondquestionfirstchapter.setQid(chapter1.getId());
-            secondquestionfirstchapter.setQuestionid(secondquestion.getId());
-            questionnaireQuestionDAO.create(secondquestionfirstchapter);
+        QuestionnaireQuestion secondQuestionFirstChapter = new QuestionnaireQuestion();
+        secondQuestionFirstChapter.setQid(chapter1.getId());
+        secondQuestionFirstChapter.setQuestionid(secondQuestion.getId());
+        questionnaireQuestionDAO.create(secondQuestionFirstChapter);
 
-            firstquestionfirstchapter.setQid(null);
-            questionnaireQuestionDAO.delete(firstquestionfirstchapter);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getMessage());
-        }
+        firstQuestionFirstChapter.setQid(null);
+        questionnaireQuestionDAO.delete(firstQuestionFirstChapter);
+
     }
 }
