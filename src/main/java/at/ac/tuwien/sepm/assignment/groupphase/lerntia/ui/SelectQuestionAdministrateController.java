@@ -294,7 +294,7 @@ public class SelectQuestionAdministrateController implements Runnable {
 
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(administrateMode.getId());
-        List<QuestionnaireQuestion> tableQuestions = null;
+        List<QuestionnaireQuestion> tableQuestions;
         List<Long> allIDs = new ArrayList<>();
         try {
             tableQuestions = iQuestionnaireQuestionService.search(questionnaireQuestion);

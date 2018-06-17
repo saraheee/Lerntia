@@ -44,35 +44,5 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
         }
     }
 
-    @Override
-    public void select(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.select(examQuestionnaire);
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustomMessage());
-        }
-    }
 
-    @Override
-    public void deselect(ExamQuestionnaire examQuestionnaire) throws ServiceException {
-        try {
-            examQuestionnaireDAO.deselect(examQuestionnaire);
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getCustomMessage());
-        }
-    }
-
-    @Override
-    public ExamQuestionnaire getSelected() throws ServiceException {
-
-        ExamQuestionnaire examQuestionnaire;
-
-        try {
-            examQuestionnaire = examQuestionnaireDAO.getSelected();
-        } catch (PersistenceException e) {
-            throw new ServiceException("Failed to get the selected questionnaire!");
-        }
-
-        return examQuestionnaire;
-    }
 }

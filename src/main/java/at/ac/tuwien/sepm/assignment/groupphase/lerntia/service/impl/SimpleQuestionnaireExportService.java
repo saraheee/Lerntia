@@ -54,11 +54,11 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
 
     @Override
     public List<Question> getAllData(LearningQuestionnaire selectedLearningQuestionnaire) throws ServiceException {
-        LOG.info("Unselect all the Other Questionnaire");
+        LOG.info("Deselect all the other questionnaires");
         iQuestionnaireService.deselectAllQuestionnaires();
 
         //Select the Questionnaire which is Selected from the User
-        LOG.info("Select the Questionnaire");
+        LOG.info("Select the questionnaire");
         iLearningQuestionnaireService.select(selectedLearningQuestionnaire);
         lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         lerntiaService.getFirstQuestion();
