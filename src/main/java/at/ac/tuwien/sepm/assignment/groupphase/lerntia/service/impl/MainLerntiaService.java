@@ -468,7 +468,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         for (Question aQuestionList : questionList) {
             String givenAnswers = aQuestionList.getCheckedAnswers();
             String correctAnswers = aQuestionList.getCorrectAnswers();
-            if (!givenAnswers.equals(correctAnswers)) {
+            if (givenAnswers != null && !givenAnswers.trim().equals(correctAnswers.trim())) {
                 count++;
             }
         }
