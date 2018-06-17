@@ -1,20 +1,16 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
-
-import java.util.List;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 
 public interface IExamResultsWriterService {
 
     /**
      * Write the exam results to a file for future reference
      *
-     * @param questions a list of all the questions used in the exam
-     * @param name the name of the exam
-     * @param path      the path where the exam results should be saved
+     * @param examwriter includes questions, name and path of exam
      * @throws ServiceException if the exam results cannot be written
      */
-    void writeExamResults(List<Question> questions, String name, String path) throws ServiceException;
+    void writeExamResults(ExamWriter examwriter) throws ServiceException;
 
 }

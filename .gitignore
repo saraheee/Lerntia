@@ -58,7 +58,10 @@ hs_err_pid*
 *.db
 
 ### Testdata-Files ###
-img/
+img/*
+!img/test_exam/
+!img/test_exam/test.png
+!img/test_exam/test_2.jpg
 img_original/playground
 csv/playground
 csv_export
