@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,13 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.lang.invoke.MethodHandles;
 
 import static org.springframework.util.Assert.notNull;
 
 @Controller
-public class AudioController {
+public class AudioController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -35,9 +33,8 @@ public class AudioController {
     private String answer5;
 
     @Autowired
-    public AudioController(ITextToSpeechService iTextToSpeechService, IMainLerntiaService lerntiaService, AlertController alertController) {
+    public AudioController(ITextToSpeechService iTextToSpeechService, AlertController alertController) {
         notNull(iTextToSpeechService, "'iTextToSpeechService' should not be null");
-        notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(alertController, "'alertController' should not be null");
         this.iTextToSpeechService = iTextToSpeechService;
         this.alertController = alertController;
@@ -57,7 +54,6 @@ public class AudioController {
             tts.setAnswer3(this.answer3);
             tts.setAnswer4(this.answer4);
             tts.setAnswer5(this.answer5);
-            resetAnswers();
             if (iTextToSpeechService != null) {
                 try {
                     stopReading();
@@ -77,16 +73,8 @@ public class AudioController {
         }
     }
 
-    private void resetAnswers() {
-        this.question = null;
-        this.answer1 = null;
-        this.answer2 = null;
-        this.answer3 = null;
-        this.answer4 = null;
-        this.answer5 = null;
-    }
-
     void readSingleAnswer(String answerText) {
+        deselectAudioButton();
         if (answerText == null || answerText.trim().length() < 1) {
             showValidationFailedDialog();
         } else {
@@ -111,18 +99,40 @@ public class AudioController {
         }
     }
 
+    void readFeedbackText(String feedbackText) {
+        deselectAudioButton();
+        var tts = new Speech();
+        tts.setFeedbackText(feedbackText);
+        if (iTextToSpeechService != null) {
+            try {
+                stopReading();
+                iTextToSpeechService.readFeedbackText(tts);
+
+            } catch (TextToSpeechServiceException e) {
+                LOG.error("Failed to read the feedback text.");
+                showAudioErrorDialog();
+            } catch (TextToSpeechServiceValidationException e) {
+                LOG.error("Validation failed for the input text of the speech synthesizer.");
+                showValidationFailedDialog();
+            }
+        } else {
+            LOG.error("Failed to read the feedback text: iTextToSpeechService is 'null'");
+            showAudioErrorDialog();
+        }
+    }
+
     void stopReading() {
         iTextToSpeechService.stopSpeaking();
     }
 
     void setSelected() {
         if (audioButton.isDefaultButton()) {
-            audioButton.defaultButtonProperty().setValue(false);
+            deselectAudioButton();
             //stop sound
             stopReading();
         } else {
-            audioButton.defaultButtonProperty().setValue(true);
             onAudioButtonClicked();
+            selectAudioButton();
         }
     }
 
@@ -132,7 +142,7 @@ public class AudioController {
     }
 
     private void showValidationFailedDialog() {
-        alertController.showBigAlert(Alert.AlertType.ERROR, "Validierung fehlgeschlagen",
+        alertController.showBigAlert(Alert.AlertType.ERROR, "Kein Text gefunden",
             "Kein Text zum Lesen vorhanden.", "");
     }
 
@@ -160,5 +170,23 @@ public class AudioController {
         this.answer5 = answer;
     }
 
+    private void selectAudioButton() {
+        audioButton.defaultButtonProperty().setValue(true);
+        var audioThread = new Thread(this);
+        audioThread.start();
+    }
 
+    void deselectAudioButton() {
+        audioButton.defaultButtonProperty().setValue(false);
+    }
+
+    @Override
+    public void run() {
+        while (audioButton != null && audioButton.isDefaultButton()) {
+            if (iTextToSpeechService.noCurrentAudio()) {
+                deselectAudioButton();
+                LOG.debug("Deselected the audio button.");
+            }
+        }
+    }
 }

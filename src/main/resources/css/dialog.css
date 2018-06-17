@@ -5,14 +5,12 @@
     -fx-text-fill: #333333;
 }
 
-
 .dialogue-header {
     -fx-font-size: 36px;
     -fx-font-family: "Lora-Bold";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
-
 
 .dialogue-content {
     -fx-font-size: 22px;
@@ -33,21 +31,46 @@
 }
 
 .button:focused {
-    -fx-background-color: rgba(0, 50, 250, 0.2);
-}
-
-.button:focused:hover {
     -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
+.button:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
+}
+
 .button:default {
-    -fx-background-color: rgba(51, 0, 102, 0.15);
+    -fx-background-color: rgba(51, 0, 102, 0.05);
 }
 
 .button:default:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.1);
+}
+
+.button:default:selected {
     -fx-background-color: rgba(51, 0, 152, 0.2);
+}
+
+.button:default:focused {
+    -fx-background-color: rgba(0, 50, 250, 0.3);
+    -fx-effect: dropshadow(gaussian, white, 50, -6, 0, 0);
+}
+
+.button:default:focused:hover {
+    -fx-background-color: rgba(0, 50, 250, 0.2);
 }
 
 .button:selected {
     -fx-background-color: #3e8e41;
+}
+
+.default-color0.chart-pie {
+    -fx-pie-color: #008000;
+}
+
+.default-color1.chart-pie {
+    -fx-pie-color: #ff0000;
+}
+
+.default-color2.chart-pie {
+    -fx-pie-color: 	#ababab;
 }

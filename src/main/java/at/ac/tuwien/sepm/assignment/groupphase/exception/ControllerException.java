@@ -2,8 +2,11 @@ package at.ac.tuwien.sepm.assignment.groupphase.exception;
 
 public class ControllerException extends Exception {
 
+    private String customMessage;
+
     public ControllerException(String message) {
         super(message);
+        this.customMessage = message;
     }
 
     public ControllerException(String message, Throwable cause) {
@@ -12,6 +15,14 @@ public class ControllerException extends Exception {
 
     public ControllerException(Throwable cause) {
         super(cause);
+    }
+
+    public String getCustomMessage() {
+        return customMessage;
+    }
+
+    public void setCustomMessage(String customMessage) {
+        this.customMessage = customMessage;
     }
 
 }

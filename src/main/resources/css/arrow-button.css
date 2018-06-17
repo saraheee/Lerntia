@@ -1,0 +1,15 @@
+.button {
+    -fx-width: 80%;
+    -fx-background-color: white;
+}
+
+.button:hover {
+    -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);
+}
+
+.button:focused {
+}
+
+.button:default {
+    -fx-effect: dropshadow(gaussian, black, 20, -5, 0, 0);
+}

@@ -23,18 +23,27 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ConfigReader configReaderSpeech = new ConfigReader("speech");
 
-    private final String WELCOME = configReaderSpeech.getValue("welcomeText");
-    private final String ANSWER = configReaderSpeech.getValue("answerPrefix");
-    private final String VOICE = configReaderSpeech.getValue("voice");
-    private final String BREAK = configReaderSpeech.getValue("break");
-    private final boolean playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+    private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
+    private String ANSWER = "Antwort nummer";
+    private String VOICE = "bits3-hsmm";
+    private String BREAK = "....";
+    private boolean playWelcomeText = false;
 
     private AudioPlayer audioPlayer;
     private MaryInterface maryTTS;
     private boolean singleAnswer = false;
+    private boolean feedbackText = false;
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
+        if (configReaderSpeech != null) {
+            WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
+            ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
+            VOICE = configReaderSpeech.getValue("voice")         != null ? configReaderSpeech.getValue("voice") : VOICE;
+            BREAK = configReaderSpeech.getValue("break")         != null ? configReaderSpeech.getValue("break") : BREAK;
+            playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+        }
+
         LOG.trace("Entering method playWelcomeText.");
         try {
             maryTTS = new LocalMaryInterface();
@@ -43,7 +52,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.error("Failed to initialize speech synthesizer!");
             throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
         }
-        if(playWelcomeText) {
+        if (playWelcomeText) {
             playText(WELCOME);
         }
     }
@@ -55,12 +64,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.trace("maryTTS is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
             LOG.trace("stopSpeaking method is called. Calling playText method.");
-            if (!singleAnswer) {
-                playText(getText(textToSpeech));
-            } else {
-                playText(textToSpeech.getSingleAnswer());
-                singleAnswer = false;
-            }
+            getTextToRead(textToSpeech);
             LOG.trace("playText method is called.");
         } else {
             try {
@@ -68,16 +72,23 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 maryTTS = new LocalMaryInterface();
                 LOG.trace("mary interface is created. maryTTS is not null anymore.");
                 maryTTS.setVoice(VOICE);
-                if (!singleAnswer) {
-                    playText(getText(textToSpeech));
-                } else {
-                    playText(textToSpeech.getSingleAnswer());
-                    singleAnswer = false;
-                }
+                getTextToRead(textToSpeech);
             } catch (MaryConfigurationException e) {
                 LOG.error("Failed to initialize speech synthesizer!");
                 throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
             }
+        }
+    }
+
+    private void getTextToRead(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        if (singleAnswer) {
+            playText(textToSpeech.getSingleAnswer());
+            singleAnswer = false;
+        } else if (feedbackText) {
+            playText(textToSpeech.getFeedbackText());
+            feedbackText = false;
+        } else {
+            playText(getQuestionAndAnswerText(textToSpeech));
         }
     }
 
@@ -88,9 +99,16 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         readQuestionAndAnswers(textToSpeech);
     }
 
+    @Override
+    public void readFeedbackText(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        LOG.trace("Entering method readFeedbackText.");
+        feedbackText = true;
+        readQuestionAndAnswers(textToSpeech);
+    }
+
     private void playText(String text) throws TextToSpeechServiceException {
         LOG.trace("Entering method playText.");
-        try (var audio = maryTTS.generateAudio(filterTextInParenthesis(text))) {
+        try (var audio = maryTTS.generateAudio(replaceUmlauts(filterTextInParenthesis(text)))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -126,6 +144,13 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         return filtered.toString();
     }
 
+    public String replaceUmlauts(String text) {
+        return text.replace("ae", "\u00e4")
+            .replace("oe", "\u00f6")
+            .replace("ue", "\u00fc")
+            .replace("sz", "\u00DF");
+    }
+
     @Override
     public void stopSpeaking() {
         LOG.trace("Entering method stopSpeaking.");
@@ -142,7 +167,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         maryTTS.setVoice(textToSpeech.getVoice());
     }
 
-    public String getText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
+    @Override
+    public boolean noCurrentAudio() {
+        return audioPlayer == null || audioPlayer.finishedAudio;
+    }
+
+    public String getQuestionAndAnswerText(Speech textToSpeech) throws TextToSpeechServiceValidationException {
         if (emptyQuestionAndAnswer(textToSpeech)) {
             throw new TextToSpeechServiceValidationException("All questions and answers are empty. Nothing to read!");
         }
@@ -172,7 +202,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
 
     public enum answerNumber {
-        eins, zwei, drei, vier, fünf
+        eins, zwei, drei, vier
     }
 
 }

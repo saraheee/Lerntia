@@ -3,33 +3,28 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.lang.invoke.MethodHandles;
-import java.util.List;
 
 @Service
 public class SimpleExamResultsWriterService implements IExamResultsWriterService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final IExamResultsWriterDAO iExamResultsWriterDAO;
 
+    @Autowired
     public SimpleExamResultsWriterService(IExamResultsWriterDAO iExamResultsWriterDAO) {
         this.iExamResultsWriterDAO = iExamResultsWriterDAO;
     }
 
     @Override
-    public void writeExamResults(List<Question> questions, String path) throws ServiceException {
+    public void writeExamResults(ExamWriter examwriter) throws ServiceException {
         try {
-            iExamResultsWriterDAO.writeExamResults(questions, path);
+            iExamResultsWriterDAO.writeExamResults(examwriter);
         } catch (PersistenceException e) {
-            // TODO - i want to pass the error message along. is this ok?
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getCustomMessage());
         }
     }
 }
