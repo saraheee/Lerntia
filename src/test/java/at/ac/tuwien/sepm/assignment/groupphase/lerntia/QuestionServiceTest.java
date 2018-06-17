@@ -91,7 +91,6 @@ public class QuestionServiceTest {
     // search
     // -----------------------------------------------------------------------------------------------------------------
 
-    @Ignore
     @Test
     public void searchQuestions() throws ServiceException {
         List<Question> questionlist = new ArrayList<>();
@@ -117,7 +116,8 @@ public class QuestionServiceTest {
         q2.setOptionalFeedback("feedback");
         questionlist.add(q2);
         questionService.create(q2);
-        List<Question> questions = questionService.search(questionlist);
+        List<Question> questions = questionService.search(new ArrayList<>(questionlist));
+        LOG.debug("mylist: " + questionlist.size() + ", searchlist: " + questions.size());
         assertTrue(questionlist.get(0).getQuestionText().equals(questions.get(0).getQuestionText()));
         assertTrue(questionlist.get(1).getQuestionText().equals(questions.get(1).getQuestionText()));
     }

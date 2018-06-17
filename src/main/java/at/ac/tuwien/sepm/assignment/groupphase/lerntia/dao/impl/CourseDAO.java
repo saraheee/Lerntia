@@ -68,7 +68,7 @@ public class CourseDAO implements ICourseDAO {
                 psUpdate.setString(3, course.getName());
                 psUpdate.setLong(4, course.getId());
                 psUpdate.executeUpdate();
-                LOG.info("Course succefsully updated in Database.");
+                LOG.info("Course successfully updated in Database.");
             }
         } catch (SQLException e) {
             throw new PersistenceException("CourseDAO UPDATE error: Selected Course couldn't be updated, check if all mandatory values have been inserted or if connection to the Database is valid.");
