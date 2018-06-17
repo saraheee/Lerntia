@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionnair
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
@@ -22,6 +23,8 @@ import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+
+import static junit.framework.TestCase.assertTrue;
 
 public class ExamQuestionnaireDAOTest {
 
@@ -100,6 +103,27 @@ public class ExamQuestionnaireDAOTest {
         chapter1.setDate(LocalDate.now());
         examQuestionnaireDAO.create(chapter1);
 
+    }
+
+    @Test
+    public void readAllExamQuestionnaire() throws PersistenceException {
+        int before = examQuestionnaireDAO.readAll().size();
+
+        Course course = new Course();
+        course.setSemester(Semester.WS + "2018");
+        course.setMark("123.14232");
+        course.setName("asdf");
+        courseDAO.create(course);
+
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setCourseID(course.getId());
+        chapter1.setName("TILExam");
+        examQuestionnaireDAO.create(chapter1);
+
+        int after = examQuestionnaireDAO.readAll().size();
+
+        assertTrue(before+1 == after);
     }
 
 }
