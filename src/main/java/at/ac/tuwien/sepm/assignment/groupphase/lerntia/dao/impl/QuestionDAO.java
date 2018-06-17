@@ -183,7 +183,7 @@ public class QuestionDAO implements IQuestionDAO {
                 return q;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO GET error : matching question coulnd't be found, check if proper value given or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO GET error : matching question couldn't be found! Check if proper value given or if the connection to the database is valid.");
         }
     }
 

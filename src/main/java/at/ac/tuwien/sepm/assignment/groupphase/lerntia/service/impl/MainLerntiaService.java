@@ -385,11 +385,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public int getListCounter() {
-        return this.listCounter;
-    }
-
-    @Override
     public List<Question> getQuestionList() {
         return this.questionList;
     }
@@ -413,11 +408,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     public void setExamMode(boolean examMode) {
         this.examMode = examMode;
 
-    }
-
-    @Override
-    public void setExamQuestionnaire(ExamQuestionnaire selectedQuestionnaire) {
-        this.currentEQ = selectedQuestionnaire;
     }
 
     @Override
