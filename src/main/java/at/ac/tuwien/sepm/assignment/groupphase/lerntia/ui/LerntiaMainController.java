@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
@@ -664,7 +665,7 @@ public class LerntiaMainController implements Runnable {
 
         try {
             if (filePath != null) {
-                iExamResultsWriterService.writeExamResults(questionList, this.getExamName(), filePath);
+                iExamResultsWriterService.writeExamResults(new ExamWriter(questionList, this.getExamName(), filePath));
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
                     "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
             }
