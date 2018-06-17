@@ -274,6 +274,39 @@ public class QuestionnaireQuestionDAOTest {
     }
 
     @Test
+    public void deleteQuestionnaireQuestion() throws PersistenceException {
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2015");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
+
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf");
+        chapter1.setCourseID(tgi.getId());
+        examQuestionnaireDAO.create(chapter1);
+
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("No");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
+
+        int before = questionnaireQuestionDAO.readAll().size();
+        questionnaireQuestionDAO.delete(firstQuestionFirstChapter);
+        int after = questionnaireQuestionDAO.readAll().size();
+
+        assertTrue(before > after);
+    }
+
+    @Test
     public void updateQuestionnaireQuestion() throws PersistenceException {
         Course tgi = new Course();
         tgi.setSemester(Semester.SS + "2015");
