@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
 
 import java.io.File;
@@ -23,7 +22,7 @@ public interface IQuestionnaireImportService {
      * @param file a directory with all images
      * @param name the name of the file
      * @throws ServiceException if an error occurred
-     * @throws IOException if the File cannot be read
+     * @throws IOException      if the File cannot be read
      */
     void importPictures(File file, String name) throws ServiceException, IOException;
 

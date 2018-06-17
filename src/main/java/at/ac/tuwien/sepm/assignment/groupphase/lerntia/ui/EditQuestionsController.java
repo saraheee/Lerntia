@@ -76,11 +76,6 @@ public class EditQuestionsController {
         tf_question.setText("Frage");
         tf_answer1.setText("Antwort 1");
         tf_answer2.setText("Antwort 2");
-        tf_answer3.setText("Antwort 3");
-        tf_answer4.setText("Antwort 4");
-        tf_answer5.setText("Antwort 5");
-        tf_correctAnswer.setText("Correct Answer");
-        tf_optionalFeedback.setText("Optional Feedback");
         PATH = System.getProperty("user.dir") + File.separator + "img" + File.separator +
             learningQuestionnaire.getName() + File.separator;
     }
@@ -129,14 +124,14 @@ public class EditQuestionsController {
         if (notEmpty(tf_question.getText()) && notEmpty(tf_answer1.getText()) && notEmpty(tf_answer2.getText())
             && notEmpty(tf_correctAnswer.getText())) {
             var newData = new Question();
-            newData.setQuestionText(tf_question.getText());
-            newData.setAnswer1(tf_answer1.getText());
-            newData.setAnswer2(tf_answer2.getText());
-            newData.setAnswer3(tf_answer3.getText());
-            newData.setAnswer4(tf_answer4.getText());
-            newData.setAnswer5(tf_answer5.getText());
-            newData.setCorrectAnswers(tf_correctAnswer.getText());
-            newData.setOptionalFeedback(tf_optionalFeedback.getText());
+            newData.setQuestionText(tf_question.getText().trim());
+            newData.setAnswer1(tf_answer1.getText().trim());
+            newData.setAnswer2(tf_answer2.getText().trim());
+            newData.setAnswer3(tf_answer3.getText().trim());
+            newData.setAnswer4(tf_answer4.getText().trim());
+            newData.setAnswer5(tf_answer5.getText().trim());
+            newData.setCorrectAnswers(tf_correctAnswer.getText().trim());
+            newData.setOptionalFeedback(tf_optionalFeedback.getText().trim());
             newData.setId(selectedQuestion.getId());
             newData.setPicture(imageName);
             LOG.debug("image name: " + imageName);
