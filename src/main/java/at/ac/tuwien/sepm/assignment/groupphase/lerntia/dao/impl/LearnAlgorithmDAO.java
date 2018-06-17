@@ -42,6 +42,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void create(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
+        if (questionLearnAlgorithm == null) {
+            throw new PersistenceException("Question learn algorithm is null!");
+        }
         try {
             LOG.info("Prepare Create Statement for QuestionLearnAlgorithm.");
             try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_CREATE_STATEMENT)) {
@@ -56,6 +59,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void update(List<QuestionLearnAlgorithm> questionLearnAlgorithmList) throws PersistenceException {
+        if (questionLearnAlgorithmList == null) {
+            throw new PersistenceException("Question learn algorithm list is null!");
+        }
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_UPDATE_STATEMENT)) {
             LOG.info("Create list of update statements for QuestionLearnAlgorithms");
             for (QuestionLearnAlgorithm questionLearnAlgorithm : questionLearnAlgorithmList) {
@@ -73,6 +79,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void delete(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
+        if (questionLearnAlgorithm == null) {
+            throw new PersistenceException("Question learn algorithm is null!");
+        }
         try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_DELETE_STATEMENT)) {
             LOG.info("Create Delete statement for QuestionLearnAlgorithm.");
             psDelete.setLong(1, questionLearnAlgorithm.getID());
@@ -103,20 +112,30 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
     }
 
     @Override
-    public void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException {
+    public void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws PersistenceException {
+        if (readResults == null || rsReadAll == null) {
+            throw new PersistenceException("At least one of the learn algorithm result values is null!");
+        }
         QuestionLearnAlgorithm questionLearnAlgorithm;
-        while (rsReadAll.next()) {
-            questionLearnAlgorithm = new QuestionLearnAlgorithm();
-            questionLearnAlgorithm.setID(rsReadAll.getLong(1));
-            questionLearnAlgorithm.setSuccessValue(rsReadAll.getInt(2));
-            questionLearnAlgorithm.setFailureValue(rsReadAll.getInt(3));
-            questionLearnAlgorithm.setPoints(rsReadAll.getDouble(4));
-            readResults.add(questionLearnAlgorithm);
+        try {
+            while (rsReadAll.next()) {
+                questionLearnAlgorithm = new QuestionLearnAlgorithm();
+                questionLearnAlgorithm.setID(rsReadAll.getLong(1));
+                questionLearnAlgorithm.setSuccessValue(rsReadAll.getInt(2));
+                questionLearnAlgorithm.setFailureValue(rsReadAll.getInt(3));
+                questionLearnAlgorithm.setPoints(rsReadAll.getDouble(4));
+                readResults.add(questionLearnAlgorithm);
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("An error occurred while getting the results from the learn algorithm.");
         }
     }
 
     @Override
     public List<QuestionLearnAlgorithm> search(List<QuestionLearnAlgorithm> questionAlgorithmList) throws PersistenceException {
+        if (questionAlgorithmList == null) {
+            throw new PersistenceException("Question learn algorithm list is null!");
+        }
         try {
             LOG.info("Create search Statement for QuestionLearnAlgorithm,");
             QuestionLearnAlgorithm searchParameter;
@@ -145,6 +164,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
     @Override
     public void reset(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
+        if (questionLearnAlgorithm == null) {
+            throw new PersistenceException("Question learn algorithm is null!");
+        }
         try (PreparedStatement psReset = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_RESET_STATEMENT)) {
             LOG.info("Prepare reset statement for QuestionLearnAlgorithm.");
 

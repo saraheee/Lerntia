@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
@@ -648,16 +647,11 @@ public class LerntiaMainController implements Runnable {
             "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
         if (handInConfirmation) {
-            try {
-                evaluateExam();
-            } catch (ControllerException e) {
-                alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                    "Fehler", e.getCustomMessage());
-            }
+            evaluateExam();
         }
     }
 
-    private void evaluateExam() throws ControllerException {
+    private void evaluateExam() {
 
         List<Question> questionList;
         questionList = lerntiaService.getQuestions();

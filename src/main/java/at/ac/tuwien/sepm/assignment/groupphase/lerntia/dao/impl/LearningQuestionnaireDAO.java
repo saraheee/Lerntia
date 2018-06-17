@@ -41,6 +41,9 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     @Override
     public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+        if (learningQuestionnaire == null) {
+            throw new PersistenceException("Learning questionnaire or its id is null!");
+        }
         try {
             LOG.info("Create preparation for LearningQuestionnaire and Questionnaire.");
             questionnaireDAO.create(learningQuestionnaire);
@@ -84,12 +87,18 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
 
     @Override
     public void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+        if (learningQuestionnaire == null) {
+            throw new PersistenceException("Learning questionnaire is null!");
+        }
         LOG.info("Select LearningQuestionnaire");
         questionnaireDAO.select(learningQuestionnaire);
     }
 
     @Override
     public void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
+        if (learningQuestionnaire == null) {
+            throw new PersistenceException("Learning questionnaire is null!");
+        }
         LOG.info("Deselect LearningQuestionnaire");
         questionnaireDAO.deselect(learningQuestionnaire);
     }

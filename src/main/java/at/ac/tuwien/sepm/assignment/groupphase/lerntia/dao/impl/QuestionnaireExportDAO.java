@@ -31,6 +31,9 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
 
     @Override
     public void exportQuestionnaire(LearningQuestionnaire questionnaire, List<Question> allQuestions) throws PersistenceException, FileExistsException {
+        if (questionnaire == null || allQuestions == null) {
+            throw new PersistenceException("At least one value of the questionnaire export values is null!");
+        }
         var csvPath = Paths.get(System.getProperty("user.dir") + File.separator + "csv_export");
         var csvDir = new File(String.valueOf(csvPath));
 
@@ -69,18 +72,16 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
         }
         //Get all questions
         var csvOutput = new StringBuilder();
-        if (allQuestions != null) {
-            for (var q : allQuestions) {
-                csvOutput.append(q.getQuestionText()).append(";")
-                    .append(q.getAnswer1()).append(";")
-                    .append(q.getAnswer2()).append(";")
-                    .append(q.getAnswer3()).append(";")
-                    .append(q.getAnswer4()).append(";")
-                    .append(q.getAnswer5()).append(";")
-                    .append(q.getCorrectAnswers()).append(";")
-                    .append(q.getPicture()).append(";")
-                    .append(q.getOptionalFeedback()).append(";\n");
-            }
+        for (var q : allQuestions) {
+            csvOutput.append(q.getQuestionText()).append(";")
+                .append(q.getAnswer1()).append(";")
+                .append(q.getAnswer2()).append(";")
+                .append(q.getAnswer3()).append(";")
+                .append(q.getAnswer4()).append(";")
+                .append(q.getAnswer5()).append(";")
+                .append(q.getCorrectAnswers()).append(";")
+                .append(q.getPicture()).append(";")
+                .append(q.getOptionalFeedback()).append(";\n");
         }
         try {
             writer.append(csvOutput.toString());
@@ -101,6 +102,9 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
 
     @Override
     public void overwriteFile(LearningQuestionnaire questionnaire, List<Question> allQuestions) throws PersistenceException, FileExistsException {
+        if (questionnaire == null || allQuestions == null) {
+            throw new PersistenceException("At least one value of the questionnaire export values is null!");
+        }
         overwriteFile = true;
         exportQuestionnaire(questionnaire, allQuestions);
     }

@@ -47,6 +47,10 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public void create(Question question) throws PersistenceException {
+        if (question == null || question.getQuestionText() == null || question.getAnswer1() == null
+            || question.getAnswer2() == null || question.getCorrectAnswers() == null) {
+            throw new PersistenceException("At least one of the question values is null!");
+        }
         try {
             LOG.info("Prepare Statement for Question creation.");
             try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTION_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
@@ -79,6 +83,11 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public void update(Question question) throws PersistenceException {
+        if (question == null || question.getQuestionText() == null || question.getPicture() == null || question.getAnswer1() == null
+            || question.getAnswer2() == null || question.getAnswer3() == null || question.getAnswer4() == null || question.getAnswer5() == null
+            || question.getCorrectAnswers() == null || question.getOptionalFeedback() == null || question.getId() == null) {
+            throw new PersistenceException("At least one of the question values is null!");
+        }
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTION_UPDATE_STATEMENT)) {
             LOG.info("Prepare statement for question update.");
             psUpdate.setString(1, question.getQuestionText());
@@ -104,6 +113,9 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public List<Question> search(List<Question> questionList) throws PersistenceException {
+        if (questionList == null) {
+            throw new PersistenceException("Question list is null!");
+        }
         try {
             LOG.info("Prepare search parameters for the Question search.");
             List<Question> searchResults = new ArrayList<>();
@@ -143,6 +155,9 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public void delete(Question question) throws PersistenceException {
+        if (question == null || question.getId() == null) {
+            throw new PersistenceException("Question or question id is null!");
+        }
         try {
             LOG.info("Prepare statement for question deletion.");
             try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTION_DELETE_STATEMENT)) {
@@ -189,6 +204,9 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public List<Question> searchForQuestions(Question questionInput) throws PersistenceException {
+        if (questionInput == null) {
+            throw new PersistenceException("At least one of the question search values is null!");
+        }
         List<Question> results = new ArrayList<>();
         LOG.info("Search a Questions which contains a part of a input String");
         try (PreparedStatement ps = connection.prepareStatement(SQL_QUESTION_SEARCH_UPPER_STATEMENT)) {

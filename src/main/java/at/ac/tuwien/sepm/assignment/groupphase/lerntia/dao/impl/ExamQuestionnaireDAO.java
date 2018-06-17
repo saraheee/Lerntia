@@ -38,6 +38,9 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
 
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
+        if (examQuestionnaire == null) {
+            throw new PersistenceException("At least one value of the exam questionnaire is null!");
+        }
         try {
             LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
             questionnaireDAO.create(examQuestionnaire);

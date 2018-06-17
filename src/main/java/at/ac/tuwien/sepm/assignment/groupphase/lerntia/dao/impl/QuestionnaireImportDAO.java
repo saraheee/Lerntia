@@ -23,8 +23,10 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
-    public ArrayList<String> getContents(String filePath) throws IOException {
-
+    public ArrayList<String> getContents(String filePath) throws IOException, PersistenceException {
+        if (filePath == null) {
+            throw new PersistenceException("File path for the questionnaire import is null!");
+        }
         // A BufferedReader Object is created using path that is the argument of this method
         FileReader fr = new FileReader(filePath);
         ArrayList<String> fileContent;
@@ -46,7 +48,9 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
     @Override
     public void importPictures(File file, String name) throws IOException, PersistenceException {
-
+        if (file == null || name == null) {
+            throw new PersistenceException("File or name for importing pictures is null!");
+        }
         Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
         File imgDir = new File(String.valueOf(imgPath));
 

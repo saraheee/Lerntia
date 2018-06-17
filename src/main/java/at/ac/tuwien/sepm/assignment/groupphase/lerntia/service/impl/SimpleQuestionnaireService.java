@@ -1,9 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +13,10 @@ import java.util.List;
 public class SimpleQuestionnaireService implements IQuestionnaireService {
 
     private final ILearningQuestionnaireService iLearningQuestionnaire;
-    private final IExamQuestionnaireService iExamQuestionnaireService;
 
     @Autowired
-    public SimpleQuestionnaireService(
-        ILearningQuestionnaireService iLearningQuestionnaire,
-        IExamQuestionnaireService iExamQuestionnaireService
-    ) {
+    public SimpleQuestionnaireService(ILearningQuestionnaireService iLearningQuestionnaire) {
         this.iLearningQuestionnaire = iLearningQuestionnaire;
-        this.iExamQuestionnaireService = iExamQuestionnaireService;
     }
 
     @Override

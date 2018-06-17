@@ -40,6 +40,9 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     @Override
     public void create(Questionnaire questionnaire) throws PersistenceException {
         LOG.info("Prepare Statement for Questionnaire creation");
+        if (questionnaire == null || questionnaire.getCourseID() == null || questionnaire.getName() == null) {
+            throw new PersistenceException("At least one value of the questionnaire is null!");
+        }
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
             try {
                 psCreate.setLong(1, questionnaire.getCourseID());
@@ -60,6 +63,9 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
     @Override
     public String getQuestionnaireName(Long id) throws PersistenceException {
+        if (id == null) {
+            throw new PersistenceException("ID is null!");
+        }
         LOG.info("Prepare Statement to get Questionnaire Name from the Database.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIRE_GETNAME_STATEMENT)) {
             psCreate.setLong(1, id);
@@ -79,12 +85,14 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
     @Override
     public void select(Questionnaire questionnaire) throws PersistenceException {
+        if (questionnaire == null || questionnaire.getId() == null) {
+            throw new PersistenceException("At least one value of the questionnaire is null!");
+        }
         LOG.info("Prepare statement for learning questionnaire selection.");
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_SELECT_STATEMENT)) {
-            if (questionnaire != null) {
-                psUpdate.setLong(1, questionnaire.getId());
-                psUpdate.executeUpdate();
-            }
+            psUpdate.setLong(1, questionnaire.getId());
+            psUpdate.executeUpdate();
+
             LOG.info("Learningquestionnaire successfully selected in Database.");
         } catch (SQLException e) {
             throw new PersistenceException("Learning questionnaire SELECTION DAO error!");
@@ -93,16 +101,18 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
     @Override
     public void deselect(Questionnaire questionnaire) throws PersistenceException {
-        LOG.info("Prepare statement for learning questionnaire selection.");
-        if(questionnaire != null) {
-            try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_DESELECT_STATEMENT)) {
-                psUpdate.setLong(1, questionnaire.getId());
-                psUpdate.executeUpdate();
-                LOG.info("Learning questionnaire successfully deselected in Database.");
-            } catch (SQLException e) {
-                throw new PersistenceException("QuestionnaireDAO DESELECT error");
-            }
+        if (questionnaire == null || questionnaire.getId() == null) {
+            throw new PersistenceException("At least one value of the questionnaire is null!");
         }
+        LOG.info("Prepare statement for learning questionnaire selection.");
+        try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_DESELECT_STATEMENT)) {
+            psUpdate.setLong(1, questionnaire.getId());
+            psUpdate.executeUpdate();
+            LOG.info("Learning questionnaire successfully deselected in Database.");
+        } catch (SQLException e) {
+            throw new PersistenceException("QuestionnaireDAO DESELECT error");
+        }
+
     }
 
     @Override
