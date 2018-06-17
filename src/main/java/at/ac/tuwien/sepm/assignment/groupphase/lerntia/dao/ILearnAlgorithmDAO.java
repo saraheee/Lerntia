@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionLearnAlgorithm;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ILearnAlgorithmDAO {
@@ -47,9 +46,9 @@ public interface ILearnAlgorithmDAO {
      *
      * @param rsReadAll   ResultSet from the read all or search methods of the LearnAlgorithmDAO
      * @param readResults the List of results which the values of the result set need to be inserted
-     * @throws SQLException if the method can't transfer the values from the result set to the list
+     * @throws PersistenceException if the method can't transfer the values from the result set to the list
      */
-    void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws SQLException;
+    void getResults(ResultSet rsReadAll, List<QuestionLearnAlgorithm> readResults) throws PersistenceException;
 
     /**
      * Search for all specific algorithm values of specified questions.

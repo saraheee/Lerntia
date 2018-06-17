@@ -107,7 +107,7 @@ public class ExamResultsWriterServiceTest {
         Assert.assertTrue(file.exists());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ServiceException.class)
     public void exportPDFWrongImg() throws ServiceException {
 
         Question firstQuestion = new Question();

@@ -39,6 +39,9 @@ public class CourseDAO implements ICourseDAO {
 
     @Override
     public void create(Course course) throws PersistenceException {
+        if (course == null || course.getName() == null || course.getMark() == null || course.getSemester() == null) {
+            throw new PersistenceException("At least one value of the course is null!");
+        }
         try {
             LOG.info("Prepare Statement for new Course Creation.");
             try (PreparedStatement psCreate = connection.prepareStatement(SQL_COURSE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
@@ -60,6 +63,9 @@ public class CourseDAO implements ICourseDAO {
 
     @Override
     public void update(Course course) throws PersistenceException {
+        if (course == null || course.getName() == null || course.getMark() == null || course.getSemester() == null || course.getId() == null) {
+            throw new PersistenceException("At least one value of the course is null!");
+        }
         try {
             LOG.info("Prepare Statement for Course Update.");
             try (PreparedStatement psUpdate = connection.prepareStatement(SQL_COURSE_UPDATE_STATEMENT)) {
@@ -78,6 +84,9 @@ public class CourseDAO implements ICourseDAO {
 
     @Override
     public void delete(Course course) throws PersistenceException {
+        if (course == null || course.getId() == null) {
+            throw new PersistenceException("At least one value of the course is null!");
+        }
         try {
             LOG.info("Prepare Statement for Course Deletion");
             try (PreparedStatement psDelete = connection.prepareStatement(SQL_COURSE_DELETE_STATEMENT)) {

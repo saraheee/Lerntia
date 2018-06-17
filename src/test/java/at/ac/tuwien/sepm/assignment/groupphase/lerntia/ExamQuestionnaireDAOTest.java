@@ -9,7 +9,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamQuestionnair
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Questionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
@@ -97,7 +96,7 @@ public class ExamQuestionnaireDAOTest {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = PersistenceException.class)
     public void createNewExamQuestionnaireError() throws PersistenceException {
         ExamQuestionnaire chapter1 = new ExamQuestionnaire();
         chapter1.setDate(LocalDate.now());
@@ -123,7 +122,7 @@ public class ExamQuestionnaireDAOTest {
 
         int after = examQuestionnaireDAO.readAll().size();
 
-        assertTrue(before+1 == after);
+        assertTrue(before + 1 == after);
     }
 
 }

@@ -51,83 +51,62 @@ public class CourseDAOTest {
 
     @Test
     public void createNewCourse() throws PersistenceException {
-        try {
-            Course course = new Course();
-            course.setSemester(Semester.WS + "2018");
-            course.setName("ECG");
-            course.setMark("124.119");
-            courseDAO.create(course);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        Course course = new Course();
+        course.setSemester(Semester.WS + "2018");
+        course.setName("ECG");
+        course.setMark("124.119");
+        courseDAO.create(course);
     }
 
     @Test(expected = PersistenceException.class)
     public void createNewCourseError() throws PersistenceException {
-        try {
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS + "2018");
-            tgi.setName("TGI");
-            tgi.setMark(null);
-            courseDAO.create(tgi);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2018");
+        tgi.setName("TGI");
+        tgi.setMark(null);
+        courseDAO.create(tgi);
+
     }
 
     @Test
     public void updateExistingUserAndReadUser() throws PersistenceException {
-        try {
-            Course course = new Course();
-            course.setSemester(Semester.SS + "2017");
-            course.setMark("151.999");
-            course.setName("Akustik 2");
-            courseDAO.create(course);
+        Course course = new Course();
+        course.setSemester(Semester.SS + "2017");
+        course.setMark("151.999");
+        course.setName("Akustik 2");
+        courseDAO.create(course);
 
-            Course courseUpdated = new Course();
-            courseUpdated.setId(course.getId());
-            courseUpdated.setSemester(Semester.WS + "2018");
-            courseUpdated.setMark("151.999");
-            courseUpdated.setName("Akustik 2");
+        Course courseUpdated = new Course();
+        courseUpdated.setId(course.getId());
+        courseUpdated.setSemester(Semester.WS + "2018");
+        courseUpdated.setMark("151.999");
+        courseUpdated.setName("Akustik 2");
 
-            courseDAO.update(courseUpdated);
-
-
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        courseDAO.update(courseUpdated);
     }
 
     @Test
     public void deleteCourse() throws PersistenceException {
-        try {
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS + "2018");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
-            Course tgidelete = new Course();
-            tgidelete.setMark(tgi.getMark());
-            tgidelete.setId(tgi.getId());
-            courseDAO.delete(tgidelete);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2018");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
+        Course tgidelete = new Course();
+        tgidelete.setMark(tgi.getMark());
+        tgidelete.setId(tgi.getId());
+        courseDAO.delete(tgidelete);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = PersistenceException.class)
     public void deleteCourseError() throws PersistenceException {
-        try {
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS + "2018");
-            tgi.setMark("111.222");
-            tgi.setName("Informatik 1");
-            courseDAO.create(tgi);
-            tgi.setId(null);
-            courseDAO.delete(tgi);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2018");
+        tgi.setMark("111.222");
+        tgi.setName("Informatik 1");
+        courseDAO.create(tgi);
+        tgi.setId(null);
+        courseDAO.delete(tgi);
     }
 
     @Test

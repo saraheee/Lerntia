@@ -8,7 +8,6 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearningQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
@@ -22,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -71,34 +69,30 @@ public class LearningQuestionnaireDAOTest {
 
     @Test
     public void createNewLearningQuestionnaire() throws PersistenceException {
-        try {
-            Long expected;
+        Long expected;
 
-            Course tgi = new Course();
-            tgi.setSemester(Semester.SS + "15");
-            tgi.setMark("123.349");
-            tgi.setName("TGI");
-            courseDAO.create(tgi);
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "15");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
 
-            LearningQuestionnaire chapter1 = new LearningQuestionnaire();
-            chapter1.setName("Success chapter");
-            chapter1.setCourseID(tgi.getId());
-            learningQuestionnaireDAO.create(chapter1);
+        LearningQuestionnaire chapter1 = new LearningQuestionnaire();
+        chapter1.setName("Success chapter");
+        chapter1.setCourseID(tgi.getId());
+        learningQuestionnaireDAO.create(chapter1);
 
-            expected = chapter1.getId() + 1;
+        expected = chapter1.getId() + 1;
 
-            LearningQuestionnaire chapter2 = new LearningQuestionnaire();
-            chapter2.setName("Success chapter2");
-            chapter2.setCourseID(tgi.getId());
-            learningQuestionnaireDAO.create(chapter2);
+        LearningQuestionnaire chapter2 = new LearningQuestionnaire();
+        chapter2.setName("Success chapter2");
+        chapter2.setCourseID(tgi.getId());
+        learningQuestionnaireDAO.create(chapter2);
 
-            Assert.assertEquals(expected, chapter2.getId());
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e.getCustomMessage());
-        }
+        Assert.assertEquals(expected, chapter2.getId());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = PersistenceException.class)
     public void createNewLearningQuestionnaireError() throws PersistenceException {
         LearningQuestionnaire chapter1 = new LearningQuestionnaire();
         chapter1.setName("Error chapter");
@@ -123,7 +117,7 @@ public class LearningQuestionnaireDAOTest {
 
         int after = learningQuestionnaireDAO.readAll().size();
 
-        assertTrue(before+1 == after);
+        assertTrue(before + 1 == after);
     }
 
     @Test
