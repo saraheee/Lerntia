@@ -1,17 +1,11 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
-import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
-import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamResultsWriterDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,17 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ExamResultsWriterDAOTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Connection connection;
 
     private IExamResultsWriterDAO examResultsWriterDAO;
-    private IUserService userService;
 
     private String path;
 
@@ -45,24 +35,21 @@ public class ExamResultsWriterDAOTest {
 
         this.path = System.getProperty("user.dir") + File.separator + "test.pdf";
 
-        this.IUserService(new SimpleUserService());
     }
 
-    private void IexamResultsWriterDAO(ExamResultsWriterDAO examResultsWriterDAO){
+    private void IexamResultsWriterDAO(ExamResultsWriterDAO examResultsWriterDAO) {
         this.examResultsWriterDAO = examResultsWriterDAO;
     }
 
-    private void IUserService(SimpleUserService userService){
-        this.userService = userService;
-    }
-
     @After
-    public void cleanup(){
+    public void cleanup() {
 
         File file = new File(this.path);
 
-        if (file.exists()){
-            file.delete();
+        if (file.exists()) {
+            if (file.delete()) {
+                LOG.debug("File deleted.");
+            }
         }
 
     }
@@ -120,11 +107,11 @@ public class ExamResultsWriterDAOTest {
         Assert.assertTrue(file.exists());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = PersistenceException.class)
     public void exportPDFWrongImg() throws PersistenceException {
 
         Question firstQuestion = new Question();
-        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setQuestionText("How you doing now");
         firstQuestion.setAnswer1("No");
         firstQuestion.setAnswer2("yes");
         firstQuestion.setCorrectAnswers("1");
