@@ -111,7 +111,8 @@ public class SelectQuestionAdministrateController implements Runnable {
         try {
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
         } catch (ServiceException e) {
-            // TODO - show alert or throw new exception
+            alertController.showStandardAlert(Alert.AlertType.WARNING, "Aktualisierung fehlgeschlagen",
+                "Der aktuelle Lernfragebogen konnte nicht aktualisiert werden!", e.getCustomMessage());
         }
 
         //Fill the First Table.
@@ -150,8 +151,8 @@ public class SelectQuestionAdministrateController implements Runnable {
         });
     }
 
-    /**
-     * Refreshs the Data and the lertiaMainController
+    /*
+     * Refresh the Data and the lertiaMainController
      */
     public void refresh() {
         LearningQuestionnaire studyMode;
@@ -178,8 +179,8 @@ public class SelectQuestionAdministrateController implements Runnable {
         }
     }
 
-    /**
-     * @return the Content for the Table in form of a ObservableList<Question>
+    /*
+     * Return the Content for the Table in form of a ObservableList<Question>
      */
     private ObservableList<Question> getContent() {
         ObservableList<Question> content = FXCollections.observableArrayList();
@@ -187,9 +188,9 @@ public class SelectQuestionAdministrateController implements Runnable {
         return content;
     }
 
-    /**
+    /*
      * Opens the first Window in the SelectQuestionAdministrate operation.
-     * Opens a window in which the user can See all the Questions .
+     * Opens a window in which the user can See all the Questions.
      */
     public void showSelectQuestionAdministrateWindow(LearningQuestionnaire administrateMode) {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/selectQuestionAdministrate.fxml"));
@@ -255,7 +256,9 @@ public class SelectQuestionAdministrateController implements Runnable {
                     qq.setQuestionid(selectedItem.getId());
                     questionnaireQuestionService.delete(qq);
                 } catch (ServiceException e) {
-                    // TODO - show alert or throw new exception
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Löschen fehlgeschlagen",
+                        "Löschoperation fehlgeschlagen", e.getCustomMessage());
+                    return;
                 }
             }
 
@@ -283,21 +286,20 @@ public class SelectQuestionAdministrateController implements Runnable {
         buttonThread.start();
     }
 
-    /**
+    /*
      * Is a Helping Function used for the Search operation
      */
     @FXML
     public void onSearchButtonClicked() {
 
-        LOG.info("Hier: "+administrateMode.getId());
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(administrateMode.getId());
         List<QuestionnaireQuestion> tableQuestions = null;
         List<Long> allIDs = new ArrayList<>();
         try {
             tableQuestions = iQuestionnaireQuestionService.search(questionnaireQuestion);
-            for(int i = 0;i<tableQuestions.size();i++){
-                allIDs.add(tableQuestions.get(i).getQuestionid());
+            for (QuestionnaireQuestion tableQuestion : tableQuestions) {
+                allIDs.add(tableQuestion.getQuestionid());
             }
         } catch (ServiceException e) {
             e.printStackTrace();
@@ -322,17 +324,16 @@ public class SelectQuestionAdministrateController implements Runnable {
             }
 
             //Delete the Questions that are not in the selected Questionnaire.
-            for(int i = 0;i<searchedQuestions.size();i++){
-                if(!(allIDs.contains(searchedQuestions.get(i).getId()))){
+            for (int i = 0; i < searchedQuestions.size(); i++) {
+                if (!(allIDs.contains(searchedQuestions.get(i).getId()))) {
                     searchedQuestions.remove(searchedQuestions.get(i));
                 }
             }
 
             LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
-            // TODO - show alert or throw new exception
-            AlertController alertController = new AlertController();
-            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Warnung","Such option fehlgeschlagen",null);
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Suche fehlgeschlagen",
+                "Suchoperation fehlgeschlagen", e.getCustomMessage());
         }
 
         //Open the prev. Window and close the Current one

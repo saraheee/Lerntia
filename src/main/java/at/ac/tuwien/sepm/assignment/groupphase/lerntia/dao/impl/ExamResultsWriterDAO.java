@@ -27,7 +27,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
@@ -92,7 +91,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         // Each question is added to a table as well as an indicator if the answer was correct or not
 
-        for (var i = 0; i < examwriter.getQuestions().size(); i++){
+        for (var i = 0; i < examwriter.getQuestions().size(); i++) {
 
             try {
                 Paragraph container = getQuestionParagraph(examwriter.getQuestions().get(i), examwriter.getName(), i);
@@ -105,7 +104,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         document.close();
     }
 
-    public Paragraph getHeader(String name) throws PersistenceException{
+    public Paragraph getHeader(String name) throws PersistenceException {
 
         // the container is used to ensure that the text is not split over two pages
         // highly unlikely, but just to be sure.
@@ -134,7 +133,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             throw new PersistenceException("Die Daten des Studenten konnten für die PDF Datei nicht geladen werden.");
         }
 
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: "+student.getName()+"\nMatrikelnummer: "+student.getMatriculationNumber(), fontStudentInfo);
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + student.getName() + "\nMatrikelnummer: " + student.getMatriculationNumber(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
@@ -153,7 +152,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Paragraph container = new Paragraph();
 
-        Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i+1) + ":");
+        Paragraph paragraphQuestionNumber = new Paragraph("Frage " + (i + 1) + ":");
         paragraphQuestionNumber.setSpacingBefore(15);
 
         Paragraph paragraphQuestionText = new Paragraph(question.getQuestionText());
@@ -201,7 +200,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     }
 
-    public PdfPTable getAnswerTable(Question question) throws PersistenceException{
+    public PdfPTable getAnswerTable(Question question) throws PersistenceException {
 
         // create a table with 4 columns and stretch it to 100% of the page width
 
@@ -251,7 +250,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         return table;
     }
 
-    public PdfPCell getImageCellBox(URL path) throws PersistenceException{
+    public PdfPCell getImageCellBox(URL path) throws PersistenceException {
 
         Image img;
         try {
@@ -270,7 +269,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         return cell;
     }
 
-    public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException{
+    public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException {
 
         Image img;
 
