@@ -62,7 +62,7 @@ public interface IQuestionService {
     void validate(Question question) throws ServiceException;
 
     /**
-     * @param questionInput contains a part of a Question that is used to finde the Questions
+     * @param questionInput contains a part of a question that is used to find the questions
      * @return list which contains all the Question that contain a part of the questionInput
      */
     List<Question> searchForQuestions(Question questionInput) throws ServiceException;
