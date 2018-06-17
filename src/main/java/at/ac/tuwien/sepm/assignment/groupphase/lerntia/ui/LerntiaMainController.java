@@ -1,14 +1,13 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -52,6 +51,7 @@ public class LerntiaMainController implements Runnable {
     private final AudioController audioController;
     private final AlertController alertController;
     private final ILearningQuestionnaireService learningQuestionnaireService;
+    private final SimpleUserService simpleUserService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private final DirectoryChooserController directoryChooserController;
     private boolean onlyWrongQuestions = false;
@@ -105,7 +105,9 @@ public class LerntiaMainController implements Runnable {
         ZoomedImageController zoomedImageController,
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController,
-        DirectoryChooserController directoryChooserController) {
+        DirectoryChooserController directoryChooserController,
+        SimpleUserService simpleUserService
+    ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
@@ -119,6 +121,7 @@ public class LerntiaMainController implements Runnable {
         this.iExamResultsWriterService = iExamResultsWriterService;
         this.learnAlgorithmController = learnAlgorithmController;
         this.directoryChooserController = directoryChooserController;
+        this.simpleUserService = simpleUserService;
     }
 
     @FXML
@@ -645,11 +648,16 @@ public class LerntiaMainController implements Runnable {
             "Soll die Prüfung jetzt abgegeben werden?", "Diese Aktion kann nicht rückgängig gemacht werden.");
 
         if (handInConfirmation) {
-            evaluateExam();
+            try {
+                evaluateExam();
+            } catch (ControllerException e) {
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
+                    "Fehler", e.getCustomMessage());
+            }
         }
     }
 
-    private void evaluateExam() {
+    private void evaluateExam() throws ControllerException {
 
         List<Question> questionList;
         questionList = lerntiaService.getQuestions();
@@ -665,7 +673,17 @@ public class LerntiaMainController implements Runnable {
 
         try {
             if (filePath != null) {
-                iExamResultsWriterService.writeExamResults(new ExamWriter(questionList, this.getExamName(), filePath));
+
+                User student = null;
+
+                try {
+                    student = simpleUserService.read();
+                } catch (ServiceException e) {
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Ergebnis konnte nicht gespeichert werden!",
+                        "Fehler", "Die Daten des Studenten konnten nicht geladen werden!");
+                }
+
+                iExamResultsWriterService.writeExamResults(new ExamWriter(questionList, student, this.getExamName(), filePath));
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
                     "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
             }

@@ -33,9 +33,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final SimpleUserService simpleUserService;
-    private final SimpleQuestionService questionService;
-
     private PdfPCell cell_checked;
     private PdfPCell cell_box;
 
@@ -44,10 +41,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private Font fontExamDate;
     private Font fontStudentInfo;
 
+    private User student;
+
     @Autowired
-    public ExamResultsWriterDAO(SimpleQuestionService questionService, SimpleUserService simpleUserService) throws PersistenceException {
-        this.questionService = questionService;
-        this.simpleUserService = simpleUserService;
+    public ExamResultsWriterDAO() throws PersistenceException {
 
         // images are used to show if an answer has been selected or not.
         // these two images are loaded here and placed in a cell.
@@ -64,6 +61,8 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     @Override
     public void writeExamResults(ExamWriter examwriter) throws PersistenceException {
+
+        this.student = examwriter.getUser();
 
         // create the document
 
@@ -126,14 +125,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        User student;
-        try {
-            student = simpleUserService.read();
-        } catch (ServiceException e) {
-            throw new PersistenceException("Die Daten des Studenten konnten für die PDF Datei nicht geladen werden.");
-        }
-
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + student.getName() + "\nMatrikelnummer: " + student.getMatriculationNumber(), fontStudentInfo);
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
@@ -218,7 +210,13 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         table.addCell("Ausgewählt");
         table.addCell("Richtig");
 
-        ArrayList<String> allAnswers = questionService.getAllAnswers(question);
+        ArrayList<String> allAnswers = new ArrayList<>();
+
+        allAnswers.add(question.getAnswer1());
+        allAnswers.add(question.getAnswer2());
+        allAnswers.add(question.getAnswer3());
+        allAnswers.add(question.getAnswer4());
+        allAnswers.add(question.getAnswer5());
 
         for (int j = 0; j < allAnswers.size(); j++) {
 
