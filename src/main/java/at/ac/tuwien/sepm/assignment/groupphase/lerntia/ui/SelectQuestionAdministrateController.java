@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.swing.*;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -38,6 +39,7 @@ public class SelectQuestionAdministrateController implements Runnable {
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
     private final ILearningQuestionnaireService iLearningQuestionnaireService;
+    private final IQuestionnaireQuestionService iQuestionnaireQuestionService;
     @FXML
     public TableView<Question> tv_questionTable;
     @FXML
@@ -89,7 +91,8 @@ public class SelectQuestionAdministrateController implements Runnable {
         EditQuestionsController editQuestionsController,
         IQuestionnaireQuestionService questionnaireQuestionService,
         AlertController alertController,
-        ILearningQuestionnaireService iLearningQuestionnaireService) {
+        ILearningQuestionnaireService iLearningQuestionnaireService,
+        IQuestionnaireQuestionService iQuestionnaireQuestionService) {
         this.lerntiaService = lerntiaService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
@@ -98,6 +101,7 @@ public class SelectQuestionAdministrateController implements Runnable {
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.alertController = alertController;
         this.iLearningQuestionnaireService = iLearningQuestionnaireService;
+        this.iQuestionnaireQuestionService = iQuestionnaireQuestionService;
     }
 
     public void initialize() {
@@ -262,7 +266,6 @@ public class SelectQuestionAdministrateController implements Runnable {
 
             //call the First Question -> Is important for the Issue: What if the user deletes the Current or first Question
             lerntiaMainController.getAndShowTheFirstQuestion();
-
             this.refresh();
         }
     }
@@ -285,6 +288,21 @@ public class SelectQuestionAdministrateController implements Runnable {
      */
     @FXML
     public void onSearchButtonClicked() {
+
+        LOG.info("Hier: "+administrateMode.getId());
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        questionnaireQuestion.setQid(administrateMode.getId());
+        List<QuestionnaireQuestion> tableQuestions = null;
+        List<Long> allIDs = new ArrayList<>();
+        try {
+            tableQuestions = iQuestionnaireQuestionService.search(questionnaireQuestion);
+            for(int i = 0;i<tableQuestions.size();i++){
+                allIDs.add(tableQuestions.get(i).getQuestionid());
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
         searchButtonClicked = true;
         Question questionInput = new Question();
         questionInput.setQuestionText(tf_searchQuestion.getText().trim());
@@ -303,9 +321,18 @@ public class SelectQuestionAdministrateController implements Runnable {
                 tv_questionTable.getItems().clear();
             }
 
+            //Delete the Questions that are not in the selected Questionnaire.
+            for(int i = 0;i<searchedQuestions.size();i++){
+                if(!(allIDs.contains(searchedQuestions.get(i).getId()))){
+                    searchedQuestions.remove(searchedQuestions.get(i));
+                }
+            }
+
             LOG.trace("Content size: " + getContent().size() + ", new content size: " + newContent.size());
         } catch (ServiceException e) {
             // TODO - show alert or throw new exception
+            AlertController alertController = new AlertController();
+            alertController.showStandardAlert(Alert.AlertType.INFORMATION,"Warnung","Such option fehlgeschlagen",null);
         }
 
         //Open the prev. Window and close the Current one
