@@ -445,7 +445,7 @@ public class LerntiaMainController implements Runnable {
                     alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
                             + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
-                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.\n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
                             + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
                         "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
 
