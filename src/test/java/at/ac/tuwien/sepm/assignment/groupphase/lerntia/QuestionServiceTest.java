@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 public class QuestionServiceTest {
@@ -117,7 +118,7 @@ public class QuestionServiceTest {
         questionlist.add(q2);
         questionService.create(q2);
         List<Question> questions = questionService.search(new ArrayList<>(questionlist));
-        LOG.debug("mylist: " + questionlist.size() + ", searchlist: " + questions.size());
+        assertEquals(questionlist.size(), questions.size());
         assertTrue(questionlist.get(0).getQuestionText().equals(questions.get(0).getQuestionText()));
         assertTrue(questionlist.get(1).getQuestionText().equals(questions.get(1).getQuestionText()));
     }
