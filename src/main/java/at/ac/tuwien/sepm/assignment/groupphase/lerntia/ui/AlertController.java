@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
@@ -25,6 +26,7 @@ public class AlertController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static String LERNTIA = "[Lerntia] ";
     private static String SPACE = "   ";
+    private static int MINWIDTH = 50;
     private Image INFO = new Image(getClass().getResourceAsStream("/icons/info.png"));
     private Image ERROR = new Image(getClass().getResourceAsStream("/icons/error.png"));
     private Image WARNING = new Image(getClass().getResourceAsStream("/icons/warning.png"));
@@ -32,9 +34,21 @@ public class AlertController {
     private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
     private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
     private boolean wrongAnswer = false;
+    private boolean onlyWrongQuestions = false;
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
+        LOG.info("Create Big Alert");
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
         var alert = new Alert(alertType);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -56,13 +70,7 @@ public class AlertController {
         grid.getColumnConstraints().setAll(graphicColumn, textColumn);
         grid.setPadding(new Insets(5));
 
-        if (alertType == Alert.AlertType.ERROR) {
-            imageView = new ImageView(ERROR);
-        } else if (alertType == Alert.AlertType.WARNING) {
-            imageView = new ImageView(WARNING);
-        } else {
-            imageView = new ImageView(INFO);
-        }
+        getAlertImage(alertType);
         imageView.setFitWidth(84);
         imageView.setFitHeight(84);
 
@@ -79,28 +87,111 @@ public class AlertController {
         headerLabel.setMaxHeight(Double.MAX_VALUE);
         grid.add(headerLabel, 1, 0);
 
-        dialogPane.setHeader(grid);
-        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        //used only for repeating questions
+        var btnAll = new ButtonType(ButtonText.WRONGQUESTIONS.toString(), ButtonBar.ButtonData.YES);
+        var btnFalse = new ButtonType(ButtonText.ALLQUESTIONS.toString(), ButtonBar.ButtonData.NO);
 
+        dialogPane.setHeader(grid);
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            dialogPane.getButtonTypes().setAll(btnAll, btnFalse);
+        } else {
+            dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        }
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
-        stage.showAndWait();
+
         LOG.trace("Showing a big alert with title: " + title);
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
     }
 
-
-    public void showWrongAnswerAlert(String title, String header, String content) {
-        wrongAnswer = true;
-        showCorrectAnswerAlert(title, header, content);
+    private void checkConfirmation(Alert.AlertType alertType, Alert alert, ButtonType btnAll, ButtonType btnFalse, Stage stage) {
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            var result = alert.showAndWait();
+            if (result.isPresent() && result.get() == btnAll) {
+                onlyWrongQuestions = true;
+            } else if (result.isPresent() && result.get() == btnFalse) {
+                onlyWrongQuestions = false;
+            }
+        } else {
+            stage.showAndWait();
+        }
     }
 
-    public void showCorrectAnswerAlert(String title, String header, String content) {
-        var alert = new Alert(Alert.AlertType.INFORMATION);
+    public void showBigAlertWithDiagram(Alert.AlertType alertType, String title, String header, String content, ImageView imageView) {
+        this.imageView = imageView;
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+        var alert = new Alert(alertType);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Weiter");
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        getAlertImage(alertType);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
+        headerLabel.getStyleClass().add("dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        //used only for repeating questions
+        var btnAll = new ButtonType(ButtonText.WRONGQUESTIONS.toString(), ButtonBar.ButtonData.YES);
+        var btnFalse = new ButtonType(ButtonText.ALLQUESTIONS.toString(), ButtonBar.ButtonData.NO);
+
+        dialogPane.setHeader(grid);
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            dialogPane.getButtonTypes().setAll(btnAll, btnFalse);
+        } else {
+            dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        }
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        alert.setGraphic(imageView);
+
+        LOG.trace("Showing a big alert with title: " + title);
+        checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
+    }
+
+
+    public boolean showWrongAnswerAlert(String title, String header, String content) {
+        wrongAnswer = true;
+        return showCorrectAnswerAlert(title, header, content);
+    }
+
+    public boolean showCorrectAnswerAlert(String title, String header, String content) {
+        LOG.info("Create correct Answer Alert.");
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
+        alert.setTitle(LERNTIA + title);
+        alert.setResizable(true);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(ButtonText.CONTINUE.toString());
 
         var dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/css/dialog.css").toExternalForm());
@@ -141,35 +232,165 @@ public class AlertController {
         grid.add(headerLabel, 1, 0);
 
         dialogPane.setHeader(grid);
-        dialogPane.getButtonTypes().setAll(ButtonType.OK);
-
+        dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.SHOW.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.CONTINUE.toString());
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
-        stage.showAndWait();
+        stage.setMaximized(true);
+
+        ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
+        for (var type : dialogPane.getButtonTypes()) {
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
+        }
         LOG.trace("Showing an answer alert with title: " + title);
+        stage.showAndWait();
+        return result.get() == ButtonType.YES;
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+
         var alert = new Alert(alertType);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
-        alert.showAndWait();
+
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().clear();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        dialogPane.getStyleClass().add("standard-dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        getAlertImage(alertType);
+        imageView.setFitWidth(54);
+        imageView.setFitHeight(54);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        headerLabel.getStyleClass().add("standard-dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.getButtonTypes().setAll(ButtonType.OK);
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+        LOG.trace("Showing a standard alert with title: " + title);
+        stage.showAndWait();
     }
 
+
+    private void getAlertImage(Alert.AlertType alertType) {
+        if (alertType == Alert.AlertType.ERROR) {
+            imageView = new ImageView(ERROR);
+        } else if (alertType == Alert.AlertType.WARNING) {
+            imageView = new ImageView(WARNING);
+        } else {
+            imageView = new ImageView(INFO);
+        }
+    }
+
+
     public boolean showStandardConfirmationAlert(String title, String header, String content) {
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
+        var headerBuilder = new StringBuilder(header);
+        while (headerBuilder.length() < MINWIDTH) {
+            headerBuilder.append(" ");
+        }
+        header = headerBuilder.toString();
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText(content + SPACE);
         alert.setTitle(LERNTIA + title);
         alert.setResizable(true);
 
-        var result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
+        var dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().clear();
+        dialogPane.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        dialogPane.getStyleClass().add("standard-dialogue-content");
+
+        var grid = new GridPane();
+        var graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+
+        var textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new Insets(5));
+
+        imageView = new ImageView(CONFIRMATION);
+        imageView.setFitWidth(54);
+        imageView.setFitHeight(54);
+
+        var stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        var headerLabel = new Label(header + SPACE);
+        headerLabel.getStylesheets().add(getClass().getResource("/css/dialog-standard.css").toExternalForm());
+        headerLabel.getStyleClass().add("standard-dialogue-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER_RIGHT);
+        headerLabel.setMaxWidth(Double.MAX_VALUE);
+        headerLabel.setMaxHeight(Double.MAX_VALUE);
+        grid.add(headerLabel, 1, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.YES.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.NO.toString());
+        var stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/main.png"));
+
+        ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
+        for (var type : dialogPane.getButtonTypes()) {
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
+        }
+        stage.showAndWait();
+        LOG.trace("Showing a standard confirmation alert with title: " + title);
+        return result.get() == ButtonType.YES;
     }
 
     public boolean showBigConfirmationAlert(String title, String header, String content) {
+        LOG.info("Show Standard Alert");
+        title = (title == null) ? "" : title;
+        header = (header == null) ? "" : header;
+        content = (content == null) ? "" : content;
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -210,18 +431,26 @@ public class AlertController {
 
         dialogPane.setHeader(grid);
         dialogPane.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText(ButtonText.YES.toString());
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText(ButtonText.NO.toString());
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
 
         ObjectProperty<ButtonType> result = new SimpleObjectProperty<>();
         for (var type : dialogPane.getButtonTypes()) {
-            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> {
-                result.set(type);
-            });
+            ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
         }
         stage.showAndWait();
         LOG.trace("Showing a big confirmation alert with title: " + title);
         return result.get() == ButtonType.YES;
+    }
+
+    public boolean isOnlyWrongQuestions() {
+        return onlyWrongQuestions;
+    }
+
+    public void setOnlyWrongQuestions(boolean onlyWrongQuestions) {
+        this.onlyWrongQuestions = onlyWrongQuestions;
+
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.lang.String?>
+<AnchorPane stylesheets="@/css/views.css" fx:id="pane" prefHeight="800.0" prefWidth="1200"
+            xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditExamController">
+    <styleClass>
+        <String fx:value="view"/>
+    </styleClass>
+    <TableView fx:id="questionTable" layoutX="16.0" layoutY="22.0" prefHeight="305.0" prefWidth="1155.0">
+        <placeholder>
+            <Label wrapText="true" text="Alle Fragen wurden der Prüfungstabelle hinzugefügt."/>
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="questionColumn" prefWidth="390.0" text="Fragen"/>
+            <TableColumn fx:id="firstAnswerColumn" prefWidth="130.0" text="1. Antwort"/>
+            <TableColumn fx:id="secondAnswerColumn" prefWidth="130.0" text="2. Antwort"/>
+            <TableColumn fx:id="thirdAnswerColumn" prefWidth="130.0" text="3. Antwort"/>
+            <TableColumn fx:id="fourthAnswerColumn" prefWidth="130.0" text="4. Antwort"/>
+            <TableColumn fx:id="fifthAnswerColumn" prefWidth="130.0" text="5. Antwort"/>
+            <TableColumn fx:id="pictureColumn" editable="false" prefWidth="90.0" text="Bild"/>
+        </columns>
+    </TableView>
+
+    <Button stylesheets="@/css/arrow-button.css" fx:id="addQuestions" layoutX="376.0" layoutY="335.0"
+            mnemonicParsing="false" onAction="#onAddQuestionsButtonClicked">
+        <graphic>
+            <ImageView fitHeight="40.0" fitWidth="50.0" layoutX="600.0" layoutY="320.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@/icons/down.png"/>
+            </ImageView>
+        </graphic>
+    </Button>
+    <Button stylesheets="@/css/arrow-button.css" fx:id="removeQuestions" layoutX="752.0" layoutY="335.0"
+            mnemonicParsing="false" onAction="#onRemoveQuestionsButtonClicked">
+        <graphic>
+            <ImageView fitHeight="40.0" fitWidth="50.0" layoutX="240.0" layoutY="320.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@/icons/up.png"/>
+            </ImageView>
+        </graphic>
+    </Button>
+
+    <TableView fx:id="acceptedTable" layoutX="14.0" layoutY="400.0" prefHeight="305.0" prefWidth="1155.0">
+        <placeholder>
+            <Label wrapText="true" text="Es wurden noch keine Fragen der Prüfungstabelle hinzugefügt."/>
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="columnAccepted" prefWidth="390.0" text="Prüfungsfragen"/>
+            <TableColumn prefWidth="130.0" text="1. Antwort" fx:id="xfirstAnswerColumn"/>
+            <TableColumn prefWidth="130.0" text="2. Antwort" fx:id="xsecondAnswerColumn"/>
+            <TableColumn prefWidth="130.0" text="3. Antwort" fx:id="xthirdAnswerColumn"/>
+            <TableColumn prefWidth="130.0" text="4. Antwort" fx:id="xfourthAnswerColumn"/>
+            <TableColumn prefWidth="130.0" text="5. Antwort" fx:id="xfifthAnswerColumn"/>
+            <TableColumn fx:id="xpictureColumn" editable="false" prefWidth="90.0" text="Bild"/>
+        </columns>
+    </TableView>
+
+    <Button fx:id="resetButton" layoutX="14.0" layoutY="720.0" mnemonicParsing="false" onAction="#onResetButtonClicked"
+            prefHeight="41.0" prefWidth="188.0" text="Zurücksetzen" pickOnBounds="false"/>
+
+    <Button fx:id="randomButton" layoutX="764.0" layoutY="720.0" mnemonicParsing="false" pickOnBounds="false"
+            onAction="#onRandomButtonClicked" prefHeight="41.0" prefWidth="188.0" text="Zufallsreihenfolge"/>
+
+    <Button fx:id="tableViewButton" layoutX="980.0" layoutY="720.0" mnemonicParsing="false"
+            onAction="#onTableViewButtonClicked" prefHeight="41.0" prefWidth="188.0" text="Prüfung starten"/>
+
+</AnchorPane>

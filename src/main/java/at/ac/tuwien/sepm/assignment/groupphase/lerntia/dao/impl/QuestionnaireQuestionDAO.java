@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,100 +21,110 @@ import java.util.List;
 public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT ="INSERT INTO Questionnairequestion(qid,questionid,isDeleted) VALUES (?,?,?)";
-    private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion set isDeleted=true where qid=? and questionid=?";
-    private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion set qid=?, questionid=? where qid=? and questionid=?";
+    private static final String SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT = "INSERT INTO Questionnairequestion(qid,questionid,isDeleted) VALUES (?,?,?)";
+    private static final String SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT = "UPDATE questionnairequestion SET isDeleted=TRUE WHERE qid=? AND questionid=?";
+    private static final String SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT = "UPDATE questionnairequestion SET qid=?, questionid=? WHERE qid=? AND questionid=?";
     private static final String SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT = "SELECT * from Questionnairequestion where isDeleted = false and qid=";
+    private static final String SQL_QUESTIoNNAIREQUESTION_READALL_STATEMENT = "SELECT * FROM Questionnairequestion WHERE isDeleted = FALSE ";
     private Connection connection;
 
     @Autowired
     public QuestionnaireQuestionDAO(JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
-        try {
+        if (jdbcConnectionManager.isTestConnection()) {
+            connection = jdbcConnectionManager.getTestConnection();
+            LOG.info("Test database connection for CourseDAO retrieved.");
+        } else {
             connection = jdbcConnectionManager.getConnection();
-            LOG.info("Connection for QuestionnaireQuestionDAO found.");
-        } catch (PersistenceException e) {
-            LOG.error("Couldn't find connection for QuestionnaireQuestionDAO!");
-            throw e;
+            LOG.info("Connection for CourseDAO retrieved.");
         }
     }
 
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
-            PreparedStatement pscreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT);
-            try {
-                pscreate.setLong(1, questionnaireQuestion.getQid());
-                pscreate.setLong(2, questionnaireQuestion.getQuestionid());
-                pscreate.setBoolean(3, false);
-                pscreate.execute();
-                LOG.info("Statement for new QuestionnaireQuestion entry succesfully sent.");
-            }finally {
-                pscreate.close();
-            }
+        LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
+        try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT)) {
+            psCreate.setLong(1, questionnaireQuestion.getQid());
+            psCreate.setLong(2, questionnaireQuestion.getQuestionid());
+            psCreate.setBoolean(3, false);
+            psCreate.execute();
+            LOG.info("Statement for new QuestionnaireQuestion entry successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO CREATE error: item couldn't have been created, check if all mandatory values have been added and if the connection to the Database is valid.");
         }
     }
 
     @Override
-    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchparameters) throws PersistenceException{
+    public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
-            List<QuestionnaireQuestion> searchresults = new ArrayList<>();
+            List<QuestionnaireQuestion> searchResults = new ArrayList<>();
             QuestionnaireQuestion questionnaireQuestion;
-            String searchStatement= SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT+searchparameters.getQid();
+            String searchStatement = SQL_QUESTIONNAIREQUESTION_SEARCH_STATEMENT + searchParameters.getQid();
             try (ResultSet rs = connection.prepareStatement(searchStatement).executeQuery()) {
-                    while (rs.next()) {
-                        questionnaireQuestion = new QuestionnaireQuestion();
-                        questionnaireQuestion.setQid(rs.getLong(1));
-                        questionnaireQuestion.setQuestionid(rs.getLong(2));
-                        questionnaireQuestion.setDeleted(rs.getBoolean(3));
-                        searchresults.add(questionnaireQuestion);
-                    }
-                    LOG.info("All QuestionnaireQuestion matching the searchparameters found.");
-                    return searchresults;
+                while (rs.next()) {
+                    questionnaireQuestion = new QuestionnaireQuestion();
+                    questionnaireQuestion.setQid(searchParameters.getQid());
+                    questionnaireQuestion.setQuestionid(rs.getLong(2));
+                    questionnaireQuestion.setDeleted(rs.getBoolean(3));
+                    searchResults.add(questionnaireQuestion);
+                }
+                LOG.info("All QuestionnaireQuestion matching the searchParameters found.");
+                return searchResults;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchparameters are valid and if the connection to the database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchParameters are valid and if the connection to the database is valid.");
         }
     }
 
     @Override
     public void delete(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
-        try {
-            LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
-            PreparedStatement psdelete= connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT);
-            try {
-                psdelete.setLong(1, questionnaireQuestion.getQid());
-                psdelete.setLong(2, questionnaireQuestion.getQuestionid());
-                psdelete.executeUpdate();
-                LOG.info("Statement for QuestionnaireQuestion Deletion succesfully sent.");
-            }finally {
-                psdelete.close();
-            }
+        LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
+        try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT)) {
+            psDelete.setLong(1, questionnaireQuestion.getQid());
+            psDelete.setLong(2, questionnaireQuestion.getQuestionid());
+            psDelete.executeUpdate();
+            LOG.info("Statement for QuestionnaireQuestion Deletion successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO DELETE error: couldn't delete item in question, check if the connection to the Database is valid.");
         }
     }
 
     @Override
-    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid,long newQuestionid) throws PersistenceException {
+    public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
-            PreparedStatement psupdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT);
-            try {
-                psupdate.setLong(1, newQid);
-                psupdate.setLong(2, newQuestionid);
-                psupdate.setLong(3, questionnaireQuestion.getQid());
-                psupdate.setLong(4, questionnaireQuestion.getQuestionid());
-                psupdate.executeUpdate();
-                LOG.info("Statement for QuestionnaireQuestion Update succesfully sent.");
-            }finally {
-                psupdate.close();
+            try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT)) {
+                psUpdate.setLong(1, newQid);
+                psUpdate.setLong(2, newQuestionId);
+                psUpdate.setLong(3, questionnaireQuestion.getQid());
+                psUpdate.setLong(4, questionnaireQuestion.getQuestionid());
+                psUpdate.executeUpdate();
+                LOG.info("Statement for QuestionnaireQuestion Update successfully sent.");
             }
         } catch (SQLException e) {
             throw new PersistenceException("QuestionnaireQuestionDAO UPDATE error: item couldn't be updated, check if mandatory values have been added or if the connection to the Database is valid.");
+        }
+    }
+
+    @Override
+    public List<QuestionnaireQuestion> readAll() throws PersistenceException {
+        try {
+            LOG.info("Prepare Statement to read all available Questions of one Questionnaire from the Database.");
+            ArrayList<QuestionnaireQuestion> list = new ArrayList<>();
+            try (ResultSet rsReadAll = connection.prepareStatement(SQL_QUESTIoNNAIREQUESTION_READALL_STATEMENT).executeQuery()) {
+                QuestionnaireQuestion question;
+                while (rsReadAll.next()) {
+                    question = new QuestionnaireQuestion();
+                    question.setQid(rsReadAll.getLong(1));
+                    question.setQuestionid(rsReadAll.getLong(2));
+                    question.setDeleted(rsReadAll.getBoolean(3));
+                    list.add(question);
+                }
+                LOG.info("All questionnaire questions found.");
+                return list;
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("QuestionnaireQuestionDAO READALL error: not all questions could have been found, check if connection to the Database is valid.");
         }
     }
 }

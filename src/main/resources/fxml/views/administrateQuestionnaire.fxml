@@ -4,13 +4,25 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="236.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/8.0.121"
+<?import java.lang.String?>
+<AnchorPane stylesheets="@/css/views.css" prefHeight="275.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AdministrateQuestionnaireController">
 
     <Label layoutX="53.0" layoutY="85.0" text="Fragebogen:"/>
-    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="81.0" prefWidth="150.0"/>
+    <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0">
+        <styleClass>
+            <String fx:value="combo-box"/>
+        </styleClass>
+    </ComboBox>
 
-    <Button layoutX="169.0" layoutY="145.0" mnemonicParsing="false" onAction="#selectQuestionnaire" prefHeight="37.0"
-            prefWidth="150.0" text="Auswählen"/>
+    <Button defaultButton="true" layoutX="169.0" layoutY="170.0" mnemonicParsing="false" onAction="#selectQuestionnaire"
+            prefHeight="41.0" prefWidth="188.0" text="Auswählen" pickOnBounds="false">
+        <styleClass>
+            <String fx:value="button"/>
+        </styleClass>
+    </Button>
+    <styleClass>
+        <String fx:value="view"/>
+    </styleClass>
 </AnchorPane>
