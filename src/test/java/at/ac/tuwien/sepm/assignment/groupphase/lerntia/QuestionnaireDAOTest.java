@@ -85,7 +85,7 @@ public class QuestionnaireDAOTest {
         Assert.assertEquals(expected, chapter2.getId());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = PersistenceException.class)
     public void createNewQuestionnaireError() throws PersistenceException {
         LearningQuestionnaire chapter1 = new LearningQuestionnaire();
         chapter1.setName("Chapter 1");

@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 public class QuestionnaireQuestionDAOTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -227,7 +226,7 @@ public class QuestionnaireQuestionDAOTest {
         Assert.assertEquals(2, list.size());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = PersistenceException.class)
     public void deleteQuestionnaireQuestionError() throws PersistenceException {
 
         Course tgi = new Course();
@@ -238,8 +237,6 @@ public class QuestionnaireQuestionDAOTest {
 
         ExamQuestionnaire chapter1 = new ExamQuestionnaire();
         chapter1.setDate(LocalDate.now());
-        //chapter1.setCmark("123.349");
-        //chapter1.setSemester("2015S");
         examQuestionnaireDAO.create(chapter1);
 
         Question firstQuestion = new Question();

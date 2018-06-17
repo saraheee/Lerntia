@@ -74,7 +74,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         try {
             fileContent = questionnaireImportDAO.getContents(pathStr);
-        } catch (IOException e) {
+        } catch (IOException | PersistenceException e) {
             LOG.warn("Persistence exception caught");
             throw new ServiceException("Persistence exception caught");
         }

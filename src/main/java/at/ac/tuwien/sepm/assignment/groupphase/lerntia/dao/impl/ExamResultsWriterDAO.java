@@ -1,13 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -27,7 +24,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
@@ -62,7 +58,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     @Override
     public void writeExamResults(ExamWriter examwriter) throws PersistenceException {
-
+        if (examwriter == null || examwriter.getPath() == null || examwriter.getName() == null ||
+            examwriter.getQuestions() == null || examwriter.getUser() == null) {
+            throw new PersistenceException("At least one value of the exam writer is null!");
+        }
         this.student = examwriter.getUser();
 
         // create the document
@@ -105,6 +104,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     public Paragraph getHeader(String name) throws PersistenceException {
+        if (name == null) {
+            throw new PersistenceException("PDF name is null!");
+        }
 
         // the container is used to ensure that the text is not split over two pages
         // highly unlikely, but just to be sure.
@@ -135,7 +137,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     public Paragraph getQuestionParagraph(Question question, String name, int i) throws PersistenceException {
-
+        if (question == null || name == null) {
+            throw new PersistenceException("PDF question or name is null!");
+        }
         // at first the question text is added to the document.
         // afterwards a table is created where each row holds an answer and the
         // expected state as well as the actual state of the checkbox.
@@ -193,7 +197,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     public PdfPTable getAnswerTable(Question question) throws PersistenceException {
-
+        if (question == null) {
+            throw new PersistenceException("PDF question is null!");
+        }
         // create a table with 4 columns and stretch it to 100% of the page width
 
         PdfPTable table = new PdfPTable(4);
@@ -216,35 +222,35 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             if (!question.getAnswer1().equals("")) {
                 allAnswers.add(question.getAnswer1());
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // no answer present.
         }
         try {
             if (!question.getAnswer2().equals("")) {
                 allAnswers.add(question.getAnswer2());
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // no answer present.
         }
         try {
             if (!question.getAnswer3().equals("")) {
                 allAnswers.add(question.getAnswer3());
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // no answer present.
         }
         try {
             if (!question.getAnswer4().equals("")) {
                 allAnswers.add(question.getAnswer4());
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // no answer present.
         }
         try {
             if (!question.getAnswer5().equals("")) {
                 allAnswers.add(question.getAnswer5());
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // no answer present.
         }
 
@@ -279,7 +285,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     public PdfPCell getImageCellBox(URL path) throws PersistenceException {
-
+        if (path == null) {
+            throw new PersistenceException("PDF path is null!");
+        }
         Image img;
         try {
             img = Image.getInstance(path);
@@ -298,7 +306,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     }
 
     public PdfPCell getImageCellQuestions(String name, String picture) throws PersistenceException {
-
+        if (name == null || picture == null) {
+            throw new PersistenceException("PDF name or picture is null!");
+        }
         Image img;
 
         String imagePath =

@@ -41,6 +41,9 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
+        if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
+            throw new PersistenceException("At least one value of the questionnaire question is null!");
+        }
         LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT)) {
             psCreate.setLong(1, questionnaireQuestion.getQid());
@@ -55,6 +58,9 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
+        if (searchParameters == null || searchParameters.getQid() == null) {
+            throw new PersistenceException("Search parameters or its id is null!");
+        }
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
             List<QuestionnaireQuestion> searchResults = new ArrayList<>();
@@ -78,6 +84,9 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public void delete(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
+        if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
+            throw new PersistenceException("At least one of the questionnaire question delete values is null!");
+        }
         LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
         try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT)) {
             psDelete.setLong(1, questionnaireQuestion.getQid());
@@ -91,6 +100,9 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
 
     @Override
     public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
+        if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
+            throw new PersistenceException("At least one of the questionnaire question update values is null!");
+        }
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
             try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_UPDATE_STATEMENT)) {
