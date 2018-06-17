@@ -62,11 +62,6 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     }
 
     @Override
-    public void delete(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
-        //this method is currently empty because there is not yet a feature implemented which would use this method effectively
-    }
-
-    @Override
     public List<LearningQuestionnaire> readAll() throws PersistenceException {
         try {
             LOG.info("Prepare Statement to read all LearingQuestionnaires from the Database.");

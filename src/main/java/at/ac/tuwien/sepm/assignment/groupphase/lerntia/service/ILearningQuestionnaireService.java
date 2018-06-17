@@ -15,14 +15,6 @@ public interface ILearningQuestionnaireService {
     void create(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
 
     /**
-     * Delete LearningQuestionnaires
-     *
-     * @param learningQuestionnaire LearningQuestionnaire that needs to be deleted
-     * @throws ServiceException if the method can't delete the LearningQuestionnaire
-     */
-    void delete(LearningQuestionnaire learningQuestionnaire) throws ServiceException;
-
-    /**
      * Reads all LearningQuestionnaires
      *
      * @return List with all LearningQuestionnaire
