@@ -27,6 +27,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
@@ -189,7 +190,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         container.add(nesting);
 
         return container;
-
     }
 
     public PdfPTable getAnswerTable(Question question) throws PersistenceException {
@@ -212,11 +212,41 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         ArrayList<String> allAnswers = new ArrayList<>();
 
-        allAnswers.add(question.getAnswer1());
-        allAnswers.add(question.getAnswer2());
-        allAnswers.add(question.getAnswer3());
-        allAnswers.add(question.getAnswer4());
-        allAnswers.add(question.getAnswer5());
+        try {
+            if (!question.getAnswer1().equals("")) {
+                allAnswers.add(question.getAnswer1());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer2().equals("")) {
+                allAnswers.add(question.getAnswer2());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer3().equals("")) {
+                allAnswers.add(question.getAnswer3());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer4().equals("")) {
+                allAnswers.add(question.getAnswer4());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
+        try {
+            if (!question.getAnswer5().equals("")) {
+                allAnswers.add(question.getAnswer5());
+            }
+        } catch (NullPointerException e){
+            // no answer present.
+        }
 
         for (int j = 0; j < allAnswers.size(); j++) {
 

@@ -120,7 +120,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                     question.setDeleted(rsReadAll.getBoolean(3));
                     list.add(question);
                 }
-                LOG.info("All Questionnairequestions found.");
+                LOG.info("All questionnaire questions found.");
                 return list;
             }
         } catch (SQLException e) {

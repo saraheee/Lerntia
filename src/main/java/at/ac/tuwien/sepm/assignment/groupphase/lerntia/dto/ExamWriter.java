@@ -9,6 +9,10 @@ public class ExamWriter {
     private String name;
     private String path;
 
+    public ExamWriter(){
+
+    }
+
     public ExamWriter(List<Question> questions, User student, String name, String path) {
         this.questions = questions;
         this.student = student;
