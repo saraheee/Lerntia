@@ -147,6 +147,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
     public void reset(QuestionLearnAlgorithm questionLearnAlgorithm) throws PersistenceException {
         try (PreparedStatement psReset = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_RESET_STATEMENT)) {
             LOG.info("Prepare reset statement for QuestionLearnAlgorithm.");
+
             psReset.setLong(1, questionLearnAlgorithm.getID());
             psReset.executeUpdate();
             LOG.info("Reset Statement successfully sent.");
