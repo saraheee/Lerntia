@@ -77,21 +77,5 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
         }
     }
 
-    @Override
-    public void select(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-        LOG.info("Select the Questionnaire in question");
-        questionnaireDAO.select(examQuestionnaire);
-    }
 
-    @Override
-    public void deselect(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
-        LOG.info("Deselect the Questionnaire in Question");
-        questionnaireDAO.deselect(examQuestionnaire);
-    }
-
-    @Override
-    public ExamQuestionnaire getSelected() throws PersistenceException {
-        LOG.info("Get selected Questionnaire from Database");
-        return (ExamQuestionnaire) questionnaireDAO.getSelected();
-    }
 }
