@@ -51,15 +51,7 @@ public class JDBCConnectionManager {
             if (isTestConnection) {
                 connection = DriverManager.getConnection(TEST_CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + TEST_RESOURCE + "'", "sa", "");
             } else {
-                connection = DriverManager.getConnection(CONNECTION_URL, "sa", "");
-
-                var inputStream = JDBCConnectionManager.class.getResourceAsStream(INITIAL_RESOURCE);
-                if (inputStream == null) {
-                    LOG.error("Input stream for create statements is null!");
-                } else {
-                    RunScript.execute(connection, new InputStreamReader(inputStream));
-                    LOG.info("Reading initial commands from input stream.");
-                }
+                connection = DriverManager.getConnection(CONNECTION_URL + ";INIT=RUNSCRIPT FROM '" + INITIAL_RESOURCE + "'", "sa", "");
             }
         } catch (SQLException e) {
             closeConnection();

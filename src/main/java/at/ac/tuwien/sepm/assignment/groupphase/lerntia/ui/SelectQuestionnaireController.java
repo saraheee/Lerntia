@@ -69,7 +69,7 @@ public class SelectQuestionnaireController {
                 "Fehler beim Lesen der Fragebögen!", "");
         }
 
-        if (learningQuestionnaireList.isEmpty()) {
+        if (learningQuestionnaireList == null || learningQuestionnaireList.isEmpty()) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fragebogen Auswahl kann nicht angezeigt werden",
                 "Fehler!", "Es ist noch kein Fragebogen vorhanden");
             return;
