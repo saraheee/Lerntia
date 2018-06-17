@@ -2,15 +2,12 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamResultsWriterDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.ExamResultsWriterDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamWriter;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleExamResultsWriterService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
-import java.sql.Connection;
 import java.util.ArrayList;
 
 public class ExamResultsWriterServiceTest {
@@ -28,7 +24,6 @@ public class ExamResultsWriterServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private IExamResultsWriterService examResultsWriterService;
-    private IUserService userService;
 
     private String path;
 
@@ -41,25 +36,21 @@ public class ExamResultsWriterServiceTest {
         }
 
         this.path = System.getProperty("user.dir") + File.separator + "test.pdf";
-
-        this.IUserService(new SimpleUserService());
     }
 
-    private void IexamResultsWriterService(IExamResultsWriterService examResultsWriterService){
+    private void IexamResultsWriterService(IExamResultsWriterService examResultsWriterService) {
         this.examResultsWriterService = examResultsWriterService;
     }
 
-    private void IUserService(SimpleUserService userService){
-        this.userService = userService;
-    }
-
     @After
-    public void cleanup(){
+    public void cleanup() {
 
         File file = new File(this.path);
 
-        if (file.exists()){
-            file.delete();
+        if (file.exists()) {
+            if (file.delete()) {
+                LOG.debug("File deleted.");
+            }
         }
     }
 
@@ -67,7 +58,7 @@ public class ExamResultsWriterServiceTest {
     public void exportPDF() throws ServiceException {
 
         Question firstQuestion = new Question();
-        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setQuestionText("How you doing now");
         firstQuestion.setAnswer1("No");
         firstQuestion.setAnswer2("yes");
         firstQuestion.setCorrectAnswers("1");
