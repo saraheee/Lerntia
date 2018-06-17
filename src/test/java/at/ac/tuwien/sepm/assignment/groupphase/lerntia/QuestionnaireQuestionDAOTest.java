@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class QuestionnaireQuestionDAOTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -272,7 +273,39 @@ public class QuestionnaireQuestionDAOTest {
 
     }
 
-    @Ignore
+    @Test
+    public void deleteQuestionnaireQuestion() throws PersistenceException {
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2015");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
+
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf");
+        chapter1.setCourseID(tgi.getId());
+        examQuestionnaireDAO.create(chapter1);
+
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("No");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
+
+        int before = questionnaireQuestionDAO.readAll().size();
+        questionnaireQuestionDAO.delete(firstQuestionFirstChapter);
+        int after = questionnaireQuestionDAO.readAll().size();
+
+        assertTrue(before > after);
+    }
+
     @Test
     public void updateQuestionnaireQuestion() throws PersistenceException {
         Course tgi = new Course();
@@ -306,13 +339,42 @@ public class QuestionnaireQuestionDAOTest {
         firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
         questionnaireQuestionDAO.create(firstQuestionFirstChapter);
 
+        firstQuestionFirstChapter.setQuestionid(secondQuestion.getId());
         questionnaireQuestionDAO.update(firstQuestionFirstChapter, chapter1.getId(), secondQuestion.getId());
 
         Long id = firstQuestionFirstChapter.getQuestionid();
         Question q = questionDAO.get(id);
 
-        System.out.println(q.getQuestionText());
-
         assertTrue(q.getQuestionText().equals("How was your day"));
+    }
+
+    @Test
+    public void readAllQuestionnaireQuestion() throws PersistenceException {
+        Course tgi = new Course();
+        tgi.setSemester(Semester.SS + "2015");
+        tgi.setMark("123.349");
+        tgi.setName("TGI");
+        courseDAO.create(tgi);
+
+        ExamQuestionnaire chapter1 = new ExamQuestionnaire();
+        chapter1.setDate(LocalDate.now());
+        chapter1.setName("asdf");
+        chapter1.setCourseID(tgi.getId());
+        examQuestionnaireDAO.create(chapter1);
+
+        Question firstQuestion = new Question();
+        firstQuestion.setQuestionText("How you doing");
+        firstQuestion.setAnswer1("No");
+        firstQuestion.setAnswer2("yes");
+        firstQuestion.setCorrectAnswers("1");
+        questionDAO.create(firstQuestion);
+
+        QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
+        firstQuestionFirstChapter.setQid(chapter1.getId());
+        firstQuestionFirstChapter.setQuestionid(firstQuestion.getId());
+        questionnaireQuestionDAO.create(firstQuestionFirstChapter);
+
+        int currentNumber = questionnaireQuestionDAO.readAll().size();
+        assertEquals(currentNumber, 1);
     }
 }
