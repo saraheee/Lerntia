@@ -26,6 +26,7 @@ public class CourseDAOTest {
     private ICourseDAO courseDAO;
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
+
     @Before
     public void setUp() {
         try {
