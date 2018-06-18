@@ -39,6 +39,8 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
         }
     }
 
+
+
     @Override
     public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         if (learningQuestionnaire == null) {
