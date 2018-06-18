@@ -24,7 +24,7 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
     @Override
     public ArrayList<String> getContents(String filePath) throws IOException, PersistenceException {
-        if (filePath == null) {
+        if (filePath.equals("") || filePath == null) {
             throw new PersistenceException("File path for the questionnaire import is null!");
         }
         // A BufferedReader Object is created using path that is the argument of this method
