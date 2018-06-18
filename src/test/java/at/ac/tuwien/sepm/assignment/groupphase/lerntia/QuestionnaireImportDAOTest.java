@@ -6,15 +6,19 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImp
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import static junit.framework.TestCase.assertTrue;
 
 public class QuestionnaireImportDAOTest {
 
@@ -28,7 +32,7 @@ public class QuestionnaireImportDAOTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            
+
             this.IQuestionnaireImportDAO(new QuestionnaireImportDAO());
 
         } catch (PersistenceException e) {
@@ -50,5 +54,21 @@ public class QuestionnaireImportDAOTest {
     @Test(expected = PersistenceException.class)
     public void getContentsOfMissingPath() throws IOException, PersistenceException {
         importDAO.getContents("");
+    }
+
+    @Test
+    public void getContentsOfCorrectFile() throws IOException, PersistenceException {
+        ArrayList<String> results =  importDAO.getContents(System.getProperty("user.dir") + File.separator + "csv" + File.separator+"test_correctfile.csv");
+        int count = 0;
+        for (int i = 0; i < results.size(); i++) {
+            count++;
+            assertTrue(results.get(i).equals("Frage?;Antwort eins;Antwort zwei;Antwort drei;Antwort vier;Antwort fünf;34"));
+        }
+        assertTrue(count == 2);
+    }
+
+    @Test
+    public void testImportPictures() throws IOException, PersistenceException {
+        importDAO.importPictures(new File(System.getProperty("user.dir") + File.separator + "img_original" + File.separator + "test_image.png"), "test");
     }
 }
