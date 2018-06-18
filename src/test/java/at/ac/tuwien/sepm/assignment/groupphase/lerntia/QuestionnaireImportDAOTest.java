@@ -28,7 +28,9 @@ public class QuestionnaireImportDAOTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            //this.IQuestionnaireImportDAO(new QuestionnaireImportService(new QuestionnaireImportDAO(jdbcConnectionManager)));
+            
+            this.IQuestionnaireImportDAO(new QuestionnaireImportDAO());
+
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
@@ -45,7 +47,6 @@ public class QuestionnaireImportDAOTest {
         this.importDAO = importDAO;
     }
 
-    @Ignore
     @Test(expected = PersistenceException.class)
     public void getContentsOfMissingPath() throws IOException, PersistenceException {
         importDAO.getContents("");
