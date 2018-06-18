@@ -47,8 +47,6 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
         String pathStr = importQuestionnaire.getFile().getAbsolutePath();
 
-        // TODO - fix duplicate code
-
         if (importQuestionnaire.getIsExam()) {
             List<ExamQuestionnaire> questionnaires = simpleExamQuestionnaireService.readAll();
 
