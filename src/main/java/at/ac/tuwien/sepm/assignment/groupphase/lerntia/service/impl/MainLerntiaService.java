@@ -83,7 +83,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
             questionnaireQuestion.setQid(eQ.getId());
             questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
-            //TODO send updated DATE to ExamQuestionnaireDAO
             getExamQuestionFromList(searchParameters);
             LOG.info("All Exam Questionnaire Questions info found.");
             LOG.info("Send required question search parameters to retrieve");
