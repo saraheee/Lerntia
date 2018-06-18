@@ -47,8 +47,7 @@ public class SelectExamController {
         WindowController windowController,
         AlertController alertController,
         EditExamController editExamController,
-        SimpleUserService simpleUserService
-    ) {
+        SimpleUserService simpleUserService) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
@@ -79,7 +78,7 @@ public class SelectExamController {
         try {
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            //Todo better exception handling
+            alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler beim Prüfungsfragenbogen","Fehler beim anzeigen aller Prüfungsfragenbogen.","Das Programm konnte nicht alle Prüfunngs-Fragenbogen herausefinden.");
         }
 
         if (examQuestionnaireList.isEmpty()) {
