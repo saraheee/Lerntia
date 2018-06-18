@@ -566,7 +566,8 @@ public class LerntiaMainController implements Runnable {
                     try {
                         selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
                     } catch (ServiceException e) {
-                        // TODO - show alert or throw new exception
+                        alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler","Fehler beim Fragenbogen entnehmung.","Zurzeit ist noch kein Lern-Fragebogen ausgewählt. \n" +
+                            "Importieren sie ein neuen Fragebogen und versuchen Sie erneut!");
                     }
                     if (selectedLearningQuestionnaire != null) {
                         String imagePath =
@@ -747,7 +748,8 @@ public class LerntiaMainController implements Runnable {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden!");
         } catch (ServiceException e) {
-            // TODO - show alert or throw new exception
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
+                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden!");
         }
     }
 

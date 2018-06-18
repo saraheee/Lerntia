@@ -321,7 +321,8 @@ public class EditExamController {
             examQuestionList = FXCollections.observableArrayList(currentQuestionList);
             questionTable.setItems(FXCollections.observableArrayList(examQuestionList));
         } catch (ServiceException e) {
-            // TODO - show alert or throw new exception
+           alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler","Fehler bei der Tabellen-befüllung!","Das Fenster konnte den ausgewählten Fragenbogen nicht korrekt anzeigen.\n" +
+               " Bitte versuchen Sie erneut.");
         }
     }
 

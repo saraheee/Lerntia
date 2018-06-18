@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.assignment.groupphase.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.util.Properties;
