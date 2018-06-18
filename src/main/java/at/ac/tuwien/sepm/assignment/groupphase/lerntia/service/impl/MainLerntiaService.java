@@ -454,11 +454,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         for (Question aQuestionList : questionList) {
             String givenAnswers = aQuestionList.getCheckedAnswers();
             String correctAnswers = aQuestionList.getCorrectAnswers();
-            if (givenAnswers != null && givenAnswers.equals(correctAnswers)) {
+            if (givenAnswers != null && givenAnswers.trim().equals(correctAnswers.trim())) {
                 count++;
             }
         }
-        LOG.info("Get Correct Answers Count");
+        LOG.info("Get correct answers count: " + count);
         return count;
     }
 
@@ -473,7 +473,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
         }
         count = count - getIgnoredAnswers();
-        LOG.info("Get Wrong Answer Count");
+        LOG.info("Get wrong answer count: " + count);
         return count;
     }
 
@@ -482,11 +482,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         int count = 0;
         for (Question aQuestionList : questionList) {
             String givenAnswers = aQuestionList.getCheckedAnswers();
-            if (givenAnswers.equals("")) {
+            if (givenAnswers == null || givenAnswers.trim().equals("")) {
                 count++;
             }
         }
-        LOG.info("Get ignored answers count");
+        LOG.info("Get ignored answers count: " + count);
         return count;
     }
 
