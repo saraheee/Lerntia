@@ -97,13 +97,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
         try {
             try (ResultSet rsReadAll = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_READALL_STATEMENT).executeQuery()) {
                 List<QuestionLearnAlgorithm> readResults = new ArrayList<>();
-                try {
-                    getResults(rsReadAll, readResults);
-                    LOG.info("Found all LearnAlgorithm Values.");
-                    return readResults;
-                } finally {
-                    rsReadAll.close();
-                }
+                getResults(rsReadAll, readResults);
+                LOG.info("Found all LearnAlgorithm Values.");
+                return readResults;
             }
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO READALL error: Check if the connection to the Database is valid or if the method actually returns the List of all Entries");
@@ -149,13 +145,9 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
 
             String searchStatement = SQL_QUESTIONLEARNALGORITHM_SEARCH_STATEMENT + parameters;
             try (ResultSet rsSearch = connection.prepareStatement(searchStatement).executeQuery()) {
-                try {
-                    getResults(rsSearch, searchResults);
-                    LOG.info("All search results have been found.");
-                    return searchResults;
-                } finally {
-                    rsSearch.close();
-                }
+                getResults(rsSearch, searchResults);
+                LOG.info("All search results have been found.");
+                return searchResults;
             }
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO SEARCH DAO: Check if the connection to the Database is valid.");
