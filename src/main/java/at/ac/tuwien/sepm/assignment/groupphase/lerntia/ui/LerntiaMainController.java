@@ -158,7 +158,12 @@ public class LerntiaMainController implements Runnable {
                 LOG.debug("Z key was pressed");
                 var zoomedImageThread = new Thread(this);
                 zoomedImageThread.start();
-                zoomedImageController.onZoomButtonClicked();
+                try {
+                    zoomedImageController.onZoomButtonClicked();
+                } catch (ControllerException e1) {
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler", "Fehler im User Interface.",
+                        e1.getCustomMessage());
+                }
             }
             if (e.getCode() == KeyCode.N) {
                 LOG.debug("N key was pressed");
@@ -207,7 +212,14 @@ public class LerntiaMainController implements Runnable {
             }
 
         }));
-        mainImage.setOnMouseClicked((MouseEvent e) -> zoomedImageController.onZoomButtonClicked());
+        mainImage.setOnMouseClicked((MouseEvent e) -> {
+            try {
+                zoomedImageController.onZoomButtonClicked();
+            } catch (ControllerException e1) {
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler", "Fehler im User Interface.",
+                    e1.getCustomMessage());
+            }
+        });
         mainImage.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             mainImage.getStyleClass().clear();
             mainImage.getStyleClass().add("image-enter");
