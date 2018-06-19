@@ -45,15 +45,6 @@ public class QuestionnaireImportServiceTest {
 
     @Before
     public void setUp() {
-        /*
-        try {
-            this.IQuestionnaireImportService(new SimpleQuestionnaireImportService(new QuestionnaireImportDAO(), new SimpleQuestionService(new QuestionDAO()), new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO()), new SimpleExamQuestionnaireService(), new SimpleQuestionnaireQuestionService()));
-
-        } catch (PersistenceException e) {
-            LOG.error("Failed to get connection to test-database");
-        }
-        */
-
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
@@ -76,23 +67,21 @@ public class QuestionnaireImportServiceTest {
         this.importService = importService;
     }
 
-    //@Ignore
     @Test
     public void importLearningQuestionnaireWorks() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
-        ImportQuestionnaire importq = new ImportQuestionnaire(new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile"), course, "learningquestionnaire", false);
+        File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile.csv");
+        ImportQuestionnaire importq = new ImportQuestionnaire(file, course, "learning", false);
         importService.importQuestionnaire(importq);
     }
 
-    @Ignore
     @Test
     public void importExamQuestionnaireWorks() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
-        ImportQuestionnaire importq = new ImportQuestionnaire(new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile"), course, "examquestionnaire", true);
+        ImportQuestionnaire importq = new ImportQuestionnaire(new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile"), course, "exam", true);
         importService.importQuestionnaire(importq);
     }
 
-    @Ignore
     @Test(expected = ServiceException.class)
     public void importLearningQuestionnaireWithSameName() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
@@ -102,7 +91,6 @@ public class QuestionnaireImportServiceTest {
         importService.importQuestionnaire(importr);
     }
 
-    @Ignore
     @Test(expected = ServiceException.class)
     public void importExamQuestionnaireWithSameName() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
@@ -112,7 +100,6 @@ public class QuestionnaireImportServiceTest {
         importService.importQuestionnaire(importr);
     }
 
-    @Ignore
     @Test
     public void importPicturesWorks() throws IOException, ServiceException {
         importService.importPictures(new File(System.getProperty("user.dir") + File.separator + "img_original" + File.separator + "test_image.png"), "test");

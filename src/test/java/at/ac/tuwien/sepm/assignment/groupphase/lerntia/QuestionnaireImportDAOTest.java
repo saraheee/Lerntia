@@ -57,7 +57,7 @@ public class QuestionnaireImportDAOTest {
 
     @Test
     public void getContentsOfCorrectFile() throws IOException, PersistenceException {
-        ArrayList<String> results = importDAO.getContents(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile2.csv");
+        ArrayList<String> results = importDAO.getContents(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile.csv");
         int count = 0;
         for (String result : results) {
             count++;
