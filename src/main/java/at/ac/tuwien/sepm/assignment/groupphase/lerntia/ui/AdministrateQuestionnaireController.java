@@ -110,7 +110,6 @@ public class AdministrateQuestionnaireController {
             simpleLearningQuestionnaireService.deselect(selectedLearningQuestionnaire);
             simpleLearningQuestionnaireService.select(studyMode);
             lerntiaService.loadQuestionnaireAndGetFirstQuestion();
-            //Delete this Line if not Needed
             if (studyMode != null) {
                 LOG.info("Study: " + studyMode.getName() + " Selected: " + selectedLearningQuestionnaire.getName());
             }

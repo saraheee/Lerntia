@@ -22,7 +22,6 @@ public class DirectoryChooserController {
 
         // actually here we do not know if the report is a pdf file.
         // the pdf is only specified in the DAO layer.
-        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
 
         Stage stage = new Stage();
 
