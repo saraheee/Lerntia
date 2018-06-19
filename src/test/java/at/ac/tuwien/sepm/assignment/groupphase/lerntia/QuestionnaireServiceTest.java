@@ -68,7 +68,7 @@ public class QuestionnaireServiceTest {
             questionnaireService.deselectAllQuestionnaires();
             Assert.assertNull(learningQuestionnaireService.getSelected());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to deselect all questionnaires");
         }
     }
 }

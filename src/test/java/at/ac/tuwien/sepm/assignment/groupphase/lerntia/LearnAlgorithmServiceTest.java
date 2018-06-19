@@ -276,7 +276,7 @@ public class LearnAlgorithmServiceTest {
         try {
             learnAlgorithmService.shutdown();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to shut down test");
         }
     }
 }
