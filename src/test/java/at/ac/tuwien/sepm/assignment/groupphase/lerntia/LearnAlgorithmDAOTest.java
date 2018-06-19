@@ -137,15 +137,14 @@ public class LearnAlgorithmDAOTest{
     }
 
     @Test
-    public void updateLearnAlgorithm(){
-        try {
-            Question refQuestion = new Question();
-            refQuestion.setQuestionText("Test Question");
-            refQuestion.setAnswer1("First answer");
-            refQuestion.setAnswer2("Second answer");
-            refQuestion.setCorrectAnswers("1");
+    public void updateLearnAlgorithm() throws PersistenceException{
+        Question refQuestion = new Question();
+        refQuestion.setQuestionText("Test Question");
+        refQuestion.setAnswer1("First answer");
+        refQuestion.setAnswer2("Second answer");
+        refQuestion.setCorrectAnswers("1");
 
-            questionDAO.create(refQuestion);
+        questionDAO.create(refQuestion);
 
         Long refId = refQuestion.getId();
         QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
@@ -167,10 +166,6 @@ public class LearnAlgorithmDAOTest{
         Assert.assertEquals(questionLearnAlgorithm.getSuccessValue(),results.get(0).getSuccessValue());
         Assert.assertEquals(questionLearnAlgorithm.getFailureValue(),results.get(0).getFailureValue());
         Assert.assertEquals(questionLearnAlgorithm.getPoints(),results.get(0).getPoints(),0);
-
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
     }
 
 

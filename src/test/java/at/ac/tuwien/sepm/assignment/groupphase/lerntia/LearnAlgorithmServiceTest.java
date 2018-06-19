@@ -272,11 +272,7 @@ public class LearnAlgorithmServiceTest {
     }
 
     @Test
-    public void shutdownTest() {
-        try {
-            learnAlgorithmService.shutdown();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void shutdownTest() throws ServiceException{
+        learnAlgorithmService.shutdown();
     }
 }

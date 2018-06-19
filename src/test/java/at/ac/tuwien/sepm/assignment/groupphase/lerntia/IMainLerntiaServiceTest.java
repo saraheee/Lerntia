@@ -128,8 +128,7 @@ public class IMainLerntiaServiceTest {
 
 
     @Test
-    public void setCustomQuestionList(){
-        try{
+    public void setCustomQuestionList() throws ServiceException{
         Question q1 = new Question();
         q1.setId(Long.valueOf(1));
         q1.setQuestionText("What is wrong?");
@@ -142,193 +141,146 @@ public class IMainLerntiaServiceTest {
 
         List<Question> questionList = mainLerntiaService.getQuestionList();
         Assert.assertEquals(1,questionList.size());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test(expected = NullPointerException.class)
-    public void errorCustomQuestionList(){
-        try {
-            mainLerntiaService.setExamMode(true);
-            ArrayList<Question> list = null;
-            mainLerntiaService.setCustomExamQuestions(list);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void errorCustomQuestionList() throws ServiceException{
+        mainLerntiaService.setExamMode(true);
+        ArrayList<Question> list = null;
+        mainLerntiaService.setCustomExamQuestions(list);
     }
 
     @Test
-    public void getFirstQuestionsFromExamQuestionnaire(){
-        try {
-            Course course = new Course();
-            course.setMark("111.199");
-            course.setSemester("2010W");
-            course.setName("TGI");
-            courseDAO.create(course);
-            ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire();
-            examQuestionnaire.setName("Exam Questionnaire");
-            examQuestionnaire.setCourseID(course.getId());
-            examQuestionnaire.setDate(LocalDate.now());
-            examQuestionnaireDAO.create(examQuestionnaire);
+    public void getFirstQuestionsFromExamQuestionnaire() throws PersistenceException, ServiceException{
+        Course course = new Course();
+        course.setMark("111.199");
+        course.setSemester("2010W");
+        course.setName("TGI");
+        courseDAO.create(course);
+        ExamQuestionnaire examQuestionnaire = new ExamQuestionnaire();
+        examQuestionnaire.setName("Exam Questionnaire");
+        examQuestionnaire.setCourseID(course.getId());
+        examQuestionnaire.setDate(LocalDate.now());
+        examQuestionnaireDAO.create(examQuestionnaire);
 
-            Question question = new Question();
-            question.setQuestionText("Random QuestionText");
-            question.setAnswer1("Answer1");
-            question.setAnswer2("Answer2");
-            question.setCorrectAnswers("1");
-            questionDAO.create(question);
+        Question question = new Question();
+        question.setQuestionText("Random QuestionText");
+        question.setAnswer1("Answer1");
+        question.setAnswer2("Answer2");
+        question.setCorrectAnswers("1");
+        questionDAO.create(question);
 
-            Question question2 = new Question();
-            question2.setQuestionText("Exam Question");
-            question2.setAnswer1("Answer1");
-            question2.setAnswer2("Answer2");
-            question2.setCorrectAnswers("2");
-            questionDAO.create(question2);
+        Question question2 = new Question();
+        question2.setQuestionText("Exam Question");
+        question2.setAnswer1("Answer1");
+        question2.setAnswer2("Answer2");
+        question2.setCorrectAnswers("2");
+        questionDAO.create(question2);
 
-            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            questionnaireQuestion.setQid(examQuestionnaire.getId());
-            questionnaireQuestion.setQuestionid(question.getId());
-            questionnaireQuestion.setCmark(course.getMark());
-            questionnaireQuestion.setSemester(course.getSemester());
-            questionnaireQuestionDAO.create(questionnaireQuestion);
-            questionnaireQuestion.setQuestionid(question2.getId());
-            questionnaireQuestionDAO.create(questionnaireQuestion);
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        questionnaireQuestion.setQid(examQuestionnaire.getId());
+        questionnaireQuestion.setQuestionid(question.getId());
+        questionnaireQuestion.setCmark(course.getMark());
+        questionnaireQuestion.setSemester(course.getSemester());
+        questionnaireQuestionDAO.create(questionnaireQuestion);
+        questionnaireQuestion.setQuestionid(question2.getId());
+        questionnaireQuestionDAO.create(questionnaireQuestion);
 
-            mainLerntiaService.getQuestionsFromExamQuestionnaire(examQuestionnaire);
-            List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(question.getId(),list.get(0).getId());
-            Assert.assertEquals(2,list.size());
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+        mainLerntiaService.getQuestionsFromExamQuestionnaire(examQuestionnaire);
+        List<Question> list = mainLerntiaService.getQuestionList();
+        Assert.assertEquals(question.getId(),list.get(0).getId());
+        Assert.assertEquals(2,list.size());
     }
     @Test
-    public void  TestToGetNextQuestionfromListInExamMode(){
-        try {
-
-            getFirstQuestionsFromExamQuestionnaire();
-            mainLerntiaService.setExamMode(true);
-            List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(2,list.size());
-            System.out.println(list.get(1).toString());
-            mainLerntiaService.getNextQuestionFromList();
-            Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
-            System.out.println(nextQuestion.toString());
-            Assert.assertEquals("Exam Question",nextQuestion.getQuestionText());
-            mainLerntiaService.setExamMode(false);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void  TestToGetNextQuestionfromListInExamMode() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromExamQuestionnaire();
+        mainLerntiaService.setExamMode(true);
+        List<Question> list = mainLerntiaService.getQuestionList();
+        Assert.assertEquals(2,list.size());
+        mainLerntiaService.getNextQuestionFromList();
+        Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
+        Assert.assertEquals("Exam Question",nextQuestion.getQuestionText());
+        mainLerntiaService.setExamMode(false);
     }
 
     @Test
-    public void getFirstQuestionsFromLearningQuestionnaire(){
-        try {
-            Course course = new Course();
-            course.setMark("222.199");
-            course.setSemester("2013W");
-            course.setName("Algodaten");
-            courseDAO.create(course);
-            LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire();
-            learningQuestionnaire.setName("Learning Questionnaire");
-            learningQuestionnaire.setCourseID(course.getId());
+    public void getFirstQuestionsFromLearningQuestionnaire() throws PersistenceException, ServiceException{
+        Course course = new Course();
+        course.setMark("222.199");
+        course.setSemester("2013W");
+        course.setName("Algodaten");
+        courseDAO.create(course);
+        LearningQuestionnaire learningQuestionnaire = new LearningQuestionnaire();
+        learningQuestionnaire.setName("Learning Questionnaire");
+        learningQuestionnaire.setCourseID(course.getId());
 
-            learningQuestionnaireDAO.create(learningQuestionnaire);
-            learningQuestionnaireDAO.select(learningQuestionnaire);
-            Question question = new Question();
-            question.setQuestionText("Random QuestionText");
-            question.setAnswer1("Answer1");
-            question.setAnswer2("Answer2");
-            question.setCorrectAnswers("1");
-            questionDAO.create(question);
+        learningQuestionnaireDAO.create(learningQuestionnaire);
+        learningQuestionnaireDAO.select(learningQuestionnaire);
+        Question question = new Question();
+        question.setQuestionText("Random QuestionText");
+        question.setAnswer1("Answer1");
+        question.setAnswer2("Answer2");
+        question.setCorrectAnswers("1");
+        questionDAO.create(question);
 
-            Question question2 = new Question();
-            question2.setQuestionText("Random QuestionText2");
-            question2.setAnswer1("Ans1wer1");
-            question2.setAnswer2("Answ1er2");
-            question2.setCorrectAnswers("1");
-            questionDAO.create(question2);
+        Question question2 = new Question();
+        question2.setQuestionText("Random QuestionText2");
+        question2.setAnswer1("Ans1wer1");
+        question2.setAnswer2("Answ1er2");
+        question2.setCorrectAnswers("1");
+        questionDAO.create(question2);
 
 
-            QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
-            questionnaireQuestion.setQid(learningQuestionnaire.getId());
-            questionnaireQuestion.setQuestionid(question.getId());
-            questionnaireQuestion.setCmark(course.getMark());
-            questionnaireQuestion.setSemester(course.getSemester());
-            questionnaireQuestionDAO.create(questionnaireQuestion);
-            questionnaireQuestion.setQuestionid(question2.getId());
-            questionnaireQuestionDAO.create(questionnaireQuestion);
+        QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
+        questionnaireQuestion.setQid(learningQuestionnaire.getId());
+        questionnaireQuestion.setQuestionid(question.getId());
+        questionnaireQuestion.setCmark(course.getMark());
+        questionnaireQuestion.setSemester(course.getSemester());
+        questionnaireQuestionDAO.create(questionnaireQuestion);
+        questionnaireQuestion.setQuestionid(question2.getId());
+        questionnaireQuestionDAO.create(questionnaireQuestion);
 
-            Question firstQuestion = mainLerntiaService.loadQuestionnaireAndGetFirstQuestion();
-            Assert.assertEquals(question.getId(),firstQuestion.getId());
-            questionnaireDAO.deselect(learningQuestionnaire);
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+        Question firstQuestion = mainLerntiaService.loadQuestionnaireAndGetFirstQuestion();
+        Assert.assertEquals(question.getId(),firstQuestion.getId());
+        questionnaireDAO.deselect(learningQuestionnaire);
     }
 
     @Test
-    public void  TestToGetNextQuestionfromList(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(2,list.size());
+    public void  TestToGetNextQuestionfromList() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        List<Question> list = mainLerntiaService.getQuestionList();
+        Assert.assertEquals(2,list.size());
 
-            Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
-            Assert.assertEquals("Random QuestionText2",nextQuestion.getQuestionText());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+        Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
+        Assert.assertEquals("Random QuestionText2",nextQuestion.getQuestionText());
     }
 
     @Test
-    public void testAlgorithmShutDown(){
-        try {
-            mainLerntiaService.stopAlgorithm();
-            Assert.assertEquals(false,learnAlgorithmController.isSelected());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void testAlgorithmShutDown() throws ServiceException{
+        mainLerntiaService.stopAlgorithm();
+        Assert.assertEquals(false,learnAlgorithmController.isSelected());
     }
 
     @Test
-    public void revertBackToFirstQuestion(){
-        try {
-            TestToGetNextQuestionfromList();
-            Question firstQuestion = mainLerntiaService.getFirstQuestion();
-            Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void revertBackToFirstQuestion() throws PersistenceException, ServiceException{
+        TestToGetNextQuestionfromList();
+        Question firstQuestion = mainLerntiaService.getFirstQuestion();
+        Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
     }
 
     @Test
-    public void getPreviousQuestion(){
-        try {
-            TestToGetNextQuestionfromList();
-            Question firstQuestion = mainLerntiaService.getPreviousQuestionFromList();
-            Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void getPreviousQuestion() throws PersistenceException, ServiceException{
+        TestToGetNextQuestionfromList();
+        Question firstQuestion = mainLerntiaService.getPreviousQuestionFromList();
+        Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
     }
 
     @Test
-    public void setQuestioninWrongQuestionList(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,false);
-            Assert.assertEquals(1,mainLerntiaService.getWrongQuestionList().size());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-
+    public void setQuestioninWrongQuestionList() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getFirstQuestion();
+        mainLerntiaService.recordCheckedAnswers(question,false);
+        Assert.assertEquals(1,mainLerntiaService.getWrongQuestionList().size());
     }
 
     @Test
@@ -337,16 +289,12 @@ public class IMainLerntiaServiceTest {
     }
 
     @Test
-    public void checkSkippedQuestions(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            Question question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,true);
-            int i = mainLerntiaService.getIgnoredAnswers();
-            Assert.assertEquals(1,i);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void checkSkippedQuestions() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getNextQuestionFromList();
+        mainLerntiaService.recordCheckedAnswers(question,true);
+        int i = mainLerntiaService.getIgnoredAnswers();
+        Assert.assertEquals(1,i);
     }
 
     @Test(expected = NullPointerException.class)
@@ -355,69 +303,53 @@ public class IMainLerntiaServiceTest {
     }
 
     @Test
-    public void checkCorrectlyAnsweredQuestions(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,true);
-            question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,true);
-            int i = mainLerntiaService.getCorrectAnswers();
-            Assert.assertEquals(2,i);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void checkCorrectlyAnsweredQuestions() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getFirstQuestion();
+        mainLerntiaService.recordCheckedAnswers(question,true);
+        question = mainLerntiaService.getNextQuestionFromList();
+        mainLerntiaService.recordCheckedAnswers(question,true);
+        int i = mainLerntiaService.getCorrectAnswers();
+        Assert.assertEquals(2,i);
     }
 
     @Test
-    public void checkWronglyAnsweredQuestions(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,false);
-            question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,false);
-            int i = mainLerntiaService.getWrongAnswers();
-            Assert.assertEquals(2,i);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void checkWronglyAnsweredQuestions() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getFirstQuestion();
+        mainLerntiaService.recordCheckedAnswers(question,false);
+        question = mainLerntiaService.getNextQuestionFromList();
+        mainLerntiaService.recordCheckedAnswers(question,false);
+        int i = mainLerntiaService.getWrongAnswers();
+        Assert.assertEquals(2,i);
     }
 
     @Test
-    public void checkProcentAnsweredQuestions(){
-        try {
-            getFirstQuestionsFromLearningQuestionnaire();
-            Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,true);
-            question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,false);
-            int i = mainLerntiaService.getWrongAnswers();
-            Assert.assertEquals(1,i);
-            Double x = mainLerntiaService.getPercent();
-            Assert.assertEquals(50.0,x,0);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void checkProcentAnsweredQuestions() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getFirstQuestion();
+        mainLerntiaService.recordCheckedAnswers(question,true);
+        question = mainLerntiaService.getNextQuestionFromList();
+        mainLerntiaService.recordCheckedAnswers(question,false);
+        int i = mainLerntiaService.getWrongAnswers();
+        Assert.assertEquals(1,i);
+        Double x = mainLerntiaService.getPercent();
+        Assert.assertEquals(50.0,x,0);
     }
 
     @Test
-    public void resetWrongAndCorrectSelectedQuestions(){
-       try {
-           getFirstQuestionsFromLearningQuestionnaire();
-           Question question = mainLerntiaService.getFirstQuestion();
-           mainLerntiaService.recordCheckedAnswers(question, true);
-           question = mainLerntiaService.getNextQuestionFromList();
-           mainLerntiaService.recordCheckedAnswers(question, false);
-           int i = mainLerntiaService.getWrongAnswers();
-           Assert.assertEquals(1, i);
-           i = mainLerntiaService.getCorrectAnswers();
-           Assert.assertEquals(1,i);
-           mainLerntiaService.resetCounter();
-           Assert.assertEquals(0,mainLerntiaService.getWrongAnswers());
-           Assert.assertEquals(0,mainLerntiaService.getCorrectAnswers());
-       } catch (ServiceException e) {
-           e.printStackTrace();
-       }
+    public void resetWrongAndCorrectSelectedQuestions() throws PersistenceException, ServiceException{
+        getFirstQuestionsFromLearningQuestionnaire();
+        Question question = mainLerntiaService.getFirstQuestion();
+        mainLerntiaService.recordCheckedAnswers(question, true);
+        question = mainLerntiaService.getNextQuestionFromList();
+        mainLerntiaService.recordCheckedAnswers(question, false);
+        int i = mainLerntiaService.getWrongAnswers();
+        Assert.assertEquals(1, i);
+        i = mainLerntiaService.getCorrectAnswers();
+        Assert.assertEquals(1,i);
+        mainLerntiaService.resetCounter();
+        Assert.assertEquals(0,mainLerntiaService.getWrongAnswers());
+        Assert.assertEquals(0,mainLerntiaService.getCorrectAnswers());
     }
 }
