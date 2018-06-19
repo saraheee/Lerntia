@@ -209,6 +209,11 @@ public class LerntiaMainController implements Runnable {
     }
 
     private void handleAnswer(AnswerController answerController) {
+        if (answerController.getAnswerText().trim().equals("")) {
+            alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Antwort vorhanden",
+                "Keine Antwort vorhanden!", "");
+            return;
+        }
         if (answerController.isDisabled()) { // enable reading but not selecting of answers
             audioController.readSingleAnswer(answerController.getAnswerText());
 
