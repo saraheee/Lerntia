@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.CourseDAO;
@@ -138,13 +139,17 @@ public class CourseServiceTest {
     @Test(expected = ServiceException.class)
     public void validateMarkTooLong() throws ServiceException {
         StringBuilder mark = new StringBuilder();
-        ConfigReader configReaderCourse = new ConfigReader("course");
-        int maxLength = configReaderCourse.getValueInt("maxLengthCourseMark");
-        while (mark.length() < maxLength + 2) {
-            mark.append("a");
+        try {
+            ConfigReader configReaderCourse = new ConfigReader("course");
+            int maxLength = configReaderCourse.getValueInt("maxLengthCourseMark");
+            while (mark.length() < maxLength + 2) {
+                mark.append("a");
+            }
+            Course course = new Course(mark.toString(), Semester.SS + "asdf", "asdf", false);
+            courseService.validate(course);
+        } catch (ConfigReaderException e) {
+            e.printStackTrace();
         }
-        Course course = new Course(mark.toString(), Semester.SS + "asdf", "asdf", false);
-        courseService.validate(course);
     }
 
     // name missing
@@ -160,7 +165,12 @@ public class CourseServiceTest {
     @Test(expected = ServiceException.class)
     public void validateNameTooLong() throws ServiceException {
         StringBuilder name = new StringBuilder();
-        ConfigReader configReaderCourse = new ConfigReader("course");
+        ConfigReader configReaderCourse = null;
+        try {
+            configReaderCourse = new ConfigReader("course");
+        } catch (ConfigReaderException e) {
+            e.printStackTrace();
+        }
         int maxLength = configReaderCourse.getValueInt("maxLengthCourseName");
         while (name.length() < maxLength + 5) {
             name.append("a");

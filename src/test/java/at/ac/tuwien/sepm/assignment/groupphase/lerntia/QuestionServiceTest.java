@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.LearnAlgorithmDAO;
@@ -35,7 +36,11 @@ public class QuestionServiceTest {
 
     @Before
     public void setUp() {
-        configReaderQuestions = new ConfigReader("questions");
+        try {
+            configReaderQuestions = new ConfigReader("questions");
+        } catch (ConfigReaderException e) {
+            e.printStackTrace();
+        }
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
@@ -394,6 +399,10 @@ public class QuestionServiceTest {
 
     @After
     public void wrapUp() {
-        this.configReaderQuestions.close();
+        try {
+            this.configReaderQuestions.close();
+        } catch (ConfigReaderException e) {
+            e.printStackTrace();
+        }
     }
 }

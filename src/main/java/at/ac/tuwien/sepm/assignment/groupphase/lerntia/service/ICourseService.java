@@ -44,6 +44,7 @@ public interface ICourseService {
      *
      * @param course the course to be validated
      * @throws ServiceException if the course failed the validation
+     *  or if the appropriate config file ('course.properties') is not provided
      */
     void validate(Course course) throws ServiceException;
 
