@@ -32,7 +32,7 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
     @Override
     public void exportQuestionnaire(LearningQuestionnaire questionnaire, List<Question> allQuestions) throws PersistenceException, FileExistsException {
         if (questionnaire == null || allQuestions == null) {
-            throw new PersistenceException("At least one value of the questionnaire export values is null!");
+            throw new PersistenceException("Mindestens ein Wert für das Exportieren ist null");
         }
         var csvPath = Paths.get(System.getProperty("user.dir") + File.separator + "csv_export");
         var csvDir = new File(String.valueOf(csvPath));
@@ -40,7 +40,7 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
         //Create export directory
         if (!Files.exists(csvPath)) {
             if (!csvDir.mkdir()) {
-                throw new PersistenceException("Failed to create export directory!");
+                throw new PersistenceException("Der Versuch ein Verzeichnis zu erzeugen ist fehlgeschlagen.");
             }
             LOG.info("Created a new export directory for the CSV.");
         }
@@ -68,7 +68,7 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
             writer = new FileWriter(csvPath + File.separator + questionnaire.getName() + ".csv");
         } catch (IOException e) {
             LOG.error("Failed to create the export file.");
-            throw new PersistenceException("Failed to create the CSV export file.");
+            throw new PersistenceException("Der Versuch eine CSV Exportdatei zu erzeugen ist fehlgeschlagen.");
         }
         //Get all questions
         var csvOutput = new StringBuilder();
@@ -86,16 +86,14 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
         try {
             writer.append(csvOutput.toString());
         } catch (IOException e) {
-            LOG.error("Failed to write data to the export file.");
-            throw new PersistenceException("Failed to write all questions for the CSV export.");
+            throw new PersistenceException("Der Versuch alle notwendigen Fragen zu schreiben ist fehlgeschlagen.");
         }
         //Flush & Close
         try {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            LOG.error("Failed to flush and close the writer for the export file.");
-            throw new PersistenceException("Failed to close the writer for the CSV export.");
+            throw new PersistenceException("Der Versuch den CSV-Schreiber zu schließen ist fehlgeschlagen..");
         }
     }
 
@@ -103,7 +101,7 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
     @Override
     public void overwriteFile(LearningQuestionnaire questionnaire, List<Question> allQuestions) throws PersistenceException, FileExistsException {
         if (questionnaire == null || allQuestions == null) {
-            throw new PersistenceException("At least one value of the questionnaire export values is null!");
+            throw new PersistenceException("Mindestens ein Wert für das Exportieren der Fragen ist null!");
         }
         overwriteFile = true;
         exportQuestionnaire(questionnaire, allQuestions);

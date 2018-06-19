@@ -42,7 +42,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
         if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
-            throw new PersistenceException("At least one value of the questionnaire question is null!");
+            throw new PersistenceException("Mindestens ein Wert der Instanz oder die QuestionnaireQuestion-Istnanz selbst ist null!");
         }
         LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT)) {
@@ -52,14 +52,14 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             psCreate.execute();
             LOG.info("Statement for new QuestionnaireQuestion entry successfully sent.");
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO CREATE error: item couldn't have been created, check if all mandatory values have been added and if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO CREATE Fehler: Die Istanz konnte nicht erzeugt werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public List<QuestionnaireQuestion> search(QuestionnaireQuestion searchParameters) throws PersistenceException {
         if (searchParameters == null || searchParameters.getQid() == null) {
-            throw new PersistenceException("Search parameters or its id is null!");
+            throw new PersistenceException("Die Suchparameter oder die ID ist null!");
         }
         try {
             LOG.info("Prepare SEARCH QuestionnaireQuestion Statement. ");
@@ -78,14 +78,14 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 return searchResults;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH error: couldn't find items, check if the searchParameters are valid and if the connection to the database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO SEARCH Fehler: Die Istanzen konnten nicht gesucht werden. Bitte überprüfen, ob die Suchparameter und die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void delete(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
         if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
-            throw new PersistenceException("At least one of the questionnaire question delete values is null!");
+            throw new PersistenceException("Mindestens ein Wert für das Löschen von QuestionnaireQuestion ist null!");
         }
         LOG.info("Prepare Statement for QuestionnaireQuestion delete from Database.");
         try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_DELETE_STATEMENT)) {
@@ -94,14 +94,14 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
             psDelete.executeUpdate();
             LOG.info("Statement for QuestionnaireQuestion Deletion successfully sent.");
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO DELETE error: couldn't delete item in question, check if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO DELETE Fehler: die Instanz konnte nicht gelöscht werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void update(QuestionnaireQuestion questionnaireQuestion, long newQid, long newQuestionId) throws PersistenceException {
         if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
-            throw new PersistenceException("At least one of the questionnaire question update values is null!");
+            throw new PersistenceException("Mindestens ein Aktuelisierungswert von QuestionnaireQuestion ist null!");
         }
         try {
             LOG.info("Prepare Statement for updating existing QuestionnaireQuestion with new values.");
@@ -114,7 +114,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 LOG.info("Statement for QuestionnaireQuestion Update successfully sent.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO UPDATE error: item couldn't be updated, check if mandatory values have been added or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO UPDATE Fehler: die Instanz konnte nicht aktuelisiert werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
@@ -136,7 +136,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
                 return list;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireQuestionDAO READALL error: not all questions could have been found, check if connection to the Database is valid.");
+            throw new PersistenceException("QuestionnaireQuestionDAO READALL Fehler: nicht alle Instanzen konnten gelesen werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 }

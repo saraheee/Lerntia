@@ -39,7 +39,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
     @Override
     public void create(ExamQuestionnaire examQuestionnaire) throws PersistenceException {
         if (examQuestionnaire == null) {
-            throw new PersistenceException("At least one value of the exam questionnaire is null!");
+            throw new PersistenceException("Mindestens ein Wert des Prüfungsfragenbogens oder der Prüfungsfragenbogen selbst ist null!");
         }
         try {
             LOG.info("Create preparation for ExamQuestionnaire and Questionnaire.");
@@ -54,7 +54,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
                 LOG.info("Statement successfully sent.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("ExamQuestionnaireDAO CREATE error: ExamQuestionnaire couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
+            throw new PersistenceException("ExamQuestionnaireDAO CREATE Fehler: Der Prüfungsfragenbogen konnte nicht erzeugt werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
@@ -76,7 +76,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
             LOG.info("All ExamQuestionnaire found.");
             return list;
         } catch (SQLException e) {
-            throw new PersistenceException("ExamQuestionnaireDAO READALL error: readall method couldn't find all ExamQuestionnaires, check if connection to the Database is valid.");
+            throw new PersistenceException("ExamQuestionnaireDAO READALL Fehler: Nicht alle Prüfungsfragenbogen konnten gefunden werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
