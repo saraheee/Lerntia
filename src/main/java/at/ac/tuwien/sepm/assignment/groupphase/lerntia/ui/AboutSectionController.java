@@ -29,7 +29,7 @@ public class AboutSectionController {
     }
 
     void showAboutSection() {
-        if(configReaderAbout == null || ABOUTTEXT == null) {
+        if (configReaderAbout == null || ABOUTTEXT == null) {
             try {
                 configReaderAbout = new ConfigReader("about");
                 ABOUTTEXT = configReaderAbout.getValue("aboutText");
