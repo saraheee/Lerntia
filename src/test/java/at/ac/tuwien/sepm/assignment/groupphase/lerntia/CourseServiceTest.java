@@ -148,7 +148,7 @@ public class CourseServiceTest {
             Course course = new Course(mark.toString(), Semester.SS + "asdf", "asdf", false);
             courseService.validate(course);
         } catch (ConfigReaderException e) {
-            e.printStackTrace();
+            LOG.error("Failed to read config");
         }
     }
 
@@ -169,7 +169,7 @@ public class CourseServiceTest {
         try {
             configReaderCourse = new ConfigReader("course");
         } catch (ConfigReaderException e) {
-            e.printStackTrace();
+            LOG.error("Failed to read config");
         }
         int maxLength = configReaderCourse.getValueInt("maxLengthCourseName");
         while (name.length() < maxLength + 5) {
