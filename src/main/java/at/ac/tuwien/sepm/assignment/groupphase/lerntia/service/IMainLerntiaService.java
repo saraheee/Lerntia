@@ -152,4 +152,11 @@ public interface IMainLerntiaService {
      * @throws ServiceException if the method can't obtain the first Exam Question.
      */
     Question getFirstExamQuestion() throws ServiceException;
+
+    /**
+     * Get the list of wrongly answered Questions
+     *
+     * @return List of all wrongly answered Questions.
+     * */
+    List<Question> getWrongQuestionList();
 }
