@@ -49,7 +49,7 @@ public class QuestionDAO implements IQuestionDAO {
     public void create(Question question) throws PersistenceException {
         if (question == null || question.getQuestionText() == null || question.getAnswer1() == null
             || question.getAnswer2() == null || question.getCorrectAnswers() == null) {
-            throw new PersistenceException("At least one of the question values is null!");
+            throw new PersistenceException("Mindestens eine Frage ist null!");
         }
         try {
             LOG.info("Prepare Statement for Question creation.");
@@ -77,7 +77,7 @@ public class QuestionDAO implements IQuestionDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO CREATE error: question couldn't be created, check if the mandatory values have been added or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO CREATE Fehler: Die Frage konnte nicht erzeugt werden, bitte überprüfen, ob alle Suchparameter und die Datenbankverbindung gültig sind.");
         }
     }
 
@@ -85,7 +85,7 @@ public class QuestionDAO implements IQuestionDAO {
     public void update(Question question) throws PersistenceException {
         if (question == null || question.getQuestionText() == null || question.getAnswer1() == null
             || question.getAnswer2() == null || question.getCorrectAnswers() == null || question.getId() == null) {
-            throw new PersistenceException("At least one of the question values is null!");
+            throw new PersistenceException("Mindestens ein Wert der Frage ist null!");
         }
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTION_UPDATE_STATEMENT)) {
             LOG.info("Prepare statement for question update.");
@@ -106,14 +106,14 @@ public class QuestionDAO implements IQuestionDAO {
             learnAlgorithmDAO.reset(questionLearnAlgorithm);
             LOG.info("Question successfully updated in Database.");
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO UPDATE error: question couldn't be updated, check if the mandatory values have been added or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO UPDATE Fehler: Die Frage konnte nicht aktuelisiert werden, bitte überprüfuen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public List<Question> search(List<Question> questionList) throws PersistenceException {
         if (questionList == null) {
-            throw new PersistenceException("Question list is null!");
+            throw new PersistenceException("Die List der Fragen ist null!");
         }
         try {
             LOG.info("Prepare search parameters for the Question search.");
@@ -148,14 +148,14 @@ public class QuestionDAO implements IQuestionDAO {
             LOG.info("All Questions matching the parameters found.");
             return searchResults;
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO SEARCH error: questions couldn't have been found. Check if the search parameters are not null or/and if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO SEARCH Fehler: Fragen konnten nicht gefunden werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void delete(Question question) throws PersistenceException {
         if (question == null || question.getId() == null) {
-            throw new PersistenceException("Question or question id is null!");
+            throw new PersistenceException("Die Frage oder die ID ist null!");
         }
         try {
             LOG.info("Prepare statement for question deletion.");
@@ -169,7 +169,7 @@ public class QuestionDAO implements IQuestionDAO {
                 learnAlgorithmDAO.delete(questionLearnAlgorithm);
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO DELETE error: question couldn't be deleted, check if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO DELETE Fehler: Die Frage konnte nich gelöscht werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
@@ -197,14 +197,14 @@ public class QuestionDAO implements IQuestionDAO {
                 return q;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO GET error : matching question couldn't be found! Check if proper value given or if the connection to the database is valid.");
+            throw new PersistenceException("QuestionDAO GET Fehler: Die passende Frage konnte nicht gefunden werden. Bitte überprüfen, ob die gegebenen Werte und die Datenbankverbindung gültig sind");
         }
     }
 
     @Override
     public List<Question> searchForQuestions(Question questionInput) throws PersistenceException {
         if (questionInput == null) {
-            throw new PersistenceException("At least one of the question search values is null!");
+            throw new PersistenceException("Mindestens einen Suchwert ist null!");
         }
         List<Question> results = new ArrayList<>();
         LOG.info("Search a Questions which contains a part of a input String");
@@ -234,7 +234,7 @@ public class QuestionDAO implements IQuestionDAO {
             }
             return results;
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionDAO SEARCHFORQUESTION error: method didn't work, check if proper values have been added or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionDAO SEARCHFORQUESTION Fehler: Fragen konnen nicht gefunden werden, bitte überprüfen, ob die gegebenen Parameter und die Datenbankverbindung gültig sind.");
         }
     }
 

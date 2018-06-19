@@ -44,7 +44,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     @Override
     public void create(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         if (learningQuestionnaire == null) {
-            throw new PersistenceException("Learning questionnaire or its id is null!");
+            throw new PersistenceException("Lernfragenbogen oder die ID ist null!");
         }
         try {
             LOG.info("Create preparation for LearningQuestionnaire and Questionnaire.");
@@ -58,11 +58,11 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
                 LOG.info("Statement for LearningQuestionnaire successfully sent.");
 
             } catch (SQLException e) {
-                throw new PersistenceException("LearningQuestionnaireDAO CREATE error: LearningQuestionnaire couldn't be created, check if all mandatory values have been added or the connection to the Database is valid.");
+                throw new PersistenceException("LearningQuestionnaireDAO CREATE Fehler: Der Lernfragenbogen konnte nicht erzeugt werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
             }
 
         } catch (PersistenceException e) {
-            throw new PersistenceException("LearningQuestionnaireDAO CREATE error: Questionnaire couldn't be created so the LearningQuestionnaire entry couldn't be created either.");
+            throw new PersistenceException("LearningQuestionnaireDAO CREATE Fehler: Der Fragenbogen konnte nicht erzeugt werden. Folglich, der Lernfragenbogen konnte nicht erzeugt werden.");
         }
     }
 
@@ -83,14 +83,14 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
                 return list;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("LearningQuestionnaireDAO READALL error: not all LearningQuestionnaire have been found, check if the connection to the Database is valid.");
+            throw new PersistenceException("LearningQuestionnaireDAO READALL Fehler: manche Lernfragenbogen waren nicht gefünden, bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void select(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         if (learningQuestionnaire == null) {
-            throw new PersistenceException("Learning questionnaire is null!");
+            throw new PersistenceException("Lernfragenbogen ist null!");
         }
         LOG.info("Select LearningQuestionnaire");
         questionnaireDAO.select(learningQuestionnaire);
@@ -99,7 +99,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     @Override
     public void deselect(LearningQuestionnaire learningQuestionnaire) throws PersistenceException {
         if (learningQuestionnaire == null) {
-            throw new PersistenceException("Learning questionnaire is null!");
+            throw new PersistenceException("Lernfragenbogen ist null!");
         }
         LOG.info("Deselect LearningQuestionnaire");
         questionnaireDAO.deselect(learningQuestionnaire);
