@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.application.MainApplication;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +21,7 @@ public class WindowController {
     private static String LERNTIA = "[Lerntia] ";
     private static String ICON = "/icons/main.png";
 
-    public Stage openNewWindow(String title, FXMLLoader fxmlLoader) {
+    public Stage openNewWindow(String title, FXMLLoader fxmlLoader) throws ControllerException {
         var stage = new Stage();
         stage.centerOnScreen();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -30,8 +32,7 @@ public class WindowController {
             LOG.debug("Successfully opened a new window with title: " + title);
             stage.show();
         } catch (IOException e) {
-            // TODO - show alert or throw new exception
-            LOG.error("Failed to open a new window with title: " + title);
+            throw new ControllerException("Konnte kein neues Fenster öffnen mit dem Titel: " + title);
         }
         return stage;
     }
