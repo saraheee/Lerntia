@@ -32,12 +32,12 @@ public class ConfigReader {
                 try {
                     this.inputStream.close();
                 } catch (IOException e1) {
-                    throw new ConfigReaderException("Das Inputstream für das Lesen der Konfigurationsdaten konnte weder geöffnet noch geschlossen werden. Bitte überprüfen Sie, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+                    throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte weder geöffnet noch geschlossen werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
                 }
-                throw new ConfigReaderException("Das Inputstream für das Lesen der Konfigurationsdaten konnte nicht geöffnet werden. Bitte überprüfen Sie, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+                throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdaten konnte nicht geöffnet werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
             }
         } catch (FileNotFoundException e) {
-            throw new ConfigReaderException("Die Config Datei \""+config+".properties\" konnte nicht gefunden werden. Bitte überprüfen Sie, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+            throw new ConfigReaderException("Die Config Datei \"" + config + ".properties\" konnte nicht gefunden werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
         }
     }
 
@@ -57,7 +57,7 @@ public class ConfigReader {
         try {
             this.inputStream.close();
         } catch (IOException e) {
-            throw new ConfigReaderException("Das Inputstream für das Lesen der Konfigurationsdaten konnte nicht geschlossen werden. Bitte überprüfen Sie, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+            throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte nicht geschlossen werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
         }
     }
 
@@ -84,9 +84,9 @@ public class ConfigReader {
             } catch (IOException e1) {
                 // ignore, as there is one exception to be send in case anything is wrong
             }
-            throw new ConfigReaderException("Die Initialisierung könnte nicht erfolgreich durchgehen, da manche " +
-                "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, dass es in dem Verzeichnis \"" + basePath +
-                " die Folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
+            throw new ConfigReaderException("Die Initialisierung konnte nicht erfolgreich durchgeführt werden, da einige " +
+                "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, dass sich dem Verzeichnis \"" + basePath +
+                " die folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
                 "\n\t *  questions.properties; \n\t *  speech.properties; \n\t *  student.properties.");
         } // end of the main try-catch block
     }

@@ -3,8 +3,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleQuestionnaireImportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,8 +38,8 @@ public class ImportFileController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CSVPATH = System.getProperty("user.dir") + File.separator + "csv" + File.separator;
     private static final String IMGPATH = System.getProperty("user.dir") + File.separator + "img_original" + File.separator;
-    private final SimpleCourseService cservice;
-    private final SimpleQuestionnaireImportService qservice;
+    private final ICourseService cservice;
+    private final IQuestionnaireImportService qservice;
     private final AlertController alertController;
     private final WindowController windowController;
     private File file;
@@ -61,8 +61,8 @@ public class ImportFileController {
 
     @Autowired
     public ImportFileController(
-        SimpleCourseService simpleCourseService,
-        SimpleQuestionnaireImportService simpleQuestionnaireImportService,
+        ICourseService simpleCourseService,
+        IQuestionnaireImportService simpleQuestionnaireImportService,
         WindowController windowController,
         AlertController alertController
     ) {

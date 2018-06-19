@@ -37,7 +37,7 @@ public class ExamResultsWriterDAOTest {
 
     }
 
-    private void IexamResultsWriterDAO(ExamResultsWriterDAO examResultsWriterDAO) {
+    private void IexamResultsWriterDAO(IExamResultsWriterDAO examResultsWriterDAO) {
         this.examResultsWriterDAO = examResultsWriterDAO;
     }
 

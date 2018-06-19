@@ -56,15 +56,15 @@ public class ExamQuestionnaireDAOTest {
         }
     }
 
-    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+    private void IExamQuestionnaireDAO(IExamQuestionnaireDAO examQuestionnaireDAO) {
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
+    private void IQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO) {
         this.questionnaireDAO = questionnaireDAO;
     }
 

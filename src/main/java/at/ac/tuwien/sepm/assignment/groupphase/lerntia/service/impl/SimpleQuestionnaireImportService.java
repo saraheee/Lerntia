@@ -2,9 +2,9 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.QuestionnaireImportDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireImportDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +22,19 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final QuestionnaireImportDAO questionnaireImportDAO;
-    private final SimpleQuestionService simpleQuestionService;
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
-    private final SimpleExamQuestionnaireService simpleExamQuestionnaireService;
-    private final SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService;
+    private final IQuestionnaireImportDAO questionnaireImportDAO;
+    private final IQuestionService simpleQuestionService;
+    private final ILearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final IExamQuestionnaireService simpleExamQuestionnaireService;
+    private final IQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
     @Autowired
     public SimpleQuestionnaireImportService(
-        QuestionnaireImportDAO questionnaireImportDAO,
-        SimpleQuestionService simpleQuestionService,
-        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
-        SimpleExamQuestionnaireService simpleExamQuestionnaireService,
-        SimpleQuestionnaireQuestionService simpleQuestionnaireQuestionService
+        IQuestionnaireImportDAO questionnaireImportDAO,
+        IQuestionService simpleQuestionService,
+        ILearningQuestionnaireService simpleLearningQuestionnaireService,
+        IExamQuestionnaireService simpleExamQuestionnaireService,
+        IQuestionnaireQuestionService simpleQuestionnaireQuestionService
     ) {
         this.questionnaireImportDAO = questionnaireImportDAO;
         this.simpleQuestionService = simpleQuestionService;

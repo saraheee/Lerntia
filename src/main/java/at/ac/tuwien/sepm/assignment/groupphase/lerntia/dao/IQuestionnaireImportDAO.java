@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface IQuestionnaireImportDAO {
 
     /**
-     * Get the contents of a File
+     * Get the contents of a file
      *
      * @param filePath the path to the File to be read
      * @return a list of Strings representing the rows of the File
@@ -18,13 +18,19 @@ public interface IQuestionnaireImportDAO {
     ArrayList<String> getContents(String filePath) throws IOException, PersistenceException;
 
     /**
-     * copy given files in new directory
+     * Copy given files in new directory
      *
      * @param file a directory with all images
      * @param name the name of the file
-     * @throws IOException if the File cannot be read
+     * @throws IOException          if the File cannot be read
      * @throws PersistenceException if the directory can't be created
      */
     void importPictures(File file, String name) throws IOException, PersistenceException;
 
+    /**
+     * Delete given files from a directory
+     *
+     * @param file a directory with all images to delete
+     */
+    void deletePictures(File file);
 }

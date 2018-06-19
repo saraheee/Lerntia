@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -43,11 +44,11 @@ public class ExamQuestionnaireServiceTest {
         }
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IExamQuestionnaireService(SimpleExamQuestionnaireService simpleExamQuestionnaireService) {
+    private void IExamQuestionnaireService(IExamQuestionnaireService simpleExamQuestionnaireService) {
         this.examQuestionnaireService = simpleExamQuestionnaireService;
     }
 

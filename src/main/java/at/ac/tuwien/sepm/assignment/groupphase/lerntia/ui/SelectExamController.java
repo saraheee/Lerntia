@@ -4,8 +4,8 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.User;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleExamQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamQuestionnaireService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class SelectExamController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final SimpleUserService simpleUserService;
-    private final SimpleExamQuestionnaireService examQuestionnaireService;
+    private final IUserService simpleUserService;
+    private final IExamQuestionnaireService examQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
     private final AlertController alertController;
@@ -42,12 +43,12 @@ public class SelectExamController {
     private boolean selectingCanceled = false;
 
     public SelectExamController(
-        SimpleExamQuestionnaireService examQuestionnaireService,
+        IExamQuestionnaireService examQuestionnaireService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,
         AlertController alertController,
         EditExamController editExamController,
-        SimpleUserService simpleUserService) {
+        IUserService simpleUserService) {
         this.examQuestionnaireService = examQuestionnaireService;
         this.lerntiaMainController = lerntiaMainController;
         this.windowController = windowController;
@@ -79,7 +80,7 @@ public class SelectExamController {
             alertController.setOnlyWrongQuestions(false);
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler beim Prüfungsfragenbogen","Fehler beim anzeigen aller Prüfungsfragenbogen.","Das Programm konnte nicht alle Prüfunngs-Fragenbogen herausefinden.");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler beim Prüfungsfragenbogen", "Fehler beim anzeigen aller Prüfungsfragenbogen.", "Das Programm konnte nicht alle Prüfunngs-Fragenbogen herausefinden.");
         }
 
         if (examQuestionnaireList.isEmpty()) {

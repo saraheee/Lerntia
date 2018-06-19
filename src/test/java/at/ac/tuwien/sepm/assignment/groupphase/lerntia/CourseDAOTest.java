@@ -45,7 +45,7 @@ public class CourseDAOTest {
         }
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 

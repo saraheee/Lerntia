@@ -86,7 +86,7 @@ public class QuestionnaireExportDAO implements IQuestionnaireExportDAO {
         try {
             writer.append(csvOutput.toString());
         } catch (IOException e) {
-            throw new PersistenceException("Der Versuch alle notwendigen Fragen zu schreiben ist fehlgeschlagen.");
+            throw new PersistenceException("Der Versuch alle notwendigen Fragen zu exportieren ist fehlgeschlagen.");
         }
         //Flush & Close
         try {
