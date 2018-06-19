@@ -91,6 +91,7 @@ public class MainLerntiaService implements IMainLerntiaService {
                 listCounter++;
             }
             currentQuestionIndex = -1;
+
             LOG.info("All Exam Questions set.");
         } catch (Exception e) {
             throw new ServiceException("Can't retrieve exam questionnaire.");
@@ -442,7 +443,9 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("Reset Wrong Question List");
         alertController.setOnlyWrongQuestions(false);
         showOnlyWrongQuestions = false;
-        wrongQuestions.clear();
+        if (wrongQuestions!=null) {
+            wrongQuestions.clear();
+        }
         currentWrongQuestionIndex = 0;
     }
 
@@ -500,6 +503,11 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("Get Percentage of correctly answered questions");
         int temp = (int) (percent * Math.pow(10, 2));
         return ((double) temp) / Math.pow(10, 2);
+    }
+
+    @Override
+    public List<Question> getWrongQuestionList(){
+        return wrongQuestions;
     }
 
 }
