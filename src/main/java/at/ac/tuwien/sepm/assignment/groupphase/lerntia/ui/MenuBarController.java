@@ -56,8 +56,7 @@ public class MenuBarController implements Runnable {
         AdministrateQuestionnaireController administrateQuestionnaireController,
         AboutSectionController showAboutSectionController,
         AlertController alertController,
-        ExportQuestionnaireController exportQuestionnaireController
-    ) {
+        ExportQuestionnaireController exportQuestionnaireController) {
         this.importFileController = importFileController;
         this.createCourseController = createCourseController;
         this.selectQuestionnaireController = selectQuestionnaireController;

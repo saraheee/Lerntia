@@ -26,4 +26,10 @@ public interface IQuestionnaireImportService {
      */
     void importPictures(File file, String name) throws ServiceException, IOException;
 
+    /**
+     * delete files from a directory
+     *
+     * @param file a directory with all images to delete
+     */
+    void deletePictures(File file);
 }
