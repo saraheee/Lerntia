@@ -57,7 +57,7 @@ public class QuestionServiceTest {
         }
     }
 
-    private void IQuestionService(SimpleQuestionService simpleQuestionService) {
+    private void IQuestionService(IQuestionService simpleQuestionService) {
         this.questionService = simpleQuestionService;
     }
 

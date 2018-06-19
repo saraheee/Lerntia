@@ -53,11 +53,11 @@ public class LearnAlgorithmServiceTest {
         this.learnAlgorithmDAO = learnAlgorithmDAO;
     }
 
-    private void IQuestionDAO(QuestionDAO questionDAO) {
+    private void IQuestionDAO(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
-    private void ILearnAlgorithmService(LearnAlgorithmService learnAlgorithmService) {
+    private void ILearnAlgorithmService(ILearnAlgorithmService learnAlgorithmService) {
         this.learnAlgorithmService = learnAlgorithmService;
     }
 

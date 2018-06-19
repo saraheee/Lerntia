@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

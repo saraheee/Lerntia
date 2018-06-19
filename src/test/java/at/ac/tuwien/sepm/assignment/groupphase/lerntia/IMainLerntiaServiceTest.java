@@ -2,10 +2,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.*;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
@@ -28,21 +28,17 @@ public class IMainLerntiaServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
-    private LerntiaMainController lerntiaMainController;
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
-    private QuestionnaireDAO questionnaireDAO;
+    private IQuestionnaireDAO questionnaireDAO;
     private ICourseDAO courseDAO;
-    private ExamQuestionnaireDAO examQuestionnaireDAO;
-    private ILearningQuestionnaireService learningQuestionnaireService;
-    private IQuestionService questionService;
-    private IQuestionnaireQuestionService questionnaireQuestionService;
-    private ILearnAlgorithmService learnAlgorithmService;
+    private IExamQuestionnaireDAO examQuestionnaireDAO;
     private LearnAlgorithmController learnAlgorithmController;
-    private AlertController alertController;
     private IMainLerntiaService mainLerntiaService;
-    private QuestionnaireQuestionDAO questionnaireQuestionDAO;
-    private QuestionDAO questionDAO;
-    private LearningQuestionnaireDAO learningQuestionnaireDAO;
+    private IQuestionnaireQuestionDAO questionnaireQuestionDAO;
+    private IQuestionDAO questionDAO;
+    private ILearningQuestionnaireDAO learningQuestionnaireDAO;
+    private LerntiaMainController lerntiaMainController;
+
     @After
     public void rollback() throws SQLException {
         if (connection != null) {
@@ -55,31 +51,31 @@ public class IMainLerntiaServiceTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager)));
+            this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
             this.IquestionnaireQuestionDAO(new QuestionnaireQuestionDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
-            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
+            this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
             this.LearnAlgorithmController(new LearnAlgorithmController());
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
-            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)),
                 new LearnAlgorithmController(),
                 new AlertController()));
 
-            this.LerntiaMainController(new LerntiaMainController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+            this.LerntiaMainController(new LerntiaMainController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)),
                 new LearnAlgorithmController(),
                 new AlertController()),
 
-                new AudioController(new SimpleTextToSpeechService(),new AlertController()),
+                new AudioController(new SimpleTextToSpeechService(), new AlertController()),
                 new AlertController(),
-                new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                new ZoomedImageController(new AlertController(),new WindowController(),new AudioController(new SimpleTextToSpeechService(),new AlertController())),
+                new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new ZoomedImageController(new AlertController(), new WindowController(), new AudioController(new SimpleTextToSpeechService(), new AlertController())),
                 new SimpleExamResultsWriterService(new ExamResultsWriterDAO()),
                 new LearnAlgorithmController(),
                 new DirectoryChooserController(),
@@ -90,23 +86,27 @@ public class IMainLerntiaServiceTest {
         }
     }
 
-    private void ILearnQuestionnaireDAO(LearningQuestionnaireDAO learningQuestionnaireDAO) {
+    private void LerntiaMainController(LerntiaMainController lerntiaMainController) {
+        this.lerntiaMainController = lerntiaMainController;
+    }
+
+    private void ILearnQuestionnaireDAO(ILearningQuestionnaireDAO learningQuestionnaireDAO) {
         this.learningQuestionnaireDAO = learningQuestionnaireDAO;
     }
 
-    private void IQuestionDAO(QuestionDAO questionDAO) {
+    private void IQuestionDAO(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
-    private void IquestionnaireQuestionDAO(QuestionnaireQuestionDAO questionnaireQuestionDAO) {
+    private void IquestionnaireQuestionDAO(IQuestionnaireQuestionDAO questionnaireQuestionDAO) {
         this.questionnaireQuestionDAO = questionnaireQuestionDAO;
     }
 
-    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+    private void IExamQuestionnaireDAO(IExamQuestionnaireDAO examQuestionnaireDAO) {
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
@@ -114,41 +114,37 @@ public class IMainLerntiaServiceTest {
         this.learnAlgorithmController = learnAlgorithmController;
     }
 
-    private void LerntiaMainController(LerntiaMainController lerntiaMainController) {
-        this.lerntiaMainController = lerntiaMainController;
-    }
-
-    private void IMainLerntiaService(MainLerntiaService mainLerntiaService) {
+    private void IMainLerntiaService(IMainLerntiaService mainLerntiaService) {
         this.mainLerntiaService = mainLerntiaService;
     }
 
-    private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
+    private void IQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO) {
         this.questionnaireDAO = questionnaireDAO;
     }
 
 
     @Test
-    public void setCustomQuestionList(){
-        try{
-        Question q1 = new Question();
-        q1.setId(Long.valueOf(1));
-        q1.setQuestionText("What is wrong?");
-        q1.setAnswer1("Nothing");
-        q1.setAnswer2("Everything");
-        ArrayList<Question> list = new ArrayList<>();
-        list.add(q1);
-        mainLerntiaService.setExamMode(true);
-        mainLerntiaService.setCustomExamQuestions(list);
+    public void setCustomQuestionList() {
+        try {
+            Question q1 = new Question();
+            q1.setId(1L);
+            q1.setQuestionText("What is wrong?");
+            q1.setAnswer1("Nothing");
+            q1.setAnswer2("Everything");
+            ArrayList<Question> list = new ArrayList<>();
+            list.add(q1);
+            mainLerntiaService.setExamMode(true);
+            mainLerntiaService.setCustomExamQuestions(list);
 
-        List<Question> questionList = mainLerntiaService.getQuestionList();
-        Assert.assertEquals(1,questionList.size());
+            List<Question> questionList = mainLerntiaService.getQuestionList();
+            Assert.assertEquals(1, questionList.size());
         } catch (ServiceException e) {
             LOG.error("Failed to get question list");
         }
     }
 
     @Test(expected = NullPointerException.class)
-    public void errorCustomQuestionList(){
+    public void errorCustomQuestionList() {
         try {
             mainLerntiaService.setExamMode(true);
             ArrayList<Question> list = null;
@@ -159,7 +155,7 @@ public class IMainLerntiaServiceTest {
     }
 
     @Test
-    public void getFirstQuestionsFromExamQuestionnaire(){
+    public void getFirstQuestionsFromExamQuestionnaire() {
         try {
             Course course = new Course();
             course.setMark("111.199");
@@ -197,27 +193,26 @@ public class IMainLerntiaServiceTest {
 
             mainLerntiaService.getQuestionsFromExamQuestionnaire(examQuestionnaire);
             List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(question.getId(),list.get(0).getId());
-            Assert.assertEquals(2,list.size());
-        } catch (PersistenceException e) {
-            LOG.error("Failed to get first question form exam questionnaire");
-        } catch (ServiceException e) {
+            Assert.assertEquals(question.getId(), list.get(0).getId());
+            Assert.assertEquals(2, list.size());
+        } catch (PersistenceException | ServiceException e) {
             LOG.error("Failed to get first question form exam questionnaire");
         }
     }
+
     @Test
-    public void  TestToGetNextQuestionfromListInExamMode(){
+    public void TestToGetNextQuestionfromListInExamMode() {
         try {
 
             getFirstQuestionsFromExamQuestionnaire();
             mainLerntiaService.setExamMode(true);
             List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(2,list.size());
+            Assert.assertEquals(2, list.size());
             System.out.println(list.get(1).toString());
             mainLerntiaService.getNextQuestionFromList();
             Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
             System.out.println(nextQuestion.toString());
-            Assert.assertEquals("Exam Question",nextQuestion.getQuestionText());
+            Assert.assertEquals("Exam Question", nextQuestion.getQuestionText());
             mainLerntiaService.setExamMode(false);
         } catch (ServiceException e) {
             LOG.error("Failed to get next question form exam questionnaire");
@@ -225,7 +220,7 @@ public class IMainLerntiaServiceTest {
     }
 
     @Test
-    public void getFirstQuestionsFromLearningQuestionnaire(){
+    public void getFirstQuestionsFromLearningQuestionnaire() {
         try {
             Course course = new Course();
             course.setMark("222.199");
@@ -263,68 +258,66 @@ public class IMainLerntiaServiceTest {
             questionnaireQuestionDAO.create(questionnaireQuestion);
 
             Question firstQuestion = mainLerntiaService.loadQuestionnaireAndGetFirstQuestion();
-            Assert.assertEquals(question.getId(),firstQuestion.getId());
+            Assert.assertEquals(question.getId(), firstQuestion.getId());
             questionnaireDAO.deselect(learningQuestionnaire);
-        } catch (PersistenceException e) {
-            LOG.error("Failed to get first question form learning questionnaire");
-        } catch (ServiceException e) {
+        } catch (PersistenceException | ServiceException e) {
             LOG.error("Failed to get first question form learning questionnaire");
         }
     }
 
     @Test
-    public void  TestToGetNextQuestionfromList(){
+    public void TestToGetNextQuestionfromList() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             List<Question> list = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(2,list.size());
+            Assert.assertEquals(2, list.size());
 
             Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
-            Assert.assertEquals("Random QuestionText2",nextQuestion.getQuestionText());
+            Assert.assertEquals("Random QuestionText2", nextQuestion.getQuestionText());
         } catch (ServiceException e) {
             LOG.error("Failed to get next question form list");
         }
     }
 
     @Test
-    public void testAlgorithmShutDown(){
+    public void testAlgorithmShutDown() {
         try {
             mainLerntiaService.stopAlgorithm();
-            Assert.assertEquals(false,learnAlgorithmController.isSelected());
+            Assert.assertEquals(false, learnAlgorithmController.isSelected());
         } catch (ServiceException e) {
             LOG.error("Failed to shut down learn algorithm");
         }
     }
 
     @Test
-    public void revertBackToFirstQuestion(){
+    public void revertBackToFirstQuestion() {
         try {
             TestToGetNextQuestionfromList();
             Question firstQuestion = mainLerntiaService.getFirstQuestion();
-            Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
+            Assert.assertEquals("Random QuestionText", firstQuestion.getQuestionText());
         } catch (ServiceException e) {
             LOG.error("Failed to revert back to first question");
         }
     }
 
     @Test
-    public void getPreviousQuestion(){
+    public void getPreviousQuestion() {
         try {
             TestToGetNextQuestionfromList();
             Question firstQuestion = mainLerntiaService.getPreviousQuestionFromList();
-            Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
+            Assert.assertEquals("Random QuestionText", firstQuestion.getQuestionText());
         } catch (ServiceException e) {
             LOG.error("Failed to get previous question");
         }
     }
 
     @Test
-    public void setQuestioninWrongQuestionList(){
+    public void setQuestioninWrongQuestionList() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,false);
-            Assert.assertEquals(1,mainLerntiaService.getWrongQuestionList().size());
+            mainLerntiaService.recordCheckedAnswers(question, false);
+            Assert.assertEquals(1, mainLerntiaService.getWrongQuestionList().size());
         } catch (ServiceException e) {
             LOG.error("Failed to set question in wrong question list");
         }
@@ -332,92 +325,92 @@ public class IMainLerntiaServiceTest {
     }
 
     @Test
-    public void WrongQuestionListError(){
+    public void WrongQuestionListError() {
         Assert.assertNull(mainLerntiaService.getWrongQuestionList());
     }
 
     @Test
-    public void checkSkippedQuestions(){
+    public void checkSkippedQuestions() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             Question question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,true);
+            mainLerntiaService.recordCheckedAnswers(question, true);
             int i = mainLerntiaService.getIgnoredAnswers();
-            Assert.assertEquals(1,i);
+            Assert.assertEquals(1, i);
         } catch (ServiceException e) {
             LOG.error("Failed to check skipped questions");
         }
     }
 
     @Test(expected = NullPointerException.class)
-    public void checkSkippedQuestionsError(){
-       int i = mainLerntiaService.getIgnoredAnswers();
+    public void checkSkippedQuestionsError() {
+        int i = mainLerntiaService.getIgnoredAnswers();
     }
 
     @Test
-    public void checkCorrectlyAnsweredQuestions(){
+    public void checkCorrectlyAnsweredQuestions() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,true);
+            mainLerntiaService.recordCheckedAnswers(question, true);
             question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,true);
+            mainLerntiaService.recordCheckedAnswers(question, true);
             int i = mainLerntiaService.getCorrectAnswers();
-            Assert.assertEquals(2,i);
+            Assert.assertEquals(2, i);
         } catch (ServiceException e) {
             LOG.error("Failed to check correctly answered questions");
         }
     }
 
     @Test
-    public void checkWronglyAnsweredQuestions(){
+    public void checkWronglyAnsweredQuestions() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,false);
+            mainLerntiaService.recordCheckedAnswers(question, false);
             question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,false);
+            mainLerntiaService.recordCheckedAnswers(question, false);
             int i = mainLerntiaService.getWrongAnswers();
-            Assert.assertEquals(2,i);
+            Assert.assertEquals(2, i);
         } catch (ServiceException e) {
             LOG.error("Failed to check wrongly answered questions");
         }
     }
 
     @Test
-    public void checkProcentAnsweredQuestions(){
+    public void checkProcentAnsweredQuestions() {
         try {
             getFirstQuestionsFromLearningQuestionnaire();
             Question question = mainLerntiaService.getFirstQuestion();
-            mainLerntiaService.recordCheckedAnswers(question,true);
+            mainLerntiaService.recordCheckedAnswers(question, true);
             question = mainLerntiaService.getNextQuestionFromList();
-            mainLerntiaService.recordCheckedAnswers(question,false);
+            mainLerntiaService.recordCheckedAnswers(question, false);
             int i = mainLerntiaService.getWrongAnswers();
-            Assert.assertEquals(1,i);
+            Assert.assertEquals(1, i);
             Double x = mainLerntiaService.getPercent();
-            Assert.assertEquals(50.0,x,0);
+            Assert.assertEquals(50.0, x, 0);
         } catch (ServiceException e) {
             LOG.error("Failed to check procent answered questions");
         }
     }
 
     @Test
-    public void resetWrongAndCorrectSelectedQuestions(){
-       try {
-           getFirstQuestionsFromLearningQuestionnaire();
-           Question question = mainLerntiaService.getFirstQuestion();
-           mainLerntiaService.recordCheckedAnswers(question, true);
-           question = mainLerntiaService.getNextQuestionFromList();
-           mainLerntiaService.recordCheckedAnswers(question, false);
-           int i = mainLerntiaService.getWrongAnswers();
-           Assert.assertEquals(1, i);
-           i = mainLerntiaService.getCorrectAnswers();
-           Assert.assertEquals(1,i);
-           mainLerntiaService.resetCounter();
-           Assert.assertEquals(0,mainLerntiaService.getWrongAnswers());
-           Assert.assertEquals(0,mainLerntiaService.getCorrectAnswers());
-       } catch (ServiceException e) {
-           LOG.error("Failed to reset wrong and correct selected questions");
-       }
+    public void resetWrongAndCorrectSelectedQuestions() {
+        try {
+            getFirstQuestionsFromLearningQuestionnaire();
+            Question question = mainLerntiaService.getFirstQuestion();
+            mainLerntiaService.recordCheckedAnswers(question, true);
+            question = mainLerntiaService.getNextQuestionFromList();
+            mainLerntiaService.recordCheckedAnswers(question, false);
+            int i = mainLerntiaService.getWrongAnswers();
+            Assert.assertEquals(1, i);
+            i = mainLerntiaService.getCorrectAnswers();
+            Assert.assertEquals(1, i);
+            mainLerntiaService.resetCounter();
+            Assert.assertEquals(0, mainLerntiaService.getWrongAnswers());
+            Assert.assertEquals(0, mainLerntiaService.getCorrectAnswers());
+        } catch (ServiceException e) {
+            LOG.error("Failed to reset wrong and correct selected questions");
+        }
     }
 }

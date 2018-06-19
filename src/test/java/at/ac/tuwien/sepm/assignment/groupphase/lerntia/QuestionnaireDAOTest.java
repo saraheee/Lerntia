@@ -52,11 +52,11 @@ public class QuestionnaireDAOTest {
         }
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
+    private void IQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO) {
         this.questionnaireDAO = questionnaireDAO;
     }
 

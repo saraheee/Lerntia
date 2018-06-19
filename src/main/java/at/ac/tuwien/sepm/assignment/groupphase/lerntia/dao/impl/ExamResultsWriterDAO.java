@@ -12,7 +12,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.maven.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -40,7 +39,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private User student;
 
-    @Autowired
+
     public ExamResultsWriterDAO() throws PersistenceException {
 
         // images are used to show if an answer has been selected or not.
