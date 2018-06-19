@@ -3,10 +3,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireExportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ExportQuestionnaireController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final ILearningQuestionnaireService simpleLearningQuestionnaireService;
     private final WindowController windowController;
     private final IQuestionnaireExportService exportService;
     private final IMainLerntiaService lerntiaService;
@@ -38,7 +38,7 @@ public class ExportQuestionnaireController {
 
     @Autowired
     public ExportQuestionnaireController(
-        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        ILearningQuestionnaireService simpleLearningQuestionnaireService,
         WindowController windowController,
         IQuestionnaireExportService iQuestionnaireExportService,
         AlertController alertController,

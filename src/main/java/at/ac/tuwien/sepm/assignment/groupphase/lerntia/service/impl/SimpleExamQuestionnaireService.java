@@ -21,7 +21,7 @@ public class SimpleExamQuestionnaireService implements IExamQuestionnaireService
     private final IExamQuestionnaireDAO examQuestionnaireDAO;
 
     @Autowired
-    public SimpleExamQuestionnaireService(IExamQuestionnaireDAO examQuestionnaireDAO){
+    public SimpleExamQuestionnaireService(IExamQuestionnaireDAO examQuestionnaireDAO) {
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 

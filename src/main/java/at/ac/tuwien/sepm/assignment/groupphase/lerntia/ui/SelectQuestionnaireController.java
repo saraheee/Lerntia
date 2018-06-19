@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 public class SelectQuestionnaireController {
 
-    private final SimpleLearningQuestionnaireService learningQuestionnaireService;
+    private final ILearningQuestionnaireService learningQuestionnaireService;
     private final IQuestionnaireService iQuestionnaireService;
     private final LerntiaMainController lerntiaMainController;
     private final WindowController windowController;
@@ -30,7 +30,7 @@ public class SelectQuestionnaireController {
     private ComboBox<String> cb_questionnaire;
 
     public SelectQuestionnaireController(
-        SimpleLearningQuestionnaireService learningQuestionnaireService,
+        ILearningQuestionnaireService learningQuestionnaireService,
         IQuestionnaireService iQuestionnaireService,
         LerntiaMainController lerntiaMainController,
         WindowController windowController,

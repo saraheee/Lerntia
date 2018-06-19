@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +29,7 @@ public class AboutSectionController {
     }
 
     void showAboutSection() {
-        if(configReaderAbout == null || ABOUTTEXT == null) {
+        if (configReaderAbout == null || ABOUTTEXT == null) {
             try {
                 configReaderAbout = new ConfigReader("about");
                 ABOUTTEXT = configReaderAbout.getValue("aboutText");

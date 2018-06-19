@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LearnAlgorithmDAOTest{
+public class LearnAlgorithmDAOTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
@@ -42,11 +42,11 @@ public class LearnAlgorithmDAOTest{
         }
     }
 
-    private void ILearnQuestionDAO(LearnAlgorithmDAO learnAlgorithmDAO) {
+    private void ILearnQuestionDAO(ILearnAlgorithmDAO learnAlgorithmDAO) {
         this.learnAlgorithmDAO = learnAlgorithmDAO;
     }
 
-    private void IQuestionDAO(QuestionDAO questionDAO) {
+    private void IQuestionDAO(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
@@ -74,13 +74,13 @@ public class LearnAlgorithmDAOTest{
             QuestionLearnAlgorithm getValue = new QuestionLearnAlgorithm();
             refValue.setID(refQuestion.getId());
             List<QuestionLearnAlgorithm> results = learnAlgorithmDAO.readAll();
-            for (QuestionLearnAlgorithm q: results){
-                if (refId==q.getID()){
+            for (QuestionLearnAlgorithm q : results) {
+                if (refId == q.getID()) {
                     getValue.setID(q.getID());
                 }
             }
 
-            Assert.assertEquals(refValue.getID(),getValue.getID());
+            Assert.assertEquals(refValue.getID(), getValue.getID());
 
 
         } catch (PersistenceException e) {
@@ -95,7 +95,7 @@ public class LearnAlgorithmDAOTest{
     }
 
     @Test
-    public void resetExistingAlgorithmValue()throws PersistenceException{
+    public void resetExistingAlgorithmValue() throws PersistenceException {
         Question refQuestion = new Question();
         refQuestion.setQuestionText("Test Question");
         refQuestion.setAnswer1("First answer");
@@ -120,8 +120,8 @@ public class LearnAlgorithmDAOTest{
         QuestionLearnAlgorithm getValue = new QuestionLearnAlgorithm();
         refValue.setID(refQuestion.getId());
         List<QuestionLearnAlgorithm> results = learnAlgorithmDAO.readAll();
-        for (QuestionLearnAlgorithm q: results){
-            if (refId==q.getID()){
+        for (QuestionLearnAlgorithm q : results) {
+            if (refId == q.getID()) {
                 getValue.setID(q.getID());
                 getValue.setSuccessValue(q.getSuccessValue());
                 getValue.setFailureValue(q.getFailureValue());
@@ -129,15 +129,15 @@ public class LearnAlgorithmDAOTest{
             }
         }
 
-        Assert.assertEquals(refValue.getID(),getValue.getID());
-        Assert.assertEquals(100.0,getValue.getPoints(),0);
-        Assert.assertEquals(refValue.getFailureValue(),getValue.getFailureValue());
-        Assert.assertEquals(refValue.getSuccessValue(),getValue.getSuccessValue());
+        Assert.assertEquals(refValue.getID(), getValue.getID());
+        Assert.assertEquals(100.0, getValue.getPoints(), 0);
+        Assert.assertEquals(refValue.getFailureValue(), getValue.getFailureValue());
+        Assert.assertEquals(refValue.getSuccessValue(), getValue.getSuccessValue());
 
     }
 
     @Test
-    public void updateLearnAlgorithm(){
+    public void updateLearnAlgorithm() {
         try {
             Question refQuestion = new Question();
             refQuestion.setQuestionText("Test Question");
@@ -147,26 +147,26 @@ public class LearnAlgorithmDAOTest{
 
             questionDAO.create(refQuestion);
 
-        Long refId = refQuestion.getId();
-        QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
-        questionLearnAlgorithm.setID(refId);
-        questionLearnAlgorithm.setPoints(200);
-        questionLearnAlgorithm.setFailureValue(15);
-        questionLearnAlgorithm.setSuccessValue(12);
-        List<QuestionLearnAlgorithm> update = new ArrayList<>();
-        update.add(questionLearnAlgorithm);
-        learnAlgorithmDAO.update(update);
-        List<QuestionLearnAlgorithm> search = new ArrayList<>();
-        List<QuestionLearnAlgorithm> results;
-        QuestionLearnAlgorithm searchparameter = new QuestionLearnAlgorithm();
-        searchparameter.setID(refId);
-        search.add(searchparameter);
-        results = learnAlgorithmDAO.search(search);
+            Long refId = refQuestion.getId();
+            QuestionLearnAlgorithm questionLearnAlgorithm = new QuestionLearnAlgorithm();
+            questionLearnAlgorithm.setID(refId);
+            questionLearnAlgorithm.setPoints(200);
+            questionLearnAlgorithm.setFailureValue(15);
+            questionLearnAlgorithm.setSuccessValue(12);
+            List<QuestionLearnAlgorithm> update = new ArrayList<>();
+            update.add(questionLearnAlgorithm);
+            learnAlgorithmDAO.update(update);
+            List<QuestionLearnAlgorithm> search = new ArrayList<>();
+            List<QuestionLearnAlgorithm> results;
+            QuestionLearnAlgorithm searchparameter = new QuestionLearnAlgorithm();
+            searchparameter.setID(refId);
+            search.add(searchparameter);
+            results = learnAlgorithmDAO.search(search);
 
-        Assert.assertEquals(searchparameter.getID(),results.get(0).getID());
-        Assert.assertEquals(questionLearnAlgorithm.getSuccessValue(),results.get(0).getSuccessValue());
-        Assert.assertEquals(questionLearnAlgorithm.getFailureValue(),results.get(0).getFailureValue());
-        Assert.assertEquals(questionLearnAlgorithm.getPoints(),results.get(0).getPoints(),0);
+            Assert.assertEquals(searchparameter.getID(), results.get(0).getID());
+            Assert.assertEquals(questionLearnAlgorithm.getSuccessValue(), results.get(0).getSuccessValue());
+            Assert.assertEquals(questionLearnAlgorithm.getFailureValue(), results.get(0).getFailureValue());
+            Assert.assertEquals(questionLearnAlgorithm.getPoints(), results.get(0).getPoints(), 0);
 
         } catch (PersistenceException e) {
             LOG.error("Failed to update learn algorithm");

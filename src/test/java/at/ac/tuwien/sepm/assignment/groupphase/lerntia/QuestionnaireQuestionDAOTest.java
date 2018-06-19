@@ -9,7 +9,10 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,23 +57,23 @@ public class QuestionnaireQuestionDAOTest {
         }
     }
 
-    private void IQuestionDAO(QuestionDAO questionDAO) {
+    private void IQuestionDAO(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
-    private void ICourseDAO(CourseDAO courseDAO) {
+    private void ICourseDAO(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
     }
 
-    private void IExamQuestionnaireDAO(ExamQuestionnaireDAO examQuestionnaireDAO) {
+    private void IExamQuestionnaireDAO(IExamQuestionnaireDAO examQuestionnaireDAO) {
         this.examQuestionnaireDAO = examQuestionnaireDAO;
     }
 
-    private void IQuestionnaireDAO(QuestionnaireDAO questionnaireDAO) {
+    private void IQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO) {
         this.questionnaireDAO = questionnaireDAO;
     }
 
-    private void IQuestionnaireQuestionDAO(QuestionnaireQuestionDAO questionnaireQuestionDAO) {
+    private void IQuestionnaireQuestionDAO(IQuestionnaireQuestionDAO questionnaireQuestionDAO) {
         this.questionnaireQuestionDAO = questionnaireQuestionDAO;
     }
 

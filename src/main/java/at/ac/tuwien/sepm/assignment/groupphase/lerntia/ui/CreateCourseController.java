@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleCourseService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ public class CreateCourseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final SimpleCourseService courseService;
+    private final ICourseService courseService;
     private final WindowController windowController;
     private final AlertController alertController;
 
@@ -38,7 +38,7 @@ public class CreateCourseController {
     private TextField tf_semesterYear;
 
     @Autowired
-    public CreateCourseController(SimpleCourseService courseService, WindowController windowController, AlertController alertController) {
+    public CreateCourseController(ICourseService courseService, WindowController windowController, AlertController alertController) {
         this.courseService = courseService;
         this.windowController = windowController;
         this.alertController = alertController;

@@ -35,7 +35,7 @@ public class QuestionDAOTest {
         }
     }
 
-    private void IQuestionDAO(QuestionDAO questionDAO) {
+    private void IQuestionDAO(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
@@ -65,7 +65,7 @@ public class QuestionDAOTest {
             firstQuestion.setAnswer2("yes");
             firstQuestion.setCorrectAnswers("1");
             questionDAO.create(firstQuestion);
-            Assert.assertEquals(Long.valueOf(refId+1), firstQuestion.getId());
+            Assert.assertEquals(Long.valueOf(refId + 1), firstQuestion.getId());
         } catch (PersistenceException e) {
             throw new PersistenceException(e.getCustomMessage());
         }

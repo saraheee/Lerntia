@@ -46,7 +46,7 @@ public class QuestionnaireImportDAOTest {
         }
     }
 
-    private void IQuestionnaireImportDAO(QuestionnaireImportDAO importDAO) {
+    private void IQuestionnaireImportDAO(IQuestionnaireImportDAO importDAO) {
         this.importDAO = importDAO;
     }
 

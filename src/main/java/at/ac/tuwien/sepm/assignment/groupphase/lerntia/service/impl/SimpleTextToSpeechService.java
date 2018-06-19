@@ -28,7 +28,6 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private String ANSWER = "Antwort nummer";
     private String VOICE = "bits3-hsmm";
     private String BREAK = "....";
-    private boolean playWelcomeText = false;
 
     private AudioPlayer audioPlayer;
     private MaryInterface maryTTS;
@@ -37,7 +36,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
-        if(configReaderSpeech == null) {
+        if (configReaderSpeech == null) {
             LOG.debug("configReaderSpeech is null, trying to add a new one.");
             try {
                 configReaderSpeech = new ConfigReader("speech");
@@ -49,9 +48,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
         WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
-        VOICE = configReaderSpeech.getValue("voice")         != null ? configReaderSpeech.getValue("voice") : VOICE;
-        BREAK = configReaderSpeech.getValue("break")         != null ? configReaderSpeech.getValue("break") : BREAK;
-        playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
+        BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
+        var playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
 
         LOG.trace("Entering method playWelcomeText.");
         try {

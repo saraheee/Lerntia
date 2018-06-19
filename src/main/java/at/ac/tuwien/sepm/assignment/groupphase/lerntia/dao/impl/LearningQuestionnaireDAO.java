@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ILearningQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -25,10 +26,10 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = FALSE)";
 
     private Connection connection;
-    private QuestionnaireDAO questionnaireDAO;
+    private IQuestionnaireDAO questionnaireDAO;
 
     @Autowired
-    public LearningQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
+    public LearningQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         this.questionnaireDAO = questionnaireDAO;
         if (jdbcConnectionManager.isTestConnection()) {
             connection = jdbcConnectionManager.getTestConnection();
@@ -38,7 +39,6 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
             LOG.info("Connection for LearningQuestionnaireDAO retrieved.");
         }
     }
-
 
 
     @Override
