@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
@@ -12,6 +13,7 @@ import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,8 +23,8 @@ import java.lang.invoke.MethodHandles;
 public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private ConfigReader configReaderSpeech = new ConfigReader("speech");
 
+    private ConfigReader configReaderSpeech = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
     private String VOICE = "bits3-hsmm";
@@ -36,13 +38,21 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
-        if (configReaderSpeech != null) {
-            WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
-            ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
-            VOICE = configReaderSpeech.getValue("voice")         != null ? configReaderSpeech.getValue("voice") : VOICE;
-            BREAK = configReaderSpeech.getValue("break")         != null ? configReaderSpeech.getValue("break") : BREAK;
-            playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+        if(configReaderSpeech == null) {
+            LOG.debug("configReaderSpeech is null, trying to add a new one.");
+            try {
+                configReaderSpeech = new ConfigReader("speech");
+            } catch (ConfigReaderException e) {
+                throw new TextToSpeechServiceException(e.getCustomMessage());
+            }
         }
+        LOG.debug("A valid configReaderSpeech found.");
+
+        WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
+        ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
+        VOICE = configReaderSpeech.getValue("voice")         != null ? configReaderSpeech.getValue("voice") : VOICE;
+        BREAK = configReaderSpeech.getValue("break")         != null ? configReaderSpeech.getValue("break") : BREAK;
+        playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
 
         LOG.trace("Entering method playWelcomeText.");
         try {
