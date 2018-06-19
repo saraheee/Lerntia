@@ -66,10 +66,10 @@ public class ConfigReader {
         String propertiesFileNamesArray[] = new String[]{"about", "course", "questions", "speech", "student"};
       //  String propertiesFileNamesArray[] = new String[]{"about", "course", "questions"};
         InputStream inputStream = null;
-        String propsPath, basePath = System.getProperty("user.home");
+        String propsPath, basePath = System.getProperty("user.home") + File.separator + "Lerntia" + File.separator + "config";
         try {
             for (String propertiesFileName : propertiesFileNamesArray) {
-                propsPath = basePath + File.separator + "Lerntia" + File.separator + "config" + File.separator + propertiesFileName + ".properties";
+                propsPath = basePath + File.separator + propertiesFileName + ".properties";
                 File propsFile = new File(propsPath);
                 inputStream = new FileInputStream(propsFile);
                 Properties properties = new Properties();

@@ -97,8 +97,7 @@ public class SelectExamController {
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Keine Studiendaten gefunden!",
                 "Bitte die Config-Datei überprüfen",
-                "Config-Datei mit dem Namen 'student.properties' muss vorhanden sein, um die Studiendaten " +
-                    "anzeigen zu können.");
+                e.getCustomMessage());
         }
 
         windowStage.setOnCloseRequest(event -> {
