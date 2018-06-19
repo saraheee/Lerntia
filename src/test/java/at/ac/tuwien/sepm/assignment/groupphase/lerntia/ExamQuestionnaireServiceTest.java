@@ -73,7 +73,7 @@ public class ExamQuestionnaireServiceTest {
             LocalDate ld = LocalDate.now();
             sample.setDate(ld);
             examQuestionnaireService.create(sample);
-            Long test = Long.valueOf(1);
+            Long test = Long.valueOf(4);
             Assert.assertEquals(test,sample.getId());
         } catch (ServiceException e) {
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class ExamQuestionnaireServiceTest {
             anotherSample.setCourseID(samplecourse.getId());
             anotherSample.setName("Chapter 2");
             List<ExamQuestionnaire> list = examQuestionnaireService.readAll();
-            Assert.assertEquals(2,list.size());
+            Assert.assertEquals(5,list.size());
         } catch (PersistenceException e) {
             e.printStackTrace();
         } catch (ServiceException e) {
