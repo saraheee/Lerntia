@@ -49,7 +49,7 @@ public class CourseServiceTest {
         }
     }
 
-    private void ICourseService(SimpleCourseService simpleCourseService) {
+    private void ICourseService(ICourseService simpleCourseService) {
         this.courseService = simpleCourseService;
     }
 
@@ -171,6 +171,7 @@ public class CourseServiceTest {
         } catch (ConfigReaderException e) {
             LOG.error("Failed to get config reader for courses");
         }
+        assert configReaderCourse != null;
         int maxLength = configReaderCourse.getValueInt("maxLengthCourseName");
         while (name.length() < maxLength + 5) {
             name.append("a");

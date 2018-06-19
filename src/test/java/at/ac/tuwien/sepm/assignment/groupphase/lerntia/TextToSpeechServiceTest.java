@@ -21,7 +21,7 @@ public class TextToSpeechServiceTest {
         ITextToSpeechService(new SimpleTextToSpeechService());
     }
 
-    private void ITextToSpeechService(SimpleTextToSpeechService simpleTextToSpeechService) {
+    private void ITextToSpeechService(ITextToSpeechService simpleTextToSpeechService) {
         this.textToSpeechService = simpleTextToSpeechService;
     }
 

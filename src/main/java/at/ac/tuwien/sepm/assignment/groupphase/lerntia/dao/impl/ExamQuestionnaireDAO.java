@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IExamQuestionnaireDAO;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionnaireDAO;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.slf4j.Logger;
@@ -21,11 +22,11 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
 
     private static final String SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO ExamQuestionnaire(id,qdate) VALUES (?,?)";
     private static final String SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM ExamQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = FALSE)";
-    private QuestionnaireDAO questionnaireDAO;
+    private IQuestionnaireDAO questionnaireDAO;
     private Connection connection;
 
     @Autowired
-    public ExamQuestionnaireDAO(QuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
+    public ExamQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {
         this.questionnaireDAO = questionnaireDAO;
         if (jdbcConnectionManager.isTestConnection()) {
             connection = jdbcConnectionManager.getTestConnection();
