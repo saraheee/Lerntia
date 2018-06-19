@@ -5,10 +5,9 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Course;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ImportQuestionnaire;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ICourseService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IQuestionnaireImportService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.*;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import at.ac.tuwien.sepm.assignment.groupphase.util.Semester;
 import org.junit.After;
@@ -31,11 +30,6 @@ public class QuestionnaireImportServiceTest {
     private Connection connection;
 
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
-    private ILearningQuestionnaireService learningQuestionnaireService;
-    private IQuestionService questionService;
-    private IQuestionnaireQuestionService questionnaireQuestionService;
-    private ILearnAlgorithmService learnAlgorithmService;
-    private AlertController alertController;
 
     private ICourseService courseService;
 
@@ -45,13 +39,13 @@ public class QuestionnaireImportServiceTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
 
-            this.IQuestionnaireImportService( new SimpleQuestionnaireImportService(
+            this.IQuestionnaireImportService(new SimpleQuestionnaireImportService(
                 new QuestionnaireImportDAO()
-                ,new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)))
-                ,new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager))
-                ,new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager))
-                ,new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager))
-            ) );
+                , new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)))
+                , new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
+                , new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
+                , new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager))
+            ));
 
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
 
@@ -72,7 +66,7 @@ public class QuestionnaireImportServiceTest {
         this.importService = importService;
     }
 
-    private void ICourseService(SimpleCourseService simpleCourseService) {
+    private void ICourseService(ICourseService simpleCourseService) {
         this.courseService = simpleCourseService;
     }
 

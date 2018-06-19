@@ -57,19 +57,17 @@ public class ZoomedImageController {
             alertController.showBigAlert(Alert.AlertType.WARNING, "Kein Bild gefunden", "Diese Frage hat kein verbundenes Bild.", "");
             return;
         }
-        Image image = null;
+        Image image;
         try {
             image = (new Image(imageFile.toURI().toURL().toExternalForm()));
         } catch (MalformedURLException e) {
             throw new ControllerException("URL of Bild nicht lesbar.");
         }
         var imageView = new ImageView();
-        if (image != null) {
-            imageView.setImage(image);
-            imageView.setPreserveRatio(true);
-            imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - eps));
-            imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
-        }
+        imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - eps));
+        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
         var pane = new BorderPane();
         pane.setCenter(imageView);
         imageScene = new Scene(pane);

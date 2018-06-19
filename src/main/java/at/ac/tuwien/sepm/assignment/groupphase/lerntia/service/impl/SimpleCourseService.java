@@ -83,7 +83,7 @@ public class SimpleCourseService implements ICourseService {
 
     @Override
     public void validate(Course course) throws ServiceException {
-        if(configReaderCourse == null) {
+        if (configReaderCourse == null) {
             LOG.debug("Openin a new config reader for course");
             try {
                 configReaderCourse = new ConfigReader("course");
@@ -118,7 +118,6 @@ public class SimpleCourseService implements ICourseService {
             !course.getSemester().startsWith(Semester.WS.toString()) &&
                 !course.getSemester().startsWith(Semester.SS.toString())
             ) {
-            error = true;
             message += "Das Semester sollte mit 'WS' oder 'SS' beginnen!\n";
             throw new ServiceException(message);
         }
@@ -135,7 +134,7 @@ public class SimpleCourseService implements ICourseService {
                 error = true;
                 message += "Das Jahr sollte nicht negativ sein!\n";
             }
-            if(!error) {
+            if (!error) {
                 course.setSemester(course.getSemester().substring(0, 2) + yearStr.substring(2, 4));
             }
             LOG.info("All course values are valid.");
