@@ -24,8 +24,8 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
 
     @Override
     public ArrayList<String> getContents(String filePath) throws IOException, PersistenceException {
-        if (filePath.equals("") || filePath == null) {
-            throw new PersistenceException("File path for the questionnaire import is null!");
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new PersistenceException("Der Pfad für das Importieren der Fragen ist null!");
         }
         // A BufferedReader Object is created using path that is the argument of this method
         FileReader fr = new FileReader(filePath);
@@ -49,7 +49,7 @@ public class QuestionnaireImportDAO implements IQuestionnaireImportDAO {
     @Override
     public void importPictures(File file, String name) throws IOException, PersistenceException {
         if (file == null || name == null) {
-            throw new PersistenceException("File or name for importing pictures is null!");
+            throw new PersistenceException("Die Datei oder der Name für das Importieren der Bilder ist null!");
         }
         Path imgPath = Paths.get(System.getProperty("user.dir") + File.separator + "img");
         File imgDir = new File(String.valueOf(imgPath));
