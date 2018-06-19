@@ -49,7 +49,7 @@ public class LearnAlgorithmServiceTest {
         }
     }
 
-    private void ILearnAlgorithmDAO(LearnAlgorithmDAO learnAlgorithmDAO) {
+    private void ILearnAlgorithmDAO(ILearnAlgorithmDAO learnAlgorithmDAO) {
         this.learnAlgorithmDAO = learnAlgorithmDAO;
     }
 
