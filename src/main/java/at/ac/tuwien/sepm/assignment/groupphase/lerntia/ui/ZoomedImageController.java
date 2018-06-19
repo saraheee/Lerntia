@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -49,7 +50,7 @@ public class ZoomedImageController {
     }
 
     @FXML
-    void onZoomButtonClicked() {
+    void onZoomButtonClicked() throws ControllerException {
         LOG.debug("Zoom button clicked");
         if (imageFile == null || !imageFile.exists()) {
             LOG.debug("Zooming was selected, but there was no image to be shown.");
@@ -60,7 +61,7 @@ public class ZoomedImageController {
         try {
             image = (new Image(imageFile.toURI().toURL().toExternalForm()));
         } catch (MalformedURLException e) {
-            // TODO - show alert or throw new exception
+            throw new ControllerException("URL of Bild nicht lesbar.");
         }
         var imageView = new ImageView();
         if (image != null) {
