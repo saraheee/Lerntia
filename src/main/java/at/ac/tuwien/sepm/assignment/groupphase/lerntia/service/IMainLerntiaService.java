@@ -166,5 +166,10 @@ public interface IMainLerntiaService {
      */
     void resetCounter();
 
-    void setLearnAlgorithmStatus(boolean b);
+    /**
+     * Set the current status of the LearnAlgorithm
+     *
+     * @param status current status if the LearnAlgorithm is running or not
+     * */
+    void setLearnAlgorithmStatus(boolean status);
 }
