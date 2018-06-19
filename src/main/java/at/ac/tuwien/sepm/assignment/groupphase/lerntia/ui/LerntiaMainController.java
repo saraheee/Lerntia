@@ -664,6 +664,7 @@ public class LerntiaMainController implements Runnable {
         buttonBar.getButtons().add(handInButton);
         buttonBar.getButtons().remove(algorithmButton);
         lerntiaService.stopAlgorithm();
+        learnAlgorithmController.reset();
     }
 
     public void switchToLearnMode() {

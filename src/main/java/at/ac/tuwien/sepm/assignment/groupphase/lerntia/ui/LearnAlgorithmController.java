@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.MainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ButtonText;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,10 +16,11 @@ public class LearnAlgorithmController {
     @FXML
     private Button learnAlgorithmButton;
     private boolean selected;
+    private MainLerntiaService mainLerntiaService;
 
-    public LearnAlgorithmController() {
+    public LearnAlgorithmController(MainLerntiaService mainLerntiaService) {
         this.selected = false;
-
+        this.mainLerntiaService = mainLerntiaService;
     }
 
     @FXML
@@ -31,12 +34,15 @@ public class LearnAlgorithmController {
         if (learnAlgorithmButton.isDefaultButton()) {
             LOG.info("Set Algorithm to OFF");
             selected = false;
+            mainLerntiaService.setLearnAlgorithmStatus(false);
             learnAlgorithmButton.defaultButtonProperty().setValue(false);
             learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
         } else {
             learnAlgorithmButton.defaultButtonProperty().setValue(true);
             LOG.info("Set Algorithm to ON");
             selected = true;
+
+            mainLerntiaService.setLearnAlgorithmStatus(true);
             learnAlgorithmButton.setText(ButtonText.ALGORITHMON.toString());
         }
     }
@@ -50,6 +56,12 @@ public class LearnAlgorithmController {
         if (learnAlgorithmButton!=null) {
             learnAlgorithmButton.defaultButtonProperty().setValue(false);
             learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+            mainLerntiaService.setLearnAlgorithmStatus(false);
+            try {
+                mainLerntiaService.stopAlgorithm();
+            } catch (ServiceException e) {
+                LOG.error("Learn Algorithm had an error Shuting down.");
+            }
         }
 
     }

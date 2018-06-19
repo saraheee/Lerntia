@@ -76,6 +76,7 @@ public class SelectExamController {
     void showSelectExamWindow() throws ControllerException {
 
         try {
+            alertController.setOnlyWrongQuestions(false);
             examQuestionnaireList = examQuestionnaireService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler beim Prüfungsfragenbogen","Fehler beim anzeigen aller Prüfungsfragenbogen.","Das Programm konnte nicht alle Prüfunngs-Fragenbogen herausefinden.");
