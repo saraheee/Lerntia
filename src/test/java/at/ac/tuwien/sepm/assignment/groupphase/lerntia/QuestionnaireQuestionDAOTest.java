@@ -113,10 +113,10 @@ public class QuestionnaireQuestionDAOTest {
     @Test(expected = PersistenceException.class)
     public void createNewQuestionnaireQuestionError() throws PersistenceException {
         QuestionnaireQuestion firstQuestionFirstChapter = new QuestionnaireQuestion();
-        firstQuestionFirstChapter.setQid(1L);
+        firstQuestionFirstChapter.setQid(212L);
         firstQuestionFirstChapter.setQuestionid(34L);
         questionnaireQuestionDAO.create(firstQuestionFirstChapter);
-        Assert.assertEquals(Long.valueOf(1), firstQuestionFirstChapter.getQid());
+        Assert.assertEquals(Long.valueOf(212), firstQuestionFirstChapter.getQid());
     }
 
     @Test
