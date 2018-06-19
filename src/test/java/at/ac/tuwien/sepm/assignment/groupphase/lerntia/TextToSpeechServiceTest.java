@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.TextToSpeechServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Speech;
@@ -146,33 +147,38 @@ public class TextToSpeechServiceTest {
 
     @Test
     public void getTextShouldPersist() throws TextToSpeechServiceValidationException {
-        var configReaderSpeech = new ConfigReader("speech");
-        final var BREAK = configReaderSpeech.getValue("break");
-        final var ANSWER = configReaderSpeech.getValue("answerPrefix");
-        configReaderSpeech.close();
-        var service = new SimpleTextToSpeechService();
-        var speech = new Speech();
+        try {
+            var configReaderSpeech = new ConfigReader("speech");
 
-        var question = "Wann ist das Semester vorbei?";
-        var answer1 = "Bald.";
-        var answer2 = "Sehr bald.";
-        var answer3 = "Kurz bevor die Sommerferien anfangen.";
-        var answer4 = "Am 29.Juni 2018 um 23:59.";
-        var answer5 = "Keine der genannten Antworten.";
+            final var BREAK = configReaderSpeech.getValue("break");
+            final var ANSWER = configReaderSpeech.getValue("answerPrefix");
+            configReaderSpeech.close();
+            var service = new SimpleTextToSpeechService();
+            var speech = new Speech();
 
-        speech.setQuestion(question);
-        speech.setAnswer1(answer1);
-        speech.setAnswer2(answer2);
-        speech.setAnswer3(answer3);
-        speech.setAnswer4(answer4);
-        speech.setAnswer5(answer5);
+            var question = "Wann ist das Semester vorbei?";
+            var answer1 = "Bald.";
+            var answer2 = "Sehr bald.";
+            var answer3 = "Kurz bevor die Sommerferien anfangen.";
+            var answer4 = "Am 29.Juni 2018 um 23:59.";
+            var answer5 = "Keine der genannten Antworten.";
 
-        Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'
-            + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + answer4 + '\n'
-            + BREAK + answer5 + '\n');
+            speech.setQuestion(question);
+            speech.setAnswer1(answer1);
+            speech.setAnswer2(answer2);
+            speech.setAnswer3(answer3);
+            speech.setAnswer4(answer4);
+            speech.setAnswer5(answer5);
+
+            Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
+                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
+                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
+                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'
+                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + answer4 + '\n'
+                + BREAK + answer5 + '\n');
+        } catch (ConfigReaderException e) {
+            throw new TextToSpeechServiceValidationException(e.getCustomMessage());
+        }
     }
 
     @Test

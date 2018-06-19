@@ -64,6 +64,9 @@ public interface IQuestionService {
     /**
      * @param questionInput contains a part of a question that is used to find the questions
      * @return list which contains all the Question that contain a part of the questionInput
+     *
+     * @throws ServiceException if the question failed the validation
+     *  or if the appropriate config file ('questions.properties') is not provided
      */
     List<Question> searchForQuestions(Question questionInput) throws ServiceException;
 
