@@ -562,12 +562,13 @@ public class LerntiaMainController implements Runnable {
             } else {
                 try {
                     LearningQuestionnaire selectedLearningQuestionnaire = null;
-
                     try {
                         selectedLearningQuestionnaire = learningQuestionnaireService.getSelected();
                     } catch (ServiceException e) {
-                        alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler","Fehler beim Fragenbogen entnehmung.","Zurzeit ist noch kein Lern-Fragebogen ausgewählt. \n" +
-                            "Importieren sie ein neuen Fragebogen und versuchen Sie erneut!");
+                        LOG.error("Failed to get selected questionnaire!");
+                        alertController.showStandardAlert(Alert.AlertType.ERROR, "Auswahl fehlgeschlagen",
+                            "Auswahl eines Fragenbogens fehlgeschlagen", "Zurzeit ist noch kein Lernfragebogen ausgewählt.\n"
+                                + "Bitte einen Fragebogen imoprtieren!");
                     }
                     if (selectedLearningQuestionnaire != null) {
                         String imagePath =
@@ -744,10 +745,7 @@ public class LerntiaMainController implements Runnable {
         try {
             lerntiaService.getQuestionsFromExamQuestionnaire(selectedQuestionnaire);
             getAndShowTheFirstExamQuestion();
-        } catch (ControllerException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
-                "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden!");
-        } catch (ServiceException e) {
+        } catch (ControllerException | ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfung anzeigen fehlgeschlagen",
                 "Fehler", "Die ausgewählte Prüfung kann nicht angezeigt werden!");
         }
