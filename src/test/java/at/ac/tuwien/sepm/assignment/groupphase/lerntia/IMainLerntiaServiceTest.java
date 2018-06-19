@@ -143,7 +143,7 @@ public class IMainLerntiaServiceTest {
         List<Question> questionList = mainLerntiaService.getQuestionList();
         Assert.assertEquals(1,questionList.size());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get question list");
         }
     }
 
@@ -154,7 +154,7 @@ public class IMainLerntiaServiceTest {
             ArrayList<Question> list = null;
             mainLerntiaService.setCustomExamQuestions(list);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to set exam questionnaire");
         }
     }
 
@@ -200,9 +200,9 @@ public class IMainLerntiaServiceTest {
             Assert.assertEquals(question.getId(),list.get(0).getId());
             Assert.assertEquals(2,list.size());
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get first question form exam questionnaire");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get first question form exam questionnaire");
         }
     }
     @Test
@@ -220,7 +220,7 @@ public class IMainLerntiaServiceTest {
             Assert.assertEquals("Exam Question",nextQuestion.getQuestionText());
             mainLerntiaService.setExamMode(false);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get next question form exam questionnaire");
         }
     }
 
@@ -266,9 +266,9 @@ public class IMainLerntiaServiceTest {
             Assert.assertEquals(question.getId(),firstQuestion.getId());
             questionnaireDAO.deselect(learningQuestionnaire);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get first question form learning questionnaire");
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get first question form learning questionnaire");
         }
     }
 
@@ -282,7 +282,7 @@ public class IMainLerntiaServiceTest {
             Question nextQuestion = mainLerntiaService.getNextQuestionFromList();
             Assert.assertEquals("Random QuestionText2",nextQuestion.getQuestionText());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get next question form list");
         }
     }
 
@@ -292,7 +292,7 @@ public class IMainLerntiaServiceTest {
             mainLerntiaService.stopAlgorithm();
             Assert.assertEquals(false,learnAlgorithmController.isSelected());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to shut down learn algorithm");
         }
     }
 
@@ -303,7 +303,7 @@ public class IMainLerntiaServiceTest {
             Question firstQuestion = mainLerntiaService.getFirstQuestion();
             Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to revert back to first question");
         }
     }
 
@@ -314,7 +314,7 @@ public class IMainLerntiaServiceTest {
             Question firstQuestion = mainLerntiaService.getPreviousQuestionFromList();
             Assert.assertEquals("Random QuestionText",firstQuestion.getQuestionText());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get previous question");
         }
     }
 
@@ -326,7 +326,7 @@ public class IMainLerntiaServiceTest {
             mainLerntiaService.recordCheckedAnswers(question,false);
             Assert.assertEquals(1,mainLerntiaService.getWrongQuestionList().size());
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to set question in wrong question list");
         }
 
     }
@@ -345,7 +345,7 @@ public class IMainLerntiaServiceTest {
             int i = mainLerntiaService.getIgnoredAnswers();
             Assert.assertEquals(1,i);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to check skipped questions");
         }
     }
 
@@ -365,7 +365,7 @@ public class IMainLerntiaServiceTest {
             int i = mainLerntiaService.getCorrectAnswers();
             Assert.assertEquals(2,i);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to check correctly answered questions");
         }
     }
 
@@ -380,7 +380,7 @@ public class IMainLerntiaServiceTest {
             int i = mainLerntiaService.getWrongAnswers();
             Assert.assertEquals(2,i);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to check wrongly answered questions");
         }
     }
 
@@ -397,7 +397,7 @@ public class IMainLerntiaServiceTest {
             Double x = mainLerntiaService.getPercent();
             Assert.assertEquals(50.0,x,0);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to check procent answered questions");
         }
     }
 
@@ -417,7 +417,7 @@ public class IMainLerntiaServiceTest {
            Assert.assertEquals(0,mainLerntiaService.getWrongAnswers());
            Assert.assertEquals(0,mainLerntiaService.getCorrectAnswers());
        } catch (ServiceException e) {
-           e.printStackTrace();
+           LOG.error("Failed to reset wrong and correct selected questions");
        }
     }
 }

@@ -169,7 +169,7 @@ public class LearnAlgorithmDAOTest{
         Assert.assertEquals(questionLearnAlgorithm.getPoints(),results.get(0).getPoints(),0);
 
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOG.error("Failed to update learn algorithm");
         }
     }
 
