@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
@@ -55,8 +56,8 @@ public class LerntiaMainController implements Runnable {
     private final DirectoryChooserController directoryChooserController;
     private boolean onlyWrongQuestions = false;
 
-    private ConfigReader configReaderSpeech = new ConfigReader("speech");
-    private final String BREAK = configReaderSpeech.getValue("break");
+    private ConfigReader configReaderSpeech = null;
+    private String BREAK = null;
 
     @FXML
     private VBox mainWindowLeft;
@@ -125,7 +126,6 @@ public class LerntiaMainController implements Runnable {
 
     @FXML
     private void initialize() {
-
         mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
         try {
@@ -133,6 +133,18 @@ public class LerntiaMainController implements Runnable {
         } catch (ControllerException e) {
             //showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
+        }
+
+        if(configReaderSpeech == null || BREAK == null) {
+            try {
+                configReaderSpeech = new ConfigReader("speech");
+                BREAK = configReaderSpeech.getValue("break");
+                // check if the properties files are present
+                configReaderSpeech.checkIfAllPropertiesFilesAreProvided();
+                LOG.debug("All propertiesFiles have been created.");
+            } catch (ConfigReaderException e) {
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Properties nicht definiert", "Properties Dateien nicht gefunden", e.getCustomMessage());
+            }
         }
     }
 

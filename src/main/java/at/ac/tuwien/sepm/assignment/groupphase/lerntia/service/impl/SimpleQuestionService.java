@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.IQuestionDAO;
@@ -23,8 +24,7 @@ public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private IQuestionDAO questionDAO;
-
-    private ConfigReader configReaderQuestions = new ConfigReader("questions");
+    private ConfigReader configReaderQuestions = null;
 
     @Autowired
     public SimpleQuestionService(QuestionDAO questionDAO){
@@ -99,13 +99,24 @@ public class SimpleQuestionService implements IQuestionService {
 
     @Override
     public void validate(Question question) throws ServiceException {
+        if(configReaderQuestions == null) {
+            try {
+                configReaderQuestions = new ConfigReader("questions");
+            } catch (ConfigReaderException e) {
+                throw new ServiceException(e.getCustomMessage());
+            }
+        }
 
         var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
         var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
         var maxHeightPicture = configReaderQuestions.getValueInt("maxHeightPicture");
         var maxWidthPicture = configReaderQuestions.getValueInt("maxWidthPicture");
 
-        configReaderQuestions.close();
+        try {
+            configReaderQuestions.close();
+        } catch (ConfigReaderException e) {
+            throw new ServiceException(e.getCustomMessage());
+        }
 
         ArrayList<String> allAnswers = getAllAnswers(question);
 
