@@ -43,6 +43,8 @@ public class QuestionnaireImportServiceTest {
     private ILearnAlgorithmService learnAlgorithmService;
     private AlertController alertController;
 
+    private ICourseService courseService;
+
     @Before
     public void setUp() {
         try {
@@ -57,6 +59,8 @@ public class QuestionnaireImportServiceTest {
                 ,new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager))
             ) );
 
+            this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
+
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
@@ -67,9 +71,14 @@ public class QuestionnaireImportServiceTest {
         this.importService = importService;
     }
 
+    private void ICourseService(SimpleCourseService simpleCourseService) {
+        this.courseService = simpleCourseService;
+    }
+
     @Test
     public void importLearningQuestionnaireWorks() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
+        courseService.create(course);
         File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile.csv");
         ImportQuestionnaire importq = new ImportQuestionnaire(file, course, "learning", false);
         importService.importQuestionnaire(importq);
