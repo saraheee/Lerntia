@@ -47,7 +47,10 @@ public class LearnAlgorithmController {
 
     public void reset() {
         selected = false;
-        learnAlgorithmButton.defaultButtonProperty().setValue(false);
-        learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+        if (learnAlgorithmButton!=null) {
+            learnAlgorithmButton.defaultButtonProperty().setValue(false);
+            learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+        }
+
     }
 }
