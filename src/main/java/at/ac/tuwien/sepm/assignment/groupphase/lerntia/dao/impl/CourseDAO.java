@@ -39,7 +39,7 @@ public class CourseDAO implements ICourseDAO {
     @Override
     public void create(Course course) throws PersistenceException {
         if (course == null || course.getName() == null || course.getMark() == null || course.getSemester() == null) {
-            throw new PersistenceException("At least one value of the course is null!");
+            throw new PersistenceException("Mindestens ein Wert der LVA ist null!");
         }
         try {
             LOG.info("Prepare Statement for new Course Creation.");
@@ -56,14 +56,14 @@ public class CourseDAO implements ICourseDAO {
                 LOG.info("Course successfully added to the database.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("CourseDAO CREATE error: New Course couldn't be created, check if all mandatory values have been inserted or if connection to the Database is valid.");
+            throw new PersistenceException("CourseDAO CREATE Fehler: Die LVA konnte nicht erzeugt werden. Bitte überprüfen, ob alle notwendingen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void update(Course course) throws PersistenceException {
         if (course == null || course.getName() == null || course.getMark() == null || course.getSemester() == null || course.getId() == null) {
-            throw new PersistenceException("At least one value of the course is null!");
+            throw new PersistenceException("Mindestens ein Wert der LVA ist null!");
         }
         try {
             LOG.info("Prepare Statement for Course Update.");
@@ -76,7 +76,7 @@ public class CourseDAO implements ICourseDAO {
                 LOG.info("Course successfully updated in Database.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("CourseDAO UPDATE error: Selected Course couldn't be updated, check if all mandatory values have been inserted or if connection to the Database is valid.");
+            throw new PersistenceException("CourseDAO UPDATE Fehler: Die LVA konnte nicht aktuelisiert werden. Bitte überprüfen, ob alle notwendingen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
@@ -84,7 +84,7 @@ public class CourseDAO implements ICourseDAO {
     @Override
     public void delete(Course course) throws PersistenceException {
         if (course == null || course.getId() == null) {
-            throw new PersistenceException("At least one value of the course is null!");
+            throw new PersistenceException("Mindestens ein Wert der LVA ist null!");
         }
         try {
             LOG.info("Prepare Statement for Course Deletion");
@@ -94,7 +94,7 @@ public class CourseDAO implements ICourseDAO {
                 LOG.info("Course in question soft-deleted in Database.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("CourseDAO DELETE error: Selected Course couldn't be deleted, check if the connection to the Database is valid.");
+            throw new PersistenceException("CourseDAO DELETE Fehler: Die LVA konnte nicht gelöscht werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
@@ -117,7 +117,7 @@ public class CourseDAO implements ICourseDAO {
                 return list;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("CourseDAO READALL error: not all courses could have been found, check if connection to the Database is valid.");
+            throw new PersistenceException("CourseDAO READALL Fehler: Nicht alle LVAs konnten gefunden werden. Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 }
