@@ -4,13 +4,10 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AlertController;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LearnAlgorithmController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,19 +41,15 @@ public class MainLerntiaService implements IMainLerntiaService {
     private IQuestionService questionService;
     private IQuestionnaireQuestionService questionnaireQuestionService;
     private ILearnAlgorithmService learnAlgorithmService;
-    private LearnAlgorithmController learnAlgorithmController;
-    private AlertController alertController;
 
     @Autowired
     public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
-                              IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService,
-                              LearnAlgorithmController learnAlgorithmController, AlertController alertController) {
+                              IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService
+                              ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.learnAlgorithmService = learnAlgorithmService;
-        this.learnAlgorithmController = learnAlgorithmController;
-        this.alertController = alertController;
         this.correctAnswered = 0;
         this.wrongAnswered = 0;
     }
@@ -131,7 +124,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     private void getQuestionsFromLearningQuestionnaire(LearningQuestionnaire lQ) throws ServiceException {
-        learnAlgorithm = learnAlgorithmController.isSelected();
         questionMap = new HashMap<>();
         if (algorithmList != null) {
             algorithmList = null;
@@ -180,7 +172,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             }
         } else {
             try {
-                learnAlgorithm = learnAlgorithmController.isSelected();
                 if (learnAlgorithm && showOnlyWrongQuestions) {
                     LOG.info("Get next algorithmic Question while the 'Wrong Question List'");
                     if (wrongQuestions.size() != 0) {
@@ -190,7 +181,6 @@ public class MainLerntiaService implements IMainLerntiaService {
                     } else {
                         stopAlgorithm();
                         resetWrongQuestionList();
-                        alertController.setOnlyWrongQuestions(false);
                         getFirstQuestion();
                         throw new ServiceException("List of wrong questions is Empty");
                     }
@@ -208,7 +198,6 @@ public class MainLerntiaService implements IMainLerntiaService {
                         }
                     } else {
                         resetWrongQuestionList();
-                        alertController.setOnlyWrongQuestions(false);
                         getFirstQuestion();
                         throw new ServiceException("List of wrong questions is Empty");
                     }
@@ -242,7 +231,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question getPreviousQuestionFromList() throws ServiceException {
         try {
-            learnAlgorithm = learnAlgorithmController.isSelected();
             if (learnAlgorithm && showOnlyWrongQuestions) {
                 if (!(currentWrongQuestionIndex - 1 > 0)) {
                     currentQuestion = new Question();
@@ -351,7 +339,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public void recordCheckedAnswers(Question question, boolean answersCorrect) throws ServiceException {
         LOG.info("Record question answering values.");
-        learnAlgorithm = learnAlgorithmController.isSelected();
         if (learnAlgorithm) {
             if (answersCorrect) {
                 correctAnswered++;
@@ -403,7 +390,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         showOnlyWrongQuestions = false;
         learnAlgorithm = false;
         learnAlgorithmService.shutdown();
-        learnAlgorithmController.reset();
+
     }
 
     @Override
@@ -432,7 +419,6 @@ public class MainLerntiaService implements IMainLerntiaService {
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
             showOnlyWrongQuestions = false;
-            alertController.setOnlyWrongQuestions(false);
             return currentQuestion;
         } else {
             LOG.info("Get first Question of the Question List.");
@@ -441,14 +427,12 @@ public class MainLerntiaService implements IMainLerntiaService {
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
             showOnlyWrongQuestions = false;
-            alertController.setOnlyWrongQuestions(false);
             return currentQuestion;
         }
     }
 
     private void resetWrongQuestionList() {
         LOG.info("Reset Wrong Question List");
-        alertController.setOnlyWrongQuestions(false);
         showOnlyWrongQuestions = false;
         if (wrongQuestions != null) {
             wrongQuestions.clear();
@@ -495,5 +479,9 @@ public class MainLerntiaService implements IMainLerntiaService {
         wrongAnswered = 0;
         correctAnswered = 0;
     }
-
+    @Override
+    public void setLearnAlgorithmStatus(boolean b) {
+        LOG.info("Set Learn Algorithm Status to: "+b);
+        this.learnAlgorithm = b;
+    }
 }

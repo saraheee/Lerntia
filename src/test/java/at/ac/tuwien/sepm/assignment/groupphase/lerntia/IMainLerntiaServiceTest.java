@@ -60,31 +60,36 @@ public class IMainLerntiaServiceTest {
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
             this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
             this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
-            this.LearnAlgorithmController(new LearnAlgorithmController());
-            this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
-            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
+            this.LearnAlgorithmController(new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
                 new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
-                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)),
-                new LearnAlgorithmController(),
-                new AlertController()));
+                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)))));
+            this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
+
+            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
+                  new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+                new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
+                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager))));
+
 
             this.LerntiaMainController(new LerntiaMainController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
                 new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
-                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)),
-                new LearnAlgorithmController(),
-                new AlertController()),
+                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager))),
 
                 new AudioController(new SimpleTextToSpeechService(),new AlertController()),
                 new AlertController(),
                 new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
                 new ZoomedImageController(new AlertController(),new WindowController(),new AudioController(new SimpleTextToSpeechService(),new AlertController())),
                 new SimpleExamResultsWriterService(new ExamResultsWriterDAO()),
-                new LearnAlgorithmController(),
+                new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
+                    new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+                    new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
+                    new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)))),
                 new DirectoryChooserController(),
-                new SimpleUserService()));
-
+                new SimpleUserService()
+                ));
+         //
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }

@@ -277,7 +277,7 @@ public class EditExamController {
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/editExam.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);
         Stage windowStage = windowController.openNewWindow("Fragebogen editieren", fxmlLoader);
-
+        alertController.setOnlyWrongQuestions(false);
         windowStage.setOnCloseRequest(event -> {
             var alertController = new AlertController();
             if (alertController.showStandardConfirmationAlert("Prüfungseditierung abbrechen?",
