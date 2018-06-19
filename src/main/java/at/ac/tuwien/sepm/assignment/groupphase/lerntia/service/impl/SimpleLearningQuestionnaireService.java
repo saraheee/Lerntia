@@ -70,6 +70,7 @@ public class SimpleLearningQuestionnaireService implements ILearningQuestionnair
 
         try {
             selectedLearningQuestionnaire = iLearningQuestionnaireDAO.getSelected();
+
         } catch (PersistenceException e) {
             throw new ServiceException("Failed to get the selected questionnaire!");
         }
