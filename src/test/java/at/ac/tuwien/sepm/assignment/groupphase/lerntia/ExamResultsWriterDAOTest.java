@@ -93,6 +93,7 @@ public class ExamResultsWriterDAOTest {
 
         student.setName("Test Student");
         student.setMatriculationNumber("123456");
+        student.setStudyProgramme("asdf");
 
         ExamWriter examWriter = new ExamWriter();
 
@@ -125,6 +126,7 @@ public class ExamResultsWriterDAOTest {
 
         student.setName("Test Student");
         student.setMatriculationNumber("123456");
+        student.setStudyProgramme("asdf");
 
         ExamWriter examWriter = new ExamWriter();
 
