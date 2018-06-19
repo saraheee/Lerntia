@@ -22,6 +22,8 @@ import java.util.Map;
 public class MainLerntiaService implements IMainLerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private int correctAnswered;
+    private int wrongAnswered;
     private Map<Long, Question> questionMap;
     private boolean learnAlgorithm;
     private boolean showOnlyWrongQuestions = false;
@@ -55,6 +57,8 @@ public class MainLerntiaService implements IMainLerntiaService {
         this.learnAlgorithmService = learnAlgorithmService;
         this.learnAlgorithmController = learnAlgorithmController;
         this.alertController = alertController;
+        this.correctAnswered = 0;
+        this.wrongAnswered = 0;
     }
 
     @Override
@@ -350,6 +354,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         learnAlgorithm = learnAlgorithmController.isSelected();
         if (learnAlgorithm) {
             if (answersCorrect) {
+                correctAnswered++;
                 LOG.info("Send to update Map");
                 learnAlgorithmService.updateSuccessValue(question);
                 if (wrongQuestions.contains(question)) {
@@ -358,18 +363,20 @@ public class MainLerntiaService implements IMainLerntiaService {
                 }
             } else { // answers not correct
                 LOG.info("Send to failure Map");
+                wrongAnswered++;
                 learnAlgorithmService.updateFailureValue(question);
                 if (!wrongQuestions.contains(question)) {
                     wrongQuestions.add(question);
-
                 }
             }
         } else {
             if (!answersCorrect) {
+                wrongAnswered++;
                 if (!wrongQuestions.contains(question)) {
                     wrongQuestions.add(question);
                 }
-            } else {
+            } else { // answers correct
+                correctAnswered++;
                 if (wrongQuestions.contains(question)) {
                     wrongQuestions.remove(question);
                     currentWrongQuestionIndex--;
@@ -443,7 +450,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         LOG.info("Reset Wrong Question List");
         alertController.setOnlyWrongQuestions(false);
         showOnlyWrongQuestions = false;
-        if (wrongQuestions!=null) {
+        if (wrongQuestions != null) {
             wrongQuestions.clear();
         }
         currentWrongQuestionIndex = 0;
@@ -452,44 +459,17 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public int getCorrectAnswers() {
-        int count = 0;
-        for (Question aQuestionList : questionList) {
-            String givenAnswers = aQuestionList.getCheckedAnswers();
-            String correctAnswers = aQuestionList.getCorrectAnswers();
-            if (givenAnswers != null && givenAnswers.trim().equals(correctAnswers.trim())) {
-                count++;
-            }
-        }
-        LOG.info("Get correct answers count: " + count);
-        return count;
+        return correctAnswered;
     }
 
     @Override
     public int getWrongAnswers() {
-        int count = 0;
-        for (Question aQuestionList : questionList) {
-            String givenAnswers = aQuestionList.getCheckedAnswers();
-            String correctAnswers = aQuestionList.getCorrectAnswers();
-            if (givenAnswers != null && !givenAnswers.trim().equals(correctAnswers.trim())) {
-                count++;
-            }
-        }
-        count = count - getIgnoredAnswers();
-        LOG.info("Get wrong answer count: " + count);
-        return count;
+        return wrongAnswered;
     }
 
     @Override
     public int getIgnoredAnswers() {
-        int count = 0;
-        for (Question aQuestionList : questionList) {
-            String givenAnswers = aQuestionList.getCheckedAnswers();
-            if (givenAnswers == null || givenAnswers.trim().equals("")) {
-                count++;
-            }
-        }
-        LOG.info("Get ignored answers count: " + count);
-        return count;
+        return questionList.size() - correctAnswered - wrongAnswered > 0 ? questionList.size() - correctAnswered - wrongAnswered : 0;
     }
 
     @Override
@@ -506,8 +486,14 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public List<Question> getWrongQuestionList(){
+    public List<Question> getWrongQuestionList() {
         return wrongQuestions;
+    }
+
+    @Override
+    public void resetCounter() {
+        wrongAnswered = 0;
+        correctAnswered = 0;
     }
 
 }
