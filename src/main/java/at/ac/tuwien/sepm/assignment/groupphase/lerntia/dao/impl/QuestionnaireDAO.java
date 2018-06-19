@@ -41,7 +41,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
     public void create(Questionnaire questionnaire) throws PersistenceException {
         LOG.info("Prepare Statement for Questionnaire creation");
         if (questionnaire == null || questionnaire.getCourseID() == null || questionnaire.getName() == null) {
-            throw new PersistenceException("At least one value of the questionnaire is null!");
+            throw new PersistenceException("Mindestens ein Wert des Fragenbogens ist null!");
         }
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIRE_CREATE_STATEMENT, Statement.RETURN_GENERATED_KEYS)) {
             try {
@@ -54,17 +54,17 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
                     questionnaire.setId(generatedKeys.getLong(1));
                 }
             } catch (SQLException e) {
-                throw new PersistenceException("QuestionnaireDAO CREATE error: questionnaire couldn't been created, check if all mandatory values have been added, or if the connection to the Database is valid.");
+                throw new PersistenceException("QuestionnaireDAO CREATE Fehler: Der Fragenbogen konnte nicht erzeugt werden, bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireDAO CREATE error: questionnaire couldn't been created, check if all mandatory values have been added, or if the connection to the Database is valid.");
+            throw new PersistenceException("QuestionnaireDAO CREATE Fehler: Der Fragenbogen konnte nicht erzeugt werden, bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public String getQuestionnaireName(Long id) throws PersistenceException {
         if (id == null) {
-            throw new PersistenceException("ID is null!");
+            throw new PersistenceException("Die ID ist null!");
         }
         LOG.info("Prepare Statement to get Questionnaire Name from the Database.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIRE_GETNAME_STATEMENT)) {
@@ -79,14 +79,14 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new PersistenceException("Questionnaire DAO getName error!");
+            throw new PersistenceException("QuestionnaireDAO getName Fehler: Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void select(Questionnaire questionnaire) throws PersistenceException {
         if (questionnaire == null || questionnaire.getId() == null) {
-            throw new PersistenceException("At least one value of the questionnaire is null!");
+            throw new PersistenceException("Mindestens ein Wert des Fragenbogens oder der Fragenbogen selbst ist null!");
         }
         LOG.info("Prepare statement for learning questionnaire selection.");
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_SELECT_STATEMENT)) {
@@ -95,14 +95,14 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
 
             LOG.info("Learningquestionnaire successfully selected in Database.");
         } catch (SQLException e) {
-            throw new PersistenceException("Learning questionnaire SELECTION DAO error!");
+            throw new PersistenceException("QuestionnaireDAO SELECT Fehler: Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 
     @Override
     public void deselect(Questionnaire questionnaire) throws PersistenceException {
         if (questionnaire == null || questionnaire.getId() == null) {
-            throw new PersistenceException("At least one value of the questionnaire is null!");
+            throw new PersistenceException("Mindestens ein Wert des Fragenbogens oder der Fragenbogen selbst ist null!");
         }
         LOG.info("Prepare statement for learning questionnaire selection.");
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONNAIRE_DESELECT_STATEMENT)) {
@@ -110,7 +110,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
             psUpdate.executeUpdate();
             LOG.info("Learning questionnaire successfully deselected in Database.");
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireDAO DESELECT error");
+            throw new PersistenceException("QuestionnaireDAO DESELECT Fehler: Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
 
     }
@@ -130,7 +130,7 @@ public class QuestionnaireDAO implements IQuestionnaireDAO {
                 return null;
             }
         } catch (SQLException e) {
-            throw new PersistenceException("QuestionnaireDAO GETSELECTED error!");
+            throw new PersistenceException("QuestionnaireDAO GETSELECTED Fehler: Bitte überprüfen, ob die Datenbankverbindung gültig ist.");
         }
     }
 }
