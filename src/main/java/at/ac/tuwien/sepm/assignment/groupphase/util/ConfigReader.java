@@ -64,7 +64,6 @@ public class ConfigReader {
     public void checkIfAllPropertiesFilesAreProvided() throws ConfigReaderException {
         LOG.debug("Checking if all properties files are provided.");
         String propertiesFileNamesArray[] = new String[]{"about", "course", "questions", "speech", "student"};
-      //  String propertiesFileNamesArray[] = new String[]{"about", "course", "questions"};
         InputStream inputStream = null;
         String propsPath, basePath = System.getProperty("user.home") + File.separator + "Lerntia" + File.separator + "config";
         try {
@@ -89,7 +88,6 @@ public class ConfigReader {
                 "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, dass es in dem Verzeichnis \"" + basePath +
                 " die Folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
                 "\n\t *  questions.properties; \n\t *  speech.properties; \n\t *  student.properties.");
-            // {"about", "course", "questions", "speech", "student"}
         } // end of the main try-catch block
     }
 }
