@@ -39,7 +39,7 @@ public class QuestionServiceTest {
         try {
             configReaderQuestions = new ConfigReader("questions");
         } catch (ConfigReaderException e) {
-            e.printStackTrace();
+            LOG.error("Failed to get config reader for questions");
         }
         try {
             JDBCConnectionManager.setIsTestConnection(true);
@@ -402,7 +402,7 @@ public class QuestionServiceTest {
         try {
             this.configReaderQuestions.close();
         } catch (ConfigReaderException e) {
-            e.printStackTrace();
+            LOG.error("Failed to close config reader for questions");
         }
     }
 }
