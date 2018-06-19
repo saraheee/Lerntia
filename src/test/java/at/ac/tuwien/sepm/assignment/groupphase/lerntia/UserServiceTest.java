@@ -37,16 +37,28 @@ public class UserServiceTest {
 
 
     @Test
-    public void checkIfTheReturnedValuesMatchThoseFromTheConfigFile() {
+    public void checkIfTheReturnedValuesMatchThoseFromTheConfigFileIffTheyAreProvided() {
         User modelUser, retunedUser;
 
         modelUser = new User(configReaderStudent.getValue("name"), configReaderStudent.getValue("matriculationNumber"),
             configReaderStudent.getValue("studyProgramme"), false);
         try {
             retunedUser = userService.read();
-            Assert.assertEquals(modelUser.getName(), retunedUser.getName());
-            Assert.assertEquals(modelUser.getMatriculationNumber(), retunedUser.getMatriculationNumber());
-            Assert.assertEquals(modelUser.getStudyProgramme(), retunedUser.getStudyProgramme());
+            if(modelUser.getName() != null && !modelUser.getName().trim().isEmpty()) {
+                Assert.assertEquals(modelUser.getName(), retunedUser.getName());
+            } else {
+                Assert.assertNotEquals(modelUser.getName(), retunedUser.getName());
+            }
+            if(modelUser.getMatriculationNumber() != null && !modelUser.getMatriculationNumber().trim().isEmpty()) {
+                Assert.assertEquals(modelUser.getMatriculationNumber(), retunedUser.getMatriculationNumber());
+            } else {
+                Assert.assertNotEquals(modelUser.getMatriculationNumber(), retunedUser.getMatriculationNumber());
+            }
+            if(modelUser.getStudyProgramme() != null && !modelUser.getStudyProgramme().trim().isEmpty()) {
+                Assert.assertEquals(modelUser.getStudyProgramme(), retunedUser.getStudyProgramme());
+            } else {
+                Assert.assertNotEquals(modelUser.getStudyProgramme(), retunedUser.getStudyProgramme());
+            }
             Assert.assertEquals(modelUser.getDeleted(), retunedUser.getDeleted());
         } catch (ServiceException e) {
             Assert.assertTrue(((modelUser.getName() == null || modelUser.getName().trim().isEmpty()) && (modelUser.getMatriculationNumber() == null ||
