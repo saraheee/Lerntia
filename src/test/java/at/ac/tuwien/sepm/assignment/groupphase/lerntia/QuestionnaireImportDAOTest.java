@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -58,11 +57,12 @@ public class QuestionnaireImportDAOTest {
 
     @Test
     public void getContentsOfCorrectFile() throws IOException, PersistenceException {
-        ArrayList<String> results =  importDAO.getContents(System.getProperty("user.dir") + File.separator + "csv" + File.separator+"test_correctfile.csv");
+        ArrayList<String> results = importDAO.getContents(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile2.csv");
         int count = 0;
-        for (int i = 0; i < results.size(); i++) {
+        for (String result : results) {
             count++;
-            assertTrue(results.get(i).equals("Frage?;Antwort eins;Antwort zwei;Antwort drei;Antwort vier;Antwort fünf;34"));
+            LOG.debug("test content: " + result);
+            assertTrue(result.equals("Frage?;Antwort eins;Antwort zwei;Antwort drei;Antwort vier;Antwort fuenf;34"));
         }
         assertTrue(count == 2);
     }
@@ -72,3 +72,4 @@ public class QuestionnaireImportDAOTest {
         importDAO.importPictures(new File(System.getProperty("user.dir") + File.separator + "img_original" + File.separator + "test_image.png"), "test");
     }
 }
+
