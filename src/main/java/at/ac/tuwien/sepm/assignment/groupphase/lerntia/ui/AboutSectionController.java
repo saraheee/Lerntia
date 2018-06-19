@@ -1,5 +1,8 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +19,8 @@ public class AboutSectionController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final WindowController windowController;
-    private ConfigReader configReaderAbout = new ConfigReader("about");
-    private final String ABOUTTEXT = configReaderAbout.getValue("aboutText");
+    private ConfigReader configReaderAbout = null;
+    private String ABOUTTEXT = null;
 
     @FXML
     private Label about;
@@ -28,6 +31,15 @@ public class AboutSectionController {
     }
 
     void showAboutSection() {
+        if(configReaderAbout == null || ABOUTTEXT == null) {
+            try {
+                configReaderAbout = new ConfigReader("about");
+                ABOUTTEXT = configReaderAbout.getValue("aboutText");
+            } catch (ConfigReaderException e) {
+                LOG.error("About text could not be read: {} / {}", e.getCustomMessage(), e.getMessage());
+            }
+
+        }
         LOG.info("Showing the About Section");
         var fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/views/showAboutSection.fxml"));
         fxmlLoader.setControllerFactory(param -> param.isInstance(this) ? this : null);

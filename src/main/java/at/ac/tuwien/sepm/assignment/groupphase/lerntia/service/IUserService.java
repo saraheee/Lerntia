@@ -8,7 +8,7 @@ public interface IUserService {
     /**
      * Read all information of the user saved in the config file
      *
-     * @throws ServiceException if the user data (i.e. a student.properties) file is not provided in config folder
+     * @throws ServiceException if the user data ('student.properties') file is not provided in config folder
      * */
     User read() throws ServiceException;
 
