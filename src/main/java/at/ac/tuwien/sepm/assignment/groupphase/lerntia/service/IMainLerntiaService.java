@@ -165,4 +165,6 @@ public interface IMainLerntiaService {
      * Resets the statistic counters
      */
     void resetCounter();
+
+    void setLearnAlgorithmStatus(boolean b);
 }
