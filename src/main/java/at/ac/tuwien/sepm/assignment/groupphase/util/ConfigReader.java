@@ -87,7 +87,9 @@ public class ConfigReader {
             }
             throw new ConfigReaderException("Die Initialisierung könnte nicht erfolgreich durchgehen, da manche " +
                 "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, dass es in dem Verzeichnis \"" + basePath +
-                "\" die Folgenden PROPERTIES Dateien befinden: {\"about\", \"course\", \"questions\", \"speech\", \"student\"}");
+                " die Folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
+                "\n\t *  questions.properties; \n\t *  speech.properties; \n\t *  student.properties.");
+            // {"about", "course", "questions", "speech", "student"}
         } // end of the main try-catch block
     }
 }
