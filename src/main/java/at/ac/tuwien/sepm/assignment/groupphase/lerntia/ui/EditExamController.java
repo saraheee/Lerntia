@@ -321,8 +321,9 @@ public class EditExamController {
             examQuestionList = FXCollections.observableArrayList(currentQuestionList);
             questionTable.setItems(FXCollections.observableArrayList(examQuestionList));
         } catch (ServiceException e) {
-           alertController.showStandardAlert(Alert.AlertType.ERROR,"Fehler","Fehler bei der Tabellen-befüllung!","Das Fenster konnte den ausgewählten Fragenbogen nicht korrekt anzeigen.\n" +
-               " Bitte versuchen Sie erneut.");
+            LOG.error("Failed to initialize the question table!");
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler", "Initialisierung fehlgeschlagen!",
+                "Die Tabelle konnte nicht initialisiert werden!");
         }
     }
 
