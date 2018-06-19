@@ -336,4 +336,88 @@ public class IMainLerntiaServiceTest {
         Assert.assertNull(mainLerntiaService.getWrongQuestionList());
     }
 
+    @Test
+    public void checkSkippedQuestions(){
+        try {
+            getFirstQuestionsFromLearningQuestionnaire();
+            Question question = mainLerntiaService.getNextQuestionFromList();
+            mainLerntiaService.recordCheckedAnswers(question,true);
+            int i = mainLerntiaService.getIgnoredAnswers();
+            Assert.assertEquals(1,i);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void checkSkippedQuestionsError(){
+       int i = mainLerntiaService.getIgnoredAnswers();
+    }
+
+    @Test
+    public void checkCorrectlyAnsweredQuestions(){
+        try {
+            getFirstQuestionsFromLearningQuestionnaire();
+            Question question = mainLerntiaService.getFirstQuestion();
+            mainLerntiaService.recordCheckedAnswers(question,true);
+            question = mainLerntiaService.getNextQuestionFromList();
+            mainLerntiaService.recordCheckedAnswers(question,true);
+            int i = mainLerntiaService.getCorrectAnswers();
+            Assert.assertEquals(2,i);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void checkWronglyAnsweredQuestions(){
+        try {
+            getFirstQuestionsFromLearningQuestionnaire();
+            Question question = mainLerntiaService.getFirstQuestion();
+            mainLerntiaService.recordCheckedAnswers(question,false);
+            question = mainLerntiaService.getNextQuestionFromList();
+            mainLerntiaService.recordCheckedAnswers(question,false);
+            int i = mainLerntiaService.getWrongAnswers();
+            Assert.assertEquals(2,i);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void checkProcentAnsweredQuestions(){
+        try {
+            getFirstQuestionsFromLearningQuestionnaire();
+            Question question = mainLerntiaService.getFirstQuestion();
+            mainLerntiaService.recordCheckedAnswers(question,true);
+            question = mainLerntiaService.getNextQuestionFromList();
+            mainLerntiaService.recordCheckedAnswers(question,false);
+            int i = mainLerntiaService.getWrongAnswers();
+            Assert.assertEquals(1,i);
+            Double x = mainLerntiaService.getPercent();
+            Assert.assertEquals(50.0,x,0);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void resetWrongAndCorrectSelectedQuestions(){
+       try {
+           getFirstQuestionsFromLearningQuestionnaire();
+           Question question = mainLerntiaService.getFirstQuestion();
+           mainLerntiaService.recordCheckedAnswers(question, true);
+           question = mainLerntiaService.getNextQuestionFromList();
+           mainLerntiaService.recordCheckedAnswers(question, false);
+           int i = mainLerntiaService.getWrongAnswers();
+           Assert.assertEquals(1, i);
+           i = mainLerntiaService.getCorrectAnswers();
+           Assert.assertEquals(1,i);
+           mainLerntiaService.resetCounter();
+           Assert.assertEquals(0,mainLerntiaService.getWrongAnswers());
+           Assert.assertEquals(0,mainLerntiaService.getCorrectAnswers());
+       } catch (ServiceException e) {
+           e.printStackTrace();
+       }
+    }
 }
