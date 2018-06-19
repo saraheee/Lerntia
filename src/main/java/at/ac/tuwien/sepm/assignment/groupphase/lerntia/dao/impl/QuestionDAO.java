@@ -83,7 +83,7 @@ public class QuestionDAO implements IQuestionDAO {
 
     @Override
     public void update(Question question) throws PersistenceException {
-        if (question == null || question.getQuestionText() == null || question.getPicture() == null || question.getAnswer1() == null
+        if (question == null || question.getQuestionText() == null || question.getAnswer1() == null
             || question.getAnswer2() == null || question.getCorrectAnswers() == null || question.getId() == null) {
             throw new PersistenceException("At least one of the question values is null!");
         }

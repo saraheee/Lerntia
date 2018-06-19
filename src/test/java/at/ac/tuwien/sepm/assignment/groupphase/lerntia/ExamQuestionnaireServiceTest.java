@@ -25,9 +25,9 @@ import java.util.List;
 
 public class ExamQuestionnaireServiceTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private IExamQuestionnaireService examQuestionnaireService;
     private ICourseDAO courseDAO;
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
     private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
@@ -37,7 +37,7 @@ public class ExamQuestionnaireServiceTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.IExamQuestionnaireService(new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)));
+            this.IExamQuestionnaireService(new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
@@ -60,53 +60,51 @@ public class ExamQuestionnaireServiceTest {
     }
 
     @Test
-    public void createExamQuestionnaireTest(){
-        try {
-            Course samplecourse = new Course();
-            samplecourse.setName("SEPM");
-            samplecourse.setSemester("2014W");
-            samplecourse.setMark("123.123");
-            courseDAO.create(samplecourse);
-            ExamQuestionnaire sample = new ExamQuestionnaire();
-            sample.setName("Name");
-            sample.setCourseID(samplecourse.getId());
-            LocalDate ld = LocalDate.now();
-            sample.setDate(ld);
-            examQuestionnaireService.create(sample);
-            Long test = Long.valueOf(4);
-            Assert.assertEquals(test,sample.getId());
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+    public void createExamQuestionnaireTest() throws PersistenceException, ServiceException {
+        Course samplecourse = new Course();
+        samplecourse.setName("SEPM");
+        samplecourse.setSemester("2014W");
+        samplecourse.setMark("123.123");
+        courseDAO.create(samplecourse);
+        ExamQuestionnaire sample = new ExamQuestionnaire();
+        sample.setName("Name");
+        sample.setCourseID(samplecourse.getId());
+        LocalDate ld = LocalDate.now();
+        sample.setDate(ld);
+        examQuestionnaireService.create(sample);
+        long refId = sample.getId();
+
+        ExamQuestionnaire sample2 = new ExamQuestionnaire();
+        sample2.setName("Name");
+        sample2.setCourseID(samplecourse.getId());
+        ld = LocalDate.now();
+        sample2.setDate(ld);
+        examQuestionnaireService.create(sample2);
+        Assert.assertEquals(sample2.getId(), Long.valueOf(refId + 1));
     }
 
     @Test
-    public void readAllExamTest(){
-        try {
-            Course samplecourse = new Course();
-            samplecourse.setName("TIL");
-            samplecourse.setSemester("2019W");
-            samplecourse.setMark("123.555");
-            courseDAO.create(samplecourse);
-            ExamQuestionnaire sample = new ExamQuestionnaire();
-            sample.setName("Chapter 1");
-            sample.setCourseID(samplecourse.getId());
-            LocalDate ld = LocalDate.now();
-            sample.setDate(ld);
-            examQuestionnaireService.create(sample);
-            ExamQuestionnaire anotherSample = new ExamQuestionnaire();
-            anotherSample.setDate(ld);
-            anotherSample.setCourseID(samplecourse.getId());
-            anotherSample.setName("Chapter 2");
-            List<ExamQuestionnaire> list = examQuestionnaireService.readAll();
-            Assert.assertEquals(5,list.size());
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+    public void readAllExamTest() throws PersistenceException, ServiceException {
+        List<ExamQuestionnaire> before = examQuestionnaireService.readAll();
+        Course samplecourse = new Course();
+        samplecourse.setName("TIL");
+        samplecourse.setSemester("2019W");
+        samplecourse.setMark("123.555");
+        courseDAO.create(samplecourse);
+        ExamQuestionnaire sample = new ExamQuestionnaire();
+        sample.setName("Chapter 1");
+        sample.setCourseID(samplecourse.getId());
+        LocalDate ld = LocalDate.now();
+        sample.setDate(ld);
+        examQuestionnaireService.create(sample);
+        ExamQuestionnaire anotherSample = new ExamQuestionnaire();
+        anotherSample.setDate(ld);
+        anotherSample.setCourseID(samplecourse.getId());
+        anotherSample.setName("Chapter 2");
+        List<ExamQuestionnaire> list = examQuestionnaireService.readAll();
+        Assert.assertEquals(before.size() + 1, list.size());
+
     }
 
 }
+
