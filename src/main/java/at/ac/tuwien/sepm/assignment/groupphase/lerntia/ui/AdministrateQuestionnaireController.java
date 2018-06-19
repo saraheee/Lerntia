@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.LearningQuestionnaire;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleLearningQuestionnaireService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class AdministrateQuestionnaireController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
-    private final SimpleLearningQuestionnaireService simpleLearningQuestionnaireService;
+    private final ILearningQuestionnaireService simpleLearningQuestionnaireService;
     private final SelectQuestionAdministrateController selectQuestionAdministrateController;
     private final IMainLerntiaService lerntiaService;
     private final WindowController windowController;
@@ -36,7 +37,7 @@ public class AdministrateQuestionnaireController {
 
     @Autowired
     public AdministrateQuestionnaireController(
-        SimpleLearningQuestionnaireService simpleLearningQuestionnaireService,
+        ILearningQuestionnaireService simpleLearningQuestionnaireService,
         SelectQuestionAdministrateController selectQuestionAdministrateController,
         IMainLerntiaService lerntiaService,
         WindowController windowController,
