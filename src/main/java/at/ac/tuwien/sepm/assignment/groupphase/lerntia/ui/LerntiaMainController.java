@@ -797,7 +797,8 @@ public class LerntiaMainController implements Runnable {
             Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistik.png"));
             return new ImageView(image);
         } catch (IOException e) {
-            // TODO - show alert or throw new exception
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Statistik anzeigen fehlgeschlagen",
+                "Fehler", "Die Statistik kann nicht angezeigt werden!");
             return null;
         } finally {
             stage.close();
