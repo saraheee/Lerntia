@@ -10,7 +10,7 @@ public interface ITextToSpeechService {
      * Plays a first audio output on startup to welcome the user
      *
      * @throws TextToSpeechServiceException if the appropriate config file ('speech.properties') is not provided
-     *  or if welcome audio can't be played.
+     *                                      or if welcome audio can't be played.
      */
     void playWelcomeText() throws TextToSpeechServiceException;
 

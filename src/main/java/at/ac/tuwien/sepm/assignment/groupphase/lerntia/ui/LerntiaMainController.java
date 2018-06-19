@@ -7,7 +7,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleUserService;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -51,7 +51,7 @@ public class LerntiaMainController implements Runnable {
     private final AudioController audioController;
     private final AlertController alertController;
     private final ILearningQuestionnaireService learningQuestionnaireService;
-    private final SimpleUserService simpleUserService;
+    private final IUserService simpleUserService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private final DirectoryChooserController directoryChooserController;
     private boolean onlyWrongQuestions = false;
@@ -106,7 +106,7 @@ public class LerntiaMainController implements Runnable {
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController,
         DirectoryChooserController directoryChooserController,
-        SimpleUserService simpleUserService
+        IUserService simpleUserService
     ) {
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -135,7 +135,7 @@ public class LerntiaMainController implements Runnable {
             LOG.warn("No first answer. Loop stopped.");
         }
 
-        if(configReaderSpeech == null || BREAK == null) {
+        if (configReaderSpeech == null || BREAK == null) {
             try {
                 configReaderSpeech = new ConfigReader("speech");
                 BREAK = configReaderSpeech.getValue("break");

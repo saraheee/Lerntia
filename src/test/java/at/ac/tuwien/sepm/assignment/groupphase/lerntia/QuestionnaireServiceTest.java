@@ -33,18 +33,18 @@ public class QuestionnaireServiceTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            this.ILearningQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)));
-            this.IQuestionnaireService(new SimpleQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager))));
+            this.ILearningQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
+            this.IQuestionnaireService(new SimpleQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
     }
 
-    private void ILearningQuestionnaireService(SimpleLearningQuestionnaireService simpleLearningQuestionnaireService) {
+    private void ILearningQuestionnaireService(ILearningQuestionnaireService simpleLearningQuestionnaireService) {
         this.learningQuestionnaireService = simpleLearningQuestionnaireService;
     }
 
-    private void IQuestionnaireService(SimpleQuestionnaireService simpleQuestionnaireService) {
+    private void IQuestionnaireService(IQuestionnaireService simpleQuestionnaireService) {
         this.questionnaireService = simpleQuestionnaireService;
     }
 
@@ -56,7 +56,7 @@ public class QuestionnaireServiceTest {
     }
 
     @Test
-    public void deselectAllQuestionnaires(){
+    public void deselectAllQuestionnaires() {
         try {
             questionnaireService.deselectAllQuestionnaires();
             Assert.assertNull(learningQuestionnaireService.getSelected());

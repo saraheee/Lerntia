@@ -14,7 +14,7 @@ public class SimpleUserService implements IUserService {
 
     @Override
     public User read() throws ServiceException {
-        if(configReader == null) {
+        if (configReader == null) {
             try {
                 this.configReader = new ConfigReader("student");
             } catch (ConfigReaderException e) {
@@ -30,13 +30,13 @@ public class SimpleUserService implements IUserService {
                 " \"student.properties\" zur Verfügung gestellt ist und ob Sie die Attribute \"name\", \"matriculationNumber\"" +
                 " und \"studyProgramme\"  enthält.");
         }
-        if(user.getName() == null || user.getName().trim().isEmpty()) {
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
             user.setName("Das Attribut \"name\" \nist nicht vorhanden.");
         }
-        if(user.getMatriculationNumber() == null || user.getMatriculationNumber().trim().isEmpty()) {
+        if (user.getMatriculationNumber() == null || user.getMatriculationNumber().trim().isEmpty()) {
             user.setMatriculationNumber("Das Attribut \"matriculationNumber\" \nist nicht vorhanden.");
         }
-        if(user.getStudyProgramme() == null || user.getStudyProgramme().trim().isEmpty()) {
+        if (user.getStudyProgramme() == null || user.getStudyProgramme().trim().isEmpty()) {
             user.setStudyProgramme("Das Attribut \"studyProgramme\" \nist nicht vorhanden.");
         }
 

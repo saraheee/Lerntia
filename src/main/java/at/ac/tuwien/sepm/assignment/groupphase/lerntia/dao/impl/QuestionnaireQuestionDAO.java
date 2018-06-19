@@ -42,7 +42,7 @@ public class QuestionnaireQuestionDAO implements IQuestionnaireQuestionDAO {
     @Override
     public void create(QuestionnaireQuestion questionnaireQuestion) throws PersistenceException {
         if (questionnaireQuestion == null || questionnaireQuestion.getQid() == null || questionnaireQuestion.getQuestionid() == null) {
-            throw new PersistenceException("Mindestens ein Wert der Instanz oder die QuestionnaireQuestion-Istnanz selbst ist null!");
+            throw new PersistenceException("Mindestens ein Wert der Instanz oder die QuestionnaireQuestion-Instanz selbst ist null!");
         }
         LOG.info("Prepare Statement for new QuestionnaireQuestion entry.");
         try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONNAIREQUESTION_CREATE_STATEMENT)) {
