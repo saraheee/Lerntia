@@ -128,7 +128,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         headerContainerParagraph.add(dateParagraph);
 
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber(), fontStudentInfo);
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber() + "\nStudienkennzahl: " + this.student.getStudyProgramme(), fontStudentInfo);
         studentInfoParagraph.setSpacingAfter(10);
 
         headerContainerParagraph.add(studentInfoParagraph);
