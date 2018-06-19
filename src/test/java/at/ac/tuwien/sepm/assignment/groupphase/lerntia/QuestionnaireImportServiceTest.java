@@ -67,6 +67,13 @@ public class QuestionnaireImportServiceTest {
 
     }
 
+    @After
+    public void rollback() throws SQLException {
+        if (connection != null) {
+            connection.rollback();
+        }
+    }
+
     private void IQuestionnaireImportService(IQuestionnaireImportService importService) {
         this.importService = importService;
     }
@@ -87,7 +94,9 @@ public class QuestionnaireImportServiceTest {
     @Test
     public void importExamQuestionnaireWorks() throws ServiceException {
         Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
-        ImportQuestionnaire importq = new ImportQuestionnaire(new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile"), course, "exam", true);
+        courseService.create(course);
+        File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_correctfile.csv");
+        ImportQuestionnaire importq = new ImportQuestionnaire(file, course, "exam", true);
         importService.importQuestionnaire(importq);
     }
 
@@ -112,5 +121,23 @@ public class QuestionnaireImportServiceTest {
     @Test
     public void importPicturesWorks() throws IOException, ServiceException {
         importService.importPictures(new File(System.getProperty("user.dir") + File.separator + "img_original" + File.separator + "test_image.png"), "test");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void tooManyColumnsForImport() throws ServiceException {
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
+        courseService.create(course);
+        File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_toomanycolumns.csv");
+        ImportQuestionnaire importq = new ImportQuestionnaire(file, course, "toomany", false);
+        importService.importQuestionnaire(importq);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void notANumberForImport() throws ServiceException {
+        Course course = new Course("asdf", Semester.SS + "2018", "asdf", false);
+        courseService.create(course);
+        File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test_wrongpicture.csv");
+        ImportQuestionnaire importq = new ImportQuestionnaire(file, course, "wrongpicture", false);
+        importService.importQuestionnaire(importq);
     }
 }
