@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,4 +153,16 @@ public interface IMainLerntiaService {
      * @throws ServiceException if the method can't obtain the first Exam Question.
      */
     Question getFirstExamQuestion() throws ServiceException;
+
+    /**
+     * Get the list of wrongly answered Questions
+     *
+     * @return List of all wrongly answered Questions.
+     */
+    List<Question> getWrongQuestionList();
+
+    /**
+     * Resets the statistic counters
+     */
+    void resetCounter();
 }
