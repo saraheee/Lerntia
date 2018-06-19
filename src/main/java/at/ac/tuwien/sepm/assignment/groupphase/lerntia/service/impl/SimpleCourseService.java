@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.ICourseDAO;
@@ -19,8 +20,7 @@ public class SimpleCourseService implements ICourseService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
-
-    private ConfigReader configReaderCourse = new ConfigReader("course");
+    private ConfigReader configReaderCourse = null;
 
     public SimpleCourseService(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
@@ -83,6 +83,14 @@ public class SimpleCourseService implements ICourseService {
 
     @Override
     public void validate(Course course) throws ServiceException {
+        if(configReaderCourse == null) {
+            LOG.debug("Openin a new config reader for course");
+            try {
+                configReaderCourse = new ConfigReader("course");
+            } catch (ConfigReaderException e) {
+                throw new ServiceException(e.getCustomMessage());
+            }
+        }
         LOG.info("Check if all mandatory values are valid.");
         boolean error = false;
         String message = "";
