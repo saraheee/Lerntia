@@ -23,12 +23,21 @@ public class SimpleUserService implements IUserService {
         }
         User user = new User(configReader.getValue("name"), configReader.getValue("matriculationNumber"),
             configReader.getValue("studyProgramme"), false);
-        if (user.getName() == null || user.getName().trim().isEmpty() || user.getMatriculationNumber() == null ||
-            user.getMatriculationNumber().trim().isEmpty() || user.getStudyProgramme() == null ||
-            user.getStudyProgramme().trim().isEmpty()) {
-            throw new ServiceException("Manche Studiendaten konnten nicht gelesen werden. Bitte überprüfen, ob die Datei" +
+        if ((user.getName() == null || user.getName().trim().isEmpty()) && (user.getMatriculationNumber() == null ||
+            user.getMatriculationNumber().trim().isEmpty()) && (user.getStudyProgramme() == null ||
+            user.getStudyProgramme().trim().isEmpty())) {
+            throw new ServiceException("Die Studiendaten konnten nicht gelesen werden. Bitte überprüfen, ob die Datei" +
                 " \"student.properties\" zur Verfügung gestellt ist und ob Sie die Attribute \"name\", \"matriculationNumber\"" +
                 " und \"studyProgramme\"  enthält.");
+        }
+        if(user.getName() == null || user.getName().trim().isEmpty()) {
+            user.setName("Das Attribut \"name\" \nist nicht vorhanden.");
+        }
+        if(user.getMatriculationNumber() == null || user.getMatriculationNumber().trim().isEmpty()) {
+            user.setMatriculationNumber("Das Attribut \"matriculationNumber\" \nist nicht vorhanden.");
+        }
+        if(user.getStudyProgramme() == null || user.getStudyProgramme().trim().isEmpty()) {
+            user.setStudyProgramme("Das Attribut \"studyProgramme\" \nist nicht vorhanden.");
         }
 
         return user;
