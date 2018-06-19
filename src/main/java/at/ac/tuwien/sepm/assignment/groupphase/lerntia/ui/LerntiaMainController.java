@@ -443,7 +443,6 @@ public class LerntiaMainController implements Runnable {
 
             } else {
                 LOG.warn("No next question to be displayed.");
-
                 if (!onlyWrongQuestions) {
                     alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
@@ -451,18 +450,21 @@ public class LerntiaMainController implements Runnable {
                             + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
                             + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
                         "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
+                    lerntiaService.resetCounter();
 
                 } else if (!e1.getMessage().contains("List of wrong questions is Empty")) {
                     alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
                         "Alle zuvor falsch beantworteten Fragen wurden durchgegangen",
                         "Es gibt noch Fragen, die falsch beantwortet wurden." + "\n" +
                             "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
+                    lerntiaService.resetCounter();
 
                 }
                 if (e1.getMessage().contains("List of wrong questions is Empty")) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                         "Es gibt keine falsch beantworteten Fragen mehr." +
                             "Die erste Frage wird wieder angezeigt.");
+                    lerntiaService.resetCounter();
                     alertController.setOnlyWrongQuestions(false);
                 }
                 Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
@@ -473,20 +475,21 @@ public class LerntiaMainController implements Runnable {
                     question = lerntiaService.getFirstQuestion();
                     showQuestionAndAnswers();
                 } catch (ServiceException e) {
-
                     if (e.getCustomMessage().contains("No wrong Questions available")) {
                         alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
                             "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
                                 + "Daher werden alle Fragen angezeigt.");
+                        lerntiaService.resetCounter();
                         alertController.setOnlyWrongQuestions(false);
                         onlyWrongQuestions = false;
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
                     } else if (e.getCustomMessage().contains("List of wrong questions is Empty.")) {
+                        lerntiaService.resetCounter();
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
                             "Es gibt keine falsch beantworteten Fragen mehr." +
                                 "Die erste Frage wird wieder angezeigt.");
-
+                        lerntiaService.resetCounter();
                         alertController.setOnlyWrongQuestions(false);
                         onlyWrongQuestions = false;
 
@@ -769,10 +772,6 @@ public class LerntiaMainController implements Runnable {
         pieChartData.get(0).getNode().getStyleClass().add("default-color0.chart-pie");
         pieChartData.get(1).getNode().getStyleClass().add("default-color1.chart-pie");
         pieChartData.get(2).getNode().getStyleClass().add("default-color2.chart-pie");
-
-        //pieChartData.get(0).getNode().setStyle("-fx-pie-color: #008000;");
-        //pieChartData.get(1).getNode().setStyle("-fx-pie-color: #ff0000;");
-        //pieChartData.get(2).getNode().setStyle("-fx-pie-color: #ababab;");
 
         WritableImage snapShot = scene.snapshot(null);
         try {
