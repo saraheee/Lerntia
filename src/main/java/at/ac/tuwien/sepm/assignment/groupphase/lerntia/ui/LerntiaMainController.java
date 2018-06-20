@@ -456,17 +456,17 @@ public class LerntiaMainController implements Runnable {
             showQuestionAndAnswers();
         } catch (ServiceException e1) {
             if (examMode) {
-                if (lerntiaService.getIgnoredAnswers() == 0) {
+                if (lerntiaService.getIgnoredExamAnswers() == 0) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
                         "Die letzte Frage wurde erreicht. Es wurden keine Fragen ausgelassen. Die Antworten können jetzt noch überprüft werden.\n\n" +
                             "Nicht vergessen die Prüfung am Ende abzugeben!");
-                } else if (lerntiaService.getIgnoredAnswers() == 1) {
+                } else if (lerntiaService.getIgnoredExamAnswers() == 1) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
                         "Die letzte Frage wurde erreicht. Es wurde genau eine Frage ausgelassen, zu der jetzt noch zurücknavigiert werden kann.\n\n" +
                             "Nicht vergessen die Prüfung am Ende abzugeben!");
                 } else {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Ende der Fragenliste", "Letzte Frage der Prüfung erreicht",
-                        "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredAnswers() + " Fragen ausgelassen, zu denen jetzt noch zurücknavigiert werden kann.\n\n" +
+                        "Die letzte Frage wurde erreicht. Es wurden " + lerntiaService.getIgnoredExamAnswers() + " Fragen ausgelassen, zu denen jetzt noch zurücknavigiert werden kann.\n\n" +
                             "Nicht vergessen die Prüfung am Ende abzugeben!");
                 }
 
