@@ -106,13 +106,13 @@ public class LerntiaMainController implements Runnable {
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController,
         DirectoryChooserController directoryChooserController,
-        IUserService simpleUserService
-    ) {
+        IUserService simpleUserService) {
+
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
         notNull(alertController, "'alertController' should not be null");
-        notNull(zoomedImageController, "'zoomedImageController' should not be null");
         notNull(learnAlgorithmController, "learnAlgorithmController should not be null");
+        notNull(zoomedImageController, "'zoomedImageController' should not be null");
         this.lerntiaService = lerntiaService;
         this.audioController = audioController;
         this.alertController = alertController;

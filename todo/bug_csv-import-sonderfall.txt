@@ -1,0 +1,10 @@
+﻿Status: Plan
+
+Bearbeitet von: --
+
+Priorität: N
+
+
+Beschreibung:
+
+Wenn in einem csv-File einige leere Zeilen in der Mitte vorkommen (z.B. zwei Fragen, drei leere Zeilen, und wieder zwei Fragen), so ist die Fehlermeldung nicht sehr aussagekräftig (z.B. Ein Dialogfenster in dem nur "6" drinnen steht.)
