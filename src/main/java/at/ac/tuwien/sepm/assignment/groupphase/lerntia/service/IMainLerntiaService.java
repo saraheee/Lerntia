@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 
@@ -33,9 +34,10 @@ public interface IMainLerntiaService {
      * Sets the custom chosen questions from the Edit Exam Window in the questions List
      *
      * @param customList custom list of questions that are set for the exam.
-     * @throws ServiceException if the method can't obtain the questions or/and can't set them into the question list.
+     * @throws ServiceException           if the method can't obtain the questions or/and can't set them into the question list.
+     * @throws ServiceValidationException if the validation fails, e.g. when the list is null or empty
      */
-    void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException;
+    void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException, ServiceValidationException;
 
     /**
      * Standard exam-questionnaire question set method. Takes the questions linked with a specific exam-questionnaire
@@ -177,6 +179,6 @@ public interface IMainLerntiaService {
      * Set the current status of the LearnAlgorithm
      *
      * @param status current status if the LearnAlgorithm is running or not
-     * */
+     */
     void setLearnAlgorithmStatus(boolean status);
 }

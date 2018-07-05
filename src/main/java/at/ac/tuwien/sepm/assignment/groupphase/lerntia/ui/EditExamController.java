@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.Question;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.QuestionnaireQuestion;
@@ -352,7 +353,7 @@ public class EditExamController {
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
 
-        } catch (ServiceException e) {
+        } catch (ServiceException | ServiceValidationException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Prüfungsmodus anzeigen fehlgeschlagen.",
                 "Fehler", "Es ist nicht möglich in den Prüfungsmodus zu wechseln!");
         } catch (ControllerException e) {

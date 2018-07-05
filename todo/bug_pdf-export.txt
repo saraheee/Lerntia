@@ -1,0 +1,10 @@
+﻿Status: Plan
+
+Bearbeitet von: --
+
+Priorität: H
+
+
+Beschreibung:
+
+Wenn ein Fragebogen-Name Leerzeichen beinhaltet, so tretet ein  Fehler beim Laden der Bilder auf, und das PDF mit den Ergebnissen kann nicht gespeichert werden.

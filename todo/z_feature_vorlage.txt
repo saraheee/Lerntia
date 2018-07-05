@@ -1,0 +1,27 @@
+﻿Status: Plan
+
+Bearbeitet von: --
+
+Priorität: H
+
+
+Beschreibung:
+
+Das ist nur eine Vorlage zum Kopieren!
+Alles ab hier kann nach dem Kopieren gelöscht werden.
+
+________________________________________________________________
+
+* Status: Plan, Develop oder Close
+Wenn ein Thema bereits geschlossen ist, bitte das betroffene Textfile in den Ordner "archive" verschieben.
+
+* Bearbeitet von: Name der Person, die vorhat sich mit dem vorliegenden Thema zu beschäftigen.
+Wenn man nur etwas Bekanntes melden möchte, kann als Platzhalter "--" verwendet werden, bis jemand Zeit/Lust hat, sich darum zu kümmern. Wer etwas Bearbeiten möchte, schreibt am besten den eigenen Namen gleich im Vorhinein rein, um doppelte Arbeiten am selben Thema zu vermeiden.
+
+* Priorität: H(hoch), M(mittel) oder N(niedrig)
+
+* Beschreibung: Eine Kurzbeschreibung vom Verbesserungsvorschlag, Wunsch oder Bug.
+
+Umgesetzte Änderungen sollten im Anschluss im Branch 'dev' zu finden sein bzw. nachdem sie bei Andreas getestet wurden und alles passt, kann dieser auch in den 'master' Branch gemergt werden.
+Verbesserungsvorschläge, sowohl zum Programm, als auch zu diesem Dokument, sind jederzeit willkommen! ;)
+
