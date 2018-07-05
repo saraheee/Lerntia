@@ -31,7 +31,7 @@ public class QuestionnaireDAOTest {
     private IQuestionnaireDAO questionnaireDAO;
     private ICourseDAO courseDAO;
 
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {

@@ -22,7 +22,7 @@ public class ExamQuestionnaireDAO implements IExamQuestionnaireDAO {
 
     private static final String SQL_EXAMQUESTIONNAIRE_CREATE_STATEMENT = "INSERT INTO ExamQuestionnaire(id,qdate) VALUES (?,?)";
     private static final String SQL_EXAMQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM ExamQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = FALSE)";
-    private IQuestionnaireDAO questionnaireDAO;
+    private final IQuestionnaireDAO questionnaireDAO;
     private Connection connection;
 
     @Autowired

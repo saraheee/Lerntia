@@ -12,7 +12,7 @@ public enum ButtonText {
     ALGORITHMOFF("Algorithmus AUS"),
     ALGORITHMON("Algorithmus EIN");
 
-    private String name;
+    private final String name;
 
     ButtonText(String name) {
         this.name = name;

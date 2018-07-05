@@ -32,7 +32,7 @@ public class QuestionServiceTest {
     private Connection connection;
     private ConfigReader configReaderQuestions;
 
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {

@@ -11,7 +11,7 @@ public class ConfigReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private InputStream inputStream;
-    private Properties prop;
+    private final Properties prop;
 
     public ConfigReader(String config) throws ConfigReaderException {
 
@@ -85,7 +85,7 @@ public class ConfigReader {
                 // ignore, as there is one exception to be send in case anything is wrong
             }
             throw new ConfigReaderException("Die Initialisierung konnte nicht erfolgreich durchgeführt werden, da einige " +
-                "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, dass sich dem Verzeichnis \"" + basePath +
+                "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, ob sich im Verzeichnis \"" + basePath +
                 " die folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
                 "\n\t *  questions.properties; \n\t *  speech.properties; \n\t *  student.properties.");
         } // end of the main try-catch block

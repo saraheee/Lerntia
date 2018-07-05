@@ -30,7 +30,7 @@ public class AdministrateQuestionnaireController {
     private final EditQuestionsController editQuestionsController;
     private final AlertController alertController;
     @FXML
-    public ComboBox<String> cb_questionnaire;
+    private ComboBox<String> cb_questionnaire;
     private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
     private List learningQuestionnaireList;

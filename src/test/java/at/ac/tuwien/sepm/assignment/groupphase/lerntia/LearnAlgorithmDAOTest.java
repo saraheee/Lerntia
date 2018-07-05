@@ -27,7 +27,7 @@ public class LearnAlgorithmDAOTest {
     private Connection connection;
     private IQuestionDAO questionDAO;
     private ILearnAlgorithmDAO learnAlgorithmDAO;
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {

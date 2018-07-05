@@ -29,7 +29,7 @@ public class IMainLerntiaServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Connection connection;
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
     private IQuestionnaireDAO questionnaireDAO;
     private ICourseDAO courseDAO;
     private IExamQuestionnaireDAO examQuestionnaireDAO;

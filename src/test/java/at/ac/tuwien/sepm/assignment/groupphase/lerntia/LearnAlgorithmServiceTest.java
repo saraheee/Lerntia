@@ -29,7 +29,7 @@ public class LearnAlgorithmServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private ILearnAlgorithmService learnAlgorithmService;
     private Connection connection;
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
     private IQuestionDAO questionDAO;
     private ILearnAlgorithmDAO learnAlgorithmDAO;
     private Question refQuestion;

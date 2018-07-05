@@ -78,7 +78,7 @@ public class LerntiaMainController implements Runnable {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private LearnAlgorithmController learnAlgorithmController;
+    private final LearnAlgorithmController learnAlgorithmController;
     @FXML
     private ButtonBar buttonBar;
     @FXML
@@ -93,7 +93,7 @@ public class LerntiaMainController implements Runnable {
 
     private boolean examMode;
     private boolean questionColored = false;
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
     private String examName;
 
     @Autowired
@@ -673,7 +673,8 @@ public class LerntiaMainController implements Runnable {
         buttonBar.getButtons().remove(handInButton);
     }
 
-    public void handIn() {
+    @FXML
+    private void handIn() {
 
         // the state of the current question has to be saved here as well.
         saveAnswerState();

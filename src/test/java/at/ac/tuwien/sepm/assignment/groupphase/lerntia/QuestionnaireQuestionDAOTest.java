@@ -33,7 +33,7 @@ public class QuestionnaireQuestionDAOTest {
     private IQuestionDAO questionDAO;
     private ICourseDAO courseDAO;
 
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {
@@ -43,7 +43,7 @@ public class QuestionnaireQuestionDAOTest {
             this.IQuestionnaireQuestionDAO(new QuestionnaireQuestionDAO(jdbcConnectionManager));
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(questionnaireDAO, jdbcConnectionManager));
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
