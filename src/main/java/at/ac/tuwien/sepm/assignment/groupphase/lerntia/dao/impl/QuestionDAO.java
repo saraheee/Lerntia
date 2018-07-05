@@ -31,7 +31,7 @@ public class QuestionDAO implements IQuestionDAO {
 
     private Connection connection;
 
-    private ILearnAlgorithmDAO learnAlgorithmDAO;
+    private final ILearnAlgorithmDAO learnAlgorithmDAO;
 
     @Autowired
     public QuestionDAO(JDBCConnectionManager jdbcConnectionManager, ILearnAlgorithmDAO learnAlgorithmDAO) throws PersistenceException {

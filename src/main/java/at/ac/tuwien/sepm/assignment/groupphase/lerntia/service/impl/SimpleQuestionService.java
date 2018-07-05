@@ -23,7 +23,7 @@ import java.util.List;
 public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private IQuestionDAO questionDAO;
+    private final IQuestionDAO questionDAO;
     private ConfigReader configReaderQuestions = null;
 
     @Autowired

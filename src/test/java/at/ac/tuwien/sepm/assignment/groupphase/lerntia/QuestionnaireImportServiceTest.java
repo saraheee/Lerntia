@@ -29,7 +29,7 @@ public class QuestionnaireImportServiceTest {
 
     private Connection connection;
 
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     private ICourseService courseService;
 

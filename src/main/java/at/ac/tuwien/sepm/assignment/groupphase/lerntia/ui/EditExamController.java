@@ -48,8 +48,8 @@ public class EditExamController {
     private ObservableList<Question> selectedQuestions;
     private List<Question> entireQuestionList;
     private List<Question> currentQuestionList;
-    private ArrayList<Question> questionList = new ArrayList<>();
-    private List<Question> acceptedQuestionList = new ArrayList<>();
+    private final ArrayList<Question> questionList = new ArrayList<>();
+    private final List<Question> acceptedQuestionList = new ArrayList<>();
     private boolean editingCanceled = false;
     private ObservableList<Question> examQuestionList = FXCollections.observableArrayList();
 

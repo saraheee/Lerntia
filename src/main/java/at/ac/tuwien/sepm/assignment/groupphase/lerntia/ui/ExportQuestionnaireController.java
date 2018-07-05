@@ -30,11 +30,11 @@ public class ExportQuestionnaireController {
     private final IMainLerntiaService lerntiaService;
     private final IQuestionnaireService iQuestionnaireService;
     @FXML
-    public ComboBox<String> cb_questionnaire;
+    private ComboBox<String> cb_questionnaire;
     private Stage stage;
     private List<LearningQuestionnaire> learningQuestionnaires;
     private List learningQuestionnaireList;
-    private AlertController alertController;
+    private final AlertController alertController;
 
     @Autowired
     public ExportQuestionnaireController(

@@ -39,10 +39,10 @@ public class MainLerntiaService implements IMainLerntiaService {
     private int currentQuestionIndex;
     private boolean examMode;
 
-    private ILearningQuestionnaireService learningQuestionnaireService;
-    private IQuestionService questionService;
-    private IQuestionnaireQuestionService questionnaireQuestionService;
-    private ILearnAlgorithmService learnAlgorithmService;
+    private final ILearningQuestionnaireService learningQuestionnaireService;
+    private final IQuestionService questionService;
+    private final IQuestionnaireQuestionService questionnaireQuestionService;
+    private final ILearnAlgorithmService learnAlgorithmService;
 
     @Autowired
     public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
@@ -464,8 +464,8 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public int getIgnoredExamAnswers() {
         int count = 0;
-        for (int i = 0; i < questionList.size(); i++) {
-            if (questionList.get(i).getCheckedAnswers().equals("")) {
+        for (Question aQuestionList : questionList) {
+            if (aQuestionList.getCheckedAnswers().equals("")) {
                 count++;
             }
         }

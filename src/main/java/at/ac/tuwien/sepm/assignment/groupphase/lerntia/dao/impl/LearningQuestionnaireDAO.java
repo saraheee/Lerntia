@@ -26,7 +26,7 @@ public class LearningQuestionnaireDAO implements ILearningQuestionnaireDAO {
     private static final String SQL_LEARNINGQUESTIONNAIRE_READALL_STATEMENT = "SELECT * FROM LearningQuestionnaire WHERE id IN (SELECT id FROM Questionnaire WHERE isDeleted = FALSE)";
 
     private Connection connection;
-    private IQuestionnaireDAO questionnaireDAO;
+    private final IQuestionnaireDAO questionnaireDAO;
 
     @Autowired
     public LearningQuestionnaireDAO(IQuestionnaireDAO questionnaireDAO, JDBCConnectionManager jdbcConnectionManager) throws PersistenceException {

@@ -41,34 +41,34 @@ public class SelectQuestionAdministrateController implements Runnable {
     private final ILearningQuestionnaireService iLearningQuestionnaireService;
     private final IQuestionnaireQuestionService iQuestionnaireQuestionService;
     @FXML
-    public TableView<Question> tv_questionTable;
+    private TableView<Question> tv_questionTable;
     @FXML
-    public TableColumn<Question, CheckBox> tc_picture;
+    private TableColumn<Question, CheckBox> tc_picture;
     @FXML
-    public TableColumn<Question, String> tc_question;
+    private TableColumn<Question, String> tc_question;
     @FXML
-    public TableColumn<Question, String> tc_answer1;
+    private TableColumn<Question, String> tc_answer1;
     @FXML
-    public TableColumn<Question, String> tc_answer2;
+    private TableColumn<Question, String> tc_answer2;
     @FXML
-    public TableColumn<Question, String> tc_answer3;
+    private TableColumn<Question, String> tc_answer3;
     @FXML
-    public TableColumn<Question, String> tc_answer4;
+    private TableColumn<Question, String> tc_answer4;
     @FXML
-    public TableColumn<Question, String> tc_answer5;
+    private TableColumn<Question, String> tc_answer5;
     //For the Searching Operation
     @FXML
-    public TextField tf_searchQuestion;
+    private TextField tf_searchQuestion;
     @FXML
-    public TextField tf_searchAnswer1;
+    private TextField tf_searchAnswer1;
     @FXML
-    public TextField tf_searchAnswer2;
+    private TextField tf_searchAnswer2;
     @FXML
-    public TextField tf_searchAnswer3;
+    private TextField tf_searchAnswer3;
     @FXML
-    public TextField tf_searchAnswer4;
+    private TextField tf_searchAnswer4;
     @FXML
-    public TextField tf_searchAnswer5;
+    private TextField tf_searchAnswer5;
     private Stage stage;
     private LearningQuestionnaire administrateMode;
     @FXML
@@ -80,7 +80,7 @@ public class SelectQuestionAdministrateController implements Runnable {
     private boolean editButtonClicked = false;
     private boolean searchButtonClicked = false;
     private boolean closedWindow = false;
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     @Autowired
     public SelectQuestionAdministrateController(

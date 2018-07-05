@@ -32,9 +32,12 @@ public class SelectExamController {
     private final WindowController windowController;
     private final AlertController alertController;
     private final EditExamController editExamController;
-    public Label studentNameLabel;
-    public Label matriculationNumberLabel;
-    public Label studyProgrammeLabel;
+    @FXML
+    private Label studentNameLabel;
+    @FXML
+    private Label matriculationNumberLabel;
+    @FXML
+    private Label studyProgrammeLabel;
 
     private List<ExamQuestionnaire> examQuestionnaireList;
 

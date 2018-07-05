@@ -38,20 +38,20 @@ public class ImportFileController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String CSVPATH = System.getProperty("user.dir") + File.separator + "csv" + File.separator;
     private static final String IMGPATH = System.getProperty("user.dir") + File.separator + "img_original" + File.separator;
-    private final ICourseService cservice;
-    private final IQuestionnaireImportService qservice;
+    private final ICourseService cService;
+    private final IQuestionnaireImportService qService;
     private final AlertController alertController;
     private final WindowController windowController;
     private File file;
     private File directory;
-    private List<Course> coursedata = new ArrayList<>();
-    private ObservableList<String> choices = FXCollections.observableArrayList();
+    private List<Course> courseData = new ArrayList<>();
+    private final ObservableList<String> choices = FXCollections.observableArrayList();
     private ObservableList<Course> courses;
 
     @FXML
     private Text t_filename;
     @FXML
-    private Text t_directoryname;
+    private Text t_directoryName;
     @FXML
     private TextField tf_questionnaire;
     @FXML
@@ -66,8 +66,8 @@ public class ImportFileController {
         WindowController windowController,
         AlertController alertController
     ) {
-        cservice = simpleCourseService;
-        qservice = simpleQuestionnaireImportService;
+        cService = simpleCourseService;
+        qService = simpleQuestionnaireImportService;
         this.windowController = windowController;
         this.alertController = alertController;
     }
@@ -75,9 +75,9 @@ public class ImportFileController {
     @FXML
     private void initialize() throws ServiceException {
         LOG.debug("Initialize ImportFileController");
-        coursedata.clear();
-        coursedata = cservice.readAll();
-        courses = FXCollections.observableArrayList(coursedata);
+        courseData.clear();
+        courseData = cService.readAll();
+        courses = FXCollections.observableArrayList(courseData);
         choices.removeAll();
         choices.clear();
         for (Course course : courses) {
@@ -128,9 +128,9 @@ public class ImportFileController {
         directory = directoryChooser.showDialog(stage);
         if (directory != null) {
             if (directory.getName().length() > 20) {
-                t_directoryname.setText(directory.getName().substring(0, 20) + "..");
+                t_directoryName.setText(directory.getName().substring(0, 20) + "..");
             } else {
-                t_directoryname.setText(directory.getName());
+                t_directoryName.setText(directory.getName());
             }
         }
     }
@@ -147,7 +147,7 @@ public class ImportFileController {
 
         if (directory != null) {
             try {
-                qservice.importPictures(directory, name);
+                qService.importPictures(directory, name);
             } catch (IOException e) {
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
                 return;
@@ -162,17 +162,17 @@ public class ImportFileController {
                 Course selectedCourse = courses.get(cb_courseIndex);
 
                 ImportQuestionnaire iq = new ImportQuestionnaire(file, selectedCourse, name, questionnaireIsExam.isSelected());
-                qservice.importQuestionnaire(iq);
+                qService.importQuestionnaire(iq);
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Import erfolgreich", "Erfolgreich", "Alle Fragen wurden erfolgreich importiert!");
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
             } catch (Exception e) {
-                qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
+                qService.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
             }
         } else {
-            qservice.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
+            qService.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Kein File ausgewählt", "Fehler", "Bitte zuerst eine csv-Datei auswählen!");
         }
     }
@@ -182,7 +182,7 @@ public class ImportFileController {
         // make sure there is at least one course before opening the window.
 
         try {
-            coursedata = cservice.readAll();
+            courseData = cService.readAll();
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Import Fenster kann nicht angezeigt werden", "Fehler", e.getCustomMessage());
             return;

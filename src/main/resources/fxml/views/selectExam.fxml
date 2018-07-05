@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
-<AnchorPane stylesheets="@/css/views.css" prefHeight="570.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.121"
+<AnchorPane stylesheets="@/css/views.css" prefHeight="590.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectExamController">
-    <Label layoutX="90.0" layoutY="49.0" text="Bitte einen Fragebogen auswählen:">
+    <Label layoutX="90.0" layoutY="50.0" text="Bitte einen Fragebogen auswählen:">
         <font>
             <Font size="18.0"/>
         </font>
@@ -19,22 +19,22 @@
         </styleClass>
     </ComboBox>
 
-    <Label layoutX="90.0" layoutY="225.0" text="Bitte die Studiendaten überprüfen:">
+    <Label layoutX="90.0" layoutY="220.0" text="Bitte die Studiendaten überprüfen:">
         <font>
             <Font size="18.0"/>
         </font>
     </Label>
-    <Label layoutX="90.0" layoutY="265.0" text="Name:"/>
-    <Label fx:id="studentNameLabel" layoutX="260.0" layoutY="265.0" text="Nicht vorhanden"/>
-    <Label layoutX="90.0" layoutY="323.0" text="Matrikelnummer:"/>
-    <Label fx:id="matriculationNumberLabel" layoutX="260.0" layoutY="323.0" text="Nicht vorhanden"/>
-    <Label layoutX="90.0" layoutY="381.0" text="Studienkennzahl:"/>
-    <Label fx:id="studyProgrammeLabel" layoutX="260.0" layoutY="381.0" text="Nicht vorhanden"/>
+    <Label layoutX="90.0" layoutY="285.0" text="Name:"/>
+    <Label fx:id="studentNameLabel" layoutX="260.0" layoutY="285.0" text="Nicht vorhanden"/>
+    <Label layoutX="90.0" layoutY="343.0" text="Matrikelnummer:"/>
+    <Label fx:id="matriculationNumberLabel" layoutX="260.0" layoutY="343.0" text="Nicht vorhanden"/>
+    <Label layoutX="90.0" layoutY="401.0" text="Studienkennzahl:"/>
+    <Label fx:id="studyProgrammeLabel" layoutX="260.0" layoutY="401.0" text="Nicht vorhanden"/>
 
-    <Button layoutX="50.0" layoutY="472.0" mnemonicParsing="false" onAction="#selectExamAndEdit"
+    <Button layoutX="50.0" layoutY="506.0" mnemonicParsing="false" onAction="#selectExamAndEdit"
             prefHeight="41.0" prefWidth="210.0" text="Prüfung bearbeiten" pickOnBounds="false">
     </Button>
-    <Button layoutX="273.0" layoutY="472.0" mnemonicParsing="false" onAction="#selectExam"
+    <Button layoutX="273.0" layoutY="506.0" mnemonicParsing="false" onAction="#selectExam"
             prefHeight="41.0" prefWidth="210.0" text="Prüfung starten" pickOnBounds="false"/>
     <styleClass>
         <String fx:value="view"/>

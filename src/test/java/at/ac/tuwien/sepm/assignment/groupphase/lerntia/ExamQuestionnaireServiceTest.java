@@ -30,7 +30,7 @@ public class ExamQuestionnaireServiceTest {
     private IExamQuestionnaireService examQuestionnaireService;
     private ICourseDAO courseDAO;
     private Connection connection;
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {

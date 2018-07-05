@@ -8,9 +8,9 @@ public abstract class Questionnaire {
     private Boolean selected; // if currently selected
     private Boolean isDeleted; // if it is deleted
 
-    public Questionnaire() {}
+    Questionnaire() {}
 
-    public Questionnaire(Long courseID, Long id, String name, Boolean selected, Boolean isDeleted) {
+    Questionnaire(Long courseID, Long id, String name, Boolean selected, Boolean isDeleted) {
         this.courseID = courseID;
         this.id = id;
         this.name = name;
@@ -34,7 +34,7 @@ public abstract class Questionnaire {
         this.id = id;
     }
 
-    public Boolean getDeleted() {
+    Boolean getDeleted() {
         return isDeleted;
     }
 
@@ -50,7 +50,7 @@ public abstract class Questionnaire {
         this.name = name;
     }
 
-    public Boolean getSelected() {
+    Boolean getSelected() {
         return selected;
     }
 
