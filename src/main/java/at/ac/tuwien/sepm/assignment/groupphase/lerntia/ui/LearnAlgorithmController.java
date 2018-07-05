@@ -17,7 +17,7 @@ public class LearnAlgorithmController {
     @FXML
     private Button learnAlgorithmButton;
     private boolean selected;
-    private MainLerntiaService mainLerntiaService;
+    private final MainLerntiaService mainLerntiaService;
 
     public LearnAlgorithmController(MainLerntiaService mainLerntiaService) {
         this.selected = false;

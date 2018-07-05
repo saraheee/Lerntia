@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import java.lang.invoke.MethodHandles;
 
 @Controller
-public class DirectoryChooserController {
+class DirectoryChooserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

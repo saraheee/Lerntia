@@ -24,15 +24,15 @@ import java.lang.invoke.MethodHandles;
 public class AlertController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static String LERNTIA = "[Lerntia] ";
-    private static String SPACE = "   ";
-    private static int MINWIDTH = 50;
-    private Image INFO = new Image(getClass().getResourceAsStream("/icons/info.png"));
-    private Image ERROR = new Image(getClass().getResourceAsStream("/icons/error.png"));
-    private Image WARNING = new Image(getClass().getResourceAsStream("/icons/warning.png"));
-    private Image CONFIRMATION = new Image(getClass().getResourceAsStream("/icons/confirmation.png"));
-    private Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
-    private Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
+    private static final String LERNTIA = "[Lerntia] ";
+    private static final String SPACE = "   ";
+    private static final int MINWIDTH = 50;
+    private final Image INFO = new Image(getClass().getResourceAsStream("/icons/info.png"));
+    private final Image ERROR = new Image(getClass().getResourceAsStream("/icons/error.png"));
+    private final Image WARNING = new Image(getClass().getResourceAsStream("/icons/warning.png"));
+    private final Image CONFIRMATION = new Image(getClass().getResourceAsStream("/icons/confirmation.png"));
+    private final Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
+    private final Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
     private boolean wrongAnswer = false;
     private boolean onlyWrongQuestions = false;
     private ImageView imageView;

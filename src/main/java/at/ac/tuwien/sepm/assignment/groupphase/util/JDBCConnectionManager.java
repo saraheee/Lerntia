@@ -59,7 +59,7 @@ public class JDBCConnectionManager {
         }
     }
 
-    public void closeConnection() {
+    private void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();

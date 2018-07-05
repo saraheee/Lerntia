@@ -23,17 +23,17 @@ import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 
 @Controller
-public class ZoomedImageController {
+class ZoomedImageController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final AlertController alertController;
     private final WindowController windowController;
     private final AudioController audioController;
     private File imageFile;
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private double screenWidth = screenSize.getWidth();
-    private double screenHeight = screenSize.getHeight();
-    private double eps = (screenHeight / 100) * 10;
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final double screenWidth = screenSize.getWidth();
+    private final double screenHeight = screenSize.getHeight();
+    private final double eps = (screenHeight / 100) * 10;
     private Scene imageScene;
 
     private boolean imageClosed = false;
