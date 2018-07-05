@@ -1,0 +1,10 @@
+﻿Status: Plan
+
+Bearbeitet von: --
+
+Priorität: N
+
+
+Beschreibung:
+
+Die Suchfunktion bei der Fragenverwaltung liefert derzeit alle Ergebnisse in allen Fragebögen, auch in Prüfungsbögen. Diese sollte so eingeschränkt werden, dass nur Ergebnisse aus dem aktuell ausgewählten Fragebogen angezeigt werden.

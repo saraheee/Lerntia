@@ -2,12 +2,13 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia;
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.PersistenceException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dao.impl.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.*;
-import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.*;
+import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LearnAlgorithmController;
 import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import org.junit.After;
 import org.junit.Assert;
@@ -37,7 +38,6 @@ public class IMainLerntiaServiceTest {
     private IQuestionnaireQuestionDAO questionnaireQuestionDAO;
     private IQuestionDAO questionDAO;
     private ILearningQuestionnaireDAO learningQuestionnaireDAO;
-    private LerntiaMainController lerntiaMainController;
 
     @After
     public void rollback() throws SQLException {
@@ -54,45 +54,22 @@ public class IMainLerntiaServiceTest {
             this.IQuestionDAO(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)));
             this.IquestionnaireQuestionDAO(new QuestionnaireQuestionDAO(jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
-            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager));
-            this.LearnAlgorithmController(new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+            this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
+            this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
+            this.LearnAlgorithmController(new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)))));
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
 
-            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                  new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
+            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
                 new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager))));
 
-
-            this.LerntiaMainController(new LerntiaMainController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
-                new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
-                new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager))),
-
-                new AudioController(new SimpleTextToSpeechService(), new AlertController()),
-                new AlertController(),
-                new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
-                new ZoomedImageController(new AlertController(), new WindowController(), new AudioController(new SimpleTextToSpeechService(), new AlertController())),
-                new SimpleExamResultsWriterService(new ExamResultsWriterDAO()),
-                new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager),jdbcConnectionManager)),
-                    new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager,new LearnAlgorithmDAO(jdbcConnectionManager))),
-                    new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
-                    new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)))),
-                new DirectoryChooserController(),
-                new SimpleUserService()
-                ));
-         //
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
-    }
-
-    private void LerntiaMainController(LerntiaMainController lerntiaMainController) {
-        this.lerntiaMainController = lerntiaMainController;
     }
 
     private void ILearnQuestionnaireDAO(ILearningQuestionnaireDAO learningQuestionnaireDAO) {
@@ -129,34 +106,25 @@ public class IMainLerntiaServiceTest {
 
 
     @Test
-    public void setCustomQuestionList() {
-        try {
-            Question q1 = new Question();
-            q1.setId(1L);
-            q1.setQuestionText("What is wrong?");
-            q1.setAnswer1("Nothing");
-            q1.setAnswer2("Everything");
-            ArrayList<Question> list = new ArrayList<>();
-            list.add(q1);
-            mainLerntiaService.setExamMode(true);
-            mainLerntiaService.setCustomExamQuestions(list);
+    public void setCustomQuestionList() throws ServiceValidationException, ServiceException {
+        Question q1 = new Question();
+        q1.setId(1L);
+        q1.setQuestionText("What is wrong?");
+        q1.setAnswer1("Nothing");
+        q1.setAnswer2("Everything");
+        ArrayList<Question> list = new ArrayList<>();
+        list.add(q1);
+        mainLerntiaService.setExamMode(true);
+        mainLerntiaService.setCustomExamQuestions(list);
 
-            List<Question> questionList = mainLerntiaService.getQuestionList();
-            Assert.assertEquals(1, questionList.size());
-        } catch (ServiceException e) {
-            LOG.error("Failed to get question list");
-        }
+        List<Question> questionList = mainLerntiaService.getQuestionList();
+        Assert.assertEquals(1, questionList.size());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void errorCustomQuestionList() {
-        try {
-            mainLerntiaService.setExamMode(true);
-            ArrayList<Question> list = null;
-            mainLerntiaService.setCustomExamQuestions(list);
-        } catch (ServiceException e) {
-            LOG.error("Failed to set exam questionnaire");
-        }
+    @Test(expected = ServiceValidationException.class)
+    public void errorCustomQuestionList() throws ServiceException, ServiceValidationException {
+        mainLerntiaService.setExamMode(true);
+        mainLerntiaService.setCustomExamQuestions(null);
     }
 
     @Test
@@ -208,7 +176,6 @@ public class IMainLerntiaServiceTest {
     @Test
     public void TestToGetNextQuestionfromListInExamMode() {
         try {
-
             getFirstQuestionsFromExamQuestionnaire();
             mainLerntiaService.setExamMode(true);
             List<Question> list = mainLerntiaService.getQuestionList();

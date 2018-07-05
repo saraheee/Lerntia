@@ -2,12 +2,14 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl;
 
 
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
+import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceValidationException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Autowired
     public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
                               IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService
-                              ) {
+    ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
@@ -55,7 +57,10 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     @Override
-    public void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException {
+    public void setCustomExamQuestions(ArrayList<Question> customList) throws ServiceException, ServiceValidationException {
+        if (customList == null || customList.size() <= 0) {
+            throw new ServiceValidationException("Keine Prüfungsfragen in der Liste vorhanden!");
+        }
         LOG.info("Set custom Exam Questionnaire");
         stopAlgorithm();
         resetWrongQuestionList();
@@ -490,9 +495,10 @@ public class MainLerntiaService implements IMainLerntiaService {
         wrongAnswered = 0;
         correctAnswered = 0;
     }
+
     @Override
     public void setLearnAlgorithmStatus(boolean b) {
-        LOG.info("Set Learn Algorithm Status to: "+b);
+        LOG.info("Set Learn Algorithm Status to: " + b);
         this.learnAlgorithm = b;
     }
 }

@@ -1,0 +1,17 @@
+﻿Status: Plan
+
+Bearbeitet von: --
+
+Priorität: M
+
+
+Beschreibung:
+
+Es sollte möglich sein am Ende (und eventuell auch auf Abruf zwischendurch) die Nummern der falsch beantworteten Fragen (+eventell auch die Fragen selbst) in einer Form anzuzeigen, sodass diese direkt kopiert werden können (vielleicht stattdessen auch eine PDF Übersicht, ähnlich wie im Prüfungsmodus.)
+
+z.B.:
+Folgende Fragen wurden falsch beantwortet:
+1 Text
+4 Text
+7 Text
+..

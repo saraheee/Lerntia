@@ -96,7 +96,7 @@ public class SimpleCourseService implements ICourseService {
         String message = "";
         if (course.getMark().equals("")) {
             error = true;
-            message += "Die LVA-Nummer ist leer\n";
+            message += "Die LVA-Nummer ist leer!\n";
         }
 
         if (course.getMark().length() > configReaderCourse.getValueInt("maxLengthCourseMark")) {
