@@ -22,7 +22,7 @@
             <totalSizeCap>1GB</totalSizeCap>
 
         </rollingPolicy>
-        <!-- only INFO-level messages saved to the file
+        <!-- only INFO and ERROR-level messages saved to the file
              https://logback.qos.ch/manual/filters.html#thresholdFilter -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>

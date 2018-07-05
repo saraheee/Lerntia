@@ -33,23 +33,23 @@ public class EditQuestionsController {
     private final AlertController alertController;
     private final LerntiaMainController lerntiaMainController;
     @FXML
-    public TextField tf_question;
+    private TextField tf_question;
     @FXML
-    public TextField tf_answer2;
+    private TextField tf_answer2;
     @FXML
-    public TextField tf_answer3;
+    private TextField tf_answer3;
     @FXML
-    public TextField tf_answer4;
+    private TextField tf_answer4;
     @FXML
-    public TextField tf_answer5;
+    private TextField tf_answer5;
     @FXML
-    public TextField tf_answer1;
+    private TextField tf_answer1;
     @FXML
-    public ImageView iv_image;
+    private ImageView iv_image;
     @FXML
-    public TextField tf_correctAnswer;
+    private TextField tf_correctAnswer;
     @FXML
-    public TextField tf_optionalFeedback;
+    private TextField tf_optionalFeedback;
     private Question selectedQuestion;
     private Stage stage;
     private LearningQuestionnaire learningQuestionnaire;

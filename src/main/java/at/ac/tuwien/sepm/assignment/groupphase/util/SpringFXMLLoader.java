@@ -19,9 +19,9 @@ import java.io.InputStream;
 @Component
 public class SpringFXMLLoader {
 
-    private Logger LOG = LoggerFactory.getLogger(SpringFXMLLoader.class);
+    private final Logger LOG = LoggerFactory.getLogger(SpringFXMLLoader.class);
 
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Autowired
     public SpringFXMLLoader(ApplicationContext applicationContext) {
@@ -43,7 +43,7 @@ public class SpringFXMLLoader {
      * @return the loaded object
      * @throws IOException if the resource could not be loaded
      */
-    public synchronized <TLoad> TLoad load(InputStream inputStream, Class<TLoad> loadType) throws IOException {
+    private synchronized <TLoad> TLoad load(InputStream inputStream, Class<TLoad> loadType) throws IOException {
         LOG.trace("Loading object of type {} from fxml resource {}", loadType.getCanonicalName(), inputStream);
         return this.getFXMLLoader().load(inputStream);
     }
@@ -95,7 +95,7 @@ public class SpringFXMLLoader {
      * @throws IOException if the resource could not be loaded
      * @see FXMLWrapper
      */
-    public synchronized <TLoad, TController> FXMLWrapper<TLoad, TController> loadAndWrap(
+    private synchronized <TLoad, TController> FXMLWrapper<TLoad, TController> loadAndWrap(
         InputStream inputStream,
         Class<TLoad> loadType,
         Class<TController> controllerType) throws IOException {
@@ -117,7 +117,7 @@ public class SpringFXMLLoader {
      * @throws IOException if the resource could not be loaded
      * @see FXMLWrapper
      */
-    public synchronized <TLoad, TController> FXMLWrapper<TLoad, TController> loadAndWrap(
+    private synchronized <TLoad, TController> FXMLWrapper<TLoad, TController> loadAndWrap(
         String pathToFXMLFile,
         Class<TLoad> loadType,
         Class<TController> controllerType) throws IOException {

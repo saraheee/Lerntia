@@ -18,7 +18,7 @@ import java.util.*;
 public class LearnAlgorithmService implements ILearnAlgorithmService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private ILearnAlgorithmDAO learnAlgorithmDAO;
+    private final ILearnAlgorithmDAO learnAlgorithmDAO;
     private Map<Long, Integer> successMap;
     private Map<Long, Integer> failureMap;
     private Map<Long, Double> valueMap;

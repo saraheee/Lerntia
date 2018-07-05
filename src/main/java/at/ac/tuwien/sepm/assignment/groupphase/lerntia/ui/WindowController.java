@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 @Controller
-public class WindowController {
+class WindowController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static String LERNTIA = "[Lerntia] ";
-    private static String ICON = "/icons/main.png";
+    private static final String LERNTIA = "[Lerntia] ";
+    private static final String ICON = "/icons/main.png";
 
     public Stage openNewWindow(String title, FXMLLoader fxmlLoader) {
         var stage = new Stage();

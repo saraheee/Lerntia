@@ -32,7 +32,7 @@ public class LearningQuestionnaireDAOTest {
     private ILearningQuestionnaireDAO learningQuestionnaireDAO;
     private ICourseDAO courseDAO;
 
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
 
     @Before
     public void setUp() {
@@ -40,7 +40,7 @@ public class LearningQuestionnaireDAOTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
-            this.ILearningQuestionnaireDAO(new LearningQuestionnaireDAO((QuestionnaireDAO) questionnaireDAO, jdbcConnectionManager));
+            this.ILearningQuestionnaireDAO(new LearningQuestionnaireDAO(questionnaireDAO, jdbcConnectionManager));
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
 
         } catch (PersistenceException e) {

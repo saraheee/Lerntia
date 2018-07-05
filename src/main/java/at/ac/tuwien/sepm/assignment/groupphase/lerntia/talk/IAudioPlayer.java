@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.assignment.groupphase.lerntia.talk;
 
 import javax.sound.sampled.AudioInputStream;
 
-public interface IAudioPlayer {
+interface IAudioPlayer {
 
     /**
      * Sets a new audio stream.

@@ -25,7 +25,7 @@ public class QuestionnaireServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private IQuestionnaireService questionnaireService;
     private Connection connection;
-    private JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
+    private final JDBCConnectionManager jdbcConnectionManager = new JDBCConnectionManager();
     private ILearningQuestionnaireService learningQuestionnaireService;
 
     @Before
