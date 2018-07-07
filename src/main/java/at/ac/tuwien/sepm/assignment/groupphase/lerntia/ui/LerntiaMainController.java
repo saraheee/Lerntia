@@ -852,17 +852,17 @@ public class LerntiaMainController implements Runnable {
     }
 
     public void stopAudio() {
-        LOG.debug("Stopping audio.");
+        LOG.info("Stopping audio.");
         audioButtonController.stopReading();
     }
 
     public void stopAlgorithm() throws ServiceException {
-        LOG.debug("Stopping algorithm.");
+        LOG.info("Stopping algorithm.");
         lerntiaService.stopAlgorithm();
     }
 
     public void closeConnection() {
-        LOG.debug("Closing connection.");
+        LOG.info("Closing connection.");
         connectionManager.closeConnection();
     }
 

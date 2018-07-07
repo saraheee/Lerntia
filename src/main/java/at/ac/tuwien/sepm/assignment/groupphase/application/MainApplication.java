@@ -93,7 +93,6 @@ public final class MainApplication extends Application {
 
     @Override
     public void stop() {
-        LOG.debug("Stopping application");
         try {
             controller.stopAlgorithm();
             controller.closeConnection();
@@ -105,6 +104,7 @@ public final class MainApplication extends Application {
         }
         context.close();
         Platform.exit();
+        LOG.info("Application closed.");
     }
 
 }

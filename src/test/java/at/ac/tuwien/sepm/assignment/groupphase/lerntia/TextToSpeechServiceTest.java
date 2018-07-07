@@ -55,7 +55,7 @@ public class TextToSpeechServiceTest {
         textToSpeechService.readQuestionAndAnswers(speech);
     }
 
-    @Test(expected = TextToSpeechServiceValidationException.class)
+    @Test(expected = TextToSpeechServiceException.class)
     public void readQuestionAndAnswersWithEmptyValuesShouldFail() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
         var speech = new Speech();
         speech.setQuestion("");
@@ -64,7 +64,7 @@ public class TextToSpeechServiceTest {
         textToSpeechService.readQuestionAndAnswers(speech);
     }
 
-    @Test(expected = TextToSpeechServiceValidationException.class)
+    @Test(expected = TextToSpeechServiceException.class)
     public void readQuestionAndAnswersWithNullValuesShouldFail() throws TextToSpeechServiceValidationException, TextToSpeechServiceException {
         var speech = new Speech();
         speech.setQuestion(null);
