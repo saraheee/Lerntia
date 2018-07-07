@@ -62,10 +62,10 @@ public class AudioController implements Runnable {
                     iTextToSpeechService.readQuestionAndAnswers(tts);
 
                 } catch (TextToSpeechServiceException e) {
-                    LOG.error("Failed to read question and answers.");
+                    LOG.error("Failed to read question and answers. " + e.getCustomMessage());
                     showAudioErrorDialog();
                 } catch (TextToSpeechServiceValidationException e) {
-                    LOG.info("Validation failed for the input text of the speech synthesizer.");
+                    LOG.error("Validation failed for the input text of the speech synthesizer. " + e.getCustomMessage());
                     showValidationFailedDialog();
                 }
             } else {
@@ -88,10 +88,10 @@ public class AudioController implements Runnable {
                     iTextToSpeechService.readSingleAnswer(tts);
 
                 } catch (TextToSpeechServiceException e) {
-                    LOG.error("Failed to read question and answers.");
+                    LOG.error("Failed to read question and answers. " + e.getCustomMessage());
                     showAudioErrorDialog();
                 } catch (TextToSpeechServiceValidationException e) {
-                    LOG.error("Validation failed for the input text of the speech synthesizer.");
+                    LOG.error("Validation failed for the input text of the speech synthesizer. " + e.getCustomMessage());
                     showValidationFailedDialog();
                 }
             } else {
@@ -111,10 +111,10 @@ public class AudioController implements Runnable {
                 iTextToSpeechService.readFeedbackText(tts);
 
             } catch (TextToSpeechServiceException e) {
-                LOG.error("Failed to read the feedback text.");
+                LOG.error("Failed to read the feedback text. " + e.getCustomMessage());
                 showAudioErrorDialog();
             } catch (TextToSpeechServiceValidationException e) {
-                LOG.error("Validation failed for the input text of the speech synthesizer.");
+                LOG.error("Validation failed for the input text of the speech synthesizer. " + e.getCustomMessage());
                 showValidationFailedDialog();
             }
         } else {
