@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -20,7 +21,7 @@ import static org.springframework.util.Assert.notNull;
 public class AudioController implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
+    private final ReentrantLock lock = new ReentrantLock();
     private final ITextToSpeechService iTextToSpeechService;
     private final AlertController alertController;
 
@@ -184,9 +185,14 @@ public class AudioController implements Runnable {
     @Override
     public void run() {
         while (audioButton != null && audioButton.isDefaultButton()) {
-            if (iTextToSpeechService.noCurrentAudio()) {
-                deselectAudioButton();
-                LOG.debug("Deselected the audio button.");
+            lock.lock();
+            try {
+                if (iTextToSpeechService.noCurrentAudio()) {
+                    deselectAudioButton();
+                    LOG.debug("Deselected the audio button.");
+                }
+            } finally {
+                lock.unlock();
             }
         }
     }
