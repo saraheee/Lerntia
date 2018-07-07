@@ -38,12 +38,11 @@ public class AlertController {
     private ImageView imageView;
 
     public void showBigAlert(Alert.AlertType alertType, String title, String header, String content) {
-        LOG.info("Show Standard Alert");
+        LOG.debug("Create big alert.");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;
 
-        LOG.info("Create Big Alert");
         var headerBuilder = new StringBuilder(header);
         while (headerBuilder.length() < MINWIDTH) {
             headerBuilder.append(" ");
@@ -100,7 +99,7 @@ public class AlertController {
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
 
-        LOG.trace("Showing a big alert with title: " + title);
+        LOG.debug("Showing a big alert with title: " + title);
         checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
     }
 
@@ -174,7 +173,7 @@ public class AlertController {
         stage.getIcons().add(new Image("/icons/main.png"));
         alert.setGraphic(imageView);
 
-        LOG.trace("Showing a big alert with title: " + title);
+        LOG.debug("Showing a big diagram alert with title: " + title);
         checkConfirmation(alertType, alert, btnAll, btnFalse, stage);
     }
 
@@ -185,7 +184,7 @@ public class AlertController {
     }
 
     public boolean showCorrectAnswerAlert(String title, String header, String content) {
-        LOG.info("Create correct Answer Alert.");
+        LOG.debug("Create answer alert.");
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.getDialogPane().setContentText(content + SPACE);
@@ -243,13 +242,13 @@ public class AlertController {
         for (var type : dialogPane.getButtonTypes()) {
             ((Button) dialogPane.lookupButton(type)).setOnAction(e -> result.set(type));
         }
-        LOG.trace("Showing an answer alert with title: " + title);
+        LOG.debug("Showing an answer alert with title: " + title);
         stage.showAndWait();
         return result.get() == ButtonType.YES;
     }
 
     public void showStandardAlert(Alert.AlertType alertType, String title, String header, String content) {
-        LOG.info("Show Standard Alert");
+        LOG.info("Create standard alert");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;
@@ -303,7 +302,8 @@ public class AlertController {
         dialogPane.getButtonTypes().setAll(ButtonType.OK);
         var stage = (Stage) dialogPane.getScene().getWindow();
         stage.getIcons().add(new Image("/icons/main.png"));
-        LOG.trace("Showing a standard alert with title: " + title);
+
+        LOG.debug("Showing a standard alert with title: " + title);
         stage.showAndWait();
     }
 
@@ -320,6 +320,7 @@ public class AlertController {
 
 
     public boolean showStandardConfirmationAlert(String title, String header, String content) {
+        LOG.debug("Create standard confirmation alert.");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;
@@ -386,7 +387,7 @@ public class AlertController {
     }
 
     public boolean showBigConfirmationAlert(String title, String header, String content) {
-        LOG.info("Show Standard Alert");
+        LOG.debug("Create big confirmation alert.");
         title = (title == null) ? "" : title;
         header = (header == null) ? "" : header;
         content = (content == null) ? "" : content;
