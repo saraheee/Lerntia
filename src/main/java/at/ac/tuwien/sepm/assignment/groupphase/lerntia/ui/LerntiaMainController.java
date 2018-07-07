@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ILearningQuestion
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.IUserService;
 import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
+import at.ac.tuwien.sepm.assignment.groupphase.util.JDBCConnectionManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,11 +55,13 @@ public class LerntiaMainController implements Runnable {
     private final IUserService simpleUserService;
     private final IExamResultsWriterService iExamResultsWriterService;
     private final DirectoryChooserController directoryChooserController;
+    private final JDBCConnectionManager connectionManager;
+    @FXML
+    private final LearnAlgorithmController learnAlgorithmController;
+    private final ReentrantLock lock = new ReentrantLock();
     private boolean onlyWrongQuestions = false;
-
     private ConfigReader configReaderSpeech = null;
     private String BREAK = null;
-
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -78,8 +81,6 @@ public class LerntiaMainController implements Runnable {
     @FXML
     private AudioController audioButtonController;
     @FXML
-    private final LearnAlgorithmController learnAlgorithmController;
-    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button checkAnswerButton;
@@ -87,13 +88,10 @@ public class LerntiaMainController implements Runnable {
     private Button handInButton;
     @FXML
     private Button algorithmButton;
-
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
-
     private boolean examMode;
     private boolean questionColored = false;
-    private final ReentrantLock lock = new ReentrantLock();
     private String examName;
 
     @Autowired
@@ -106,7 +104,8 @@ public class LerntiaMainController implements Runnable {
         IExamResultsWriterService iExamResultsWriterService,
         LearnAlgorithmController learnAlgorithmController,
         DirectoryChooserController directoryChooserController,
-        IUserService simpleUserService) {
+        IUserService simpleUserService,
+        JDBCConnectionManager connectionManager) {
 
         notNull(lerntiaService, "'lerntiaService' should not be null");
         notNull(audioController, "'audioController' should not be null");
@@ -122,6 +121,7 @@ public class LerntiaMainController implements Runnable {
         this.learnAlgorithmController = learnAlgorithmController;
         this.directoryChooserController = directoryChooserController;
         this.simpleUserService = simpleUserService;
+        this.connectionManager = connectionManager;
     }
 
     @FXML
@@ -654,11 +654,6 @@ public class LerntiaMainController implements Runnable {
         answerController.setAnswerText(answerText);
     }
 
-    public void stopAudio() {
-        LOG.debug("Stop audio");
-        audioButtonController.stopReading();
-    }
-
     public void switchToExamMode() throws ServiceException {
         buttonBar.getButtons().remove(checkAnswerButton);
         buttonBar.getButtons().add(handInButton);
@@ -763,10 +758,6 @@ public class LerntiaMainController implements Runnable {
         question.setCheckedAnswers(checkedAnswers);
     }
 
-    public void stopAlgorithm() throws ServiceException {
-        lerntiaService.stopAlgorithm();
-    }
-
     private String getExamName() {
         return this.examName;
     }
@@ -859,4 +850,20 @@ public class LerntiaMainController implements Runnable {
         zoomedImageController.setKey4pressed(false);
         zoomedImageController.setKey5pressed(false);
     }
+
+    public void stopAudio() {
+        LOG.debug("Stopping audio.");
+        audioButtonController.stopReading();
+    }
+
+    public void stopAlgorithm() throws ServiceException {
+        LOG.debug("Stopping algorithm.");
+        lerntiaService.stopAlgorithm();
+    }
+
+    public void closeConnection() {
+        LOG.debug("Closing connection.");
+        connectionManager.closeConnection();
+    }
+
 }

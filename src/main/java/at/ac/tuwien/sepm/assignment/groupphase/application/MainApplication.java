@@ -29,7 +29,6 @@ import java.lang.invoke.MethodHandles;
 public final class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private Thread textToSpeechThread;
     private AnnotationConfigApplicationContext context;
     private ITextToSpeechService iTextToSpeechService;
     private LerntiaMainController controller;
@@ -86,7 +85,7 @@ public final class MainApplication extends Application {
                 var alertController = new AlertController();
                 alertController.showBigAlert(Alert.AlertType.ERROR, "Sprachsynthesizer konnte nicht gestartet werden",
                     "Der Sprachsynthesizer konnte nicht gestartet werden!",
-                    "Bitte Java 10.0.1 herunterladen, um die Sprachausgabe verwenden zu können!");
+                    "Bitte Java 10.0.1 installieren, um die Sprachausgabe verwenden zu können!");
             }
         });
         LOG.debug("Application startup complete");
@@ -96,8 +95,8 @@ public final class MainApplication extends Application {
     public void stop() {
         LOG.debug("Stopping application");
         try {
-            LOG.info("Stopping the learning algorithm");
             controller.stopAlgorithm();
+            controller.closeConnection();
         } catch (ServiceException e) {
             LOG.debug("Can't shutdown the learning algorithm.");
         }

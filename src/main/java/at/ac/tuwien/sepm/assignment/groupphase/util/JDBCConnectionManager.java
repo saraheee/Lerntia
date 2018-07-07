@@ -55,11 +55,11 @@ public class JDBCConnectionManager {
             closeConnection();
             throw new PersistenceException("Could not initialize the database: " + e.getLocalizedMessage());
         } catch (ClassNotFoundException e) {
-            throw new PersistenceException("Could not initialize the database. Class not found!");
+            throw new PersistenceException("Could not initialize the database. Class not found! " + e.getLocalizedMessage());
         }
     }
 
-    private void closeConnection() {
+    public void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
