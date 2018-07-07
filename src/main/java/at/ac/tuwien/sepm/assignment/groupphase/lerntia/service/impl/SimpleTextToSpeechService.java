@@ -11,6 +11,7 @@ import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
+import marytts.util.MaryRuntimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private MaryInterface maryTTS;
     private boolean singleAnswer = false;
     private boolean feedbackText = false;
+    private boolean notInitialized = false;
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
@@ -57,8 +59,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             maryTTS = new LocalMaryInterface();
             maryTTS.setVoice(VOICE);
         } catch (MaryConfigurationException e) {
+            notInitialized = true;
             LOG.error("Failed to initialize speech synthesizer!");
-            throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
+            throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer: " + e.getLocalizedMessage());
         }
         if (playWelcomeText) {
             playText(WELCOME);
@@ -71,7 +74,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         if (maryTTS != null) {
             LOG.trace("maryTTS is NOT null. Calling stopSpeaking method.");
             stopSpeaking();
-            LOG.trace("stopSpeaking method is called. Calling playText method.");
+            try {
+                MaryRuntimeUtils.ensureMaryStarted();
+            } catch (Exception e) {
+                notInitialized = true;
+                throw new TextToSpeechServiceException("Speech synthesizer is not started: " + e.getLocalizedMessage());
+            }
             getTextToRead(textToSpeech);
             LOG.trace("playText method is called.");
         } else {
@@ -79,11 +87,17 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 LOG.trace("maryTTS is null. Creating a new mary interface.");
                 maryTTS = new LocalMaryInterface();
                 LOG.trace("mary interface is created. maryTTS is not null anymore.");
+                MaryRuntimeUtils.ensureMaryStarted();
                 maryTTS.setVoice(VOICE);
                 getTextToRead(textToSpeech);
+                notInitialized = false;
             } catch (MaryConfigurationException e) {
+                notInitialized = true;
                 LOG.error("Failed to initialize speech synthesizer!");
-                throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer.");
+                throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer: " + e.getLocalizedMessage());
+            } catch (Exception e) {
+                notInitialized = true;
+                throw new TextToSpeechServiceException("Speech synthesizer is not started: " + e.getLocalizedMessage());
             }
         }
     }
@@ -96,6 +110,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             playText(textToSpeech.getFeedbackText());
             feedbackText = false;
         } else {
+            try {
+                MaryRuntimeUtils.ensureMaryStarted();
+            } catch (Exception e) {
+                notInitialized = true;
+                throw new TextToSpeechServiceException("Speech synthesizer is not started: " + e.getLocalizedMessage());
+            }
             playText(getQuestionAndAnswerText(textToSpeech));
         }
     }
@@ -116,6 +136,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     private void playText(String text) throws TextToSpeechServiceException {
         LOG.trace("Entering method playText.");
+        if (notInitialized && !singleAnswer && !feedbackText) {
+            throw new TextToSpeechServiceException("Speech synthesizer is not started!");
+        } else if (notInitialized) {
+            return;
+        }
         try (var audio = maryTTS.generateAudio(replaceUmlauts(filterTextInParenthesis(text)))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
@@ -127,11 +152,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
         } catch (SynthesisException e) {
             LOG.error("Failed to generate audio with the speech synthesizer!");
-            throw new TextToSpeechServiceException("Failed to generate audio.");
+            throw new TextToSpeechServiceException("Failed to generate audio: " + e.getLocalizedMessage());
 
         } catch (IOException e) {
             LOG.error("Failed or interrupted IO operation occurred during speech synthesis.");
-            throw new TextToSpeechServiceException("Failed or interrupted IO operation.");
+            throw new TextToSpeechServiceException("Failed or interrupted IO operation: " + e.getLocalizedMessage());
         }
     }
 

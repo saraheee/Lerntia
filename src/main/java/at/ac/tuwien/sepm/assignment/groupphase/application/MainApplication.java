@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -25,7 +26,7 @@ import java.lang.invoke.MethodHandles;
 
 @Component
 @ComponentScan("at.ac.tuwien.sepm.assignment.groupphase")
-public final class MainApplication extends Application implements Runnable {
+public final class MainApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private Thread textToSpeechThread;
@@ -75,8 +76,19 @@ public final class MainApplication extends Application implements Runnable {
         primaryStage.show();
         primaryStage.toFront();
         iTextToSpeechService = new SimpleTextToSpeechService();
-        textToSpeechThread = new Thread(new MainApplication());
-        textToSpeechThread.start();
+
+        Platform.runLater(() -> {
+            iTextToSpeechService = new SimpleTextToSpeechService();
+            try {
+                iTextToSpeechService.playWelcomeText();
+            } catch (TextToSpeechServiceException e) {
+                LOG.error("Failed to play welcome text with the speech synthesizer! " + e.getLocalizedMessage());
+                var alertController = new AlertController();
+                alertController.showBigAlert(Alert.AlertType.ERROR, "Sprachsynthesizer konnte nicht gestartet werden",
+                    "Der Sprachsynthesizer konnte nicht gestartet werden!",
+                    "Bitte Java 10.0.1 herunterladen, um die Sprachausgabe verwenden zu können!");
+            }
+        });
         LOG.debug("Application startup complete");
     }
 
@@ -92,25 +104,8 @@ public final class MainApplication extends Application implements Runnable {
         if (iTextToSpeechService != null) {
             controller.stopAudio();
         }
-        try {
-            LOG.debug("Starting thread interrupt");
-            textToSpeechThread.interrupt();
-            LOG.info("Thread is interrupted");
-        } catch (IllegalThreadStateException e) {
-            LOG.debug("Interrupting textToSpeech thread!");
-        }
         context.close();
         Platform.exit();
-    }
-
-    @Override
-    public void run() {
-        iTextToSpeechService = new SimpleTextToSpeechService();
-        try {
-            iTextToSpeechService.playWelcomeText();
-        } catch (TextToSpeechServiceException e) {
-            LOG.error("Failed to play welcome text with the speech synthesizer!");
-        }
     }
 
 }
