@@ -21,6 +21,10 @@ import java.util.Map;
 public class MainLerntiaService implements IMainLerntiaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final ILearningQuestionnaireService learningQuestionnaireService;
+    private final IQuestionService questionService;
+    private final IQuestionnaireQuestionService questionnaireQuestionService;
+    private final ILearnAlgorithmService learnAlgorithmService;
     private int correctAnswered;
     private int wrongAnswered;
     private Map<Long, Question> questionMap;
@@ -39,11 +43,6 @@ public class MainLerntiaService implements IMainLerntiaService {
     private int currentQuestionIndex;
     private boolean examMode;
 
-    private final ILearningQuestionnaireService learningQuestionnaireService;
-    private final IQuestionService questionService;
-    private final IQuestionnaireQuestionService questionnaireQuestionService;
-    private final ILearnAlgorithmService learnAlgorithmService;
-
     @Autowired
     public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
                               IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService
@@ -61,13 +60,13 @@ public class MainLerntiaService implements IMainLerntiaService {
         if (customList == null || customList.size() <= 0) {
             throw new ServiceValidationException("Keine Prüfungsfragen in der Liste vorhanden!");
         }
-        LOG.info("Set custom Exam Questionnaire");
+        LOG.info("Set custom exam questionnaire");
         stopAlgorithm();
         resetWrongQuestionList();
         questionList = customList;
         listCounter = questionList.size();
         currentQuestionIndex = -1;
-        LOG.info("First custom Exam question found.");
+        LOG.debug("First custom exam question found.");
     }
 
     @Override
@@ -77,7 +76,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             //or if the option was selected that only wrong question are to be shown
             stopAlgorithm();
             resetWrongQuestionList();
-            LOG.info("Get questions from an Exam Questionnaire.");
+            LOG.info("Get questions from an exam questionnaire.");
             listCounter = 0;
             questionnaireQuestionsList = new ArrayList<>();
             questionList = new ArrayList<>();
@@ -86,15 +85,15 @@ public class MainLerntiaService implements IMainLerntiaService {
             questionnaireQuestion.setQid(eQ.getId());
             questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
             getExamQuestionFromList(searchParameters);
-            LOG.info("All Exam Questionnaire Questions info found.");
-            LOG.info("Send required question search parameters to retrieve");
+            LOG.debug("All exam questionnaire questions info found.");
+            LOG.debug("Send required question search parameters to retrieve");
             questionList = questionService.search(searchParameters);
             for (Question ignored : questionList) {
                 listCounter++;
             }
             currentQuestionIndex = -1;
 
-            LOG.info("All Exam Questions set.");
+            LOG.info("All exam questions set.");
         } catch (Exception e) {
             throw new ServiceException("Can't retrieve exam questionnaire.");
         }
@@ -134,7 +133,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             algorithmList = null;
             algorithmList = new ArrayList<>();
         }
-        LOG.info("Get all questions from a Learning Questionnaire.");
+        LOG.debug("Get all questions from a learning questionnaire.");
         listCounter = 0;
         algorithmListCounter = 0;
         questionnaireQuestionsList = new ArrayList<>();
@@ -144,10 +143,10 @@ public class MainLerntiaService implements IMainLerntiaService {
         QuestionnaireQuestion questionnaireQuestion = new QuestionnaireQuestion();
         questionnaireQuestion.setQid(lQ.getId());
         questionnaireQuestionsList = questionnaireQuestionService.search(questionnaireQuestion);
-        LOG.info("All info regarding Questions found.");
+        LOG.debug("All info regarding questions found.");
         getLearningQuestionFromList(searchParameters, questionLearnAlgorithmList);
-        LOG.info("All questions from the selected LearningQuestionnaire found.");
-        LOG.info("Search for questions in the Database.");
+        LOG.debug("All questions from the selected learning questionnaire found.");
+        LOG.debug("Search for questions in the Database.");
         questionList = questionService.search(searchParameters);
         algorithmList = learnAlgorithmService.prepareQuestionValues(questionLearnAlgorithmList);
         for (Question q : questionList) {
@@ -155,7 +154,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             algorithmListCounter++;
             questionMap.put(q.getId(), q);
         }
-        LOG.info("All Questions from the LearningQuestionnaire are set.");
+        LOG.info("All questions from the learning questionnaire are set.");
     }
 
 
@@ -163,22 +162,22 @@ public class MainLerntiaService implements IMainLerntiaService {
     public Question getNextQuestionFromList() throws ServiceException {
         if (examMode) {
             try {
-                LOG.info("Get next Exam Question from Exam Questionnaire.");
+                LOG.info("Get next exam question from exam questionnaire.");
                 if (!(currentQuestionIndex + 1 > listCounter)) {
                     currentQuestion = new Question();
                     currentQuestion = questionList.get(++currentQuestionIndex);
-                    LOG.info("Next Exam question.");
+                    LOG.info("Next exam question.");
                     return currentQuestion;
                 } else {
                     currentQuestion = questionList.get(currentQuestionIndex);
                 }
             } catch (IndexOutOfBoundsException e) {
-                throw new ServiceException("Reached end of Exam Questionnaire");
+                throw new ServiceException("Reached end of exam questionnaire");
             }
         } else {
             try {
                 if (learnAlgorithm && showOnlyWrongQuestions) {
-                    LOG.info("Get next algorithmic Question while the 'Wrong Question List'");
+                    LOG.info("Get next algorithmic question from the 'wrong question list'");
                     if (wrongQuestions.size() != 0) {
                         if (getNextQuestionFromWrongQuestionList()) {
                             return currentQuestion;
@@ -187,13 +186,13 @@ public class MainLerntiaService implements IMainLerntiaService {
                         stopAlgorithm();
                         resetWrongQuestionList();
                         getFirstQuestion();
-                        throw new ServiceException("List of wrong questions is Empty");
+                        throw new ServiceException("List of wrong questions is empty");
                     }
                 } else if (learnAlgorithm) {
                     if (!(currentAlgorithmQuestionIndex + 1 > algorithmListCounter)) {
                         currentQuestion = new Question();
                         currentQuestion = questionMap.get(algorithmList.get(++currentAlgorithmQuestionIndex));
-                        LOG.info("Found next question determined by Learn Algorithm.");
+                        LOG.debug("Found next question determined by learn algorithm.");
                         return currentQuestion;
                     }
                 } else if (showOnlyWrongQuestions) {
@@ -204,20 +203,20 @@ public class MainLerntiaService implements IMainLerntiaService {
                     } else {
                         resetWrongQuestionList();
                         getFirstQuestion();
-                        throw new ServiceException("List of wrong questions is Empty");
+                        throw new ServiceException("List of wrong questions is empty");
                     }
                 } else {
-                    LOG.info("Get next Question from Questionnaire.");
+                    LOG.info("Get next question from questionnaire.");
                     if (!(currentQuestionIndex + 1 > listCounter)) {
                         currentQuestion = new Question();
                         currentQuestion = questionList.get(++currentQuestionIndex);
                         return currentQuestion;
                     }
-                    LOG.info("Next question.");
+                    LOG.debug("Next question.");
                 }
                 return currentQuestion;
             } catch (IndexOutOfBoundsException e) {
-                throw new ServiceException("Reached end of Question List");
+                throw new ServiceException("Reached end of question list");
             }
         }
         return currentQuestion;
@@ -227,7 +226,7 @@ public class MainLerntiaService implements IMainLerntiaService {
         if (!(currentWrongQuestionIndex + 1 > wrongQuestions.size())) {
             currentQuestion = new Question();
             currentQuestion = wrongQuestions.get(++currentWrongQuestionIndex);
-            LOG.info("Found next question that has been answered wrong previously.");
+            LOG.debug("Found next question that has been answered wrong previously.");
             return true;
         }
         return false;
@@ -240,32 +239,32 @@ public class MainLerntiaService implements IMainLerntiaService {
                 if (!(currentWrongQuestionIndex - 1 > 0)) {
                     currentQuestion = new Question();
                     currentQuestion = wrongQuestions.get(--currentWrongQuestionIndex);
-                    LOG.info("Found previous question that has been answered wrong previously.");
+                    LOG.debug("Found previous question that has been answered wrong previously.");
                     return currentQuestion;
                 }
             } else if (learnAlgorithm) {
-                LOG.info("Get previous question determined by the Learn Algorithm");
+                LOG.debug("Get previous question determined by the Learn Algorithm");
                 if (!(currentAlgorithmQuestionIndex - 1 < 0)) {
                     currentQuestion = new Question();
                     currentQuestion = questionMap.get(algorithmList.get(--currentAlgorithmQuestionIndex));
-                    LOG.info("Found previous question determined by the Learn Algorithm.");
+                    LOG.debug("Found previous question determined by the learn algorithm.");
                     return currentQuestion;
                 }
             } else if (showOnlyWrongQuestions) {
                 if (!(currentWrongQuestionIndex - 1 < 0)) {
                     currentQuestion = new Question();
                     currentQuestion = wrongQuestions.get(--currentWrongQuestionIndex);
-                    LOG.info("Found previous question that has been answered wrong previously.");
+                    LOG.debug("Found previous question that has been answered wrong previously.");
                     return currentQuestion;
                 }
             } else {
-                LOG.info("Get previous Question from Questionnaire");
+                LOG.debug("Get previous question from questionnaire");
                 if (!(currentQuestionIndex - 1 < 0)) {
                     currentQuestion = new Question();
                     currentQuestion = questionList.get(--currentQuestionIndex);
                     return currentQuestion;
                 }
-                LOG.info("Previous Question.");
+                LOG.debug("Previous Question.");
             }
             return currentQuestion;
         } catch (IndexOutOfBoundsException e) {
@@ -275,7 +274,7 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public Question loadQuestionnaireAndGetFirstQuestion() throws ServiceException {
-        LOG.info("Prepare/reset Question List and prepare first Question in the List.");
+        LOG.debug("Reset question list and prepare first question in the list.");
         if (wrongQuestions == null) {
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
@@ -287,7 +286,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             currentEQ = null;
         }
         if (currentLQ == null) {
-            throw new ServiceException("No Questionnaire has been selected yet.");
+            throw new ServiceException("No questionnaire has been selected yet.");
         }
         getQuestionsFromLearningQuestionnaire(currentLQ);
         if (!learnAlgorithm) {
@@ -297,27 +296,27 @@ public class MainLerntiaService implements IMainLerntiaService {
             currentQuestionIndex = 0;
             currentAlgorithmQuestionIndex = -1;
         }
-        LOG.info("First question found.");
+        LOG.debug("First question found.");
         return getNextQuestionFromList();
     }
 
     @Override
     public Question getFirstQuestion() throws ServiceException {
         try {
-            LOG.info("Get first Question");
+            LOG.debug("Get first question");
             currentAlgorithmQuestionIndex = 0;
             currentWrongQuestionIndex = 0;
             if (learnAlgorithm && showOnlyWrongQuestions && wrongQuestions.size() > 0) {
                 currentQuestion = wrongQuestions.get(0);
                 currentWrongQuestionIndex = 0;
-                LOG.info("First Question Found");
+                LOG.debug("First question found");
                 return currentQuestion;
             } else if (learnAlgorithm && showOnlyWrongQuestions) { // wrongQuestions.size() is zero
                 currentAlgorithmQuestionIndex = 0;
-                throw new ServiceException("No wrong Questions available");
+                throw new ServiceException("No wrong questions available");
             } else if (learnAlgorithm) {
                 currentAlgorithmQuestionIndex = 0;
-                LOG.info("Revert to first question in the Algorithm List.");
+                LOG.debug("Revert to first question in the algorithm list.");
                 currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
                 wrongQuestions = new ArrayList<>();
                 currentWrongQuestionIndex = 0;
@@ -327,9 +326,9 @@ public class MainLerntiaService implements IMainLerntiaService {
                 currentWrongQuestionIndex = 0;
                 return currentQuestion;
             } else if (showOnlyWrongQuestions) { // wrongQuestions.size() is zero
-                throw new ServiceException("No wrong Questions available");
+                throw new ServiceException("No wrong questions available");
             } else {
-                LOG.info("Get first Question of the Question List.");
+                LOG.debug("Get first question of the question list.");
                 currentQuestion = questionList.get(0);
                 currentQuestionIndex = 0;
                 wrongQuestions = new ArrayList<>();
@@ -347,14 +346,14 @@ public class MainLerntiaService implements IMainLerntiaService {
         if (learnAlgorithm) {
             if (answersCorrect) {
                 correctAnswered++;
-                LOG.info("Send to update Map");
+                LOG.info("Send to update map");
                 learnAlgorithmService.updateSuccessValue(question);
                 if (wrongQuestions.contains(question)) {
                     wrongQuestions.remove(question);
                     currentWrongQuestionIndex--;
                 }
             } else { // answers not correct
-                LOG.info("Send to failure Map");
+                LOG.info("Send to failure map");
                 wrongAnswered++;
                 learnAlgorithmService.updateFailureValue(question);
                 if (!wrongQuestions.contains(question)) {
@@ -379,7 +378,7 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public List<Question> getQuestions() {
-        LOG.info("Get all questions.");
+        LOG.debug("Get all questions.");
         return questionList;
     }
 
@@ -390,7 +389,7 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public void stopAlgorithm() throws ServiceException {
-        LOG.info("Turn off Algorithm while its on Exam Mode.");
+        LOG.debug("Turn off algorithm.");
         currentAlgorithmQuestionIndex = 0;
         showOnlyWrongQuestions = false;
         learnAlgorithm = false;
@@ -418,15 +417,15 @@ public class MainLerntiaService implements IMainLerntiaService {
     @Override
     public Question restoreQuestionsAndGetFirst() {
         if (learnAlgorithm && showOnlyWrongQuestions) {
-            LOG.info("Get first Question of the Question List.");
-            LOG.info("Revert to first question in the Algorithm List.");
+            LOG.debug("Get first question of the question list.");
+            LOG.debug("Revert to first question in the algorithm list.");
             currentQuestion = questionMap.get(algorithmList.get(currentAlgorithmQuestionIndex));
             wrongQuestions = new ArrayList<>();
             currentWrongQuestionIndex = 0;
             showOnlyWrongQuestions = false;
             return currentQuestion;
         } else {
-            LOG.info("Get first Question of the Question List.");
+            LOG.debug("Get first question of the question list.");
             currentQuestion = questionList.get(0);
             currentQuestionIndex = 0;
             wrongQuestions = new ArrayList<>();
@@ -437,7 +436,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     }
 
     private void resetWrongQuestionList() {
-        LOG.info("Reset Wrong Question List");
+        LOG.info("Reset wrong question list");
         showOnlyWrongQuestions = false;
         if (wrongQuestions != null) {
             wrongQuestions.clear();
@@ -480,7 +479,7 @@ public class MainLerntiaService implements IMainLerntiaService {
             return 0.0;
         }
         double percent = base != 0 ? (share / base) * 100.00 : 0;
-        LOG.info("Get Percentage of correctly answered questions");
+        LOG.info("Get percentage of correctly answered questions");
         int temp = (int) (percent * Math.pow(10, 2));
         return ((double) temp) / Math.pow(10, 2);
     }
@@ -498,7 +497,7 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Override
     public void setLearnAlgorithmStatus(boolean b) {
-        LOG.info("Set Learn Algorithm Status to: " + b);
+        LOG.info("Set learn algorithm status to: " + b);
         this.learnAlgorithm = b;
     }
 }
