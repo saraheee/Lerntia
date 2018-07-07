@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>at.ac.tuwien.sepm.assignment.groupphase</groupId>
-    <artifactId>ss18_sepm_qse_08<!-- add your semester and group number here --></artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <artifactId>lerntia</artifactId>
+    <version>3.1.1</version>
 
     <properties>
         <!-- build properties -->

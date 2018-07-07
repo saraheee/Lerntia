@@ -46,11 +46,11 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             throw new PersistenceException("Lernalgorithmus ist null!");
         }
         try {
-            LOG.info("Prepare Create Statement for QuestionLearnAlgorithm.");
+            LOG.debug("Prepare create-statement for QuestionLearnAlgorithm.");
             try (PreparedStatement psCreate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_CREATE_STATEMENT)) {
                 psCreate.setLong(1, questionLearnAlgorithm.getID());
                 psCreate.executeUpdate();
-                LOG.info("Create statement for QuestionLearnAlgorithm successfully sent.");
+                LOG.debug("Create statement for QuestionLearnAlgorithm successfully sent.");
             }
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO CREATE Fehler: Der Lernalgorithmus konnte nicht erzeugt werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
@@ -63,7 +63,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             throw new PersistenceException("Die Liste der Fragen des Lernalgorithmus ist null!");
         }
         try (PreparedStatement psUpdate = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_UPDATE_STATEMENT)) {
-            LOG.info("Create list of update statements for QuestionLearnAlgorithms");
+            LOG.debug("Create list of update statements for QuestionLearnAlgorithms");
             for (QuestionLearnAlgorithm questionLearnAlgorithm : questionLearnAlgorithmList) {
                 psUpdate.setInt(1, questionLearnAlgorithm.getSuccessValue());
                 psUpdate.setInt(2, questionLearnAlgorithm.getFailureValue());
@@ -71,7 +71,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
                 psUpdate.setLong(4, questionLearnAlgorithm.getID());
                 psUpdate.executeUpdate();
             }
-            LOG.info("All QuestionLearnAlgorithms have been successfully updated");
+            LOG.debug("All QuestionLearnAlgorithms have been successfully updated");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO UPDATE Fehler: Der Lernalgorithmus konnte nicht aktuelisiert werden. Bitte überprüfen, ob alle notwendigen Felder ausgefüllt sind und ob die Datenbankverbindung gültig ist.");
         }
@@ -83,10 +83,10 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             throw new PersistenceException("Lernalgorithmus ist null!");
         }
         try (PreparedStatement psDelete = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_DELETE_STATEMENT)) {
-            LOG.info("Create Delete statement for QuestionLearnAlgorithm.");
+            LOG.debug("Create delete-statement for QuestionLearnAlgorithm.");
             psDelete.setLong(1, questionLearnAlgorithm.getID());
             psDelete.executeUpdate();
-            LOG.info("Delete Statement for QuestionLearnAlgorithm has been successfully sent");
+            LOG.debug("Delete-statement for QuestionLearnAlgorithm has been successfully sent");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO DELETE Fehler: Der Lernalgorithmus konnte nicht gelöscht werden. Bitte überprüfen, ob die gegebene ID oder die Datenbankverbindung gültig ist.");
         }
@@ -98,7 +98,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             try (ResultSet rsReadAll = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_READALL_STATEMENT).executeQuery()) {
                 List<QuestionLearnAlgorithm> readResults = new ArrayList<>();
                 getResults(rsReadAll, readResults);
-                LOG.info("Found all LearnAlgorithm Values.");
+                LOG.debug("Found all learn algorithm values.");
                 return readResults;
             }
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
                 readResults.add(questionLearnAlgorithm);
             }
         } catch (SQLException e) {
-            throw new PersistenceException("Ein Fehler ist passiert, während des Erzeugens der Resultat des Lernalgorithmus");
+            throw new PersistenceException("Ein Fehler ist aufgetreten, während das Resultat des Lernalgorithmus erzeugt wird.");
         }
     }
 
@@ -133,7 +133,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             throw new PersistenceException("Lernalgorithmus ist null!");
         }
         try {
-            LOG.info("Create search Statement for QuestionLearnAlgorithm,");
+            LOG.debug("Create search-statement for QuestionLearnAlgorithm");
             QuestionLearnAlgorithm searchParameter;
             List<QuestionLearnAlgorithm> searchResults = new ArrayList<>();
             StringBuilder parameters = new StringBuilder();
@@ -146,7 +146,7 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             String searchStatement = SQL_QUESTIONLEARNALGORITHM_SEARCH_STATEMENT + parameters;
             try (ResultSet rsSearch = connection.prepareStatement(searchStatement).executeQuery()) {
                 getResults(rsSearch, searchResults);
-                LOG.info("All search results have been found.");
+                LOG.debug("All search results have been found.");
                 return searchResults;
             }
         } catch (SQLException e) {
@@ -160,11 +160,11 @@ public class LearnAlgorithmDAO implements ILearnAlgorithmDAO {
             throw new PersistenceException("Lernalgorithmus ist null!");
         }
         try (PreparedStatement psReset = connection.prepareStatement(SQL_QUESTIONLEARNALGORITHM_RESET_STATEMENT)) {
-            LOG.info("Prepare reset statement for QuestionLearnAlgorithm.");
+            LOG.debug("Prepare reset statement for QuestionLearnAlgorithm.");
 
             psReset.setLong(1, questionLearnAlgorithm.getID());
             psReset.executeUpdate();
-            LOG.info("Reset Statement successfully sent.");
+            LOG.debug("Reset-statement successfully sent.");
         } catch (SQLException e) {
             throw new PersistenceException("LearnAlgorithmDAO RESET Fehler: Der Lernalgorithmus konnte nicht neugestartet werden. Bitte überprüfen, ob mehrere notwendigen Felder nicht gegeben sind und ob die Datenbankverbindung gültig ist.");
         }
