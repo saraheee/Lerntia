@@ -189,7 +189,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         LOG.trace("Entering method stopSpeaking.");
         if (audioPlayer != null) {
             audioPlayer.cancel();
-            LOG.info("Stopping speech synthesis.");
+            LOG.debug("Stopping speech synthesis.");
         } else {
             LOG.debug("audioPlayer is already null.");
         }
