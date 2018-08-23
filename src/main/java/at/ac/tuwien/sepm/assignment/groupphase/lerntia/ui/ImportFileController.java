@@ -42,10 +42,10 @@ public class ImportFileController {
     private final IQuestionnaireImportService qService;
     private final AlertController alertController;
     private final WindowController windowController;
+    private final ObservableList<String> choices = FXCollections.observableArrayList();
     private File file;
     private File directory;
     private List<Course> courseData = new ArrayList<>();
-    private final ObservableList<String> choices = FXCollections.observableArrayList();
     private ObservableList<Course> courses;
 
     @FXML
@@ -167,7 +167,7 @@ public class ImportFileController {
                 Node source = (Node) actionEvent.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
-            } catch (Exception e) {
+            } catch (ServiceException e) {
                 qService.deletePictures(new File(System.getProperty("user.dir") + File.separator + "img" + File.separator + name));
                 alertController.showStandardAlert(Alert.AlertType.ERROR, "Import fehlgeschlagen", "Fehler", e.getMessage());
             }

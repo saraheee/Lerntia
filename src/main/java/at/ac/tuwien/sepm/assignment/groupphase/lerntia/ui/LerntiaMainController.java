@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui;
 
-import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ServiceException;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.dto.*;
@@ -61,7 +60,7 @@ public class LerntiaMainController implements Runnable {
     private final ReentrantLock lock = new ReentrantLock();
     private boolean onlyWrongQuestions = false;
     private ConfigReader configReaderSpeech = null;
-    private String BREAK = null;
+    private String BREAK = "....";
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -133,18 +132,6 @@ public class LerntiaMainController implements Runnable {
         } catch (ControllerException e) {
             //showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
-        }
-
-        if (configReaderSpeech == null || BREAK == null) {
-            try {
-                configReaderSpeech = new ConfigReader("speech");
-                BREAK = configReaderSpeech.getValue("break");
-                // check if the properties files are present
-                configReaderSpeech.checkIfAllPropertiesFilesAreProvided();
-                LOG.debug("All propertiesFiles have been created.");
-            } catch (ConfigReaderException e) {
-                alertController.showStandardAlert(Alert.AlertType.ERROR, "Properties nicht definiert", "Properties Dateien nicht gefunden", e.getCustomMessage());
-            }
         }
     }
 
@@ -481,7 +468,7 @@ public class LerntiaMainController implements Runnable {
                         "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
                     lerntiaService.resetCounter();
 
-                } else if (!e1.getMessage().contains("List of wrong questions is Empty")) {
+                } else if (!e1.getMessage().contains("List of wrong questions is empty")) {
                     alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
                         "Alle zuvor falsch beantworteten Fragen wurden durchgegangen",
                         "Es gibt noch Fragen, die falsch beantwortet wurden." + "\n" +
@@ -489,10 +476,9 @@ public class LerntiaMainController implements Runnable {
                     lerntiaService.resetCounter();
 
                 }
-                if (e1.getMessage().contains("List of wrong questions is Empty")) {
+                if (e1.getMessage().contains("List of wrong questions is empty")) {
                     alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
-                        "Es gibt keine falsch beantworteten Fragen mehr." +
-                            "Die erste Frage wird wieder angezeigt.");
+                        "Es gibt keine falsch beantworteten Fragen mehr. Die erste Frage wird wieder angezeigt.");
                     lerntiaService.resetCounter();
                     alertController.setOnlyWrongQuestions(false);
                 }
@@ -513,11 +499,10 @@ public class LerntiaMainController implements Runnable {
                         onlyWrongQuestions = false;
                         question = lerntiaService.restoreQuestionsAndGetFirst();
                         showQuestionAndAnswers();
-                    } else if (e.getCustomMessage().contains("List of wrong questions is Empty.")) {
+                    } else if (e.getCustomMessage().contains("List of wrong questions is empty.")) {
                         lerntiaService.resetCounter();
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
-                            "Es gibt keine falsch beantworteten Fragen mehr." +
-                                "Die erste Frage wird wieder angezeigt.");
+                            "Es gibt keine falsch beantworteten Fragen mehr. Die erste Frage wird wieder angezeigt.");
                         lerntiaService.resetCounter();
                         alertController.setOnlyWrongQuestions(false);
                         onlyWrongQuestions = false;

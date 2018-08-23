@@ -24,11 +24,24 @@ public class SimpleQuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IQuestionDAO questionDAO;
+    private int maxLengthQuestion = 200;
+    private int maxLengthAnswer = 200;
+    private int minHeightPicture = 200;
+    private int minWidthPicture = 200;
     private ConfigReader configReaderQuestions = null;
 
     @Autowired
     public SimpleQuestionService(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
+    }
+
+    private static boolean isInteger(String text) {
+        try {
+            Integer.parseInt(text);
+        } catch (NumberFormatException | NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -106,11 +119,10 @@ public class SimpleQuestionService implements IQuestionService {
                 throw new ServiceException(e.getCustomMessage());
             }
         }
-
-        var maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion");
-        var maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer");
-        var maxHeightPicture = configReaderQuestions.getValueInt("maxHeightPicture");
-        var maxWidthPicture = configReaderQuestions.getValueInt("maxWidthPicture");
+        maxLengthQuestion = configReaderQuestions.getValueInt("maxLengthQuestion") != 0 ? configReaderQuestions.getValueInt("maxLengthQuestion") : maxLengthQuestion;
+        maxLengthAnswer = configReaderQuestions.getValueInt("maxLengthAnswer") != 0 ? configReaderQuestions.getValueInt("maxLengthAnswer") : maxLengthAnswer;
+        minHeightPicture = configReaderQuestions.getValueInt("minHeightPicture") != 0 ? configReaderQuestions.getValueInt("minHeightPicture") : minHeightPicture;
+        minWidthPicture = configReaderQuestions.getValueInt("minWidthPicture") != 0 ? configReaderQuestions.getValueInt("minWidthPicture") : minWidthPicture;
 
         try {
             configReaderQuestions.close();
@@ -129,12 +141,12 @@ public class SimpleQuestionService implements IQuestionService {
 
         if (question.getQuestionText().trim().equals("")) {
             error = true;
-            message.append("Ein Fragetext muss angegeben werden!\n");
+            message.append("In der ").append(question.getIndex()).append(".Frage von oben wurde kein Fragetext angegeben!\n");
         }
 
         if (question.getQuestionText().length() > maxLengthQuestion) {
             error = true;
-            message.append("Die Frage ist zu lang und kann daher nicht angezeigt werden!\n");
+            message.append("Die ").append(question.getIndex()).append(".Fragestellung von oben ist zu lang und kann daher nicht angezeigt werden!\n");
         }
 
         // -------------------------------------------------------------------------------------------------------------
@@ -155,16 +167,16 @@ public class SimpleQuestionService implements IQuestionService {
 
         if (numberOfAnswersPresent < 2) {
             error = true;
-            message.append("Es müssen mindestens 2 Antwortmöglichkeiten vorhanden sein!\n");
+            message.append("In der ").append(question.getIndex()).append(".Frage von oben wurden weniger als 2 Antwortmöglichkeiten angegeben. Es müssen mindestens 2 Antwortmöglickeiten verfügbar sein!\n");
         }
 
         // answers not too long
         for (var i = 0; i < allAnswers.size(); i++) {
 
-            // answer is not "" and longer than 200 chars
+            // answer is not "" and longer than the defined limit
             if ((allAnswers.get(i) != null && !allAnswers.get(i).equals("")) && (allAnswers.get(i).length() > maxLengthAnswer)) {
                 error = true;
-                message.append("Antwort ").append(i).append(" ist zu lang und kann daher nicht angezeigt werden!\n");
+                message.append("In der ").append(question.getIndex()).append(".Frage von oben ist die ").append(i + 1).append(".Antwort zu lang und kann daher nicht angezeigt werden!\n");
             }
         }
 
@@ -178,7 +190,7 @@ public class SimpleQuestionService implements IQuestionService {
         //check if the correct answers can be parsed to an integer
         if (!isInteger(correctAnswers)) {
             error = true;
-            message.append("Die Antwortnummern beinhalten ungültige Zeichen!\n");
+            message.append("In der ").append(question.getIndex()).append(".Frage von oben enthält die Eingabe der korrekten Antwortnummern ungültige Zeichen!\n");
             throw new ServiceException(message.toString());
         }
 
@@ -191,14 +203,14 @@ public class SimpleQuestionService implements IQuestionService {
             // index is 0
             if (currentCorrectAnswerIndex == 0) {
                 error = true;
-                message.append("Die Antwortnummern beginnen mit 1, nicht mit 0!\n");
+                message.append("In der ").append(question.getIndex()).append(".Frage von oben gibt es Antwortnummern, die die Zahl 0 beinhalten. Die korrekten Antwortnummern beginnen mit 1, nicht mit 0!\n");
                 throw new ServiceException(message.toString());
             }
 
             // index is to high
             if (currentCorrectAnswerIndex > 5) {
                 error = true;
-                message.append("Es kann nur bis zu 5 korrekte Antworten geben. Die Angabe einer größeren Antwortnummer, ist daher nicht möglich!\n");
+                message.append("In der ").append(question.getIndex()).append(".Frage von oben wurde eine zu große Antwortnummer angegeben. Es kann nur bis zu 5 korrekte Antworten geben. Eine Antwortnummer größer als 5 ist daher nicht zulässig!\n");
                 throw new ServiceException(message.toString());
             }
 
@@ -209,7 +221,7 @@ public class SimpleQuestionService implements IQuestionService {
             // access the ArrayList.
             if (allAnswers.get(currentCorrectAnswerIndex - 1) == null || allAnswers.get(currentCorrectAnswerIndex - 1).equals("")) {
                 error = true;
-                message.append("Eine Antwort, die als korrekt angegeben wurde, existiert nicht!\n");
+                message.append("In der ").append(question.getIndex()).append(".Frage von oben wurde eine Antwort als korrekt angegeben, die nicht existiert!\n");
             }
         }
 
@@ -223,19 +235,19 @@ public class SimpleQuestionService implements IQuestionService {
                 input = new FileInputStream(question.getPicture());
                 Image image = new Image(input);
 
-                if (image.getHeight() < maxHeightPicture) {
+                if (image.getHeight() < minHeightPicture) {
                     error = true;
-                    LOG.error("image has too small height");
+                    LOG.error("Image has too small height");
                     message.append("Das Bild muss mindestens 200x200 Pixel haben!\n");
                 }
-                if (image.getWidth() < maxWidthPicture) {
+                if (image.getWidth() < minWidthPicture) {
                     error = true;
-                    LOG.error("image has too small width");
+                    LOG.error("Image has too small width");
                     message.append("Das Bild muss mindestens 200x200 Pixel haben!\n");
                 }
             }
         } catch (FileNotFoundException e) {
-            LOG.error("cannot find image");
+            LOG.info("No image available");
         }
         if (error) {
             throw new ServiceException(message.toString());
@@ -250,15 +262,6 @@ public class SimpleQuestionService implements IQuestionService {
             LOG.warn("Persistence exception caught");
             throw new ServiceException(e.getCustomMessage());
         }
-    }
-
-    private static boolean isInteger(String text) {
-        try {
-            Integer.parseInt(text);
-        } catch (NumberFormatException | NullPointerException e) {
-            return false;
-        }
-        return true;
     }
 
 

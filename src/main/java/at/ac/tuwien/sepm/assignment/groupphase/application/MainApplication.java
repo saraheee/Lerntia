@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.ITextToSpeechServ
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.AlertController;
 import at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController;
+import at.ac.tuwien.sepm.assignment.groupphase.util.ConfigReader;
 import at.ac.tuwien.sepm.assignment.groupphase.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -32,7 +33,7 @@ public final class MainApplication extends Application {
     private AnnotationConfigApplicationContext context;
     private ITextToSpeechService iTextToSpeechService;
     private LerntiaMainController controller;
-
+    private AlertController alertController = new AlertController();
 
     public static void main(String[] args) {
         LOG.debug("Application starting with arguments={}", (Object) args);
@@ -47,7 +48,7 @@ public final class MainApplication extends Application {
         primaryStage.setMaximized(true);
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> {
-            var alertController = new AlertController();
+            alertController = new AlertController();
             if (alertController.showBigConfirmationAlert("Wirklich beenden",
                 "Soll Lerntia wirklich beendet werden?", "")) {
                 LOG.debug("Application shutdown initiated");
@@ -80,12 +81,18 @@ public final class MainApplication extends Application {
             iTextToSpeechService = new SimpleTextToSpeechService();
             try {
                 iTextToSpeechService.playWelcomeText();
+                String missingFilePaths = ConfigReader.checkIfAllPropertiesFilesAreProvided();
+                if (missingFilePaths != null && missingFilePaths.trim().length() > 0) {
+                    alertController.showStandardAlert(Alert.AlertType.WARNING, "Fehlende Config Dateien!",
+                        "Einige Config Dateien fehlen! ", "Bitte nachfolgende Dateien bereitstellen, damit " +
+                            "das Programm ordnungsgemäß funktionieren kann:\n" + missingFilePaths);
+                }
             } catch (TextToSpeechServiceException e) {
                 LOG.error("Failed to play welcome text with the speech synthesizer! " + e.getLocalizedMessage());
                 var alertController = new AlertController();
                 alertController.showBigAlert(Alert.AlertType.ERROR, "Sprachsynthesizer konnte nicht gestartet werden",
                     "Der Sprachsynthesizer konnte nicht gestartet werden!",
-                    "Bitte Java 10.0.1 installieren, um die Sprachausgabe verwenden zu können!");
+                    "Bitte eine Java-Version ab 10.0.1 installieren, um die Sprachausgabe verwenden zu können!");
             }
         });
         LOG.debug("Application startup complete");
