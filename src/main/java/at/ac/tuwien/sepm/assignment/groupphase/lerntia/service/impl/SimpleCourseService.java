@@ -20,16 +20,31 @@ public class SimpleCourseService implements ICourseService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
-    private ConfigReader configReaderCourse = null;
+    private ConfigReader configReaderCourse;
 
-    public SimpleCourseService(ICourseDAO courseDAO) {
+    private int maxLengthCourseMark;
+    private int maxLengthCourseName;
+
+    public SimpleCourseService(ICourseDAO courseDAO) throws ServiceException {
         this.courseDAO = courseDAO;
+
+        maxLengthCourseMark = 10;
+        maxLengthCourseName = 60;
+
+        try {
+            configReaderCourse = new ConfigReader("course");
+        } catch (ConfigReaderException e) {
+            //throw new ServiceException(e.getCustomMessage());
+        }
+
+        maxLengthCourseMark = configReaderCourse.getValue("maxLengthCourseMark") != null ? configReaderCourse.getValueInt("maxLengthCourseMark") : maxLengthCourseMark;
+        maxLengthCourseName = configReaderCourse.getValue("maxLengthCourseName") != null ? configReaderCourse.getValueInt("maxLengthCourseName") : maxLengthCourseName;
     }
 
     @Override
     public void create(Course course) throws ServiceException {
         try {
-            LOG.info("Create new Course: {}", course);
+            LOG.debug("Create new course: {}", course);
             courseDAO.create(course);
             LOG.info("New course created: {}", course);
         } catch (PersistenceException e) {
@@ -41,7 +56,7 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void update(Course course) throws ServiceException {
         try {
-            LOG.info("Update existing Course with new values, {}", course);
+            LOG.debug("Update existing course with new values, {}", course);
             courseDAO.update(course);
             LOG.info("Course successfully updated.");
         } catch (PersistenceException e) {
@@ -65,7 +80,7 @@ public class SimpleCourseService implements ICourseService {
 
     @Override
     public List<Course> readAll() throws ServiceException {
-        LOG.info("Retrieving all existing Courses....");
+        LOG.info("Retrieving all existing courses....");
         List<Course> courses;
         try {
             courses = courseDAO.readAll();
@@ -84,7 +99,7 @@ public class SimpleCourseService implements ICourseService {
     @Override
     public void validate(Course course) throws ServiceException {
         if (configReaderCourse == null) {
-            LOG.debug("Openin a new config reader for course");
+            LOG.debug("Opening a new config reader for course");
             try {
                 configReaderCourse = new ConfigReader("course");
             } catch (ConfigReaderException e) {
@@ -99,7 +114,7 @@ public class SimpleCourseService implements ICourseService {
             message += "Die LVA-Nummer ist leer!\n";
         }
 
-        if (course.getMark().length() > configReaderCourse.getValueInt("maxLengthCourseMark")) {
+        if (course.getMark().length() > maxLengthCourseMark) {
             error = true;
             message += "Die LVA-Nummer ist zu lang!\n";
         }
@@ -109,15 +124,14 @@ public class SimpleCourseService implements ICourseService {
             message += "Der LVA-Name ist leer!\n";
         }
 
-        if (course.getName().length() > configReaderCourse.getValueInt("maxLengthCourseName")) {
+        if (course.getName().length() > maxLengthCourseName) {
             error = true;
             message += "Der LVA-Name ist zu lang!\n";
         }
 
         if (
             !course.getSemester().startsWith(Semester.WS.toString()) &&
-                !course.getSemester().startsWith(Semester.SS.toString())
-            ) {
+                !course.getSemester().startsWith(Semester.SS.toString())) {
             message += "Das Semester sollte mit 'WS' oder 'SS' beginnen!\n";
             throw new ServiceException(message);
         }

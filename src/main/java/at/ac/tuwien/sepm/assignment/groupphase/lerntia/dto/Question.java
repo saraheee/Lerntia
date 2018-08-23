@@ -21,6 +21,7 @@ public class Question {
     private CheckBox containPicture; // if question contains picture
 
     private String checkedAnswers; // selected answers
+    private int index;
 
     public Question() {
     }
@@ -38,6 +39,27 @@ public class Question {
         this.correctAnswers = correctAnswers;
         this.optionalFeedback = optionalFeedback;
         this.isDeleted = isDeleted;
+    }
+
+    private static String formatLines(String target, Locale currentLocale) {
+        var boundary = BreakIterator.getSentenceInstance(currentLocale);
+        boundary.setText(target);
+        var start = boundary.first();
+        var end = boundary.next();
+        var lineLength = 0;
+        var word = new StringBuilder();
+        while (end != BreakIterator.DONE) {
+            word.append(target.substring(start, end));
+            lineLength = lineLength + word.length();
+            if (lineLength >= 100) {
+                word.append('\n');
+                lineLength = word.length();
+            }
+            start = end;
+            end = boundary.next();
+        }
+        word = (word.substring(word.length() - 1).equals("\n") ? word : (word.append("\n")));
+        return word.toString();
     }
 
     public Long getId() {
@@ -161,7 +183,7 @@ public class Question {
 
     public String toStringGUI() {
         //the first three fields are mandatory
-        return "Fragestellung: " + formatLines(questionText, new Locale ("de","AT")) +
+        return "Fragestellung: " + formatLines(questionText, new Locale("de", "AT")) +
             "Antwort 1: " + answer1 + "\n" +
             "Antwort 2: " + answer2 + "\n" +
             ((answer3 != null && answer3.trim().length() > 0) ? "Antwort 3: " + answer3 + "\n" : "") +
@@ -186,25 +208,12 @@ public class Question {
         this.containPicture.setSelected(set);
     }
 
-    private static String formatLines(String target, Locale currentLocale) {
-        var boundary = BreakIterator.getSentenceInstance(currentLocale);
-        boundary.setText(target);
-        var start = boundary.first();
-        var end = boundary.next();
-        var lineLength = 0;
-        var word = new StringBuilder();
-        while (end != BreakIterator.DONE) {
-            word.append(target.substring(start, end));
-            lineLength = lineLength + word.length();
-            if (lineLength >= 100) {
-                word.append('\n');
-                lineLength = word.length();
-            }
-            start = end;
-            end = boundary.next();
-        }
-        word = (word.substring(word.length() - 1).equals("\n") ? word : (word.append("\n")));
-        return word.toString();
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public enum checked {

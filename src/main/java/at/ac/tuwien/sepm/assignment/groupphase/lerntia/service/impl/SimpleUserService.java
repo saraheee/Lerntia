@@ -26,9 +26,9 @@ public class SimpleUserService implements IUserService {
         if ((user.getName() == null || user.getName().trim().isEmpty()) && (user.getMatriculationNumber() == null ||
             user.getMatriculationNumber().trim().isEmpty()) && (user.getStudyProgramme() == null ||
             user.getStudyProgramme().trim().isEmpty())) {
-            throw new ServiceException("Die Studiendaten konnten nicht gelesen werden. Bitte überprüfen, ob die Datei" +
-                " \"student.properties\" zur Verfügung gestellt ist und ob Sie die Attribute \"name\", \"matriculationNumber\"" +
-                " und \"studyProgramme\"  enthält.");
+            throw new ServiceException("Die Studiendaten konnten nicht gelesen werden. Bitte sicherstellen, dass die Konfigurationsdatei" +
+                " \"student.properties\" verfügbar ist. Diese muss auch die Attribute \"name\", \"matriculationNumber\"" +
+                " und \"studyProgramme\" enthalten.");
         }
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             user.setName("Das Attribut \"name\" \nist nicht vorhanden.");
