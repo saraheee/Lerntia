@@ -52,7 +52,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
             for (ExamQuestionnaire questionnaire : questionnaires) {
                 if (importQuestionnaire.getName().equals(questionnaire.getName())) {
-                    throw new ServiceException("Dieser Name existiert schon!");
+                    throw new ServiceException("Dieser Name existiert bereits!");
                 }
             }
 
@@ -61,7 +61,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
 
             for (LearningQuestionnaire questionnaire : questionnaires) {
                 if (importQuestionnaire.getName().equals(questionnaire.getName())) {
-                    throw new ServiceException("Dieser Name existiert schon!");
+                    throw new ServiceException("Dieser Name existiert bereits!");
                 }
             }
         }
@@ -78,7 +78,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
         }
 
         ArrayList<Long> questionIDs = new ArrayList<>();
-
+        int questionIndex = 1;
         for (String aFileContent : fileContent) {
 
             // split the rows, the separator is ";"
@@ -134,10 +134,12 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
             q.setAnswer5(lineParts[5]);
             q.setCorrectAnswers(lineParts[6]);
             q.setOptionalFeedback(feedback);
+            q.setIndex(questionIndex);
             q.setDeleted(false);
             simpleQuestionService.create(q);
 
             questionIDs.add(q.getId());
+            questionIndex ++;
         }
 
         Long questionnaireID;

@@ -37,7 +37,7 @@ public class CourseServiceTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
-        } catch (PersistenceException e) {
+        } catch (PersistenceException | ServiceException e) {
             LOG.error("Failed to get connection to test-database");
         }
     }
