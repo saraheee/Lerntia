@@ -3,15 +3,22 @@ package at.ac.tuwien.sepm.assignment.groupphase.util;
 import at.ac.tuwien.sepm.assignment.groupphase.exception.ConfigReaderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class ConfigReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private InputStream inputStream;
     private final Properties prop;
+    private InputStream inputStream;
 
     public ConfigReader(String config) throws ConfigReaderException {
 
@@ -23,22 +30,36 @@ public class ConfigReader {
 
         LOG.debug("Reading config properties: propsPath: *{}* propsFile: *{}*", propsPath, propsFile);
 
-        try {
-            this.inputStream = new FileInputStream(propsFile);
-            LOG.debug("Opened input stream: {}", inputStream);
+        if (Files.exists(Paths.get(propsPath))) {
             try {
+                this.inputStream = new FileInputStream(propsFile);
                 this.prop.load(this.inputStream);
             } catch (IOException e) {
                 try {
                     this.inputStream.close();
                 } catch (IOException e1) {
-                    throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte weder geöffnet noch geschlossen werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+                    throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte nicht geschlossen werden!");
                 }
-                throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdaten konnte nicht geöffnet werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
+                throw new ConfigReaderException("Das Lesen der Konfigurationsdateien ist fehlgeschlagen!");
             }
-        } catch (FileNotFoundException e) {
-            throw new ConfigReaderException("Die Config Datei \"" + config + ".properties\" konnte nicht gefunden werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
         }
+    }
+
+    public static String checkIfAllPropertiesFilesAreProvided() {
+        LOG.debug("Checking if all properties files are provided.");
+        String propertiesFileNamesArray[] = new String[]{"about", "course", "questions", "speech", "student"};
+        String basePath = System.getProperty("user.home") + File.separator + "Lerntia" + File.separator + "config";
+        StringBuilder message = new StringBuilder();
+
+        for (String propertiesFileName : propertiesFileNamesArray) {
+            String path = basePath + File.separator + propertiesFileName + ".properties";
+            Path propsPath = Paths.get(path);
+
+            if (!Files.exists(propsPath)) {
+                message.append(propsPath).append("\n");
+            }
+        }
+        return String.valueOf(message);
     }
 
     public String getValue(String key) {
@@ -46,48 +67,24 @@ public class ConfigReader {
     }
 
     public int getValueInt(String key) {
-        return Integer.parseInt(this.prop.getProperty(key));
+        try {
+            return Integer.parseInt(this.prop.getProperty(key));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
-    public boolean getValueBoolean(String key) {
+    public Boolean getValueBoolean(String key) {
         return Boolean.valueOf(this.prop.getProperty(key));
     }
 
     public void close() throws ConfigReaderException {
-        try {
-            this.inputStream.close();
-        } catch (IOException e) {
-            throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte nicht geschlossen werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
-        }
-    }
-
-    public void checkIfAllPropertiesFilesAreProvided() throws ConfigReaderException {
-        LOG.debug("Checking if all properties files are provided.");
-        String propertiesFileNamesArray[] = new String[]{"about", "course", "questions", "speech", "student"};
-        InputStream inputStream = null;
-        String propsPath, basePath = System.getProperty("user.home") + File.separator + "Lerntia" + File.separator + "config";
-        try {
-            for (String propertiesFileName : propertiesFileNamesArray) {
-                propsPath = basePath + File.separator + propertiesFileName + ".properties";
-                File propsFile = new File(propsPath);
-                inputStream = new FileInputStream(propsFile);
-                Properties properties = new Properties();
-                properties.load(inputStream);
-                inputStream.close();
-                inputStream = null;
-            }
-        } catch (IOException e) {
+        if (inputStream != null) {
             try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e1) {
-                // ignore, as there is one exception to be send in case anything is wrong
+                this.inputStream.close();
+            } catch (IOException e) {
+                throw new ConfigReaderException("Der Inputstream für das Lesen der Konfigurationsdateien konnte nicht geschlossen werden. Bitte überprüfen, ob die notwendigen PROPERTIES Dateien vorhanden sind.");
             }
-            throw new ConfigReaderException("Die Initialisierung konnte nicht erfolgreich durchgeführt werden, da einige " +
-                "PROPERTIES Dateien nicht vorhanden sind. Bitte überprüfen, ob sich im Verzeichnis \"" + basePath +
-                " die folgenden PROPERTIES Dateien befinden: \n\n\t *  about.properties;\n\t *  course.properties;" +
-                "\n\t *  questions.properties; \n\t *  speech.properties; \n\t *  student.properties.");
-        } // end of the main try-catch block
+        }
     }
 }

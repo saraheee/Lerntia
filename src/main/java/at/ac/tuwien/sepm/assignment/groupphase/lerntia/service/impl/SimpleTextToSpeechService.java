@@ -35,6 +35,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private boolean singleAnswer = false;
     private boolean feedbackText = false;
     private boolean notInitialized = false;
+    private boolean playWelcomeText = false;
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
@@ -46,13 +47,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 throw new TextToSpeechServiceException(e.getCustomMessage());
             }
         }
-        LOG.debug("A valid configReaderSpeech found.");
 
         WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
-        var playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText");
+        playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
 
         LOG.trace("Entering method playWelcomeText.");
         try {
