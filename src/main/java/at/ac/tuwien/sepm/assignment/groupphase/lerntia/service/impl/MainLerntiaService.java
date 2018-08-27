@@ -460,6 +460,10 @@ public class MainLerntiaService implements IMainLerntiaService {
         return questionList.size() - correctAnswered - wrongAnswered > 0 ? questionList.size() - correctAnswered - wrongAnswered : 0;
     }
 
+    public int getWrongIgnoredAnswers() {
+        return wrongQuestions.size() - correctAnswered - wrongAnswered > 0 ? wrongQuestions.size() - correctAnswered - wrongAnswered : 0;
+    }
+
     @Override
     public int getIgnoredExamAnswers() {
         int count = 0;
