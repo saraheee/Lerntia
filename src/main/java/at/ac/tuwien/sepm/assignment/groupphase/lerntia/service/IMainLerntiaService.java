@@ -122,6 +122,13 @@ public interface IMainLerntiaService {
     int getIgnoredAnswers();
 
     /**
+     * Returns the number of not answered questions of the questionnaire, while showing only questions that were answered wrongly
+     *
+     * @return the number of not answered questions of the questionnaire, while showing only questions that were answered wrongly.
+     */
+    int getWrongIgnoredAnswers();
+
+    /**
      * Returns the number of questions of one questionnaire, which were not answered during the exam
      *
      * @return the number of questions of one questionnaire, which were not answered during the exam.
