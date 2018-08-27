@@ -59,6 +59,7 @@ public class LerntiaMainController implements Runnable {
     private final LearnAlgorithmController learnAlgorithmController;
     private final ReentrantLock lock = new ReentrantLock();
     private boolean onlyWrongQuestions = false;
+    private boolean showAllQuestionsStatistic = false;
     private ConfigReader configReaderSpeech = null;
     private String BREAK = "....";
     @FXML
@@ -460,6 +461,7 @@ public class LerntiaMainController implements Runnable {
             } else {
                 LOG.warn("No next question to be displayed.");
                 if (!onlyWrongQuestions) {
+                    showAllQuestionsStatistic = true;
                     alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
                             + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
@@ -469,28 +471,35 @@ public class LerntiaMainController implements Runnable {
                     lerntiaService.resetCounter();
 
                 } else if (!e1.getMessage().contains("List of wrong questions is empty")) {
-                    alertController.showBigAlert(Alert.AlertType.CONFIRMATION, "Ende der Fragenliste",
-                        "Alle zuvor falsch beantworteten Fragen wurden durchgegangen",
-                        "Es gibt noch Fragen, die falsch beantwortet wurden." + "\n" +
-                            "Sollen wieder die falsch beantworteten Fragen angezeigt werden, oder alle Fragen?");
+                    showAllQuestionsStatistic = false;
+                    alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
+                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
+                            + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
+                            + "Übersprungen: " + lerntiaService.getWrongIgnoredAnswers(),
+                        "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
                     lerntiaService.resetCounter();
-
                 }
                 if (e1.getMessage().contains("List of wrong questions is empty")) {
-                    alertController.showBigAlert(Alert.AlertType.WARNING, "Keine Fragen mehr", "Keine falsch beantworteten Fragen mehr.",
-                        "Es gibt keine falsch beantworteten Fragen mehr. Die erste Frage wird wieder angezeigt.");
+                    showAllQuestionsStatistic = false;
+                    alertController.showBigAlertWithDiagram(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
+                        "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
+                            + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
+                            + "Übersprungen: " + lerntiaService.getWrongIgnoredAnswers(),
+                        "Es gibt keine falsch beantworteten Fragen mehr. Die erste Frage wird wieder angezeigt!\n", createPieChart());
                     lerntiaService.resetCounter();
                     alertController.setOnlyWrongQuestions(false);
                 }
-                Boolean onlyWrongQuestionshelp = alertController.isOnlyWrongQuestions();
+                Boolean onlyWrongQuestionsHelp = alertController.isOnlyWrongQuestions();
 
-                onlyWrongQuestions = onlyWrongQuestionshelp;
+                onlyWrongQuestions = onlyWrongQuestionsHelp;
                 try {
-                    lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionshelp);
+                    lerntiaService.setOnlyWrongQuestions(onlyWrongQuestionsHelp);
                     question = lerntiaService.getFirstQuestion();
                     showQuestionAndAnswers();
                 } catch (ServiceException e) {
-                    if (e.getCustomMessage().contains("No wrong Questions available")) {
+                    if (e.getCustomMessage().contains("No wrong questions available")) {
                         alertController.showBigAlert(Alert.AlertType.INFORMATION, "Keine Fragen",
                             "Keine falsch beantworteten Fragen vorhanden", "Es gibt keine falsch beantworteten Fragen. "
                                 + "Daher werden alle Fragen angezeigt.");
@@ -762,10 +771,18 @@ public class LerntiaMainController implements Runnable {
     }
 
     private ImageView createPieChart() {
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-            new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
-            new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),
-            new PieChart.Data("Übersprungen", lerntiaService.getIgnoredAnswers()));
+        ObservableList<PieChart.Data> pieChartData;
+        if (showAllQuestionsStatistic) {
+            pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
+                new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),
+                new PieChart.Data("Übersprungen", lerntiaService.getIgnoredAnswers()));
+        } else {
+            pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Richtig", lerntiaService.getCorrectAnswers()),
+                new PieChart.Data("Falsch", lerntiaService.getWrongAnswers()),
+                new PieChart.Data("Übersprungen", lerntiaService.getWrongIgnoredAnswers()));
+        }
         PieChart pieChart = new PieChart(pieChartData);
         pieChart.setClockwise(false);
         pieChart.setLegendVisible(false);
