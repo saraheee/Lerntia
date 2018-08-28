@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.assignment.groupphase.exception.ControllerException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,7 @@ public class MenuBarController implements Runnable {
 
     @FXML
     private void initialize() {
+        selectQuestionnaireButton.setAccelerator(KeyCombination.keyCombination("Ctrl+K"));
         examToLearnButton.setDisable(true);
         learnToExamButton.setDisable(false);
     }
