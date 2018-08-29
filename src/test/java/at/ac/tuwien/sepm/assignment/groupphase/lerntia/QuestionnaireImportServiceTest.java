@@ -49,7 +49,7 @@ public class QuestionnaireImportServiceTest {
 
             this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
 
-        } catch (PersistenceException | ServiceException e) {
+        } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
 

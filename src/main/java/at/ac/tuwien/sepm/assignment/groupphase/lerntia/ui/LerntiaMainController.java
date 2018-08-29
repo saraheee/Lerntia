@@ -58,10 +58,10 @@ public class LerntiaMainController implements Runnable {
     @FXML
     private final LearnAlgorithmController learnAlgorithmController;
     private final ReentrantLock lock = new ReentrantLock();
+    private final String BREAK = "....";
     private boolean onlyWrongQuestions = false;
     private boolean showAllQuestionsStatistic = false;
     private ConfigReader configReaderSpeech = null;
-    private String BREAK = "....";
     @FXML
     private VBox mainWindowLeft;
     @FXML
@@ -626,8 +626,9 @@ public class LerntiaMainController implements Runnable {
 
     // this method should be called if the DB does not contain any questions that could be displayed
     private void showNoQuestionsAvailable() {
-        qLabelController.setQuestionText("Keine Fragen gefunden. Bitte einen Fragebogen importieren!\n" + "(Menü -> \"Fragen von CSV importieren\")");
-        audioController.setQuestion("Keine Fragen gefunden. Bitte einen Fragebogen importieren!");
+        qLabelController.setQuestionText("Keine Fragen gefunden. Bitte einen Fragebogen importieren und auswählen!\n" +
+            "(Menü -> \"Fragen von CSV importieren\"   Menü -> \"Fragebogen auswählen\")");
+        audioController.setQuestion("Keine Fragen gefunden. Bitte einen Fragebogen importieren und auswählen!");
 
         setAnswerText(answer1Controller, "Keine Antwort vorhanden");
         setAnswerText(answer2Controller, "Keine Antwort vorhanden");

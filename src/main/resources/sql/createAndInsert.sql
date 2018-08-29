@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS QuestionnaireQuestion (
 INSERT INTO Course
    SELECT * FROM (
       SELECT * FROM Course WHERE FALSE
-        UNION SELECT 1, '1', 'SS2018', 'SEPM', false
+        UNION SELECT 1, '1', 'SS2018', 'VSVO', false
   )
 WHERE NOT EXISTS (SELECT * FROM Course);
 
