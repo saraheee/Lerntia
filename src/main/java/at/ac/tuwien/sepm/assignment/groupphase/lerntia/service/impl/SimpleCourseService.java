@@ -25,7 +25,7 @@ public class SimpleCourseService implements ICourseService {
     private int maxLengthCourseMark;
     private int maxLengthCourseName;
 
-    public SimpleCourseService(ICourseDAO courseDAO) throws ServiceException {
+    public SimpleCourseService(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
 
         maxLengthCourseMark = 10;
