@@ -148,7 +148,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             audioPlayer.setGain(1);
             audioPlayer.setDaemon(false);
             audioPlayer.start();
-            LOG.info("audioPlayer successfully created and started.");
+            LOG.debug("audioPlayer successfully created and started.");
 
         } catch (SynthesisException e) {
             LOG.error("Failed to generate audio with the speech synthesizer!");

@@ -820,22 +820,27 @@ public class LerntiaMainController implements Runnable {
             lock.lock();
             try {
                 if (zoomedImageController.isKey1pressed()) {
+                    LOG.info("Value of isKey1pressed: " + zoomedImageController.isKey1pressed());
                     handleAnswer(answer1Controller);
                     return;
                 }
                 if (zoomedImageController.isKey2pressed()) {
+                    LOG.info("Value of isKey2pressed: " + zoomedImageController.isKey2pressed());
                     handleAnswer(answer2Controller);
                     return;
                 }
                 if (zoomedImageController.isKey3pressed()) {
+                    LOG.info("Value of isKey3pressed: " + zoomedImageController.isKey3pressed());
                     handleAnswer(answer3Controller);
                     return;
                 }
                 if (zoomedImageController.isKey4pressed()) {
+                    LOG.info("Value of isKey4pressed: " + zoomedImageController.isKey4pressed());
                     handleAnswer(answer4Controller);
                     return;
                 }
                 if (zoomedImageController.isKey5pressed()) {
+                    LOG.info("Value of isKey5pressed: " + zoomedImageController.isKey5pressed());
                     handleAnswer(answer5Controller);
                     return;
                 }
