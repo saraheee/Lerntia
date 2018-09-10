@@ -77,36 +77,36 @@ class ZoomedImageController {
 
         Platform.runLater(() -> imageScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.Z || e.getCode() == KeyCode.S || e.getCode() == KeyCode.C || e.getCode() == KeyCode.ESCAPE) {
-                LOG.debug("Key pressed, closing");
+                LOG.info("Z key pressed while image is open");
                 imageClosed = true;
                 closeZoomedImageWindows();
             }
             if (e.getCode() == KeyCode.A) {
-                LOG.debug("A key pressed while image is open");
+                LOG.info("A key pressed while image is open");
                 audioController.setSelected();
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
-                LOG.debug("Key 1 pressed, while image is open");
+                LOG.info("Key 1 pressed, while image is open");
                 closeZoomedImageWindows();
                 key1pressed = true;
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
-                LOG.debug("Key 2 pressed, while image is open");
+                LOG.info("Key 2 pressed, while image is open");
                 closeZoomedImageWindows();
                 key2pressed = true;
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
-                LOG.debug("Key 3 pressed, while image is open");
+                LOG.info("Key 3 pressed, while image is open");
                 closeZoomedImageWindows();
                 key3pressed = true;
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
-                LOG.debug("Key 4 pressed, while image is open");
+                LOG.info("Key 4 pressed, while image is open");
                 closeZoomedImageWindows();
                 key4pressed = true;
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
-                LOG.debug("Key 5 pressed, while image is open");
+                LOG.info("Key 5 pressed, while image is open");
                 closeZoomedImageWindows();
                 key5pressed = true;
             }
