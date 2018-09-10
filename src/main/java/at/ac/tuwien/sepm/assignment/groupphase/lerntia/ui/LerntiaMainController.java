@@ -139,11 +139,11 @@ public class LerntiaMainController implements Runnable {
     public void update(Scene scene) {
         Platform.runLater(() -> scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.A) {
-                LOG.debug("A key was pressed");
+                LOG.info("A key was pressed");
                 audioButtonController.setSelected();
             }
             if (e.getCode() == KeyCode.Z) {
-                LOG.debug("Z key was pressed");
+                LOG.info("Z key was pressed");
                 var zoomedImageThread = new Thread(this);
                 zoomedImageThread.start();
                 try {
@@ -154,15 +154,15 @@ public class LerntiaMainController implements Runnable {
                 }
             }
             if (e.getCode() == KeyCode.N) {
-                LOG.debug("N key was pressed");
+                LOG.info("N key was pressed");
                 getAndShowNextQuestion();
             }
             if (e.getCode() == KeyCode.P) {
-                LOG.debug("P key was pressed");
+                LOG.info("P key was pressed");
                 getAndShowPreviousQuestion();
             }
             if (e.getCode() == KeyCode.C) {
-                LOG.debug("C key was pressed");
+                LOG.info("C key was pressed");
                 if (!examMode) {
                     checkIfQuestionWasCorrect();
                 } else {
@@ -179,23 +179,23 @@ public class LerntiaMainController implements Runnable {
                 }
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
-                LOG.debug("1 key was pressed");
+                LOG.info("1 key was pressed");
                 handleAnswer(answer1Controller);
             }
             if (e.getCode() == KeyCode.NUMPAD2 || e.getCode() == KeyCode.DIGIT2) {
-                LOG.debug("2 key was pressed");
+                LOG.info("2 key was pressed");
                 handleAnswer(answer2Controller);
             }
             if (e.getCode() == KeyCode.NUMPAD3 || e.getCode() == KeyCode.DIGIT3) {
-                LOG.debug("3 key was pressed");
+                LOG.info("3 key was pressed");
                 handleAnswer(answer3Controller);
             }
             if (e.getCode() == KeyCode.NUMPAD4 || e.getCode() == KeyCode.DIGIT4) {
-                LOG.debug("4 key was pressed");
+                LOG.info("4 key was pressed");
                 handleAnswer(answer4Controller);
             }
             if (e.getCode() == KeyCode.NUMPAD5 || e.getCode() == KeyCode.DIGIT5) {
-                LOG.debug("5 key was pressed");
+                LOG.info("5 key was pressed");
                 handleAnswer(answer5Controller);
             }
 
