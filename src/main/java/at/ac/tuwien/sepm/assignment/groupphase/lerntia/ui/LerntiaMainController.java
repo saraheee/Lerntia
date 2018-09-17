@@ -230,7 +230,9 @@ public class LerntiaMainController implements Runnable {
             audioController.readSingleAnswer(answerController.getAnswerText());
 
         } else { //answer is not disabled
+            LOG.info("Before selecting answer: Answer is selected " + answerController.isSelected());
             answerController.setSelected(!answerController.isSelected());
+            LOG.info("After selecting answer: Answer is selected " + answerController.isSelected());
             if (answerController.isSelected()) {
                 audioController.readSingleAnswer(answerController.getAnswerText());
             } else {
