@@ -149,7 +149,8 @@ public class LerntiaMainController implements Runnable {
                 try {
                     zoomedImageController.onZoomButtonClicked();
                 } catch (ControllerException e1) {
-                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler", "Fehler im User Interface.",
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Zoomen fehlgeschlafgen",
+                        "Das Bild kann nicht angezeigt werden.",
                         e1.getCustomMessage());
                 }
             }
@@ -204,7 +205,8 @@ public class LerntiaMainController implements Runnable {
             try {
                 zoomedImageController.onZoomButtonClicked();
             } catch (ControllerException e1) {
-                alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehler", "Fehler im User Interface.",
+                alertController.showStandardAlert(Alert.AlertType.ERROR, "Zoomen fehlgeschlagen",
+                    "Das Bild kann nicht angezeigt werden.",
                     e1.getCustomMessage());
             }
         });
@@ -251,8 +253,7 @@ public class LerntiaMainController implements Runnable {
             String checkedAnswers = getCheckedAnswers();
             boolean goToNextQuestion = true;
             boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-            //LOG.trace("Correct answers: {} ; selected answers: {} ; selected is correct: {}", question.getCorrectAnswers(), checkedAnswers, answersCorrect);
-            LOG.info("Save values to Algorithm");
+            LOG.info("Save values to the algorithm");
             if (answersCorrect) {
                 if (!questionColored) {
                     try {

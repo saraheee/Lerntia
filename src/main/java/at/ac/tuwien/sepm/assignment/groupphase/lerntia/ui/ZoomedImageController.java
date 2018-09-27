@@ -29,11 +29,11 @@ class ZoomedImageController {
     private final AlertController alertController;
     private final WindowController windowController;
     private final AudioController audioController;
-    private File imageFile;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final double screenWidth = screenSize.getWidth();
     private final double screenHeight = screenSize.getHeight();
     private final double eps = (screenHeight / 100) * 10;
+    private File imageFile;
     private Scene imageScene;
 
     private boolean imageClosed = false;
@@ -62,7 +62,7 @@ class ZoomedImageController {
         try {
             image = (new Image(imageFile.toURI().toURL().toExternalForm()));
         } catch (MalformedURLException e) {
-            throw new ControllerException("URL of Bild nicht lesbar.");
+            throw new ControllerException("URL vom Bild nicht lesbar.");
         }
         var imageView = new ImageView();
         imageView.setImage(image);
