@@ -45,6 +45,14 @@ public class AudioController implements Runnable {
     @FXML
     private void onAudioButtonClicked() {
         LOG.debug("Audio button clicked");
+
+        if (audioButton.isDefaultButton()) {
+            deselectAudioButton();
+            //stop sound
+            stopReading();
+            return;
+        }
+
         if (this.question == null || this.question.trim().length() < 1) {
             showValidationFailedDialog();
         } else {
@@ -73,6 +81,7 @@ public class AudioController implements Runnable {
                 showAudioErrorDialog();
             }
         }
+        selectAudioButton();
     }
 
     void readSingleAnswer(String answerText) {
@@ -128,14 +137,7 @@ public class AudioController implements Runnable {
     }
 
     void setSelected() {
-        if (audioButton.isDefaultButton()) {
-            deselectAudioButton();
-            //stop sound
-            stopReading();
-        } else {
-            onAudioButtonClicked();
-            selectAudioButton();
-        }
+        onAudioButtonClicked();
     }
 
     private void showAudioErrorDialog() {
