@@ -22,8 +22,8 @@ public class ConfigReader {
 
     public ConfigReader(String config) throws ConfigReaderException {
 
-        String propsPath = System.getProperty("user.home");
-        propsPath += File.separator + "Lerntia" + File.separator + "config" + File.separator + config + ".properties";
+        String propsPath = System.getProperty("user.dir");
+        propsPath += File.separator + "config" + File.separator + config + ".properties";
 
         this.prop = new Properties();
         File propsFile = new File(propsPath);
@@ -48,7 +48,7 @@ public class ConfigReader {
     public static String checkIfAllPropertiesFilesAreProvided() {
         LOG.debug("Checking if all properties files are provided.");
         String propertiesFileNamesArray[] = new String[]{"about", "course", "questions", "speech", "student"};
-        String basePath = System.getProperty("user.home") + File.separator + "Lerntia" + File.separator + "config";
+        String basePath = System.getProperty("user.dir") + File.separator + "config";
         StringBuilder message = new StringBuilder();
 
         for (String propertiesFileName : propertiesFileNamesArray) {
