@@ -149,7 +149,7 @@ public class LerntiaMainController implements Runnable {
                 try {
                     zoomedImageController.onZoomButtonClicked();
                 } catch (ControllerException e1) {
-                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Zoomen fehlgeschlafgen",
+                    alertController.showStandardAlert(Alert.AlertType.ERROR, "Zoomen fehlgeschlagen",
                         "Das Bild kann nicht angezeigt werden.",
                         e1.getCustomMessage());
                 }
@@ -174,9 +174,9 @@ public class LerntiaMainController implements Runnable {
                 LOG.info("G key was pressed.");
                 learnAlgorithmController.onAlgorithmButtonPressed();
                 if (learnAlgorithmController.isSelected()) {
-                    LOG.info("Learn Algorithm is now running");
+                    LOG.info("Learn algorithm is now running");
                 } else {
-                    LOG.info("Learn Algorithm is now not running.");
+                    LOG.info("Learn algorithm is not running anymore.");
                 }
             }
             if (e.getCode() == KeyCode.NUMPAD1 || e.getCode() == KeyCode.DIGIT1) {
@@ -232,9 +232,7 @@ public class LerntiaMainController implements Runnable {
             audioController.readSingleAnswer(answerController.getAnswerText());
 
         } else { //answer is not disabled
-            LOG.info("Before selecting answer: Answer is selected " + answerController.isSelected());
             answerController.setSelected(!answerController.isSelected());
-            LOG.info("After selecting answer: Answer is selected " + answerController.isSelected());
             if (answerController.isSelected()) {
                 audioController.readSingleAnswer(answerController.getAnswerText());
             } else {
@@ -823,28 +821,28 @@ public class LerntiaMainController implements Runnable {
             lock.lock();
             try {
                 if (zoomedImageController.isKey1pressed()) {
-                    LOG.info("Value of isKey1pressed: " + zoomedImageController.isKey1pressed());
                     handleAnswer(answer1Controller);
+                    zoomedImageController.setKey1pressed(false);
                     return;
                 }
                 if (zoomedImageController.isKey2pressed()) {
-                    LOG.info("Value of isKey2pressed: " + zoomedImageController.isKey2pressed());
                     handleAnswer(answer2Controller);
+                    zoomedImageController.setKey2pressed(false);
                     return;
                 }
                 if (zoomedImageController.isKey3pressed()) {
-                    LOG.info("Value of isKey3pressed: " + zoomedImageController.isKey3pressed());
                     handleAnswer(answer3Controller);
+                    zoomedImageController.setKey3pressed(false);
                     return;
                 }
                 if (zoomedImageController.isKey4pressed()) {
-                    LOG.info("Value of isKey4pressed: " + zoomedImageController.isKey4pressed());
                     handleAnswer(answer4Controller);
+                    zoomedImageController.setKey4pressed(false);
                     return;
                 }
                 if (zoomedImageController.isKey5pressed()) {
-                    LOG.info("Value of isKey5pressed: " + zoomedImageController.isKey5pressed());
                     handleAnswer(answer5Controller);
+                    zoomedImageController.setKey5pressed(false);
                     return;
                 }
             } finally {
