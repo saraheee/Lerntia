@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 @Service
 public class SimpleTextToSpeechService implements ITextToSpeechService {
@@ -25,6 +26,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private ConfigReader configReaderSpeech = null;
+    private Map<String, String> dictionary = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
     private String VOICE = "bits3-hsmm";
@@ -78,7 +80,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 MaryRuntimeUtils.ensureMaryStarted();
             } catch (Exception e) {
                 notInitialized = true;
-                throw new TextToSpeechServiceException("Speech synthesizer is not started: " + e.getLocalizedMessage());
+                throw new TextToSpeechServiceException("Speech synthesizer is not started!");
             }
             getTextToRead(textToSpeech);
             LOG.trace("playText method is called.");
@@ -97,7 +99,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 throw new TextToSpeechServiceException("Failed to initialize the speech synthesizer: " + e.getLocalizedMessage());
             } catch (Exception e) {
                 notInitialized = true;
-                throw new TextToSpeechServiceException("Speech synthesizer is not started: " + e.getLocalizedMessage());
+                throw new TextToSpeechServiceException("Speech synthesizer is not started!");
             }
         }
     }
@@ -141,7 +143,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         } else if (notInitialized) {
             return;
         }
-        try (var audio = maryTTS.generateAudio(replaceUmlauts(filterTextInParenthesis(text)))) {
+        try (var audio = maryTTS.generateAudio(replaceUmlauts(replaceWordsInDictionary(filterTextInParenthesis(text))))) {
             LOG.trace("Creating and setting a new audioPlayer.");
             audioPlayer = new AudioPlayer();
             audioPlayer.setAudio(audio);
@@ -158,6 +160,24 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             LOG.error("Failed or interrupted IO operation occurred during speech synthesis.");
             throw new TextToSpeechServiceException("Failed or interrupted IO operation: " + e.getLocalizedMessage());
         }
+    }
+
+    public String replaceWordsInDictionary(String input) throws TextToSpeechServiceException {
+        String output = input;
+        try {
+            dictionary = ConfigReader.readTextFile("dictionary");
+        } catch (ConfigReaderException e) {
+            throw new TextToSpeechServiceException(e.getCustomMessage());
+        }
+        if (dictionary != null) {
+            for (String word : dictionary.keySet()) {
+                while (output.contains(word)) {
+                    LOG.info("Replacing word '" + word.trim() + "' with '" + dictionary.get(word).trim() + "'");
+                    output = output.substring(0, output.indexOf(word.trim())) + dictionary.get(word).trim() + output.substring(output.indexOf(word) + word.trim().length());
+                }
+            }
+        }
+        return output;
     }
 
     public String filterTextInParenthesis(String text) {
@@ -211,11 +231,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
         var out = "";
         out += isValidText(textToSpeech.getQuestion()) ? textToSpeech.getQuestion() : "" + '\n';
-        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (ANSWER + answerNumber.eins + BREAK + textToSpeech.getAnswer1() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (ANSWER + answerNumber.zwei + BREAK + textToSpeech.getAnswer2() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (ANSWER + answerNumber.drei + BREAK + textToSpeech.getAnswer3() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (ANSWER + answerNumber.vier + BREAK + textToSpeech.getAnswer4() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer5())) ? (textToSpeech.getAnswer5() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (" " + ANSWER + answerNumber.eins + BREAK + " " + textToSpeech.getAnswer1() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + answerNumber.zwei + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + answerNumber.drei + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + answerNumber.vier + BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer5())) ? (" " + textToSpeech.getAnswer5() + '\n') : "");
         LOG.trace(out);
         return out;
     }
