@@ -146,6 +146,12 @@ public class TextToSpeechServiceTest {
     }
 
     @Test
+    public void replaceWordsInDictionaryShouldPersist() throws TextToSpeechServiceException {
+        var service = new SimpleTextToSpeechService();
+        Assert.assertEquals(service.replaceWordsInDictionary("Ein Apfel."), "Ein Auto.");
+    }
+
+    @Test
     public void getTextShouldPersist() throws TextToSpeechServiceValidationException {
         try {
             var configReaderSpeech = new ConfigReader("speech");
@@ -171,11 +177,11 @@ public class TextToSpeechServiceTest {
             speech.setAnswer5(answer5);
 
             Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
-                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + answer1 + '\n'
-                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + answer2 + '\n'
-                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + answer3 + '\n'
-                + BREAK + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + answer4 + '\n'
-                + BREAK + answer5 + '\n');
+                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumber.eins + BREAK + " " + answer1 + '\n'
+                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumber.zwei + BREAK + " " + answer2 + '\n'
+                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumber.drei + BREAK + " " + answer3 + '\n'
+                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumber.vier + BREAK + " " + answer4 + '\n'
+                + BREAK + " " + answer5 + '\n');
         } catch (ConfigReaderException e) {
             throw new TextToSpeechServiceValidationException(e.getCustomMessage());
         }
