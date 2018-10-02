@@ -801,9 +801,9 @@ public class LerntiaMainController implements Runnable {
 
         WritableImage snapShot = scene.snapshot(null);
         try {
-            File f = new File(System.getProperty("user.dir") + File.separator + "statistik.png");
+            File f = new File(System.getProperty("user.dir") + File.separator + "statistic.png");
             ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", f);
-            Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistik.png"));
+            Image image = new Image(new FileInputStream(System.getProperty("user.dir") + File.separator + "statistic.png"));
             return new ImageView(image);
         } catch (IOException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Statistik anzeigen fehlgeschlagen",

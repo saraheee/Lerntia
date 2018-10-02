@@ -12,7 +12,10 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class ConfigReader {
 
@@ -60,6 +63,39 @@ public class ConfigReader {
             }
         }
         return String.valueOf(message);
+    }
+
+    public static Map<String, String> readTextFile(String name) throws ConfigReaderException {
+        LOG.debug("Trying to read text file with name '" + name + "'.");
+        String propsPath = System.getProperty("user.dir");
+        propsPath += File.separator + name + ".txt";
+
+        Map<String, String> wordMap = new HashMap<>();
+
+        Properties prop = new Properties();
+        File propsFile = new File(propsPath);
+
+        if (Files.exists(Paths.get(propsPath))) {
+            InputStream inputStream;
+            try {
+                inputStream = new FileInputStream(propsFile);
+
+                Scanner sc = new Scanner(inputStream);
+                while (sc.hasNext()) {
+                    String firstWord = sc.next();
+                    String secondWordToEnd = "";
+                    if (sc.hasNextLine()) {
+                        secondWordToEnd = sc.nextLine();
+                    }
+                    wordMap.put(firstWord, secondWordToEnd);
+                }
+                sc.close();
+                inputStream.close();
+            } catch (IOException e) {
+                throw new ConfigReaderException("Das Lesen der Textdatei ist fehlgeschlagen!");
+            }
+        }
+        return wordMap;
     }
 
     public String getValue(String key) {
