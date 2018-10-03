@@ -1,3 +1,4 @@
 Hashtabelle Haschtabelle
 Aussagen Testaussagen
 Apfel Auto
+Konsisten Konsistenz
