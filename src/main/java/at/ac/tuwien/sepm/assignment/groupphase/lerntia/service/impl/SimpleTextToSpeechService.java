@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class SimpleTextToSpeechService implements ITextToSpeechService {
@@ -171,13 +173,28 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
         if (dictionary != null) {
             for (String word : dictionary.keySet()) {
-                while (output.contains(word)) {
+                int counter = 0;
+                int occNumber = occurrencesOfWordInText(output, word);
+                while (output.contains(word) && counter < occNumber) {
                     LOG.info("Replacing word '" + word.trim() + "' with '" + dictionary.get(word).trim() + "'");
                     output = output.substring(0, output.indexOf(word.trim())) + dictionary.get(word).trim() + output.substring(output.indexOf(word) + word.trim().length());
+                    counter++;
                 }
             }
         }
         return output;
+    }
+
+    private int occurrencesOfWordInText(String text, String word) {
+
+        int num = 0;
+        Pattern pat = Pattern.compile(Pattern.quote(word));
+        Matcher m = pat.matcher(text);
+        while (m.find()) {
+            num++;
+        }
+        LOG.debug("Number of occurrences of word '" + word + "': " + num);
+        return num;
     }
 
     public String filterTextInParenthesis(String text) {
