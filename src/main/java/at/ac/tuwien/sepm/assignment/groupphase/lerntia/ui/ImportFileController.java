@@ -140,7 +140,7 @@ public class ImportFileController {
         LOG.info("Import file.");
         String name = tf_questionnaire.getText().trim();
 
-        if (name.equals("")) {
+        if (name.trim().equals("")) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Fehlerhafter Name", "Fehler", "Bitte einen gültigen Namen angeben!");
             return;
         }
