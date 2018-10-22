@@ -93,6 +93,7 @@ public class LerntiaMainController implements Runnable {
     private boolean examMode;
     private boolean questionColored = false;
     private String examName;
+    private String examStart;
 
     @Autowired
     public LerntiaMainController(
@@ -875,4 +876,7 @@ public class LerntiaMainController implements Runnable {
         connectionManager.closeConnection();
     }
 
+    void setExamStart(String examStart) {
+        this.examStart = examStart;
+    }
 }

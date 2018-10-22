@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -136,6 +138,7 @@ public class SelectExamController {
         try {
             lerntiaMainController.setExamMode(true);
             lerntiaMainController.setExamName(selectedQuestionnaire.getName());
+            lerntiaMainController.setExamStart(new SimpleDateFormat("HH:mm").format(new Date()));
             lerntiaMainController.switchToExamMode();
             lerntiaMainController.prepareExamQuestionnaire(selectedQuestionnaire);
         } catch (ServiceException e) {
@@ -152,6 +155,7 @@ public class SelectExamController {
         int selectedQuestionnaireIndex = cb_exam.getSelectionModel().getSelectedIndex();
         ExamQuestionnaire selectedQuestionnaire = examQuestionnaireList.get(selectedQuestionnaireIndex);
         lerntiaMainController.setExamName(selectedQuestionnaire.getName());
+        lerntiaMainController.setExamStart(new SimpleDateFormat("HH:mm").format(new Date()));
         editExamController.showSelectExamWindow(selectedQuestionnaire);
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();

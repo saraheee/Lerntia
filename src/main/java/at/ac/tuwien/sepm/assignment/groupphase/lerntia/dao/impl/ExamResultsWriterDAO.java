@@ -38,6 +38,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private Font fontStudentInfo;
 
     private User student;
+    private ExamWriter examwriter;
 
 
     public ExamResultsWriterDAO() throws PersistenceException {
@@ -52,7 +53,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         this.fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
         this.fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
         this.fontExamDate = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
-        this.fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+        this.fontStudentInfo = FontFactory.getFont(FontFactory.HELVETICA, 14, BaseColor.BLACK);
     }
 
     @Override
@@ -61,6 +62,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             examwriter.getQuestions() == null || examwriter.getUser() == null) {
             throw new PersistenceException("Mindestens ein Wert des Ergebnisschreibers oder der Ergebnisschreiber selbst ist null!");
         }
+        this.examwriter = examwriter;
         this.student = examwriter.getUser();
 
         // create the document
@@ -114,25 +116,49 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         Paragraph titleParagraph = new Paragraph("Prüfung", fontTitle);
         titleParagraph.setSpacingAfter(0);
-
         headerContainerParagraph.add(titleParagraph);
 
         Paragraph examNameParagraph = new Paragraph(name, fontExamName);
         examNameParagraph.setSpacingAfter(0);
-
         headerContainerParagraph.add(examNameParagraph);
 
-        Paragraph dateParagraph = new Paragraph("am: " + new SimpleDateFormat("dd.MM.yyyy").format(new Date()), fontExamDate);
-        dateParagraph.setSpacingAfter(10);
-
+        Paragraph dateParagraph = new Paragraph("Am " + new SimpleDateFormat("dd.MM.yyyy").format(new Date()), fontExamDate);
+        dateParagraph.setSpacingAfter(0);
         headerContainerParagraph.add(dateParagraph);
 
-        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName() + "\nMatrikelnummer: " + this.student.getMatriculationNumber() + "\nStudienkennzahl: " + this.student.getStudyProgramme(), fontStudentInfo);
-        studentInfoParagraph.setSpacingAfter(10);
+        Paragraph timeParagraph = new Paragraph("Abgegeben um " + new SimpleDateFormat("HH:mm").format(new Date()), fontExamDate);
+        timeParagraph.setSpacingAfter(10);
+        headerContainerParagraph.add(timeParagraph);
 
+        Paragraph studentInfoParagraph = new Paragraph("Student:\nName: " + this.student.getName()
+            + "\nMatrikelnummer: " + this.student.getMatriculationNumber() + "\nStudienkennzahl: " + this.student.getStudyProgramme(), fontStudentInfo);
+        studentInfoParagraph.setSpacingAfter(10);
         headerContainerParagraph.add(studentInfoParagraph);
 
+        int correctAnswers = 0;
+        for(int i = 0; i < this.examwriter.getQuestions().size(); i++) {
+            if(this.examwriter.getQuestions().get(i).getCorrectAnswers().equals(this.examwriter.getQuestions().get(i).getCheckedAnswers())) {
+                correctAnswers++;
+            }
+        }
+
+        Paragraph resultParagraph = new Paragraph(correctAnswers + " von " + this.examwriter.getQuestions().size()
+            + " Fragen wurden korrekt beantwortet. Das entspricht " + getPercent(correctAnswers, this.examwriter.getQuestions().size()) + "% der gestellten Fragen.", fontExamName);
+        resultParagraph.setSpacingAfter(0);
+        headerContainerParagraph.add(resultParagraph);
+
+        Paragraph noteParagraph = new Paragraph("Hinweis: Eine Frage wird in dieser Übersicht" +
+            " nur dann als korrekt gezählt, wenn alle gegebenen Antworten mit den erwarteten Antworten übereinstimmen.", fontStudentInfo);
+        noteParagraph.setSpacingAfter(10);
+        headerContainerParagraph.add(noteParagraph);
+
         return headerContainerParagraph;
+    }
+
+    private double getPercent(int correctAnswers, int size) {
+        double percent = (double)correctAnswers * 100 / (double)size;
+        int temp = (int) (percent * Math.pow(10, 2));
+        return ((double) temp) / Math.pow(10, 2);
     }
 
     public Paragraph getQuestionParagraph(Question question, String name, int i) throws PersistenceException {
@@ -254,7 +280,6 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         }
 
         for (int j = 0; j < allAnswers.size(); j++) {
-
             table.addCell(allAnswers.get(j));
 
             String correctAnswers = question.getCorrectAnswers();
@@ -264,11 +289,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             String indexStr = Integer.toString(j + 1);
 
             boolean answerWasCorrect = correctAnswers.contains(indexStr);
-
             boolean answerWasChecked;
 
             // skipped questions are treated as false
-
             try {
                 answerWasChecked = checkedAnswers.contains(indexStr);
             } catch (NullPointerException e) {
