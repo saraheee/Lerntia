@@ -252,7 +252,8 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + answerNumber.zwei + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
         out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + answerNumber.drei + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
         out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + answerNumber.vier + BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer5())) ? (" " + textToSpeech.getAnswer5() + '\n') : "");
+        out += BREAK + (((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("Keine der genannten")))) ? (" " + textToSpeech.getAnswer5()
+            + '\n') : ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + answerNumber.fünf + BREAK + " " + textToSpeech.getAnswer5() + '\n') : ""));
         LOG.trace(out);
         return out;
     }
@@ -272,7 +273,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
 
     public enum answerNumber {
-        eins, zwei, drei, vier
+        eins, zwei, drei, vier, fünf
     }
 
 }
