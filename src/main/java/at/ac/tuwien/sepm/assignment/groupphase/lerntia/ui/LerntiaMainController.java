@@ -264,7 +264,7 @@ public class LerntiaMainController implements Runnable {
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummer ist richtig: " + checkedAnswers;
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwort ist richtig: " + checkedAnswers;
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
@@ -275,7 +275,7 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
 
                 } else {
-                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwortnummern sind richtig: "
+                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antworten sind richtig: "
                         + formatAnswerNumbers(question.getCorrectAnswers());
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
@@ -296,7 +296,7 @@ public class LerntiaMainController implements Runnable {
                     }
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummer wäre richtig gewesen: "
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwort wäre richtig gewesen: "
                         + formatAnswerNumbers(question.getCorrectAnswers());
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
@@ -308,7 +308,7 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
 
                 } else {
-                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwortnummern wären richtig gewesen: "
+                    var feedbackPrefix = "Falsch beantwortet! Folgende Antworten wären richtig gewesen: "
                         + formatAnswerNumbers(question.getCorrectAnswers());
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
 
