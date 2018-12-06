@@ -33,6 +33,7 @@ class ZoomedImageController {
     private final double screenWidth = screenSize.getWidth();
     private final double screenHeight = screenSize.getHeight();
     private final double eps = (screenHeight / 100) * 10;
+    private final double k = 4;
     private File imageFile;
     private Scene imageScene;
 
@@ -67,7 +68,7 @@ class ZoomedImageController {
         var imageView = new ImageView();
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - eps));
+        imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - (k * eps)));
         imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
         var pane = new BorderPane();
         pane.setCenter(imageView);
