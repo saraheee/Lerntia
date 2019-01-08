@@ -264,7 +264,7 @@ public class LerntiaMainController implements Runnable {
                 }
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antwort ist richtig: " + checkedAnswers;
+                    var feedbackPrefix = "Korrekt beantwortet! Richtige Antwort: " + checkedAnswers + "       ";
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
@@ -275,8 +275,8 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
 
                 } else {
-                    var feedbackPrefix = "Korrekt beantwortet! Folgende Antworten sind richtig: "
-                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    var feedbackPrefix = "Korrekt beantwortet! Richtige Antworten: "
+                        + formatAnswerNumbers(question.getCorrectAnswers()) + "     ";
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
@@ -296,8 +296,8 @@ public class LerntiaMainController implements Runnable {
                     }
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    var feedbackPrefix = "Falsch beantwortet! Folgende Antwort wäre richtig gewesen: "
-                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    var feedbackPrefix = "Falsch beantwortet! Die richtige Antwort lautet: "
+                        + formatAnswerNumbers(question.getCorrectAnswers()) + "    ";
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
@@ -308,8 +308,8 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
 
                 } else {
-                    var feedbackPrefix = "Falsch beantwortet! Folgende Antworten wären richtig gewesen: "
-                        + formatAnswerNumbers(question.getCorrectAnswers());
+                    var feedbackPrefix = "Falsch beantwortet! Die richtigen Antworten lauten: "
+                        + formatAnswerNumbers(question.getCorrectAnswers()) + " ";
                     audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
 
                     if (alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
