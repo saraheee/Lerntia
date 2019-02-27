@@ -59,7 +59,7 @@ public class LerntiaMainController implements Runnable {
     private final LearnAlgorithmController learnAlgorithmController;
     private final ReentrantLock lock = new ReentrantLock();
     private final String BREAK = "....";
-    private final String SPACE = "                                      ";
+    private final String SPACE = "                                                            ";
     private boolean onlyWrongQuestions = false;
     private boolean showAllQuestionsStatistic = false;
     private ConfigReader configReaderSpeech = null;
