@@ -10,6 +10,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.maven.model.Resource;
+import org.codehaus.plexus.interpolation.QueryEnabledValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -137,20 +138,24 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
         int correctAnswers = 0;
         for(int i = 0; i < this.examwriter.getQuestions().size(); i++) {
-            if(this.examwriter.getQuestions().get(i).getCorrectAnswers().equals(this.examwriter.getQuestions().get(i).getCheckedAnswers())) {
+            if(this.examwriter.getQuestions().get(i).getCorrectAnswers().equals("-1")) {
+                correctAnswers = -1;
+            }
+            else if(this.examwriter.getQuestions().get(i).getCorrectAnswers().equals(this.examwriter.getQuestions().get(i).getCheckedAnswers())) {
                 correctAnswers++;
             }
         }
+        if(correctAnswers != -1) {
+            Paragraph resultParagraph = new Paragraph(correctAnswers + " von " + this.examwriter.getQuestions().size()
+                + " Fragen wurden korrekt beantwortet. Das entspricht " + getPercent(correctAnswers, this.examwriter.getQuestions().size()) + "% der gestellten Fragen.", fontExamName);
+            resultParagraph.setSpacingAfter(0);
+            headerContainerParagraph.add(resultParagraph);
 
-        Paragraph resultParagraph = new Paragraph(correctAnswers + " von " + this.examwriter.getQuestions().size()
-            + " Fragen wurden korrekt beantwortet. Das entspricht " + getPercent(correctAnswers, this.examwriter.getQuestions().size()) + "% der gestellten Fragen.", fontExamName);
-        resultParagraph.setSpacingAfter(0);
-        headerContainerParagraph.add(resultParagraph);
-
-        Paragraph noteParagraph = new Paragraph("Hinweis: Eine Frage wird in dieser Übersicht" +
-            " nur dann als korrekt gezählt, wenn alle gegebenen Antworten mit den erwarteten Antworten übereinstimmen.", fontStudentInfo);
-        noteParagraph.setSpacingAfter(10);
-        headerContainerParagraph.add(noteParagraph);
+            Paragraph noteParagraph = new Paragraph("Hinweis: Eine Frage wird in dieser Übersicht" +
+                " nur dann als korrekt gezählt, wenn alle gegebenen Antworten mit den erwarteten Antworten übereinstimmen.", fontStudentInfo);
+            noteParagraph.setSpacingAfter(10);
+            headerContainerParagraph.add(noteParagraph);
+        }
 
         return headerContainerParagraph;
     }
@@ -225,21 +230,35 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         if (question == null) {
             throw new PersistenceException("PDF-Frage ist null!");
         }
-        // create a table with 4 columns and stretch it to 100% of the page width
-
-        PdfPTable table = new PdfPTable(4);
+        // create a table with 2 or 4 columns and stretch it to 100% of the page width
+        PdfPTable table;
+        if(question.getCorrectAnswers().trim().equals("-1")) {
+            table = new PdfPTable(2);
+        } else {
+            table = new PdfPTable(4);
+        }
         table.setWidthPercentage(100);
 
         try {
-            table.setWidths(new float[]{8, (float) 1.25, (float) 1.5, (float) 1});
+            if(question.getCorrectAnswers().trim().equals("-1")) {
+                table.setWidths(new float[]{8, (float) 1.25});
+            } else {
+                table.setWidths(new float[]{8, (float) 1.25, (float) 1.5, (float) 1});
+            }
         } catch (DocumentException e) {
             throw new PersistenceException("Eine Tabelle konnte nicht für das PDF formatiert werden.");
         }
 
-        table.addCell("Antworten");
-        table.addCell("Erwartet");
-        table.addCell("Ausgewählt");
-        table.addCell("Richtig");
+        if(question.getCorrectAnswers().trim().equals("-1")) {
+            table.addCell("Antworten");
+            table.addCell("Ausgewählt");
+        } else {
+            table.addCell("Antworten");
+            table.addCell("Erwartet");
+            table.addCell("Ausgewählt");
+            table.addCell("Richtig");
+        }
+
 
         ArrayList<String> allAnswers = new ArrayList<>();
 
@@ -297,10 +316,13 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             } catch (NullPointerException e) {
                 answerWasChecked = false;
             }
-
-            table.addCell((answerWasCorrect) ? cell_checked : cell_box);
-            table.addCell((answerWasChecked) ? cell_checked : cell_box);
-            table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
+            if(question.getCorrectAnswers().trim().equals("-1")) {
+                table.addCell((answerWasChecked) ? cell_checked : cell_box);
+            } else {
+                table.addCell((answerWasCorrect) ? cell_checked : cell_box);
+                table.addCell((answerWasChecked) ? cell_checked : cell_box);
+                table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
+            }
         }
 
         return table;
