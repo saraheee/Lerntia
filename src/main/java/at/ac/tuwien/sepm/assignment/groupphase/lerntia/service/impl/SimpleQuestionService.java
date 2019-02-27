@@ -219,7 +219,7 @@ public class SimpleQuestionService implements IQuestionService {
             // the ArrayList index starts at 0. the answers however start with 1.
             // so we have to decrement the index that we get from the correct answer string so we can
             // access the ArrayList.
-            if (allAnswers.get(currentCorrectAnswerIndex - 1) == null || allAnswers.get(currentCorrectAnswerIndex - 1).equals("")) {
+            if (currentCorrectAnswerIndex != -1 && allAnswers.get(currentCorrectAnswerIndex - 1) == null || currentCorrectAnswerIndex != -1 && allAnswers.get(currentCorrectAnswerIndex - 1).equals("")) {
                 error = true;
                 message.append("In der ").append(question.getIndex()).append(".Frage von oben wurde eine Antwort als korrekt angegeben, die nicht existiert!\n");
             }
