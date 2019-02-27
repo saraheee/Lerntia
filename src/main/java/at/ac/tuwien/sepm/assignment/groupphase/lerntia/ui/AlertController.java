@@ -33,7 +33,9 @@ public class AlertController {
     private final Image CONFIRMATION = new Image(getClass().getResourceAsStream("/icons/confirmation.png"));
     private final Image CORRECT = new Image(getClass().getResourceAsStream("/icons/correct.png"));
     private final Image WRONG = new Image(getClass().getResourceAsStream("/icons/incorrect.png"));
+    private final Image UNDEFINED = new Image(getClass().getResourceAsStream("/icons/feedback.png"));
     private boolean wrongAnswer = false;
+    private boolean undefinedAnswer = false;
     private boolean onlyWrongQuestions = false;
     private ImageView imageView;
 
@@ -183,6 +185,11 @@ public class AlertController {
         return showCorrectAnswerAlert(title, header, content);
     }
 
+    public boolean showUndefinedAnswerAlert(String title, String header, String content) {
+        undefinedAnswer = true;
+        return showCorrectAnswerAlert(title, header, content);
+    }
+
     public boolean showCorrectAnswerAlert(String title, String header, String content) {
         LOG.debug("Create answer alert.");
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -211,6 +218,10 @@ public class AlertController {
         if (wrongAnswer) {
             imageView = new ImageView(WRONG);
             wrongAnswer = false;
+        } else if(undefinedAnswer) {
+            imageView = new ImageView(UNDEFINED);
+            undefinedAnswer = false;
+
         } else {
             imageView = new ImageView(CORRECT);
         }

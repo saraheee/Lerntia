@@ -59,6 +59,7 @@ public class LerntiaMainController implements Runnable {
     private final LearnAlgorithmController learnAlgorithmController;
     private final ReentrantLock lock = new ReentrantLock();
     private final String BREAK = "....";
+    private final String SPACE = "                                      ";
     private boolean onlyWrongQuestions = false;
     private boolean showAllQuestionsStatistic = false;
     private ConfigReader configReaderSpeech = null;
@@ -253,7 +254,20 @@ public class LerntiaMainController implements Runnable {
             boolean goToNextQuestion = true;
             boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
             LOG.info("Save values to the algorithm");
-            if (answersCorrect) {
+
+            // No correct answers specified, just read the feedback-text
+            if(question.getCorrectAnswers().equals("-1")) {
+                var feedbackPrefix = "Feedbacktext :" + SPACE;
+                if(question.getOptionalFeedback() != null && !question.getOptionalFeedback().trim().equals("")) {
+                    audioController.readFeedbackText(question.getOptionalFeedback());
+                }
+                if (alertController.showUndefinedAnswerAlert("Antwortfeedback!", feedbackPrefix,
+                    question.getOptionalFeedback())) {
+                    goToNextQuestion = false;
+                }
+                audioController.stopReading();
+
+            } else if (answersCorrect) {
                 if (!questionColored) {
                     try {
                         lerntiaService.recordCheckedAnswers(question, true);
@@ -323,7 +337,9 @@ public class LerntiaMainController implements Runnable {
                 removeColorsAndEnableAnswers();
                 getAndShowNextQuestion();
             } else {
-                showColorsAndDisableAnswers(question.getCorrectAnswers());
+                if(!question.getCorrectAnswers().equals("-1")) {
+                    showColorsAndDisableAnswers(question.getCorrectAnswers());
+                }
             }
         } catch (NullPointerException e) {
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
