@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>at.ac.tuwien.sepm.assignment.groupphase</groupId>
+    <groupId>at.ac.tuwien.lerntia</groupId>
     <artifactId>lerntia</artifactId>
     <version>3.1.3</version>
 
@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
-        <exec.mainClass>at.ac.tuwien.sepm.assignment.groupphase.application.MainApplication</exec.mainClass>
+        <exec.mainClass>at.ac.tuwien.lerntia.application.MainApplication</exec.mainClass>
         <!-- compile dependencies -->
         <spring.version>5.0.5.RELEASE</spring.version>
         <slf4j.version>1.8.0-beta2</slf4j.version>

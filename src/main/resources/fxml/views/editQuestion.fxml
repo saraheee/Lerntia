@@ -7,7 +7,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@/css/views.css" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="820.0"
             prefWidth="1184.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.EditQuestionsController">
+            fx:controller="at.ac.tuwien.lerntia.lerntia.ui.EditQuestionsController">
     <Label layoutX="80.0" layoutY="58.0" text="Frage*"/>
     <TextField fx:id="tf_question" layoutX="137.0" layoutY="20.0" prefHeight="90.0" prefWidth="455.0"/>
     <Label layoutX="50.0" layoutY="175.0" text="Antwort 1*"/>

@@ -7,7 +7,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@/css/views.css" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="410.0"
             prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.ImportFileController">
+            fx:controller="at.ac.tuwien.lerntia.lerntia.ui.ImportFileController">
     <Label layoutX="28.0" layoutY="42.0" text="Lehrveranstaltung:"/>
     <ComboBox fx:id="cb_course" layoutX="231.0" layoutY="38.0" prefWidth="215.0">
         <styleClass>
