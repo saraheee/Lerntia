@@ -5,7 +5,7 @@
 <?import java.lang.String?>
 <AnchorPane prefHeight="580.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/views.css"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionAdministrateController">
+            fx:controller="at.ac.tuwien.lerntia.lerntia.ui.SelectQuestionAdministrateController">
     <styleClass>
         <String fx:value="view"/>
     </styleClass>

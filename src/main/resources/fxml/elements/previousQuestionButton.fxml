@@ -8,7 +8,7 @@
         minWidth="304.0" styleClass="label" stylesheets="@/css/rectangle-button.css"
         text="Zurück" onAction="#getAndShowPreviousQuestion"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
+        fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
     <graphic>
         <ImageView fitHeight="89.0" fitWidth="74.0" pickOnBounds="true"
                    preserveRatio="true">
