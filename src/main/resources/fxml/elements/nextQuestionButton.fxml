@@ -7,7 +7,7 @@
         contentDisplay="RIGHT"
         styleClass="label" stylesheets="@/css/rectangle-button.css" text="Weiter" xmlns="http://javafx.com/javafx/8.0.121"
         xmlns:fx="http://javafx.com/fxml/1" onAction="#getAndShowNextQuestion"
-        fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.LerntiaMainController">
+        fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
     <graphic>
         <ImageView fitHeight="89.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/icons/right.png"/>
