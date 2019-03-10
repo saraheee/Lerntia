@@ -7,7 +7,7 @@
 <?import java.lang.String?>
 <AnchorPane stylesheets="@/css/views.css" prefHeight="275.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/8.0.121"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.SelectQuestionnaireController">
+            fx:controller="at.ac.tuwien.lerntia.lerntia.ui.SelectQuestionnaireController">
 
     <Label layoutX="53.0" layoutY="85.0" text="Fragebogen:"/>
     <ComboBox fx:id="cb_questionnaire" layoutX="169.0" layoutY="80.0" prefHeight="41.0" prefWidth="188.0">

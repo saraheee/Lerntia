@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <MenuBar maxWidth="Infinity" prefHeight="25.0" styleClass="menu-label" stylesheets="@/css/menu.css"
          xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="at.ac.tuwien.sepm.assignment.groupphase.lerntia.ui.MenuBarController">
+         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.MenuBarController">
     <Menu mnemonicParsing="false" text="Menü" onAction="#onMenuClicked">
         <MenuItem fx:id="administrateQuestionnaireButton" mnemonicParsing="false" onAction="#administrateQuestionnaire" text="Fragen verwalten">
             <graphic>
