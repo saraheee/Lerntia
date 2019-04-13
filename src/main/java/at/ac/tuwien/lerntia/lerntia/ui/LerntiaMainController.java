@@ -252,8 +252,10 @@ public class LerntiaMainController implements Runnable {
         try {
             String checkedAnswers = getCheckedAnswers();
             boolean goToNextQuestion = true;
-            boolean answersCorrect = checkedAnswers.equals(question.getCorrectAnswers());
-            LOG.info("Save values to the algorithm");
+            boolean answersCorrect = checkedAnswers.trim().equals(question.getCorrectAnswers().trim());
+            LOG.info(question.toStringGUI());
+            LOG.info("Answers given: " + (checkedAnswers.trim().length() > 0 ? checkedAnswers.trim() : "-"));
+            LOG.info(answersCorrect ? "Correctly answered.\n" : "Wrongly answered.\n" );
 
             // No correct answers specified, just read the feedback-text
             if(question.getCorrectAnswers().equals("-1")) {
@@ -274,6 +276,7 @@ public class LerntiaMainController implements Runnable {
                     } catch (ServiceException e) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
                             "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
+                        LOG.error("Given answers are correct, but failed to save answers: " + e.getLocalizedMessage());
                     }
                 }
 
@@ -307,6 +310,7 @@ public class LerntiaMainController implements Runnable {
                     } catch (ServiceException e) {
                         alertController.showBigAlert(Alert.AlertType.WARNING, "Speichern fehlgeschlagen",
                             "Antworten nicht gespeichert!", "Die gegebenen Antworten konnten nicht gespeichert werden!");
+                        LOG.error("Given answers are wrong, and failed to save answers: " + e.getLocalizedMessage());
                     }
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
@@ -343,7 +347,8 @@ public class LerntiaMainController implements Runnable {
             }
         } catch (NullPointerException e) {
             alertController.showBigAlert(Alert.AlertType.ERROR, "Keine Frage vorhanden", "Fehler",
-                "Überprüfen ist nicht möglich da keine Frage vorhanden ist.");
+                "Überprüfen nicht möglich, da keine Frage vorhanden ist.");
+            LOG.error("Failed to check answers: " + e.getLocalizedMessage());
         }
     }
 
@@ -825,6 +830,7 @@ public class LerntiaMainController implements Runnable {
         } catch (IOException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Statistik anzeigen fehlgeschlagen",
                 "Fehler", "Die Statistik kann nicht angezeigt werden!");
+            LOG.error("Failed to show statistic: " + e.getLocalizedMessage());
             return null;
         } finally {
             stage.close();

@@ -480,10 +480,12 @@ public class MainLerntiaService implements IMainLerntiaService {
         double share = (double) getCorrectAnswers();
         double base = (double) getCorrectAnswers() + getWrongAnswers();
         double percent = base <= 0 ? 0 : (share / base) * 100.00;
-        LOG.info("Get percentage of correctly answered questions");
         int temp = (int) (percent * Math.pow(10, 2));
         double result = ((double) temp) / Math.pow(10, 2);
-        return result > 100 ? 100 : result < 0 ? 0 : result;
+        result = result > 100 ? 100 : result < 0 ? 0 : result;
+        LOG.info("Percentage of correctly answered questions: " + result);
+        LOG.info("Correct: " + getCorrectAnswers() + ", Wrong: " + getWrongAnswers() + ", Skipped: " + getIgnoredAnswers());
+        return result;
     }
 
     @Override
