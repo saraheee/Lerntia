@@ -1,13 +1,13 @@
 package at.ac.tuwien.lerntia.application;
 
+import at.ac.tuwien.lerntia.exception.ServiceException;
+import at.ac.tuwien.lerntia.exception.TextToSpeechServiceException;
 import at.ac.tuwien.lerntia.lerntia.service.ITextToSpeechService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleTextToSpeechService;
 import at.ac.tuwien.lerntia.lerntia.ui.AlertController;
 import at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.lerntia.util.ConfigReader;
 import at.ac.tuwien.lerntia.util.SpringFXMLLoader;
-import at.ac.tuwien.lerntia.exception.ServiceException;
-import at.ac.tuwien.lerntia.exception.TextToSpeechServiceException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleTextToSpeechService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +28,6 @@ import java.lang.invoke.MethodHandles;
 @Component
 @ComponentScan("at.ac.tuwien.lerntia")
 public final class MainApplication extends Application {
-
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private AnnotationConfigApplicationContext context;
     private ITextToSpeechService iTextToSpeechService;
