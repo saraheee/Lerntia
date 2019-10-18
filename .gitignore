@@ -47,6 +47,10 @@ Icon
 *.log
 log/
 
+### Autonom-Folder ###
+*autonom/*
+autonom/
+
 ### Java ###
 *.class
 *.jar
