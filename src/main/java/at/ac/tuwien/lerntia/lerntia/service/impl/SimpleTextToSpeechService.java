@@ -32,7 +32,8 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private Map<String, String> dictionary = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
-    private String VOICE = "bits3-hsmm";
+    private String VOICE = "cmu-slt-hsmm"; //  "bits3-hsmm";
+    // private String VOICE = "bits3-hsmm";
     private String BREAK = "....";
 
     private AudioPlayer audioPlayer;
@@ -56,13 +57,16 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
+        System.out.println("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiier: " + VOICE);
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
 
         LOG.trace("Entering method playWelcomeText.");
         try {
             maryTTS = new LocalMaryInterface();
-            maryTTS.setVoice(VOICE);
+            if (VOICE != null) {
+                maryTTS.setVoice(VOICE);
+            }
         } catch (MaryConfigurationException e) {
             notInitialized = true;
             LOG.error("Failed to initialize speech synthesizer!");
@@ -93,7 +97,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 maryTTS = new LocalMaryInterface();
                 LOG.trace("mary interface is created. maryTTS is not null anymore.");
                 MaryRuntimeUtils.ensureMaryStarted();
-                maryTTS.setVoice(VOICE);
+                if (VOICE != null) {
+                    maryTTS.setVoice(VOICE);
+                }
                 getTextToRead(textToSpeech);
                 notInitialized = false;
             } catch (MaryConfigurationException e) {
