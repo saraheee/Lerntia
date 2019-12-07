@@ -32,9 +32,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private Map<String, String> dictionary = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
-    private String VOICE = "cmu-slt-hsmm"; //  "bits3-hsmm";
-    // private String VOICE = "bits3-hsmm";
+    private String VOICE = "bits3-hsmm";
     private String BREAK = "....";
+    private boolean english = false;
 
     private AudioPlayer audioPlayer;
     private MaryInterface maryTTS;
@@ -45,21 +45,14 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void playWelcomeText() throws TextToSpeechServiceException {
-        if (configReaderSpeech == null) {
-            LOG.debug("configReaderSpeech is null, trying to add a new one.");
-            try {
-                configReaderSpeech = new ConfigReader("speech");
-            } catch (ConfigReaderException e) {
-                throw new TextToSpeechServiceException(e.getCustomMessage());
-            }
-        }
+        createConfigReader();
 
         WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
-        System.out.println("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiier: " + VOICE);
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
+        english = VOICE.equals("cmu-slt-hsmm");
 
         LOG.trace("Entering method playWelcomeText.");
         try {
@@ -79,6 +72,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void readQuestionAndAnswers(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
+        createConfigReader();
+        ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
+        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
+        BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
+        english = VOICE.equals("cmu-slt-hsmm");
+
         LOG.trace("Entering method readQuestionAndAnswers.");
         if (maryTTS != null) {
             LOG.trace("maryTTS is NOT null. Calling stopSpeaking method.");
@@ -89,6 +88,9 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 notInitialized = true;
                 throw new TextToSpeechServiceException("Speech synthesizer is not started!");
             }
+            if (VOICE != null) {
+                setVoice(textToSpeech);
+            }
             getTextToRead(textToSpeech);
             LOG.trace("playText method is called.");
         } else {
@@ -98,7 +100,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
                 LOG.trace("mary interface is created. maryTTS is not null anymore.");
                 MaryRuntimeUtils.ensureMaryStarted();
                 if (VOICE != null) {
-                    maryTTS.setVoice(VOICE);
+                    setVoice(textToSpeech);
                 }
                 getTextToRead(textToSpeech);
                 notInitialized = false;
@@ -109,6 +111,17 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             } catch (Exception e) {
                 notInitialized = true;
                 throw new TextToSpeechServiceException("Speech synthesizer is not started!");
+            }
+        }
+    }
+
+    private void createConfigReader() throws TextToSpeechServiceException {
+        if (configReaderSpeech == null) {
+            LOG.debug("configReaderSpeech is null, trying to add a new one.");
+            try {
+                configReaderSpeech = new ConfigReader("speech");
+            } catch (ConfigReaderException e) {
+                throw new TextToSpeechServiceException(e.getCustomMessage());
             }
         }
     }
@@ -241,6 +254,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
     @Override
     public void setVoice(Speech textToSpeech) {
+        textToSpeech.setVoice(VOICE);
         maryTTS.setVoice(textToSpeech.getVoice());
     }
 
@@ -255,12 +269,12 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
         String out = "";
         out += isValidText(textToSpeech.getQuestion()) ? textToSpeech.getQuestion() : "" + '\n';
-        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (" " + ANSWER + answerNumber.eins + BREAK + " " + textToSpeech.getAnswer1() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + answerNumber.zwei + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + answerNumber.drei + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + answerNumber.vier + BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (" " + ANSWER + (english ? answerNumberEN.one : answerNumberDE.eins) + BREAK + " " + textToSpeech.getAnswer1() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + (english ? answerNumberEN.two : answerNumberDE.zwei) + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + (english ? answerNumberEN.three : answerNumberDE.drei) + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + (english ? answerNumberEN.four : answerNumberDE.vier)+ BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
         out += BREAK + (((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("Keine der genannten")))) ? (" " + textToSpeech.getAnswer5()
-            + '\n') : ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + answerNumber.fünf + BREAK + " " + textToSpeech.getAnswer5() + '\n') : ""));
+            + '\n') : ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + (english ? answerNumberEN.five : answerNumberDE.fünf) + BREAK + " " + textToSpeech.getAnswer5() + '\n') : ""));
         LOG.trace(out);
         return out;
     }
@@ -279,8 +293,11 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     }
 
 
-    public enum answerNumber {
+    public enum answerNumberDE {
         eins, zwei, drei, vier, fünf
     }
 
+    public enum answerNumberEN {
+        one, two, three, four, five
+    }
 }
