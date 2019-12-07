@@ -1,0 +1,5 @@
+AVAILABLE VOICES
+
+DE-male: bits3-hsmm
+EN-male: dfki-spike-hsmm
+EN-female: cmu-slt-hsmm
