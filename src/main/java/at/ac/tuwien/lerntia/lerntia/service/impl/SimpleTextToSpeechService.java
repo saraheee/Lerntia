@@ -53,7 +53,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
-        english = VOICE.equals("cmu-slt-hsmm") || VOICE.equals("dfki-spike-hsmm");
+        english = !VOICE.equals(VOICE_DE);
 
         LOG.trace("Entering method playWelcomeText.");
         try {
@@ -77,7 +77,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
-        english = VOICE.equals("cmu-slt-hsmm") || VOICE.equals("dfki-spike-hsmm");
+        english = !VOICE.equals(VOICE_DE);
 
         LOG.trace("Entering method readQuestionAndAnswers.");
         if (maryTTS != null) {
