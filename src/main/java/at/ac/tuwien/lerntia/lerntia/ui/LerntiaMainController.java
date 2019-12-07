@@ -282,7 +282,7 @@ public class LerntiaMainController implements Runnable {
 
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                     String feedbackPrefix = "Korrekt beantwortet! Richtige Antwort: " + checkedAnswers + "       ";
-                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                    audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
                     if (alertController.showCorrectAnswerAlert("Antwort richtig!", feedbackPrefix,
@@ -294,7 +294,7 @@ public class LerntiaMainController implements Runnable {
                 } else {
                     String feedbackPrefix = "Korrekt beantwortet! Richtige Antworten: "
                         + formatAnswerNumbers(question.getCorrectAnswers()) + "     ";
-                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                    audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
                     if (alertController.showCorrectAnswerAlert("Antworten richtig!", feedbackPrefix,
@@ -316,7 +316,7 @@ public class LerntiaMainController implements Runnable {
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
                     String feedbackPrefix = "Falsch beantwortet! Die richtige Antwort lautet: "
                         + formatAnswerNumbers(question.getCorrectAnswers()) + "    ";
-                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK +
+                    audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK +
                         question.getOptionalFeedback());
 
                     if (alertController.showWrongAnswerAlert("Antwort nicht richtig.", feedbackPrefix,
@@ -328,7 +328,7 @@ public class LerntiaMainController implements Runnable {
                 } else {
                     String feedbackPrefix = "Falsch beantwortet! Die richtigen Antworten lauten: "
                         + formatAnswerNumbers(question.getCorrectAnswers()) + " ";
-                    audioController.readFeedbackText(feedbackPrefix + " " + BREAK + BREAK + question.getOptionalFeedback());
+                    audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK + question.getOptionalFeedback());
 
                     if (alertController.showWrongAnswerAlert("Antworten nicht richtig.", feedbackPrefix,
                         question.getOptionalFeedback())) {

@@ -32,6 +32,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private Map<String, String> dictionary = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
+    private String VOICE_DE = "bits3-hsmm";
     private String VOICE = "bits3-hsmm";
     private String BREAK = "....";
     private boolean english = false;
@@ -131,7 +132,14 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
             playText(textToSpeech.getSingleAnswer());
             singleAnswer = false;
         } else if (feedbackText) {
-            playText(textToSpeech.getFeedbackText());
+            if (textToSpeech.getFeedbackText().contains("|")) {
+                maryTTS.setVoice(VOICE_DE);
+                playText(textToSpeech.getFeedbackText().substring(0, textToSpeech.getFeedbackText().indexOf("|")));
+                maryTTS.setVoice(VOICE);
+                playText(textToSpeech.getFeedbackText().substring(textToSpeech.getFeedbackText().indexOf("|")));
+            } else {
+                playText(textToSpeech.getFeedbackText());
+            }
             feedbackText = false;
         } else {
             try {
