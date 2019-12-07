@@ -52,7 +52,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
-        english = VOICE.equals("cmu-slt-hsmm");
+        english = VOICE.equals("cmu-slt-hsmm") || VOICE.equals("dfki-spike-hsmm");
 
         LOG.trace("Entering method playWelcomeText.");
         try {
@@ -76,7 +76,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
-        english = VOICE.equals("cmu-slt-hsmm");
+        english = VOICE.equals("cmu-slt-hsmm") || VOICE.equals("dfki-spike-hsmm");
 
         LOG.trace("Entering method readQuestionAndAnswers.");
         if (maryTTS != null) {
@@ -269,10 +269,10 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
         String out = "";
         out += isValidText(textToSpeech.getQuestion()) ? textToSpeech.getQuestion() : "" + '\n';
-        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (" " + ANSWER + (english ? answerNumberEN.one : answerNumberDE.eins) + BREAK + " " + textToSpeech.getAnswer1() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + (english ? answerNumberEN.two : answerNumberDE.zwei) + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + (english ? answerNumberEN.three : answerNumberDE.drei) + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
-        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + (english ? answerNumberEN.four : answerNumberDE.vier)+ BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer1())) ? (" " + ANSWER + (english ? " " + answerNumberEN.one : answerNumberDE.eins) + BREAK + " " + textToSpeech.getAnswer1() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + (english ? " " + answerNumberEN.two : answerNumberDE.zwei) + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + (english ? " " + answerNumberEN.three : answerNumberDE.drei) + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
+        out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + (english ? " " + answerNumberEN.four : answerNumberDE.vier)+ BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
         out += BREAK + (((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("Keine der genannten")))) ? (" " + textToSpeech.getAnswer5()
             + '\n') : ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + (english ? answerNumberEN.five : answerNumberDE.fünf) + BREAK + " " + textToSpeech.getAnswer5() + '\n') : ""));
         LOG.trace(out);

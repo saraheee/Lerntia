@@ -90,6 +90,11 @@
             <artifactId>voice-bits3-hsmm</artifactId>
             <version>${mary.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.dfki.mary</groupId>
+            <artifactId>voice-dfki-spike-hsmm</artifactId>
+            <version>${mary.version}</version>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>
