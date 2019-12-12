@@ -71,6 +71,14 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         }
     }
 
+    public boolean isEnglish() {
+        return english;
+    }
+
+    public void setEnglish(boolean en) {
+        this.english = en;
+    }
+
     @Override
     public void readQuestionAndAnswers(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
         createConfigReader();
