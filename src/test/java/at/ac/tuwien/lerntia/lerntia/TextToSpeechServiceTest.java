@@ -176,12 +176,17 @@ public class TextToSpeechServiceTest {
             speech.setAnswer4(answer4);
             speech.setAnswer5(answer5);
 
-            Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
-                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.eins + BREAK + " " + answer1 + '\n'
-                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.zwei + BREAK + " " + answer2 + '\n'
-                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.drei + BREAK + " " + answer3 + '\n'
-                + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.vier + BREAK + " " + answer4 + '\n'
-                + BREAK + " " + answer5 + '\n');
+            if(ANSWER.startsWith("Answer")) {
+                service.setEnglish(true);
+            }
+            if(!service.isEnglish()) {
+                Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
+                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.eins + BREAK + " " + answer1 + '\n'
+                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.zwei + BREAK + " " + answer2 + '\n'
+                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.drei + BREAK + " " + answer3 + '\n'
+                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.vier + BREAK + " " + answer4 + '\n'
+                    + BREAK + " " + answer5 + '\n');
+            }
         } catch (ConfigReaderException e) {
             throw new TextToSpeechServiceValidationException(e.getCustomMessage());
         }
