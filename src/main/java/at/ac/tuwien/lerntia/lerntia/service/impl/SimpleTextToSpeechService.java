@@ -50,7 +50,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
 
         WELCOME = configReaderSpeech.getValue("welcomeText") != null ? configReaderSpeech.getValue("welcomeText") : WELCOME;
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
-        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
+        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice").trim() : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
         english = !VOICE.equals(VOICE_DE);
@@ -83,7 +83,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     public void readQuestionAndAnswers(Speech textToSpeech) throws TextToSpeechServiceException, TextToSpeechServiceValidationException {
         createConfigReader();
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
-        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice") : VOICE;
+        VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice").trim() : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         english = !VOICE.equals(VOICE_DE);
 
