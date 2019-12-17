@@ -1,5 +1,29 @@
 AVAILABLE VOICES
 
-DE-male: bits3-hsmm
-EN-male: dfki-spike-hsmm
-EN-female: cmu-slt-hsmm
+DEFAULT VOICES:
+* DE-male: bits3-hsmm
+* EN-male: dfki-spike-hsmm
+
+
+OTHER VOICES:
+* DE-female: bits1-hsmm
+* DE-male: dfki-pavoque-neutral-hsmm
+
+* EN-male: cmu-rms-hsmm
+* EN-male: cmu-bdl-hsmm
+* EN-male: cmu-nk-hsmm
+* EN-male: dfki-obadiah-hsmm
+
+* EN-female: cmu-slt-hsmm
+* EN-female: dfki-poppy-hsmm
+* EN-female: dfki-prudence-hsmm
+
+
+OTHER LANGUAGES:
+* TURKISH-male: dfki-ot-hsmm
+* FRENCH-male: enst-dennys-hsmm
+* FRENCH-male: upmc-pierre-hsmm
+* FRENCH-female: enst-camille-hsmm
+* FRENCH-female: upmc-jessica-hsmm
+* ITALIAN-female: istc-lucia-hsmm
+
