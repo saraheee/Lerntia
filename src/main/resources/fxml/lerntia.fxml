@@ -11,6 +11,7 @@
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml"/>
         </VBox>
         <HBox alignment="BASELINE_RIGHT">
+            <fx:include fx:id="algorithmButton" source="/fxml/elements/learnAlgorithmButton.fxml" />
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml"/>
         </HBox>
         <HBox
@@ -47,7 +48,6 @@
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml"/>
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml"/>
-                    <fx:include fx:id="algorithmButton" source="/fxml/elements/learnAlgorithmButton.fxml"/>
                     <fx:include fx:id="handInButton" source="/fxml/elements/handInButton.fxml"/>
                     <fx:include fx:id="checkAnswerButton" source="/fxml/elements/checkAnswerButton.fxml"/>
                 </buttons>

@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
 <Button fx:id="learnAlgorithmButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#onAlgorithmButtonPressed"
-        prefHeight="79.0" prefWidth="166.0" stylesheets="@/css/square-button.css" text="Algorithm"
+        prefHeight="120.0" prefWidth="220.0" stylesheets="@/css/square-button.css" text="Algorithm"
         xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LearnAlgorithmController">
     <graphic>
