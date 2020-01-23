@@ -24,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -88,7 +89,14 @@ public class LerntiaMainController implements Runnable {
     @FXML
     private Button handInButton;
     @FXML
+    private HBox upperButtonBox;
+    @FXML
+    private VBox upperButtonSpace;
+    @FXML
     private Button algorithmButton;
+    @FXML
+    private Button audioButton;
+
     // question to be displayed and to be used for checking whether the selected answers were correct
     private Question question;
     private boolean examMode;
@@ -673,15 +681,19 @@ public class LerntiaMainController implements Runnable {
     }
 
     public void switchToExamMode() throws ServiceException {
+        upperButtonBox.getChildren().remove(algorithmButton);
         buttonBar.getButtons().remove(checkAnswerButton);
         buttonBar.getButtons().add(handInButton);
-        buttonBar.getButtons().remove(algorithmButton);
         lerntiaService.stopAlgorithm();
         learnAlgorithmController.reset();
     }
 
     public void switchToLearnMode() {
-        buttonBar.getButtons().add(algorithmButton);
+        upperButtonBox.getChildren().remove(audioButton);
+        upperButtonBox.getChildren().remove(upperButtonSpace);
+        upperButtonBox.getChildren().add(algorithmButton);
+        upperButtonBox.getChildren().add(upperButtonSpace);
+        upperButtonBox.getChildren().add(audioButton);
         buttonBar.getButtons().add(checkAnswerButton);
         buttonBar.getButtons().remove(handInButton);
     }

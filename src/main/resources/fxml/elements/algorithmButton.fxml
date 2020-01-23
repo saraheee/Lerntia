@@ -4,9 +4,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
-<Button fx:id="learnAlgorithmButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#onAlgorithmButtonPressed"
-        prefHeight="120.0" prefWidth="220.0" stylesheets="@/css/square-button.css" text="Algorithm"
-        xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<Button fx:id="algorithmButton" contentDisplay="TOP" mnemonicParsing="false"
+        onAction="#onAlgorithmButtonPressed" prefHeight="120.0" prefWidth="150.0"
+        stylesheets="@/css/square-button.css" text="Algorithm" xmlns="http://javafx.com/javafx/8.0.121"
+        xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LearnAlgorithmController">
     <graphic>
         <ImageView fitHeight="80.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
@@ -14,7 +15,7 @@
         </ImageView>
     </graphic>
     <styleClass>
-        <String fx:value="label-xsmall"/>
+        <String fx:value="label-small"/>
         <String fx:value="button"/>
     </styleClass>
 </Button>
