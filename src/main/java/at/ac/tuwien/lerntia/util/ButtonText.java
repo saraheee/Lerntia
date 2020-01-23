@@ -9,8 +9,8 @@ public enum ButtonText {
     SHOW("Anzeigen"),
     ALLQUESTIONS("Alle Fragen"),
     WRONGQUESTIONS("Falsche Fragen"),
-    ALGORITHMOFF("Algorithmus AUS"),
-    ALGORITHMON("Algorithmus EIN");
+    ALGORITHMOFF("Alg. aus"),
+    ALGORITHMON("Alg. ein");
 
     private final String name;
 

@@ -15,7 +15,7 @@ import java.lang.invoke.MethodHandles;
 public class LearnAlgorithmController {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     @FXML
-    private Button learnAlgorithmButton;
+    private Button algorithmButton;
     private boolean selected;
     private final MainLerntiaService mainLerntiaService;
 
@@ -26,25 +26,25 @@ public class LearnAlgorithmController {
 
     @FXML
     private void initialize() {
-        learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+        algorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
     }
 
     @FXML
     public void onAlgorithmButtonPressed() {
-        LOG.info("Learn Algorithm Button Pressed");
-        if (learnAlgorithmButton.isDefaultButton()) {
-            LOG.info("Set Algorithm to OFF");
+        LOG.info("Learn algorithm button pressed");
+        if (algorithmButton.isDefaultButton()) {
+            LOG.info("Set algorithm to OFF");
             selected = false;
             mainLerntiaService.setLearnAlgorithmStatus(false);
-            learnAlgorithmButton.defaultButtonProperty().setValue(false);
-            learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+            algorithmButton.defaultButtonProperty().setValue(false);
+            algorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
         } else {
-            learnAlgorithmButton.defaultButtonProperty().setValue(true);
-            LOG.info("Set Algorithm to ON");
+            algorithmButton.defaultButtonProperty().setValue(true);
+            LOG.info("Set algorithm to ON");
             selected = true;
 
             mainLerntiaService.setLearnAlgorithmStatus(true);
-            learnAlgorithmButton.setText(ButtonText.ALGORITHMON.toString());
+            algorithmButton.setText(ButtonText.ALGORITHMON.toString());
         }
     }
 
@@ -54,14 +54,14 @@ public class LearnAlgorithmController {
 
     public void reset() {
         selected = false;
-        if (learnAlgorithmButton != null) {
-            learnAlgorithmButton.defaultButtonProperty().setValue(false);
-            learnAlgorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
+        if (algorithmButton != null) {
+            algorithmButton.defaultButtonProperty().setValue(false);
+            algorithmButton.setText(ButtonText.ALGORITHMOFF.toString());
             mainLerntiaService.setLearnAlgorithmStatus(false);
             try {
                 mainLerntiaService.stopAlgorithm();
             } catch (ServiceException e) {
-                LOG.error("Learn Algorithm had an error Shuting down.");
+                LOG.error("Learn algorithm has an error in shutting down.");
             }
         }
 
