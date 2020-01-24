@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -44,6 +45,9 @@ class ZoomedImageController {
     private boolean key4pressed = false;
     private boolean key5pressed = false;
 
+    @FXML
+    private Button audioButton;
+
     @Autowired
     public ZoomedImageController(AlertController alertController, WindowController windowController, AudioController audioController) {
         this.alertController = alertController;
@@ -72,6 +76,11 @@ class ZoomedImageController {
         imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
         BorderPane pane = new BorderPane();
         pane.setCenter(imageView);
+        //pane.getChildren().add(audioButton);
+        Button audio = new Button("VORLESEN");
+        audio.setOnAction(event -> audioController.setSelected());
+
+        pane.setTop(audio);
         imageScene = new Scene(pane);
         windowController.openNewWindow("Bild", imageScene);
         LOG.debug("Successfully opened a window for the zoomed image");
