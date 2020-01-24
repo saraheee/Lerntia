@@ -16,7 +16,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Service
-public class SimpleCourseService implements ICourseService {
+public class CourseService implements ICourseService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ICourseDAO courseDAO;
@@ -25,7 +25,7 @@ public class SimpleCourseService implements ICourseService {
     private int maxLengthCourseMark;
     private int maxLengthCourseName;
 
-    public SimpleCourseService(ICourseDAO courseDAO) {
+    public CourseService(ICourseDAO courseDAO) {
         this.courseDAO = courseDAO;
 
         maxLengthCourseMark = 10;

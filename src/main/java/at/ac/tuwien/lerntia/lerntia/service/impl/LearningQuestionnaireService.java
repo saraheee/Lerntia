@@ -14,14 +14,14 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Service
-public class SimpleLearningQuestionnaireService implements ILearningQuestionnaireService {
+public class LearningQuestionnaireService implements ILearningQuestionnaireService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final ILearningQuestionnaireDAO iLearningQuestionnaireDAO;
 
     @Autowired
-    public SimpleLearningQuestionnaireService(ILearningQuestionnaireDAO iLearningQuestionnaireDAO) {
+    public LearningQuestionnaireService(ILearningQuestionnaireDAO iLearningQuestionnaireDAO) {
         this.iLearningQuestionnaireDAO = iLearningQuestionnaireDAO;
     }
 
