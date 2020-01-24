@@ -25,7 +25,11 @@
 }
 
 .button:hover, .button:focused {
-    -fx-effect: dropshadow(gaussian, lightgray, 20, -5, 0, 0);
+    -fx-effect: dropshadow(gaussian, lightblue, 20, -5, 0, 0);
+}
+
+.button:focused:hover, .button:default:hover, .button:default:focused {
+    -fx-effect: dropshadow(gaussian, mediumblue, 20, -5, 0, 0);
 }
 
 .button:default {
