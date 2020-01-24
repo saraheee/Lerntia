@@ -22,7 +22,7 @@
 }
 
 .button:focused {
-    -fx-background-color: rgba(0, 50, 250, 0.1);
+    -fx-background-color: rgba(0, 50, 250, 0.3);
 }
 
 .button:selected {
@@ -42,7 +42,7 @@
 }
 
 .button:focused:hover {
-    -fx-background-color: rgba(0, 50, 250, 0.02);
+    -fx-background-color: rgba(0, 50, 250, 0.4);
 }
 
 .check-box .box {

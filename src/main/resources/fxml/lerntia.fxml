@@ -12,7 +12,7 @@
         </VBox>
         <HBox fx:id="upperButtonBox" alignment="BASELINE_RIGHT">
             <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
-         <VBox fx:id="upperButtonSpace" prefHeight="17.0" prefWidth="17.0" />
+         <VBox fx:id="upperButtonSpace" prefWidth="17.0" />
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
         </HBox>
         <HBox
