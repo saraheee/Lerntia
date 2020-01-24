@@ -45,9 +45,6 @@ class ZoomedImageController {
     private boolean key4pressed = false;
     private boolean key5pressed = false;
 
-    @FXML
-    private Button audioButton;
-
     @Autowired
     public ZoomedImageController(AlertController alertController, WindowController windowController, AudioController audioController) {
         this.alertController = alertController;
@@ -73,14 +70,16 @@ class ZoomedImageController {
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - (k * eps)));
-        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - eps));
+        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - (k / 2 * eps)));
         BorderPane pane = new BorderPane();
         pane.setCenter(imageView);
-        //pane.getChildren().add(audioButton);
-        Button audio = new Button("VORLESEN");
-        audio.setOnAction(event -> audioController.setSelected());
 
-        pane.setTop(audio);
+        final Button audioOnImage = new Button();
+        audioOnImage.getStylesheets().add(this.getClass().getResource("/css/audio-on-image-button.css").toExternalForm());
+        audioOnImage.setMinSize((Math.min(image.getWidth(), screenWidth - eps)), 120);
+        audioOnImage.setMaxSize((Math.min(image.getWidth(), screenWidth - eps)), 120);
+        audioOnImage.setOnAction(event -> audioController.setSelected());
+        pane.setTop(audioOnImage);
         imageScene = new Scene(pane);
         windowController.openNewWindow("Bild", imageScene);
         LOG.debug("Successfully opened a window for the zoomed image");
