@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.AudioInputStream;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
     private String VOICE_DE = "bits3-hsmm";
+    private String PREFIX_DE = "Antwort";
     private String VOICE = "bits3-hsmm";
     private String BREAK = "....";
     private boolean english = false;
@@ -53,7 +56,14 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice").trim() : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
         playWelcomeText = configReaderSpeech.getValueBoolean("playWelcomeText") != null ? configReaderSpeech.getValueBoolean("playWelcomeText") : playWelcomeText;
-        english = !VOICE.equals(VOICE_DE);
+        english = !ANSWER.startsWith(PREFIX_DE);
+
+        try { // mark first button after starting the application
+            Robot robot = new Robot();
+            robot.keyPress(KeyEvent.VK_TAB);
+        } catch (AWTException e) {
+            LOG.error("Failed to go to first button after starting the application! " + e.getLocalizedMessage());
+        }
 
         LOG.trace("Entering method playWelcomeText.");
         try {
@@ -85,7 +95,7 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         ANSWER = configReaderSpeech.getValue("answerPrefix") != null ? configReaderSpeech.getValue("answerPrefix") : ANSWER;
         VOICE = configReaderSpeech.getValue("voice") != null ? configReaderSpeech.getValue("voice").trim() : VOICE;
         BREAK = configReaderSpeech.getValue("break") != null ? configReaderSpeech.getValue("break") : BREAK;
-        english = !VOICE.equals(VOICE_DE);
+        english = !ANSWER.startsWith(PREFIX_DE);
 
         LOG.trace("Entering method readQuestionAndAnswers.");
         if (maryTTS != null) {
