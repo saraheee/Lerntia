@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SimpleQuestionnaireService implements IQuestionnaireService {
+public class QuestionnaireService implements IQuestionnaireService {
 
     private final ILearningQuestionnaireService iLearningQuestionnaire;
 
     @Autowired
-    public SimpleQuestionnaireService(ILearningQuestionnaireService iLearningQuestionnaire) {
+    public QuestionnaireService(ILearningQuestionnaireService iLearningQuestionnaire) {
         this.iLearningQuestionnaire = iLearningQuestionnaire;
     }
 

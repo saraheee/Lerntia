@@ -3,7 +3,7 @@ package at.ac.tuwien.lerntia.application;
 import at.ac.tuwien.lerntia.exception.ServiceException;
 import at.ac.tuwien.lerntia.exception.TextToSpeechServiceException;
 import at.ac.tuwien.lerntia.lerntia.service.ITextToSpeechService;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleTextToSpeechService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.TextToSpeechService;
 import at.ac.tuwien.lerntia.lerntia.ui.AlertController;
 import at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController;
 import at.ac.tuwien.lerntia.util.ConfigReader;
@@ -74,10 +74,10 @@ public final class MainApplication extends Application {
         // show application
         primaryStage.show();
         primaryStage.toFront();
-        iTextToSpeechService = new SimpleTextToSpeechService();
+        iTextToSpeechService = new TextToSpeechService();
 
         Platform.runLater(() -> {
-            iTextToSpeechService = new SimpleTextToSpeechService();
+            iTextToSpeechService = new TextToSpeechService();
             try {
                 iTextToSpeechService.playWelcomeText();
                 String missingFilePaths = ConfigReader.checkIfAllPropertiesFilesAreProvided();

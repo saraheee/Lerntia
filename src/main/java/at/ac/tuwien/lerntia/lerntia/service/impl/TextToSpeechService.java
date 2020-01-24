@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class SimpleTextToSpeechService implements ITextToSpeechService {
+public class TextToSpeechService implements ITextToSpeechService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -299,8 +299,10 @@ public class SimpleTextToSpeechService implements ITextToSpeechService {
         out += BREAK + ((isValidText(textToSpeech.getAnswer2())) ? (" " + ANSWER + (english ? " " + answerNumberEN.two : answerNumberDE.zwei) + BREAK + " " + textToSpeech.getAnswer2() + '\n') : "");
         out += BREAK + ((isValidText(textToSpeech.getAnswer3())) ? (" " + ANSWER + (english ? " " + answerNumberEN.three : answerNumberDE.drei) + BREAK + " " + textToSpeech.getAnswer3() + '\n') : "");
         out += BREAK + ((isValidText(textToSpeech.getAnswer4())) ? (" " + ANSWER + (english ? " " + answerNumberEN.four : answerNumberDE.vier)+ BREAK + " " + textToSpeech.getAnswer4() + '\n') : "");
-        out += BREAK + (((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("Keine der genannten")))) ? (" " + textToSpeech.getAnswer5()
-            + '\n') : ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + (english ? answerNumberEN.five : answerNumberDE.fünf) + BREAK + " " + textToSpeech.getAnswer5() + '\n') : ""));
+        out += BREAK +
+            (((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("Keine der genannten")))) ? (" " + textToSpeech.getAnswer5() + '\n') :
+            ((isValidText(textToSpeech.getAnswer5()) && (textToSpeech.getAnswer5().startsWith("None of these"))) ? (" " + textToSpeech.getAnswer5() + '\n') :
+            ((isValidText(textToSpeech.getAnswer5())) ? (" " + ANSWER + (english ? answerNumberEN.five : answerNumberDE.fünf) + BREAK + " " + textToSpeech.getAnswer5() + '\n') : "")));
         LOG.trace(out);
         return out;
     }

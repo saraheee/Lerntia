@@ -56,15 +56,15 @@ public class IMainLerntiaServiceTest {
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
             this.ILearnQuestionnaireDAO(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
             this.IExamQuestionnaireDAO(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager));
-            this.LearnAlgorithmController(new LearnAlgorithmController(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
-                new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
+            this.LearnAlgorithmController(new LearnAlgorithmController(new MainLerntiaService(new LearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new QuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
+                new QuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager)))));
             this.IQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager));
 
-            this.IMainLerntiaService(new MainLerntiaService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
-                new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
-                new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
+            this.IMainLerntiaService(new MainLerntiaService(new LearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)),
+                new QuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))),
+                new QuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager)),
                 new LearnAlgorithmService(new LearnAlgorithmDAO(jdbcConnectionManager))));
 
         } catch (PersistenceException e) {

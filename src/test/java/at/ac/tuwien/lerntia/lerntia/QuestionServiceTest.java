@@ -9,7 +9,7 @@ import at.ac.tuwien.lerntia.util.ConfigReader;
 import at.ac.tuwien.lerntia.util.JDBCConnectionManager;
 import at.ac.tuwien.lerntia.exception.ConfigReaderException;
 import at.ac.tuwien.lerntia.exception.PersistenceException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleQuestionService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.QuestionService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class QuestionServiceTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            this.IQuestionService(new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))));
+            this.IQuestionService(new QuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager))));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }

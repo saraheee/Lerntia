@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SimpleQuestionService implements IQuestionService {
+public class QuestionService implements IQuestionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IQuestionDAO questionDAO;
@@ -31,7 +31,7 @@ public class SimpleQuestionService implements IQuestionService {
     private ConfigReader configReaderQuestions = null;
 
     @Autowired
-    public SimpleQuestionService(IQuestionDAO questionDAO) {
+    public QuestionService(IQuestionDAO questionDAO) {
         this.questionDAO = questionDAO;
     }
 
