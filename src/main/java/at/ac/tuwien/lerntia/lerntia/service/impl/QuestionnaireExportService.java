@@ -20,7 +20,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Component
-public class SimpleQuestionnaireExportService implements IQuestionnaireExportService {
+public class QuestionnaireExportService implements IQuestionnaireExportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final IQuestionnaireService iQuestionnaireService;
@@ -29,7 +29,7 @@ public class SimpleQuestionnaireExportService implements IQuestionnaireExportSer
     private final IQuestionnaireExportDAO iQuestionnaireExportDAO;
 
     @Autowired
-    public SimpleQuestionnaireExportService(
+    public QuestionnaireExportService(
         IMainLerntiaService lerntiaService,
         IQuestionnaireService iQuestionnaireService,
         ILearningQuestionnaireService simpleLearningQuestionnaireService,

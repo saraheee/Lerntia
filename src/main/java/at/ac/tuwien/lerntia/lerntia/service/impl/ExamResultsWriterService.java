@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimpleExamResultsWriterService implements IExamResultsWriterService {
+public class ExamResultsWriterService implements IExamResultsWriterService {
 
 
     private final IExamResultsWriterDAO iExamResultsWriterDAO;
 
     @Autowired
-    public SimpleExamResultsWriterService(IExamResultsWriterDAO iExamResultsWriterDAO) {
+    public ExamResultsWriterService(IExamResultsWriterDAO iExamResultsWriterDAO) {
         this.iExamResultsWriterDAO = iExamResultsWriterDAO;
     }
 

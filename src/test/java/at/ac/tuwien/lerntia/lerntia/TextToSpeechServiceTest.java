@@ -6,7 +6,7 @@ import at.ac.tuwien.lerntia.lerntia.dto.Speech;
 import at.ac.tuwien.lerntia.lerntia.service.ITextToSpeechService;
 import at.ac.tuwien.lerntia.util.ConfigReader;
 import at.ac.tuwien.lerntia.exception.ConfigReaderException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleTextToSpeechService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.TextToSpeechService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class TextToSpeechServiceTest {
 
     @Before
     public void setUp() {
-        ITextToSpeechService(new SimpleTextToSpeechService());
+        ITextToSpeechService(new TextToSpeechService());
     }
 
     private void ITextToSpeechService(ITextToSpeechService simpleTextToSpeechService) {
@@ -123,31 +123,31 @@ public class TextToSpeechServiceTest {
 
     @Test
     public void filterTextInParenthesisShouldPersist() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("Hallo (a)b"), "Hallo b");
     }
 
     @Test
     public void filterTextInNestedParenthesisShouldPersist() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.filterTextInParenthesis("((Hallo (a)b) c)i"), "i");
     }
 
     @Test
     public void replaceUmlautsInTextWithUmlautsShouldPersist() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.replaceUmlauts("Möhren-Gemuese Kuchen"), "M\u00f6hren-Gem\u00fcse Kuchen");
     }
 
     @Test
     public void replaceUmlautsInTextWithoutUmlautsShouldPersist() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.replaceUmlauts("Bei mir gibt es keine Umlaute."), "Bei mir gibt es keine Umlaute.");
     }
 
     @Test
     public void replaceWordsInDictionaryShouldPersist() throws TextToSpeechServiceException {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.replaceWordsInDictionary("Ein Apfel."), "Ein Auto.");
     }
 
@@ -159,7 +159,7 @@ public class TextToSpeechServiceTest {
             final String BREAK = configReaderSpeech.getValue("break");
             final String ANSWER = configReaderSpeech.getValue("answerPrefix");
             configReaderSpeech.close();
-            SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+            TextToSpeechService service = new TextToSpeechService();
             Speech speech = new Speech();
 
             String question = "Wann ist das Semester vorbei?";
@@ -181,10 +181,10 @@ public class TextToSpeechServiceTest {
             }
             if(!service.isEnglish()) {
                 Assert.assertEquals(service.getQuestionAndAnswerText(speech), question
-                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.eins + BREAK + " " + answer1 + '\n'
-                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.zwei + BREAK + " " + answer2 + '\n'
-                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.drei + BREAK + " " + answer3 + '\n'
-                    + BREAK + " " + ANSWER + SimpleTextToSpeechService.answerNumberDE.vier + BREAK + " " + answer4 + '\n'
+                    + BREAK + " " + ANSWER + TextToSpeechService.answerNumberDE.eins + BREAK + " " + answer1 + '\n'
+                    + BREAK + " " + ANSWER + TextToSpeechService.answerNumberDE.zwei + BREAK + " " + answer2 + '\n'
+                    + BREAK + " " + ANSWER + TextToSpeechService.answerNumberDE.drei + BREAK + " " + answer3 + '\n'
+                    + BREAK + " " + ANSWER + TextToSpeechService.answerNumberDE.vier + BREAK + " " + answer4 + '\n'
                     + BREAK + " " + answer5 + '\n');
             }
         } catch (ConfigReaderException e) {
@@ -194,7 +194,7 @@ public class TextToSpeechServiceTest {
 
     @Test
     public void notEmptyQuestionAndAnswerShouldReturnFalse() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Speech speech = new Speech();
         speech.setQuestion("Ich bin nicht leer.");
         speech.setAnswer1("Ich auch nicht.");
@@ -203,7 +203,7 @@ public class TextToSpeechServiceTest {
 
     @Test
     public void emptyQuestionAndAnswerShouldReturnTrue() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Speech speech = new Speech();
         speech.setQuestion("");
         speech.setAnswer1("");
@@ -212,13 +212,13 @@ public class TextToSpeechServiceTest {
 
     @Test
     public void validTextShouldReturnTrue() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.isValidText("Ein gültiger Text"), true);
     }
 
     @Test
     public void emptyTextShouldReturnFalse() {
-        SimpleTextToSpeechService service = new SimpleTextToSpeechService();
+        TextToSpeechService service = new TextToSpeechService();
         Assert.assertEquals(service.isValidText("  "), false);
     }
 
