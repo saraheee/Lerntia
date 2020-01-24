@@ -8,7 +8,7 @@ import at.ac.tuwien.lerntia.util.ConfigReader;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimpleUserService implements IUserService {
+public class UserService implements IUserService {
 
     private ConfigReader configReader = null;
 

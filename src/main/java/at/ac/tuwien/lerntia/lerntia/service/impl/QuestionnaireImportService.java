@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SimpleQuestionnaireImportService implements IQuestionnaireImportService {
+public class QuestionnaireImportService implements IQuestionnaireImportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -29,7 +29,7 @@ public class SimpleQuestionnaireImportService implements IQuestionnaireImportSer
     private final IQuestionnaireQuestionService simpleQuestionnaireQuestionService;
 
     @Autowired
-    public SimpleQuestionnaireImportService(
+    public QuestionnaireImportService(
         IQuestionnaireImportDAO questionnaireImportDAO,
         IQuestionService simpleQuestionService,
         ILearningQuestionnaireService simpleLearningQuestionnaireService,

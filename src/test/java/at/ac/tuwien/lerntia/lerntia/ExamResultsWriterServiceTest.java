@@ -7,7 +7,7 @@ import at.ac.tuwien.lerntia.lerntia.dto.User;
 import at.ac.tuwien.lerntia.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.lerntia.exception.PersistenceException;
 import at.ac.tuwien.lerntia.exception.ServiceException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleExamResultsWriterService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.ExamResultsWriterService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class ExamResultsWriterServiceTest {
     @Before
     public void setUp() {
         try {
-            this.IexamResultsWriterService(new SimpleExamResultsWriterService(new ExamResultsWriterDAO()));
+            this.IexamResultsWriterService(new ExamResultsWriterService(new ExamResultsWriterDAO()));
         } catch (PersistenceException e) {
             LOG.error("Failed create ExamResultsWriterDAO test-database");
         }

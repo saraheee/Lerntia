@@ -5,7 +5,7 @@ import at.ac.tuwien.lerntia.lerntia.service.IUserService;
 import at.ac.tuwien.lerntia.util.ConfigReader;
 import at.ac.tuwien.lerntia.exception.ConfigReaderException;
 import at.ac.tuwien.lerntia.exception.ServiceException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleUserService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.UserService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,7 +28,7 @@ public class UserServiceTest {
         } catch (ConfigReaderException e) {
                 LOG.error("Failed to get student config reader: {}", e.getLocalizedMessage());
         }
-        this.userService = new SimpleUserService();
+        this.userService = new UserService();
     }
 
 

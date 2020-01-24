@@ -9,7 +9,7 @@ import at.ac.tuwien.lerntia.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.lerntia.lerntia.dto.Course;
 import at.ac.tuwien.lerntia.lerntia.dto.ExamQuestionnaire;
 import at.ac.tuwien.lerntia.lerntia.service.IExamQuestionnaireService;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleExamQuestionnaireService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.ExamQuestionnaireService;
 import at.ac.tuwien.lerntia.util.JDBCConnectionManager;
 import org.junit.After;
 import org.junit.Assert;
@@ -38,7 +38,7 @@ public class ExamQuestionnaireServiceTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
             this.ICourseDAO(new CourseDAO(jdbcConnectionManager));
-            this.IExamQuestionnaireService(new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
+            this.IExamQuestionnaireService(new ExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }

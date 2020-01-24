@@ -39,15 +39,15 @@ public class QuestionnaireImportServiceTest {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
 
-            this.IQuestionnaireImportService(new SimpleQuestionnaireImportService(
+            this.IQuestionnaireImportService(new QuestionnaireImportService(
                 new QuestionnaireImportDAO()
-                , new SimpleQuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)))
-                , new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
-                , new SimpleExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
-                , new SimpleQuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager))
+                , new QuestionService(new QuestionDAO(jdbcConnectionManager, new LearnAlgorithmDAO(jdbcConnectionManager)))
+                , new LearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
+                , new ExamQuestionnaireService(new ExamQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))
+                , new QuestionnaireQuestionService(new QuestionnaireQuestionDAO(jdbcConnectionManager))
             ));
 
-            this.ICourseService(new SimpleCourseService(new CourseDAO(jdbcConnectionManager)));
+            this.ICourseService(new CourseService(new CourseDAO(jdbcConnectionManager)));
 
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");

@@ -5,10 +5,10 @@ import at.ac.tuwien.lerntia.lerntia.dao.impl.LearningQuestionnaireDAO;
 import at.ac.tuwien.lerntia.lerntia.dao.impl.QuestionnaireDAO;
 import at.ac.tuwien.lerntia.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.lerntia.lerntia.service.IQuestionnaireService;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleLearningQuestionnaireService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.LearningQuestionnaireService;
 import at.ac.tuwien.lerntia.util.JDBCConnectionManager;
 import at.ac.tuwien.lerntia.exception.PersistenceException;
-import at.ac.tuwien.lerntia.lerntia.service.impl.SimpleQuestionnaireService;
+import at.ac.tuwien.lerntia.lerntia.service.impl.QuestionnaireService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,8 +33,8 @@ public class QuestionnaireServiceTest {
         try {
             JDBCConnectionManager.setIsTestConnection(true);
             connection = jdbcConnectionManager.getTestConnection();
-            this.ILearningQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
-            this.IQuestionnaireService(new SimpleQuestionnaireService(new SimpleLearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))));
+            this.ILearningQuestionnaireService(new LearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager)));
+            this.IQuestionnaireService(new QuestionnaireService(new LearningQuestionnaireService(new LearningQuestionnaireDAO(new QuestionnaireDAO(jdbcConnectionManager), jdbcConnectionManager))));
         } catch (PersistenceException e) {
             LOG.error("Failed to get connection to test-database");
         }
