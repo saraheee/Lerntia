@@ -45,6 +45,11 @@
     -fx-background-color: rgba(0, 50, 250, 0.4);
 }
 
+.button:selected:focused {
+    -fx-background-color: rgba(0, 50, 250, 0.5);
+    -fx-effect: dropshadow(gaussian, white, 20, -5, 0, 0);
+}
+
 .check-box .box {
     -fx-background-color: white;
     -fx-border-color: lightgrey;

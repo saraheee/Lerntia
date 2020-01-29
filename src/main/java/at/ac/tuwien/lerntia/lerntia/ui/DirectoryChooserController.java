@@ -19,6 +19,7 @@ class DirectoryChooserController {
         LOG.info("Open new FileChooser to save a file.");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("[Lerntia] Verzeichnis");
+        // fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
 
         Stage stage = new Stage();
