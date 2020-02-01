@@ -322,7 +322,7 @@ public class LerntiaMainController implements Runnable {
                     }
                 }
                 if (question.getCorrectAnswers().length() == 1) { // only one answer is correct
-                    String feedbackPrefix = "Falsch beantwortet! Die richtige Antwort lautet: "
+                    String feedbackPrefix = "Falsch beantwortet! Die richtige Antwort\nlautet: "
                         + formatAnswerNumbers(question.getCorrectAnswers()) + "    ";
                     audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK +
                         question.getOptionalFeedback());
@@ -334,7 +334,7 @@ public class LerntiaMainController implements Runnable {
                     audioController.stopReading();
 
                 } else {
-                    String feedbackPrefix = "Falsch beantwortet! Die richtigen Antworten lauten: "
+                    String feedbackPrefix = "Falsch beantwortet! Die richtigen Antworten\nlauten: "
                         + formatAnswerNumbers(question.getCorrectAnswers()) + " ";
                     audioController.readFeedbackText(feedbackPrefix + " | " + BREAK + BREAK + question.getOptionalFeedback());
 

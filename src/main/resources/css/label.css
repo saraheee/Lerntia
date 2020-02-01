@@ -34,7 +34,7 @@
 }
 
 .button:focused:selected {
-    -fx-background-color: rgba(0, 50, 250, 0.3);
+    -fx-background-color: rgba(0, 50,   250, 0.3);
 }
 
 .button:focused:selected:hover {
