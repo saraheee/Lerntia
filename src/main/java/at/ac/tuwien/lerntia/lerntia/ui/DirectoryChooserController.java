@@ -7,12 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
 import java.lang.invoke.MethodHandles;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 class DirectoryChooserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final String PDFPATH = System.getProperty("user.dir") + File.separator + "ergebnisse" + File.separator;
 
     public String showFileSaveDirectoryChooser() throws ControllerException {
 
@@ -34,5 +40,16 @@ class DirectoryChooserController {
             throw new ControllerException("Keine Datei angegeben!");
         }
         return filePath;
+    }
+
+    String getExamPath() throws ControllerException {
+        if (!Files.exists(Paths.get(PDFPATH))) {
+            if (new File(String.valueOf(PDFPATH)).mkdir()) { //result directory created
+                LOG.info("Result folder created.");
+            } else {
+                throw new ControllerException("Das Anlegen eines Ergebnis-Ordners ist fehlgeschlagen!");
+            }
+        }
+        return PDFPATH + "prfg_" +  new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss'.pdf'").format(new Date());
     }
 }
