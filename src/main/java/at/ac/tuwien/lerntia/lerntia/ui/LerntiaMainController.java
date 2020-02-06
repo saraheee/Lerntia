@@ -1,13 +1,13 @@
 package at.ac.tuwien.lerntia.lerntia.ui;
 
 import at.ac.tuwien.lerntia.exception.ControllerException;
+import at.ac.tuwien.lerntia.exception.ServiceException;
 import at.ac.tuwien.lerntia.lerntia.dto.*;
 import at.ac.tuwien.lerntia.lerntia.service.IExamResultsWriterService;
 import at.ac.tuwien.lerntia.lerntia.service.ILearningQuestionnaireService;
 import at.ac.tuwien.lerntia.lerntia.service.IMainLerntiaService;
 import at.ac.tuwien.lerntia.lerntia.service.IUserService;
 import at.ac.tuwien.lerntia.util.ConfigReader;
-import at.ac.tuwien.lerntia.exception.ServiceException;
 import at.ac.tuwien.lerntia.util.JDBCConnectionManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -718,19 +719,17 @@ public class LerntiaMainController implements Runnable {
         questionList = lerntiaService.getQuestions();
 
         String filePath = null;
-
         try {
-            filePath = directoryChooserController.showFileSaveDirectoryChooser();
+            filePath = directoryChooserController.getExamPath();
         } catch (ControllerException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
                 "Fehler", e.getCustomMessage());
         }
-
+        LOG.info("Exam result saved in " + filePath);
         try {
             if (filePath != null) {
 
                 User student = null;
-
                 try {
                     student = simpleUserService.read();
                 } catch (ServiceException e) {
@@ -741,6 +740,16 @@ public class LerntiaMainController implements Runnable {
                 iExamResultsWriterService.writeExamResults(new ExamWriter(questionList, student, this.getExamName(), filePath));
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
                     "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
+
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        File myFile = new File(filePath);
+                        Desktop.getDesktop().open(myFile);
+                    } catch (IOException ex) {
+                        alertController.showStandardAlert(Alert.AlertType.ERROR, "Ergebnis konnte nicht geöffnet werden!",
+                            "Fehler", "Das Ergebnis-PDF konnte nicht geöffnet werden!");
+                    }
+                }
             }
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
