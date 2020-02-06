@@ -150,9 +150,7 @@ public class TextToSpeechService implements ITextToSpeechService {
             playText(textToSpeech.getSingleAnswer());
             singleAnswer = false;
         } else if (feedbackText) {
-            if (textToSpeech.getFeedbackText().contains("|")) {
-                maryTTS.setVoice(VOICE_DE);
-                playText(textToSpeech.getFeedbackText().substring(0, textToSpeech.getFeedbackText().indexOf("|")));
+            if (english && textToSpeech.getFeedbackText().contains("|")) {
                 maryTTS.setVoice(VOICE);
                 playText(textToSpeech.getFeedbackText().substring(textToSpeech.getFeedbackText().indexOf("|")));
             } else {
