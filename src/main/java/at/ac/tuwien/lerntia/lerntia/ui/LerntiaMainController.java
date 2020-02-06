@@ -496,7 +496,7 @@ public class LerntiaMainController implements Runnable {
                     alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
                             + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
-                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden\n korrekt beantwortet.  \n"
                             + "Übersprungen: " + lerntiaService.getIgnoredAnswers(),
                         "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
                     lerntiaService.resetCounter();
@@ -506,7 +506,7 @@ public class LerntiaMainController implements Runnable {
                     alertController.showBigAlertWithDiagram(Alert.AlertType.CONFIRMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
                             + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
-                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden\n korrekt beantwortet.  \n"
                             + "Übersprungen: " + lerntiaService.getWrongIgnoredAnswers(),
                         "Sollen nur falsch beantwortete Fragen erneut angezeigt werden, oder alle Fragen?\n", createPieChart());
                     lerntiaService.resetCounter();
@@ -516,7 +516,7 @@ public class LerntiaMainController implements Runnable {
                     alertController.showBigAlertWithDiagram(Alert.AlertType.INFORMATION, "Keine weiteren Fragen",
                         "Die letzte Frage wurde erreicht.\nRichtig: " + lerntiaService.getCorrectAnswers()
                             + "\n" + "Falsch: " + lerntiaService.getWrongAnswers() + "\n"
-                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden korrekt beantwortet.  \n"
+                            + lerntiaService.getPercent() + "% der gestellten Fragen wurden\n korrekt beantwortet.  \n"
                             + "Übersprungen: " + lerntiaService.getWrongIgnoredAnswers(),
                         "Es gibt keine falsch beantworteten Fragen mehr. Die erste Frage wird wieder angezeigt!\n", createPieChart());
                     lerntiaService.resetCounter();

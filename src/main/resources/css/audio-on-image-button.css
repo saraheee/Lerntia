@@ -21,7 +21,7 @@
 
 .button {
     -fx-width: 80%;
-    -fx-background-color: white;
+    -fx-background-color: lightgray;
     -fx-background-image: url('../icons/audio.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;

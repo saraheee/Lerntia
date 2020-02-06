@@ -3,6 +3,7 @@ package at.ac.tuwien.lerntia.lerntia.ui;
 import at.ac.tuwien.lerntia.exception.ControllerException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -70,7 +71,7 @@ class ZoomedImageController {
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - (k * eps)));
-        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - (k / 2 * eps)));
+        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - (k * eps)));
         BorderPane pane = new BorderPane();
         pane.setCenter(imageView);
 
@@ -80,6 +81,7 @@ class ZoomedImageController {
         audioOnImage.setMaxSize((Math.min(image.getWidth(), screenWidth - eps)), 120);
         audioOnImage.setOnAction(event -> audioController.setSelected());
         pane.setTop(audioOnImage);
+        BorderPane.setAlignment(audioOnImage, Pos.TOP_CENTER);
         imageScene = new Scene(pane);
         windowController.openNewWindow("Bild", imageScene);
         LOG.debug("Successfully opened a window for the zoomed image");
