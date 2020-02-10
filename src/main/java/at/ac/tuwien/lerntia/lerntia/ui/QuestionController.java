@@ -24,6 +24,7 @@ public class QuestionController implements Initializable {
     }
 
     public void setQuestionText(String text) {
+        question.setMnemonicParsing(false);
         question.setText(text);
     }
 }
