@@ -39,6 +39,7 @@ public class AnswerController implements Initializable {
     }
 
     public void setAnswerText(String text) {
+        answer.setMnemonicParsing(false);
         answer.setText(text);
     }
 
