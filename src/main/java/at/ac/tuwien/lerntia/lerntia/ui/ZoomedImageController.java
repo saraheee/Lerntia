@@ -71,13 +71,13 @@ class ZoomedImageController {
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - (k * eps)));
-        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - (k * eps)));
+        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - (k/2 * eps)));
         BorderPane pane = new BorderPane();
         pane.setCenter(imageView);
 
         final Button audioOnImage = new Button();
         audioOnImage.getStylesheets().add(this.getClass().getResource("/css/audio-on-image-button.css").toExternalForm());
-        audioOnImage.setMinSize((Math.min(image.getWidth(), screenWidth - eps)), 120);
+        audioOnImage.setMinSize(0, 120);
         audioOnImage.setMaxSize((Math.min(image.getWidth(), screenWidth - eps)), 120);
         audioOnImage.setOnAction(event -> audioController.setSelected());
         pane.setTop(audioOnImage);
