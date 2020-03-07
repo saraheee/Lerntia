@@ -36,7 +36,7 @@ class ZoomedImageController {
     private final double screenHeight = screenSize.getHeight();
     private final double eps = (screenHeight / 100) * 10;
     private static final double k = 4;
-    private static final int audioOnImageButtonHeight = 120;
+    private static final int audioOnImageButtonHeight = 60;
     private File imageFile;
     private Scene imageScene;
 
@@ -71,8 +71,8 @@ class ZoomedImageController {
         ImageView imageView = new ImageView();
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(Math.min(image.getWidth(), screenWidth - (k * eps)));
-        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - audioOnImageButtonHeight - eps));
+        imageView.setFitWidth(Math.min(image.getWidth(), screenWidth));
+        imageView.setFitHeight(Math.min(image.getHeight(), screenHeight - audioOnImageButtonHeight - eps/2));
         BorderPane pane = new BorderPane();
         pane.setCenter(imageView);
 

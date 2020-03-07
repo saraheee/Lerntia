@@ -1,18 +1,18 @@
 AVAILABLE VOICES
 
 DEFAULT VOICES:
-* DE-male: bits3-hsmm
-* EN-male: dfki-spike-hsmm
-
+* DE-female: bits1-hsmm
+* EN-male: dfki-obadiah-hsmm
 
 OTHER VOICES:
-* DE-female: bits1-hsmm
+* DE-male: bits3-hsmm
 * DE-male: dfki-pavoque-neutral-hsmm
 
+* EN-male: dfki-spike-hsmm
 * EN-male: cmu-rms-hsmm
 * EN-male: cmu-bdl-hsmm
-* EN-male: cmu-nk-hsmm
-* EN-male: dfki-obadiah-hsmm
+* EN-male: dfki-obadiah-hsmm 
+* EN-male: cmu-nk-hsmm -geht nicht
 
 * EN-female: cmu-slt-hsmm
 * EN-female: dfki-poppy-hsmm
