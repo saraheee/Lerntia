@@ -45,7 +45,6 @@ public final class MainApplication extends Application {
         primaryStage.setTitle("[Lerntia] Lern- und Prüfungstool");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/main.png")));
         primaryStage.setMaximized(true);
-        primaryStage.setFullScreen(true);
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> {
             alertController = new AlertController();
