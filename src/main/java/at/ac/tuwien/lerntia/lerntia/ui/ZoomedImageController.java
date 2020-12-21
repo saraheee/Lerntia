@@ -34,8 +34,8 @@ class ZoomedImageController {
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final double screenWidth = screenSize.getWidth();
     private final double screenHeight = screenSize.getHeight();
-    private final double eps = (screenHeight / 100) * 10;
-    private static final double k = 4;
+    private final double eps = (screenHeight / 100) * 11;
+    private static final double k = 2;
     private static final int audioOnImageButtonHeight = 120;
     private File imageFile;
     private Scene imageScene;
