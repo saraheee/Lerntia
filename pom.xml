@@ -67,6 +67,11 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
         <!-- runtime dependencies -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
