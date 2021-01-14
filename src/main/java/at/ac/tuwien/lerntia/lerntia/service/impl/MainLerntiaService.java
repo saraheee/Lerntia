@@ -25,6 +25,7 @@ public class MainLerntiaService implements IMainLerntiaService {
     private final IQuestionService questionService;
     private final IQuestionnaireQuestionService questionnaireQuestionService;
     private final ILearnAlgorithmService learnAlgorithmService;
+    private final ICourseService courseService;
     private int correctAnswered;
     private int wrongAnswered;
     private Map<Long, Question> questionMap;
@@ -45,12 +46,14 @@ public class MainLerntiaService implements IMainLerntiaService {
 
     @Autowired
     public MainLerntiaService(ILearningQuestionnaireService learningQuestionnaireService, IQuestionService questionService,
-                              IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService
+                              IQuestionnaireQuestionService questionnaireQuestionService, ILearnAlgorithmService learnAlgorithmService,
+                              ICourseService courseService
     ) {
         this.learningQuestionnaireService = learningQuestionnaireService;
         this.questionService = questionService;
         this.questionnaireQuestionService = questionnaireQuestionService;
         this.learnAlgorithmService = learnAlgorithmService;
+        this.courseService = courseService;
         this.correctAnswered = 0;
         this.wrongAnswered = 0;
     }
