@@ -92,6 +92,7 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
         InternetAddress[] ccAddresses = {new InternetAddress(ccAddress)};
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setRecipients(Message.RecipientType.CC, ccAddresses);
+        msg.setReplyTo(ccAddresses);
         msg.setSubject(subject);
         msg.setSentDate(new Date());
 
