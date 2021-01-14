@@ -71,6 +71,10 @@ csv/playground
 csv_export
 statistic.png
 
+### Mail config ###
+mail.properties
+server.properties
+
 ###################
 ### Build-Tools ###
 ###################
