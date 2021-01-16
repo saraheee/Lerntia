@@ -757,7 +757,7 @@ public class LerntiaMainController implements Runnable {
             }
         } catch (ServiceException e) {
             alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert oder gesendet werden",
-                "Fehler", e.getCustomMessage());
+                "Fehler", e.getLocalizedMessage());
         }
     }
 
