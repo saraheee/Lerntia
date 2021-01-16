@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.*;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 import java.util.Properties;
@@ -66,7 +64,7 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
                                           String ccAddress,
                                           String subject,
                                           String message,
-                                          String[] attachFiles) throws MessagingException {
+                                          String[] attachFiles) throws MessagingException, UnsupportedEncodingException {
         // Set SMTP server properties
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
@@ -93,7 +91,7 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setRecipients(Message.RecipientType.CC, ccAddresses);
         msg.setReplyTo(ccAddresses);
-        msg.setSubject(subject);
+        msg.setSubject(MimeUtility.encodeText(subject, "utf-8", "B"));
         msg.setSentDate(new Date());
 
         // Create message part
