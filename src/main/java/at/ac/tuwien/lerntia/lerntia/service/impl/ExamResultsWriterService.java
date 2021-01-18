@@ -61,7 +61,7 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
                                           final String userName,
                                           final String password,
                                           String toAddress,
-                                          String ccAddress,
+                                          String ccAddress_1, String ccAddress_2,
                                           String subject,
                                           String message,
                                           String[] attachFiles) throws MessagingException, UnsupportedEncodingException {
@@ -87,10 +87,11 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
 
         msg.setFrom(new InternetAddress(userName));
         InternetAddress[] toAddresses = {new InternetAddress(toAddress)};
-        InternetAddress[] ccAddresses = {new InternetAddress(ccAddress)};
+        InternetAddress[] ccAddresses = {new InternetAddress(ccAddress_1), new InternetAddress(ccAddress_2)};
+        InternetAddress[] replyToAddresses = {new InternetAddress(ccAddress_1)};
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setRecipients(Message.RecipientType.CC, ccAddresses);
-        msg.setReplyTo(ccAddresses);
+        msg.setReplyTo(replyToAddresses);
         msg.setSubject(MimeUtility.encodeText(subject, "utf-8", "B"));
         msg.setSentDate(new Date());
 
@@ -140,7 +141,8 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
         String port = configReaderServer.getValue("port");
         String mailFrom = configReaderServer.getValue("username");
         String password = configReaderServer.getValue("password");
-        String mailCC = configReaderServer.getValue("mailCC");
+        String mailCC_1 = configReaderServer.getValue("mailCC_1");
+        String mailCC_2 = configReaderServer.getValue("mailCC_2");
 
         // Message info
         createConfigReaderMail();
@@ -154,7 +156,8 @@ public class ExamResultsWriterService implements IExamResultsWriterService {
         attachFiles[0] = filePath;
 
         try {
-            sendEmailWithAttachments(host, port, mailFrom, password, mailTo, mailCC, subject, message, attachFiles);
+            sendEmailWithAttachments(host, port, mailFrom, password, mailTo,
+                mailCC_1, mailCC_2, subject, message, attachFiles);
             LOG.info("Email sent.");
         } catch (Exception e) {
             LOG.info("Could not send email.");
