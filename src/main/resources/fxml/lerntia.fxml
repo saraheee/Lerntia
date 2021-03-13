@@ -20,9 +20,7 @@
         <HBox prefHeight="30.0" />
         <HBox prefHeight="246.0" styleClass="question-box">
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
-            <VBox prefWidth="27.0" />
                 <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />
-            <VBox fx:id="upperButtonSpace" prefWidth="90.0" />
             <VBox alignment="BASELINE_RIGHT">
                 <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
             </VBox>
@@ -30,20 +28,19 @@
                 <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
             </HBox>
         </HBox>
-        <VBox minHeight="2.0" prefHeight="5.0" />
-        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="2.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="0.5" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
         <HBox prefHeight="105.0" styleClass="button-box" stylesheets="@/css/background-division.css">
