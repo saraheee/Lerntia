@@ -17,10 +17,11 @@
     <!-- try next: https://stackoverflow.com/questions/41127429/javafx-fill-widthcolumn-constraint-is-not-working-inside-a-layout -->
     <VBox styleClass="main-right" stylesheets="@/css/background-division.css"
           minWidth="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <HBox prefHeight="30.0" />
         <HBox prefHeight="246.0" styleClass="question-box">
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
+            <HBox prefHeight="30.0" />
                 <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />
+            <HBox prefWidth="7.0" />
             <VBox alignment="BASELINE_RIGHT">
                 <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
             </VBox>
@@ -28,23 +29,23 @@
                 <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
             </HBox>
         </HBox>
-        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox maxHeight="550.0" prefHeight="300" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox maxHeight="550.0" prefHeight="300" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox maxHeight="550.0" prefHeight="300" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="550.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox maxHeight="5.0" prefHeight="5" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="0.5" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox maxHeight="0.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="105.0" styleClass="button-box" stylesheets="@/css/background-division.css">
-            <ButtonBar fx:id="buttonBar" prefHeight="98.0">
+        <HBox maxHeight="40" styleClass="button-box" stylesheets="@/css/background-division.css">
+            <ButtonBar fx:id="buttonBar"  maxHeight="40" prefHeight="40.0">
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml" />
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml" />

@@ -4,7 +4,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.lang.String?>
-<Button defaultButton="true" layoutY="10.0" minWidth="340" mnemonicParsing="false" prefHeight="92.0" prefWidth="396.0"
+<Button defaultButton="true" layoutY="10.0" minWidth="340" mnemonicParsing="false" prefHeight="60.0" prefWidth="396.0"
         stylesheets="@/css/rectangle-button.css" text="Abgeben" textOverrun="CLIP"
         xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" onAction="#handIn"
         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">

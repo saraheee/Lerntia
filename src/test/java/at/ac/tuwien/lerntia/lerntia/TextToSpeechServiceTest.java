@@ -150,7 +150,7 @@ public class TextToSpeechServiceTest {
         TextToSpeechService service = new TextToSpeechService();
         //Assert.assertEquals(service.replaceWordsInDictionary("Ein Apfel."), "Ein Auto.");
     }
-        
+
     @Test
     public void getTextShouldPersist() throws TextToSpeechServiceValidationException {
         try {

@@ -3,10 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<Button alignment="CENTER" maxWidth="Infinity" mnemonicParsing="false" prefHeight="79.0" minWidth="304.0"
-        contentDisplay="RIGHT"
+<Button alignment="CENTER" maxWidth="Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="396.0"
+        contentDisplay="RIGHT" layoutY="10.0"
         styleClass="label" stylesheets="@/css/rectangle-button.css" text="Weiter" xmlns="http://javafx.com/javafx/8.0.121"
-        xmlns:fx="http://javafx.com/fxml/1" onAction="#getAndShowNextQuestion"
+        xmlns:fx="http://javafx.com/fxml/1" onAction="#getAndShowNextQuestion" textOverrun="CLIP"
         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
     <graphic>
         <ImageView fitHeight="89.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">

@@ -7,7 +7,7 @@
 <Button fx:id="audioButton" contentDisplay="TOP" mnemonicParsing="false"
         onAction="#onAudioButtonClicked" prefHeight="50.0" prefWidth="150.0"
         stylesheets="@/css/square-button.css" text="Vorlesen" xmlns="http://javafx.com/javafx/8.0.121"
-        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns:fx="http://javafx.com/fxml/1" textOverrun="CLIP"
         fx:controller="at.ac.tuwien.lerntia.lerntia.ui.AudioController">
     <graphic>
         <ImageView fitHeight="50.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
