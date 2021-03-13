@@ -7,14 +7,6 @@
           fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
     <VBox fx:id="mainWindowLeft" styleClass="main-left" stylesheets="@/css/background-division.css"
           minWidth="0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-        <VBox>
-            <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
-        </VBox>
-        <HBox fx:id="upperButtonBox" alignment="BASELINE_RIGHT">
-            <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
-         <VBox fx:id="upperButtonSpace" prefWidth="17.0" />
-            <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
-        </HBox>
         <HBox
             prefHeight="17.0"/> <!-- provides space between the icons in the top-left part and the area for the image -->
         <VBox alignment="CENTER">
@@ -26,22 +18,32 @@
     <VBox styleClass="main-right" stylesheets="@/css/background-division.css"
           minWidth="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <HBox prefHeight="30.0" />
-        <HBox prefHeight="286.0" styleClass="question-box">
-            <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />
+        <HBox prefHeight="246.0" styleClass="question-box">
+            <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
+            <VBox prefWidth="27.0" />
+                <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />
+            <VBox fx:id="upperButtonSpace" prefWidth="90.0" />
+            <VBox alignment="BASELINE_RIGHT">
+                <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
+            </VBox>
+            <HBox fx:id="upperButtonBox" alignment="BASELINE_RIGHT">
+                <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
+            </HBox>
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <VBox minHeight="2.0" prefHeight="5.0" />
+        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox layoutY="345.0" prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="350.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+        <HBox prefHeight="2.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
         <HBox prefHeight="105.0" styleClass="button-box" stylesheets="@/css/background-division.css">
@@ -56,8 +58,8 @@
         </HBox>
     </VBox>
     <columnConstraints> <!-- columnConstraints for the main window - divides the whole window in two parts -->
-        <ColumnConstraints percentWidth="25.0" />
-        <ColumnConstraints percentWidth="75.0" />
+        <ColumnConstraints percentWidth="0.0" />
+        <ColumnConstraints percentWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints />

@@ -692,11 +692,11 @@ public class LerntiaMainController implements Runnable {
     }
 
     public void switchToLearnMode() {
-        upperButtonBox.getChildren().remove(audioButton);
-        upperButtonBox.getChildren().remove(upperButtonSpace);
+        //upperButtonBox.getChildren().remove(audioButton);
+        //upperButtonBox.getChildren().remove(upperButtonSpace);
         upperButtonBox.getChildren().add(algorithmButton);
-        upperButtonBox.getChildren().add(upperButtonSpace);
-        upperButtonBox.getChildren().add(audioButton);
+        //upperButtonBox.getChildren().add(upperButtonSpace);
+        //upperButtonBox.getChildren().add(audioButton);
         buttonBar.getButtons().add(checkAnswerButton);
         buttonBar.getButtons().remove(handInButton);
     }
