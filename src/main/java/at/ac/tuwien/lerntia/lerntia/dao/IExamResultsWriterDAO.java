@@ -53,6 +53,7 @@ public interface IExamResultsWriterDAO {
      * Get cells containing an image used to display the state of an answer
      *
      * @param path the path where the image can be found
+     * @param color the background color for the cell
      * @return the cell with the image
      * @throws PersistenceException if the cell cannot be created
      */
