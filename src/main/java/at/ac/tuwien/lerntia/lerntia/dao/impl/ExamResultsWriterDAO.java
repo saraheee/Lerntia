@@ -36,6 +36,9 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
     private PdfPCell cell_box_green;
     private PdfPCell cell_box_red;
 
+    private BaseColor customRed = new BaseColor(255, 214, 201);
+    private BaseColor customGreen = new BaseColor(215, 252, 223);
+
     private Font fontTitle;
     private Font fontExamName;
     private Font fontExamDate;
@@ -52,11 +55,11 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         // later these cells are added to the table of answers.
 
         this.cell_checked_white = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), BaseColor.WHITE);
-        this.cell_checked_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), BaseColor.GREEN);
-        this.cell_checked_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), BaseColor.PINK);
+        this.cell_checked_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), customGreen);
+        this.cell_checked_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), customRed);
         this.cell_box_white = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), BaseColor.WHITE);
-        this.cell_box_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), BaseColor.GREEN);
-        this.cell_box_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), BaseColor.PINK);
+        this.cell_box_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), customGreen);
+        this.cell_box_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), customRed);
 
         this.fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
         this.fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
@@ -325,10 +328,10 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             }
 
             if (answerWasCorrect == answerWasChecked) {
-                answer.setBackgroundColor(BaseColor.GREEN);
+                answer.setBackgroundColor(customGreen);
             }
             else {
-                answer.setBackgroundColor(BaseColor.PINK);
+                answer.setBackgroundColor(customRed);
             }
             table.addCell(answer);
 
