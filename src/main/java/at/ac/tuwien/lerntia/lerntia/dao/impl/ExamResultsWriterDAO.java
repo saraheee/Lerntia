@@ -29,8 +29,15 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private PdfPCell cell_checked;
-    private PdfPCell cell_box;
+    private PdfPCell cell_checked_white;
+    private PdfPCell cell_checked_green;
+    private PdfPCell cell_checked_red;
+    private PdfPCell cell_box_white;
+    private PdfPCell cell_box_green;
+    private PdfPCell cell_box_red;
+
+    private BaseColor customRed = new BaseColor(255, 214, 201);
+    private BaseColor customGreen = new BaseColor(215, 252, 223);
 
     private Font fontTitle;
     private Font fontExamName;
@@ -47,8 +54,12 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         // these two images are loaded here and placed in a cell.
         // later these cells are added to the table of answers.
 
-        this.cell_checked = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"));
-        this.cell_box = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"));
+        this.cell_checked_white = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), BaseColor.WHITE);
+        this.cell_checked_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), customGreen);
+        this.cell_checked_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box_checked.png"), customRed);
+        this.cell_box_white = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), BaseColor.WHITE);
+        this.cell_box_green = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), customGreen);
+        this.cell_box_red = getImageCellBox(Resource.class.getResource("/icons/exam_report_box.png"), customRed);
 
         this.fontTitle = FontFactory.getFont(FontFactory.HELVETICA, 26, BaseColor.BLACK);
         this.fontExamName = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
@@ -298,7 +309,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         }
 
         for (int j = 0; j < allAnswers.size(); j++) {
-            table.addCell(allAnswers.get(j));
+            PdfPCell answer = new PdfPCell(new Phrase(allAnswers.get(j)));
 
             String correctAnswers = question.getCorrectAnswers();
             String checkedAnswers = question.getCheckedAnswers();
@@ -315,19 +326,35 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
             } catch (NullPointerException e) {
                 answerWasChecked = false;
             }
+
+            if (answerWasCorrect == answerWasChecked) {
+                answer.setBackgroundColor(customGreen);
+            }
+            else {
+                answer.setBackgroundColor(customRed);
+            }
+            table.addCell(answer);
+
             if(question.getCorrectAnswers().trim().equals("-1")) {
-                table.addCell((answerWasChecked) ? cell_checked : cell_box);
+                table.addCell((answerWasChecked) ? cell_checked_white : cell_box_white);
             } else {
-                table.addCell((answerWasCorrect) ? cell_checked : cell_box);
-                table.addCell((answerWasChecked) ? cell_checked : cell_box);
-                table.addCell((answerWasCorrect == answerWasChecked) ? cell_checked : cell_box);
+                if (answerWasCorrect == answerWasChecked) {
+                    table.addCell((answerWasCorrect) ? cell_checked_green : cell_box_green);
+                    table.addCell((answerWasChecked) ? cell_checked_green : cell_box_green);
+                    table.addCell(cell_checked_green);
+                }
+                else {
+                    table.addCell((answerWasCorrect) ? cell_checked_red : cell_box_red);
+                    table.addCell((answerWasChecked) ? cell_checked_red : cell_box_red);
+                    table.addCell(cell_box_red);
+                }
             }
         }
 
         return table;
     }
 
-    public PdfPCell getImageCellBox(URL path) throws PersistenceException {
+    public PdfPCell getImageCellBox(URL path, BaseColor color) throws PersistenceException {
         if (path == null) {
             throw new PersistenceException("PDF-Pfad ist null!");
         }
@@ -344,6 +371,7 @@ public class ExamResultsWriterDAO implements IExamResultsWriterDAO {
         cell.setFixedHeight(12);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(color);
 
         return cell;
     }

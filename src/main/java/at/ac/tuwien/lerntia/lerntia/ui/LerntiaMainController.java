@@ -44,6 +44,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static org.springframework.util.Assert.notNull;
 
+
 @Controller
 public class LerntiaMainController implements Runnable {
 
@@ -264,12 +265,12 @@ public class LerntiaMainController implements Runnable {
             boolean answersCorrect = checkedAnswers.trim().equals(question.getCorrectAnswers().trim());
             LOG.info(question.toStringGUI());
             LOG.info("Answers given: " + (checkedAnswers.trim().length() > 0 ? checkedAnswers.trim() : "-"));
-            LOG.info(answersCorrect ? "Correctly answered.\n" : "Wrongly answered.\n" );
+            LOG.info(answersCorrect ? "Correctly answered.\n" : "Wrongly answered.\n");
 
             // No correct answers specified, just read the feedback-text
-            if(question.getCorrectAnswers().equals("-1")) {
+            if (question.getCorrectAnswers().equals("-1")) {
                 String feedbackPrefix = "Feedbacktext :" + SPACE;
-                if(question.getOptionalFeedback() != null && !question.getOptionalFeedback().trim().equals("")) {
+                if (question.getOptionalFeedback() != null && !question.getOptionalFeedback().trim().equals("")) {
                     audioController.readFeedbackText(question.getOptionalFeedback());
                 }
                 if (alertController.showUndefinedAnswerAlert("Antwortfeedback!", feedbackPrefix,
@@ -350,7 +351,7 @@ public class LerntiaMainController implements Runnable {
                 removeColorsAndEnableAnswers();
                 getAndShowNextQuestion();
             } else {
-                if(!question.getCorrectAnswers().equals("-1")) {
+                if (!question.getCorrectAnswers().equals("-1")) {
                     showColorsAndDisableAnswers(question.getCorrectAnswers());
                 }
             }
@@ -394,6 +395,7 @@ public class LerntiaMainController implements Runnable {
         answer3Controller.setDisabled(true);
         answer4Controller.setDisabled(true);
         answer5Controller.setDisabled(true);
+
     }
 
     public void removeColorsAndEnableAnswers() {
@@ -741,6 +743,7 @@ public class LerntiaMainController implements Runnable {
                 alertController.showStandardAlert(Alert.AlertType.INFORMATION, "Ergebnis gespeichert!",
                     "Ergebnis gespeichert!", "Das Ergebnis wurde erfolgreich gespeichert!");
 
+
                 if (Desktop.isDesktopSupported()) {
                     try {
                         File myFile = new File(filePath);
@@ -750,10 +753,11 @@ public class LerntiaMainController implements Runnable {
                             "Fehler", "Das Ergebnis-PDF konnte nicht geöffnet werden!");
                     }
                 }
+                iExamResultsWriterService.sendExamResultsPerEmail(filePath);
             }
         } catch (ServiceException e) {
-            alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert werden",
-                "Fehler", e.getCustomMessage());
+            alertController.showStandardAlert(Alert.AlertType.ERROR, "Datei konnte nicht gespeichert oder gesendet werden",
+                "Fehler", e.getLocalizedMessage());
         }
     }
 

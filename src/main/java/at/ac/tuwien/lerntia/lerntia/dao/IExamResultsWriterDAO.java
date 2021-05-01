@@ -3,6 +3,7 @@ package at.ac.tuwien.lerntia.lerntia.dao;
 import at.ac.tuwien.lerntia.exception.PersistenceException;
 import at.ac.tuwien.lerntia.lerntia.dto.ExamWriter;
 import at.ac.tuwien.lerntia.lerntia.dto.Question;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -52,10 +53,11 @@ public interface IExamResultsWriterDAO {
      * Get cells containing an image used to display the state of an answer
      *
      * @param path the path where the image can be found
+     * @param color the background color for the cell
      * @return the cell with the image
      * @throws PersistenceException if the cell cannot be created
      */
-    PdfPCell getImageCellBox(URL path) throws PersistenceException;
+    PdfPCell getImageCellBox(URL path, BaseColor color) throws PersistenceException;
 
     /**
      * Get the image to a question
