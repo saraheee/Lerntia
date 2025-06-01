@@ -92,7 +92,7 @@
         </dependency>
         <dependency>
             <groupId>de.dfki.mary</groupId>
-            <artifactId>voice-bits3-hsmm</artifactId>
+            <artifactId>voice-bits1-hsmm</artifactId>
             <version>${mary.version}</version>
         </dependency>
         <dependency>
