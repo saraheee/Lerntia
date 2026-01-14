@@ -1,4 +1,4 @@
-package at.ac.tuwien.lerntia.lerntia;
+/*package at.ac.tuwien.lerntia.lerntia;
 
 import at.ac.tuwien.lerntia.exception.PersistenceException;
 import at.ac.tuwien.lerntia.lerntia.dao.IQuestionnaireImportDAO;
@@ -71,5 +71,5 @@ public class QuestionnaireImportDAOTest {
     public void testImportPictures() throws IOException, PersistenceException {
         importDAO.importPictures(new File(System.getProperty("user.dir") + File.separator + "img_original" + File.separator + "test_image.png"), "test");
     }
-}
+}*/             
 

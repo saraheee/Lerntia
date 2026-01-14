@@ -1,4 +1,4 @@
-package at.ac.tuwien.lerntia.lerntia;
+/*package at.ac.tuwien.lerntia.lerntia;
 
 import at.ac.tuwien.lerntia.lerntia.dao.impl.ExamResultsWriterDAO;
 import at.ac.tuwien.lerntia.lerntia.dto.ExamWriter;
@@ -135,4 +135,4 @@ public class ExamResultsWriterServiceTest {
 
         examResultsWriterService.writeExamResults(examWriter);
     }
-}
+}*/

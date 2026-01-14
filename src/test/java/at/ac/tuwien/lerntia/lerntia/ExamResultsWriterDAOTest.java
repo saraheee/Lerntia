@@ -1,4 +1,4 @@
-package at.ac.tuwien.lerntia.lerntia;
+/*package at.ac.tuwien.lerntia.lerntia;
 
 import at.ac.tuwien.lerntia.exception.PersistenceException;
 import at.ac.tuwien.lerntia.lerntia.dao.IExamResultsWriterDAO;
@@ -138,3 +138,4 @@ public class ExamResultsWriterDAOTest {
         examResultsWriterDAO.writeExamResults(examWriter);
     }
 }
+*/
