@@ -27,7 +27,7 @@
         <junit.version>4.12</junit.version>
         <mockito.version>2.18.0</mockito.version>
         <!-- plugins -->
-        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.2.5        </maven-surefire-plugin.version>
         <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
     </properties>
 

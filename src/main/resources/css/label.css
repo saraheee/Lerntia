@@ -1,12 +1,14 @@
 .question-label {
-    -fx-font-size: 32px;
+    /* -fx-font-size: 32px; */
+    -fx-font-size: 26px;
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
 }
 
 .answer-label {
-    -fx-font-size: 26px;
+    /* -fx-font-size: 26px; */
+    -fx-font-size: 23px;
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
 }
@@ -14,7 +16,8 @@
 .button {
     -fx-width: 80%;
     -fx-background-color: rgba(51, 0, 102, 0.09);
-    -fx-font-size: 26px;
+/*    -fx-font-size: 26px;   */
+    -fx-font-size: 23px;
 }
 
 .button:hover {
