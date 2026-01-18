@@ -86,6 +86,7 @@ public class LerntiaMainController implements Runnable {
     private static final double PREFERRED_SPACING = 8.0;
     private static final double MIN_BUTTON_BAR_HEIGHT = 50.0;
     private static final double PREFERRED_BUTTON_BAR_HEIGHT = 105.0;
+    public VBox upperButtonSpace2;
 
     private boolean onlyWrongQuestions = false;
     private boolean showAllQuestionsStatistic = false;
