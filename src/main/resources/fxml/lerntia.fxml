@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
-    <VBox fx:id="mainWindowLeft" styleClass="main-left" stylesheets="@/css/background-division.css"
-          minWidth="0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+<GridPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.lerntia.lerntia.ui.LerntiaMainController">
+    <VBox fx:id="mainWindowLeft" minWidth="0" styleClass="main-left" stylesheets="@/css/background-division.css" GridPane.columnIndex="0" GridPane.rowIndex="0">
         <VBox>
             <fx:include fx:id="menuBar" source="/fxml/elements/menuBar.fxml" />
         </VBox>
         <HBox fx:id="upperButtonBox" alignment="BASELINE_RIGHT">
             <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
-         <VBox fx:id="upperButtonSpace" prefWidth="17.0" />
+            <VBox fx:id="upperButtonSpace" prefWidth="17.0" />
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
         </HBox>
-        <HBox
-            prefHeight="17.0"/> <!-- provides space between the icons in the top-left part and the area for the image -->
-        <VBox alignment="CENTER">
+        <Region minHeight="5.0" prefHeight="17.0" VBox.vgrow="ALWAYS" />
+        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
             <ImageView fx:id="mainImage" pickOnBounds="true" preserveRatio="true" />
         </VBox>
-        <HBox prefHeight="17.0" /> <!-- provides space under the image and the rest of the frame -->
+        <Region minHeight="5.0" prefHeight="17.0" VBox.vgrow="ALWAYS" />
     </VBox>
-    <!-- try next: https://stackoverflow.com/questions/41127429/javafx-fill-widthcolumn-constraint-is-not-working-inside-a-layout -->
-    <VBox styleClass="main-right" stylesheets="@/css/background-division.css"
-          minWidth="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <HBox prefHeight="30.0" />
-        <HBox prefHeight="286.0" styleClass="question-box">
+
+    <VBox fx:id="rightPanel" minHeight="0" minWidth="0" prefWidth="1634.0" spacing="17.0" styleClass="main-right" stylesheets="@/css/background-division.css" GridPane.columnIndex="1" GridPane.rowIndex="0" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="30.0" />
+        </padding>
+
+        <HBox fx:id="questionBox" minHeight="0" minWidth="0" styleClass="question-box">
             <fx:include fx:id="qLabel" source="/fxml/elements/questionLabel.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+
+        <HBox fx:id="answer1Box" minHeight="0" minWidth="0" styleClass="answer-box">
             <fx:include fx:id="answer1" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+
+        <HBox fx:id="answer2Box" minHeight="0" minWidth="0" styleClass="answer-box">
             <fx:include fx:id="answer2" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox layoutY="345.0" prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+
+        <HBox fx:id="answer3Box" minHeight="0" minWidth="0" styleClass="answer-box">
             <fx:include fx:id="answer3" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+
+        <HBox fx:id="answer4Box" minHeight="0" minWidth="0" styleClass="answer-box">
             <fx:include fx:id="answer4" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="250.0" styleClass="answer-box" stylesheets="@/css/background-division.css">
+
+        <HBox fx:id="answer5Box" minHeight="0" minWidth="0" styleClass="answer-box">
             <fx:include fx:id="answer5" source="/fxml/elements/answerCheckBox.fxml" />
         </HBox>
-        <HBox prefHeight="105.0" styleClass="button-box" stylesheets="@/css/background-division.css">
-            <ButtonBar fx:id="buttonBar" prefHeight="98.0">
+
+        <HBox fx:id="buttonBox" minHeight="0" minWidth="0" styleClass="button-box">
+            <ButtonBar fx:id="buttonBar">
                 <buttons>
                     <fx:include fx:id="previousQuestionButton" source="/fxml/elements/previousQuestionButton.fxml" />
                     <fx:include fx:id="nextQuestionButton" source="/fxml/elements/nextQuestionButton.fxml" />
@@ -54,12 +61,16 @@
                 </buttons>
             </ButtonBar>
         </HBox>
+
+        <!-- Spacer to push everything up and extend background to bottom -->
+        <Region minHeight="0" VBox.vgrow="ALWAYS" />
     </VBox>
-    <columnConstraints> <!-- columnConstraints for the main window - divides the whole window in two parts -->
-        <ColumnConstraints percentWidth="25.0" />
-        <ColumnConstraints percentWidth="75.0" />
+
+    <columnConstraints>
+        <ColumnConstraints percentWidth="20.0" />
+        <ColumnConstraints percentWidth="80.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints />
+        <RowConstraints minHeight="0" percentHeight="100.0" vgrow="ALWAYS" />
     </rowConstraints>
 </GridPane>

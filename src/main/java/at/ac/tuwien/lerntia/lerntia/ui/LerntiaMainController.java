@@ -19,6 +19,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -26,6 +28,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.scene.Node;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,13 +68,52 @@ public class LerntiaMainController implements Runnable {
     private final ReentrantLock lock = new ReentrantLock();
     private final String BREAK = "....";
     private final String SPACE = "                                                            ";
+
+    // Ratio constants for layout - maintain 3:2:2:2:2:2 ratio
+    private static final double QUESTION_LINE_RATIO = 3.0;
+    private static final double ANSWER_LINE_RATIO = 2.0;
+
+    // Font sizing constants
+    private static final double MIN_FONT_SIZE = 6.0;
+    private static final double MAX_FONT_SIZE = 28.0;
+    // Realistic line height - actual rendered line height in JavaFX
+    private static final double LINE_HEIGHT_FACTOR = 1.5; // JavaFX default line spacing
+
+    // Spacing and padding constants
+    private static final double BOX_PADDING = 10.0; // Total vertical padding per box (top + bottom)
+    private static final double TOP_PADDING = 30.0;
+    private static final double MIN_SPACING = 1.0;
+    private static final double PREFERRED_SPACING = 8.0;
+    private static final double MIN_BUTTON_BAR_HEIGHT = 50.0;
+    private static final double PREFERRED_BUTTON_BAR_HEIGHT = 105.0;
+
     private boolean onlyWrongQuestions = false;
     private boolean showAllQuestionsStatistic = false;
     private ConfigReader configReaderSpeech = null;
+
+    // Track last calculated values to prevent unnecessary updates
+    private double lastCalculatedHeight = 0;
+
     @FXML
     private VBox mainWindowLeft;
     @FXML
+    private VBox rightPanel;
+    @FXML
     private ImageView mainImage;
+    @FXML
+    private HBox questionBox;
+    @FXML
+    private HBox answer1Box;
+    @FXML
+    private HBox answer2Box;
+    @FXML
+    private HBox answer3Box;
+    @FXML
+    private HBox answer4Box;
+    @FXML
+    private HBox answer5Box;
+    @FXML
+    private HBox buttonBox;
     @FXML
     private QuestionController qLabelController;
     @FXML
@@ -140,11 +184,222 @@ public class LerntiaMainController implements Runnable {
     private void initialize() {
         mainImage.fitWidthProperty().bind(mainWindowLeft.widthProperty()); // *necessary* in order to bind the image width to the width of the left pane
         buttonBar.getButtons().remove(handInButton);
+
+        // Setup responsive sizing
+        setupResponsiveSizing();
+
         try {
             getAndShowTheFirstQuestionFirstTime();
         } catch (ControllerException e) {
             //showNoQuestionsAvailable();
             LOG.warn("No first answer. Loop stopped.");
+        }
+    }
+
+
+    /**
+     * Sets up listeners to automatically adjust sizes based on available space
+     */
+    private void setupResponsiveSizing() {
+        if (rightPanel != null) {
+            rightPanel.heightProperty().addListener((obs, oldVal, newVal) -> {
+                double newHeight = newVal.doubleValue();
+                if (Math.abs(newHeight - lastCalculatedHeight) > 3 && newHeight > 0) {
+                    Platform.runLater(this::adjustSizes);
+                }
+            });
+
+            rightPanel.widthProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal.doubleValue() > 0) {
+                    Platform.runLater(this::adjustSizes);
+                }
+            });
+
+            Platform.runLater(() -> {
+                Platform.runLater(this::adjustSizes);
+            });
+        }
+    }
+
+    /**
+     * Calculates and applies appropriate heights and font sizes to fit everything on screen
+     */
+    private void adjustSizes() {
+        if (rightPanel == null || rightPanel.getHeight() <= 0) {
+            return;
+        }
+
+        double panelHeight = rightPanel.getHeight();
+        lastCalculatedHeight = panelHeight;
+
+        // Calculate adaptive values
+        double spacing = calculateAdaptiveSpacing(panelHeight);
+        double buttonBarHeight = calculateAdaptiveButtonBarHeight(panelHeight);
+        double topPadding = calculateAdaptiveTopPadding(panelHeight);
+
+        // 6 spacing gaps total
+        double totalSpacing = spacing * 6;
+
+        // Calculate available height for content boxes
+        double availableHeight = panelHeight - topPadding - buttonBarHeight - totalSpacing;
+
+        if (availableHeight < 150) {
+            LOG.warn("Very limited space: {}px. Using minimum configuration.", availableHeight);
+            // Recalculate with minimum values
+            spacing = MIN_SPACING;
+            buttonBarHeight = MIN_BUTTON_BAR_HEIGHT;
+            topPadding = 5;
+            totalSpacing = spacing * 6;
+            availableHeight = panelHeight - topPadding - buttonBarHeight - totalSpacing;
+
+            if (availableHeight < 100) {
+                availableHeight = 100; // Absolute minimum
+            }
+        }
+
+        // Total ratio units: 3 (question) + 2*5 (answers) = 13
+        double totalRatioUnits = QUESTION_LINE_RATIO + (ANSWER_LINE_RATIO * 5);
+        double unitHeight = availableHeight / totalRatioUnits;
+
+        // Calculate heights maintaining 3:2:2:2:2:2 ratio
+        double questionHeight = unitHeight * QUESTION_LINE_RATIO;
+        double answerHeight = unitHeight * ANSWER_LINE_RATIO;
+
+        // Ensure minimum heights
+        double minQuestionHeight = calculateMinHeightForLines(QUESTION_LINE_RATIO, MIN_FONT_SIZE);
+        double minAnswerHeight = calculateMinHeightForLines(ANSWER_LINE_RATIO, MIN_FONT_SIZE);
+
+        questionHeight = Math.max(questionHeight, minQuestionHeight);
+        answerHeight = Math.max(answerHeight, minAnswerHeight);
+
+        // Calculate font sizes that fit the available space
+        double questionFontSize = calculateFontSizeForHeight(questionHeight, QUESTION_LINE_RATIO);
+        double answerFontSize = calculateFontSizeForHeight(answerHeight, ANSWER_LINE_RATIO);
+
+        // Clamp font sizes
+        questionFontSize = clampFontSize(questionFontSize);
+        answerFontSize = clampFontSize(answerFontSize);
+
+        // Apply styles and heights - now with direct label access
+        applyBoxStyleAndHeight(questionBox, questionFontSize, questionHeight);
+        applyBoxStyleAndHeight(answer1Box, answerFontSize, answerHeight);
+        applyBoxStyleAndHeight(answer2Box, answerFontSize, answerHeight);
+        applyBoxStyleAndHeight(answer3Box, answerFontSize, answerHeight);
+        applyBoxStyleAndHeight(answer4Box, answerFontSize, answerHeight);
+        applyBoxStyleAndHeight(answer5Box, answerFontSize, answerHeight);
+
+        if (buttonBox != null) {
+            buttonBox.setPrefHeight(buttonBarHeight);
+            buttonBox.setMinHeight(buttonBarHeight);
+            buttonBox.setMaxHeight(buttonBarHeight);
+        }
+
+        if (rightPanel != null) {
+            rightPanel.setSpacing(spacing);
+        }
+
+        LOG.debug("Layout: Panel={}h, Q={:.1f}px/{:.0f}h, A={:.1f}px/{:.0f}h, Btn={:.0f}h, Sp={:.1f}px",
+            Math.round(panelHeight), questionFontSize, questionHeight,
+            answerFontSize, answerHeight, buttonBarHeight, spacing);
+    }
+
+    private double calculateAdaptiveSpacing(double panelHeight) {
+        if (panelHeight >= 800) {
+            return PREFERRED_SPACING;
+        } else if (panelHeight >= 500) {
+            double ratio = (panelHeight - 500) / 300.0;
+            return MIN_SPACING + (PREFERRED_SPACING - MIN_SPACING) * ratio;
+        } else {
+            return MIN_SPACING;
+        }
+    }
+
+    private double calculateAdaptiveButtonBarHeight(double panelHeight) {
+        if (panelHeight >= 800) {
+            return PREFERRED_BUTTON_BAR_HEIGHT;
+        } else if (panelHeight >= 400) {
+            double ratio = (panelHeight - 400) / 400.0;
+            return MIN_BUTTON_BAR_HEIGHT + (PREFERRED_BUTTON_BAR_HEIGHT - MIN_BUTTON_BAR_HEIGHT) * ratio;
+        } else {
+            return MIN_BUTTON_BAR_HEIGHT;
+        }
+    }
+
+    private double calculateAdaptiveTopPadding(double panelHeight) {
+        if (panelHeight >= 800) {
+            return TOP_PADDING;
+        } else if (panelHeight >= 400) {
+            double ratio = (panelHeight - 400) / 400.0;
+            return 5 + (TOP_PADDING - 5) * ratio;
+        } else {
+            return 5;
+        }
+    }
+
+    /**
+     * Calculates the minimum height needed to display the specified number of lines
+     * at the given font size
+     */
+    private double calculateMinHeightForLines(double numberOfLines, double fontSize) {
+        double lineHeight = fontSize * LINE_HEIGHT_FACTOR;
+        double textHeight = numberOfLines * lineHeight;
+        return textHeight + BOX_PADDING;
+    }
+
+    /**
+     * Calculates font size that will fit the specified number of lines in the given height
+     */
+    private double calculateFontSizeForHeight(double boxHeight, double numberOfLines) {
+        double availableForText = boxHeight - BOX_PADDING;
+
+        if (availableForText <= 0) {
+            return MIN_FONT_SIZE;
+        }
+
+        double fontSize = availableForText / (numberOfLines * LINE_HEIGHT_FACTOR);
+        return fontSize;
+    }
+
+    private double clampFontSize(double fontSize) {
+        return Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, fontSize));
+    }
+
+    /**
+     * Applies font size to all labels within a box and sets box height
+     */
+    private void applyBoxStyleAndHeight(HBox box, double fontSize, double height) {
+        if (box == null) {
+            return;
+        }
+
+        // Apply font size to the box itself
+        String boxStyle = String.format("-fx-font-size: %.2fpx;", fontSize);
+        box.setStyle(boxStyle);
+
+        // IMPORTANT: Apply font size to ALL children recursively to override any FXML styles
+        applyFontSizeToAllChildren(box, fontSize);
+
+        // Set exact height
+        box.setPrefHeight(height);
+        box.setMinHeight(height);
+        box.setMaxHeight(height);
+    }
+
+    /**
+     * Recursively applies font size to all children nodes
+     * This ensures that labels in included FXML files also get the font size
+     */
+    private void applyFontSizeToAllChildren(javafx.scene.Parent parent, double fontSize) {
+        String style = String.format("-fx-font-size: %.2fpx;", fontSize);
+
+        for (Node child : parent.getChildrenUnmodifiable()) {
+            // Apply to labels and other text-containing controls
+            if (child instanceof Labeled) {
+                child.setStyle(style);
+            } else if (child instanceof javafx.scene.Parent) {
+                // Recursively apply to children
+                applyFontSizeToAllChildren((javafx.scene.Parent) child, fontSize);
+            }
         }
     }
 
