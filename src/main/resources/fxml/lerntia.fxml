@@ -14,7 +14,7 @@
             <fx:include fx:id="algorithmButton" source="/fxml/elements/algorithmButton.fxml" />
             <VBox fx:id="upperButtonSpace" prefWidth="17.0" />
             <fx:include fx:id="audioButton" source="/fxml/elements/audioButton.fxml" />
-         <VBox fx:id="upperButtonSpace2" layoutX="252.0" layoutY="127.0" prefWidth="17.0" />
+            <VBox fx:id="upperButtonSpace2" layoutX="252.0" layoutY="127.0" prefWidth="17.0" />
         </HBox>
         <Region minHeight="5.0" prefHeight="17.0" VBox.vgrow="ALWAYS" />
         <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
@@ -25,7 +25,7 @@
 
     <VBox fx:id="rightPanel" minHeight="0" minWidth="0" prefWidth="1634.0" spacing="17.0" styleClass="main-right" stylesheets="@/css/background-division.css" GridPane.columnIndex="1" GridPane.rowIndex="0" VBox.vgrow="ALWAYS">
         <padding>
-            <Insets top="30.0" />
+            <Insets top="30.0" bottom="10.0" />  <!-- top and bottom padding -->
         </padding>
 
         <HBox fx:id="questionBox" minHeight="0" minWidth="0" styleClass="question-box">
@@ -68,8 +68,8 @@
     </VBox>
 
     <columnConstraints>
-        <ColumnConstraints percentWidth="20.0" />
-        <ColumnConstraints percentWidth="80.0" />
+        <ColumnConstraints percentWidth="25.0" />
+        <ColumnConstraints percentWidth="75.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="0" percentHeight="100.0" vgrow="ALWAYS" />

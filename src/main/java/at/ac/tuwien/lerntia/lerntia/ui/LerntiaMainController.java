@@ -77,7 +77,7 @@ public class LerntiaMainController implements Runnable {
     private static final double MIN_FONT_SIZE = 6.0;
     private static final double MAX_FONT_SIZE = 28.0;
     // Realistic line height - actual rendered line height in JavaFX
-    private static final double LINE_HEIGHT_FACTOR = 1.5; // JavaFX default line spacing
+    private static final double LINE_HEIGHT_FACTOR = 1.7; // JavaFX default line spacing
 
     // Spacing and padding constants
     private static final double BOX_PADDING = 10.0; // Total vertical padding per box (top + bottom)
@@ -94,6 +94,7 @@ public class LerntiaMainController implements Runnable {
 
     // Track last calculated values to prevent unnecessary updates
     private double lastCalculatedHeight = 0;
+    private static final double BOTTOM_PADDING = 30.0;
 
     @FXML
     private VBox mainWindowLeft;
@@ -237,12 +238,13 @@ public class LerntiaMainController implements Runnable {
         double spacing = calculateAdaptiveSpacing(panelHeight);
         double buttonBarHeight = calculateAdaptiveButtonBarHeight(panelHeight);
         double topPadding = calculateAdaptiveTopPadding(panelHeight);
+        double bottomPadding = BOTTOM_PADDING; //
 
         // 6 spacing gaps total
         double totalSpacing = spacing * 6;
 
         // Calculate available height for content boxes
-        double availableHeight = panelHeight - topPadding - buttonBarHeight - totalSpacing;
+        double availableHeight = panelHeight - topPadding - bottomPadding - buttonBarHeight - totalSpacing;
 
         if (availableHeight < 150) {
             LOG.warn("Very limited space: {}px. Using minimum configuration.", availableHeight);
@@ -251,7 +253,7 @@ public class LerntiaMainController implements Runnable {
             buttonBarHeight = MIN_BUTTON_BAR_HEIGHT;
             topPadding = 5;
             totalSpacing = spacing * 6;
-            availableHeight = panelHeight - topPadding - buttonBarHeight - totalSpacing;
+            availableHeight = panelHeight - topPadding - bottomPadding - buttonBarHeight - totalSpacing;
 
             if (availableHeight < 100) {
                 availableHeight = 100; // Absolute minimum
