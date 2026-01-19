@@ -34,9 +34,8 @@ public class TextToSpeechService implements ITextToSpeechService {
     private Map<String, String> dictionary = null;
     private String WELCOME = "Hallo und willkommen bei Lerntia. Schöön, dass du hier bist!";
     private String ANSWER = "Antwort nummer";
-    private String VOICE_DE = "bits3-hsmm";
     private String PREFIX_DE = "Antwort";
-    private String VOICE = "bits3-hsmm";
+    private String VOICE = "bits1-hsmm";
     private String BREAK = "....";
     private boolean english = false;
 
@@ -68,6 +67,7 @@ public class TextToSpeechService implements ITextToSpeechService {
         LOG.trace("Entering method playWelcomeText.");
         try {
             maryTTS = new LocalMaryInterface();
+            LOG.info("Available voices: " + marytts.modules.synthesis.Voice.getAvailableVoices());
             if (VOICE != null) {
                 maryTTS.setVoice(VOICE);
             }

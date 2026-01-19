@@ -30,9 +30,10 @@ von Barbara Schuhmacher und Lukas Kathrein umgesetzt.
     ```mvnw package```\
     als ausführbares jar-File packetiert werden.
 
-Zuletzt getestet im **Juni 2025** mit folgenden Versionen:
+Zuletzt getestet im **Jänner 2026** mit folgenden Versionen:
 * ```Maven 3.9.9```
 * ```Java 10.0.2```
+* ```Java 21```
 
 Benötigte Libraries mit diesem Setup befinden sich unter:
 ```Lerntia/libraries/.m2.zip```

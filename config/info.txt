@@ -1,20 +1,20 @@
 AVAILABLE VOICES
 
-DEFAULT VOICES:
-* DE-male: bits3-hsmm
-* EN-male: dfki-spike-hsmm
+INSTALLED VOICES:
+* DE-female: bits1-hsmm [installed]
+* EN-female: cmu-slt-hsmm [installed]
 
 
 OTHER VOICES:
-* DE-female: bits1-hsmm
+* DE-male: bits3-hsmm
 * DE-male: dfki-pavoque-neutral-hsmm
 
+* EN-male: dfki-spike-hsmm
 * EN-male: cmu-rms-hsmm
 * EN-male: cmu-bdl-hsmm
 * EN-male: cmu-nk-hsmm
 * EN-male: dfki-obadiah-hsmm
 
-* EN-female: cmu-slt-hsmm
 * EN-female: dfki-poppy-hsmm
 * EN-female: dfki-prudence-hsmm
 
