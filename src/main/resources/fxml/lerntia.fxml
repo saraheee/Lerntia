@@ -25,7 +25,7 @@
 
     <VBox fx:id="rightPanel" minHeight="0" minWidth="0" prefWidth="1634.0" spacing="17.0" styleClass="main-right" stylesheets="@/css/background-division.css" GridPane.columnIndex="1" GridPane.rowIndex="0" VBox.vgrow="ALWAYS">
         <padding>
-            <Insets top="30.0" bottom="10.0" />  <!-- top and bottom padding -->
+            <Insets right="15.0" />
         </padding>
 
         <HBox fx:id="questionBox" minHeight="0" minWidth="0" styleClass="question-box">

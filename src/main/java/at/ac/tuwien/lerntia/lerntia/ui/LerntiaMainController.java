@@ -94,7 +94,7 @@ public class LerntiaMainController implements Runnable {
 
     // Track last calculated values to prevent unnecessary updates
     private double lastCalculatedHeight = 0;
-    private static final double BOTTOM_PADDING = 30.0;
+    private static final double BOTTOM_PADDING = 27.0;
 
     @FXML
     private VBox mainWindowLeft;
