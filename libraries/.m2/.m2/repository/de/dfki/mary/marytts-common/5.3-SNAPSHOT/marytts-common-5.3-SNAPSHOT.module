@@ -1,0 +1,146 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "marytts-common",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.18.0"
+          }
+        },
+        {
+          "group": "commons-lang",
+          "module": "commons-lang",
+          "version": {
+            "requires": "2.6"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-core",
+          "version": {
+            "requires": "2.24.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-common-5.3-SNAPSHOT.jar",
+          "url": "marytts-common-5.3-SNAPSHOT.jar",
+          "size": 136451,
+          "sha512": "c3b449ab2ed3f5071f91a18a58487b85d12673a8b135cbf1cf0e6414b981ddcf0ad0450587ab408b14c6e5c0639b118382b322be47bd62bbba166d7d6e5a3549",
+          "sha256": "6a6906ceb39e9b6b5257936a5634d9d0437c6d54725a83075c17fc86371d3cc4",
+          "sha1": "906ea419762ba41c2815b0587d36f8931a3d3380",
+          "md5": "5b3d31ccc450b6d225572f5d1e43ea6a"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.18.0"
+          }
+        },
+        {
+          "group": "commons-lang",
+          "module": "commons-lang",
+          "version": {
+            "requires": "2.6"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-core",
+          "version": {
+            "requires": "2.24.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-common-5.3-SNAPSHOT.jar",
+          "url": "marytts-common-5.3-SNAPSHOT.jar",
+          "size": 136451,
+          "sha512": "c3b449ab2ed3f5071f91a18a58487b85d12673a8b135cbf1cf0e6414b981ddcf0ad0450587ab408b14c6e5c0639b118382b322be47bd62bbba166d7d6e5a3549",
+          "sha256": "6a6906ceb39e9b6b5257936a5634d9d0437c6d54725a83075c17fc86371d3cc4",
+          "sha1": "906ea419762ba41c2815b0587d36f8931a3d3380",
+          "md5": "5b3d31ccc450b6d225572f5d1e43ea6a"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-common-5.3-SNAPSHOT-sources.jar",
+          "url": "marytts-common-5.3-SNAPSHOT-sources.jar",
+          "size": 122430,
+          "sha512": "d026097410b2bfc8a2ab1933e8de55d93719115180716c171b757508718d650190003c361e6cd0051600f6e7a4e61a6d5432ecdc0b8ac6a79b007cf11396f4bd",
+          "sha256": "a7125e6ce0261fc86f7fc7c4052bf9cf9efd5e46cf2d9eca6524d9f081489d61",
+          "sha1": "4829347b5e959b6ab60218ddf7a202aa56ad1642",
+          "md5": "a8b2e380f1405385b7c69ad2a7fa1c26"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-common-5.3-SNAPSHOT-javadoc.jar",
+          "url": "marytts-common-5.3-SNAPSHOT-javadoc.jar",
+          "size": 637397,
+          "sha512": "cdafd1f7a69c1c11fd672fff5d090a51a9692a84fda0fe8966098729745cefd4293cc6f3dd3b5d1f247e63d7c778a512decf5b49d53c149951d474a428eb8e80",
+          "sha256": "f6203eecf180bfa5caeab3b26e2ccc788d37167fdb25af67c6ff8263adee7441",
+          "sha1": "9dd51e564ca97afb6d41c74ae9a97869ec4da9ff",
+          "md5": "a029baf1b8f712944d4a6b1c61736abc"
+        }
+      ]
+    }
+  ]
+}

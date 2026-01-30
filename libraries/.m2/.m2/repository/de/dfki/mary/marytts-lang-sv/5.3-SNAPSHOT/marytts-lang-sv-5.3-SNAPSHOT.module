@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "marytts-lang-sv",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.2.1"
+          },
+          "excludes": [
+            {
+              "group": "gov.nist.math",
+              "module": "Jampack"
+            },
+            {
+              "group": "com.twmacinta",
+              "module": "fast-md5"
+            },
+            {
+              "group": "*",
+              "module": "groovy-all"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-lang-sv-5.3-SNAPSHOT.jar",
+          "url": "marytts-lang-sv-5.3-SNAPSHOT.jar",
+          "size": 136808,
+          "sha512": "a9fb6908e72b1e007f00dcae9059a65dca63c732b4431edfc96707f7ac1dc69d6dd36b4aa3e1f5a27781c17722c634d4e01cd057b0616c5d6f0a3d080ff85054",
+          "sha256": "8d42d2d1f2e0ca94214f25f3d604016a3151949d1bd57f909859eeb6a85a08d7",
+          "sha1": "4bc97946acb9ae116b8f3aa25a1b7105aed15e46",
+          "md5": "090ef20a5904260079622d41fb5ad4bb"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.2.1"
+          },
+          "excludes": [
+            {
+              "group": "gov.nist.math",
+              "module": "Jampack"
+            },
+            {
+              "group": "com.twmacinta",
+              "module": "fast-md5"
+            },
+            {
+              "group": "*",
+              "module": "groovy-all"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-lang-sv-5.3-SNAPSHOT.jar",
+          "url": "marytts-lang-sv-5.3-SNAPSHOT.jar",
+          "size": 136808,
+          "sha512": "a9fb6908e72b1e007f00dcae9059a65dca63c732b4431edfc96707f7ac1dc69d6dd36b4aa3e1f5a27781c17722c634d4e01cd057b0616c5d6f0a3d080ff85054",
+          "sha256": "8d42d2d1f2e0ca94214f25f3d604016a3151949d1bd57f909859eeb6a85a08d7",
+          "sha1": "4bc97946acb9ae116b8f3aa25a1b7105aed15e46",
+          "md5": "090ef20a5904260079622d41fb5ad4bb"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-lang-sv-5.3-SNAPSHOT-sources.jar",
+          "url": "marytts-lang-sv-5.3-SNAPSHOT-sources.jar",
+          "size": 135916,
+          "sha512": "8729e8d98a2d00ffd77d83f092fd9d09508bdf9cfceda296891918aebfcf04c34ae98a83834f7d9864dac785b86c2a81475f752f0d701774d5affcccc4ce10d5",
+          "sha256": "632363f4f533744153ad75e32cac997f6490faa30a76423e4d02fc850417f06f",
+          "sha1": "84e70e6ec08c64a38f39cdc3d4b9ce7f9aacb8e0",
+          "md5": "5ffabf15e07525d69acb54bb57901ab4"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-lang-sv-5.3-SNAPSHOT-javadoc.jar",
+          "url": "marytts-lang-sv-5.3-SNAPSHOT-javadoc.jar",
+          "size": 366177,
+          "sha512": "9f040d53ad6c4766930dff4fd50ce1732ce3cafce31a8d82eb110b7363555082c28dd049b0ab4eae14752a410fe532335fc2bacb184de7057f698e57e975dd99",
+          "sha256": "e6a0d38a5aa891620905c7a504e0f17c307d4197e7426432e07fdb0156e43d7e",
+          "sha1": "677298660623a8b983e839d5ed72fd0743b35abb",
+          "md5": "1be1113597f1c9921b1cff632eca024d"
+        }
+      ]
+    }
+  ]
+}

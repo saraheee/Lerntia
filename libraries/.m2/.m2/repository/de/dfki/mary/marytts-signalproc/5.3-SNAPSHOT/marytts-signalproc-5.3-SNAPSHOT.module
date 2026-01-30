@@ -1,0 +1,146 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "marytts-signalproc",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-common",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "gov.nist.math",
+          "module": "jama",
+          "version": {
+            "requires": "1.0.3"
+          }
+        },
+        {
+          "group": "org.swinglabs",
+          "module": "swing-layout",
+          "version": {
+            "requires": "1.0.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-signalproc-5.3-SNAPSHOT.jar",
+          "url": "marytts-signalproc-5.3-SNAPSHOT.jar",
+          "size": 967540,
+          "sha512": "b1fb63a6f4dcb3fa22c8ae6b7a446dd8cddc89ca0fdfdc0ac75381a7f2c2d5d1724721aaecb2a2607918e2a3cbd223021ca794bd08fdeea0bb428d41314d3a03",
+          "sha256": "7b0093bae3cc8d81f67822497ff4404ad722d19b94ee0a0ae51cc086037e9ec1",
+          "sha1": "0213e2ce855dd746b0cd7438b307460156840dca",
+          "md5": "ddeaf793eee3a5a6b24a4c24843fa05a"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-common",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "gov.nist.math",
+          "module": "jama",
+          "version": {
+            "requires": "1.0.3"
+          }
+        },
+        {
+          "group": "org.swinglabs",
+          "module": "swing-layout",
+          "version": {
+            "requires": "1.0.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-signalproc-5.3-SNAPSHOT.jar",
+          "url": "marytts-signalproc-5.3-SNAPSHOT.jar",
+          "size": 967540,
+          "sha512": "b1fb63a6f4dcb3fa22c8ae6b7a446dd8cddc89ca0fdfdc0ac75381a7f2c2d5d1724721aaecb2a2607918e2a3cbd223021ca794bd08fdeea0bb428d41314d3a03",
+          "sha256": "7b0093bae3cc8d81f67822497ff4404ad722d19b94ee0a0ae51cc086037e9ec1",
+          "sha1": "0213e2ce855dd746b0cd7438b307460156840dca",
+          "md5": "ddeaf793eee3a5a6b24a4c24843fa05a"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-signalproc-5.3-SNAPSHOT-sources.jar",
+          "url": "marytts-signalproc-5.3-SNAPSHOT-sources.jar",
+          "size": 856578,
+          "sha512": "3912e204eb7f9b7ab574b8bf746e3e7e220bb74dd497652aa010103b7bbd44c0f6a031854f4bec4b1a9ca28ba314065faae2e743b61fafd3253418856e3f22d9",
+          "sha256": "9343794873e80e2be50fdd869abdf0d686b366ff5bbabd26aca20a4dd074ffb7",
+          "sha1": "2a86096fbf34a15912f685b44b0ad83c7dcc24e4",
+          "md5": "888673df17ec3525de344f9f70ff9649"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-signalproc-5.3-SNAPSHOT-javadoc.jar",
+          "url": "marytts-signalproc-5.3-SNAPSHOT-javadoc.jar",
+          "size": 2184502,
+          "sha512": "b17496b728b5defaa90368d28d6ac1ec3aed001fa22076e1305000b957eaa09bc28d6bd88634e3c445cd78ae9161e67682b4e136ad22c8ae5d6849550b94510f",
+          "sha256": "d68601e65a063b3ee385283adb14f3f9d98eae9c459a5da09faa6b5bfe603117",
+          "sha1": "fe7be302fd66602eab750686dd93d49c302a8179",
+          "md5": "91a0351dac0386aba72750ce3bfe6da9"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>de.dfki.mary</groupId>
+  <artifactId>marytts-common</artifactId>
+  <versioning>
+    <latest>5.3-SNAPSHOT</latest>
+    <versions>
+      <version>5.3-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20260118150407</lastUpdated>
+  </versioning>
+</metadata>

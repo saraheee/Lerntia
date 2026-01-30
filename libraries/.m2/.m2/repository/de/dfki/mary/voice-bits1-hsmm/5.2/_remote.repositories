@@ -1,4 +1,6 @@
-#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
-#Sat Mar 07 11:49:48 CET 2020
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sun Jan 18 22:48:10 CET 2026
 voice-bits1-hsmm-5.2.jar>MaryTTS=
 voice-bits1-hsmm-5.2.pom>MaryTTS=
+voice-bits1-hsmm-5.2.jar>=
+voice-bits1-hsmm-5.2.pom>=

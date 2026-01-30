@@ -1,0 +1,139 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "marytts-master",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 10,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "marytts-master-5.3-SNAPSHOT.jar",
+          "url": "marytts-master-5.3-SNAPSHOT.jar",
+          "size": 261,
+          "sha512": "ad5a43ab15ac52ed6b94ff1c1c195d866b134cebe44162a01f81ba70258b8c38377bdbfbca96bade5a05c1b7aad25019ad46f329be4adec65a21fce7768ecb96",
+          "sha256": "d1a98c978e7bf5190e6f588ca21bf9e45d167d1114d8dfcecd09415b47395d3f",
+          "sha1": "beaeb14aba7a6498d76f010b87a2d76f1097d4e8",
+          "md5": "11b0175b3ed442e154bf105ec7358fca"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 10,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-de",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-en",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-fr",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-it",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-lb",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-ru",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-sv",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-te",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-tr",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "voice-cmu-slt-hsmm",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-master-5.3-SNAPSHOT.jar",
+          "url": "marytts-master-5.3-SNAPSHOT.jar",
+          "size": 261,
+          "sha512": "ad5a43ab15ac52ed6b94ff1c1c195d866b134cebe44162a01f81ba70258b8c38377bdbfbca96bade5a05c1b7aad25019ad46f329be4adec65a21fce7768ecb96",
+          "sha256": "d1a98c978e7bf5190e6f588ca21bf9e45d167d1114d8dfcecd09415b47395d3f",
+          "sha1": "beaeb14aba7a6498d76f010b87a2d76f1097d4e8",
+          "md5": "11b0175b3ed442e154bf105ec7358fca"
+        }
+      ]
+    }
+  ]
+}

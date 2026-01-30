@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- This module was also published with a richer model, Gradle metadata,  -->
+  <!-- which should be used instead. Do not delete the following line which  -->
+  <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+  <!-- that they should prefer consuming it instead. -->
+  <!-- do_not_remove: published-with-gradle-metadata -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.dfki.mary</groupId>
+  <artifactId>marytts-lang-tr</artifactId>
+  <version>5.3-SNAPSHOT</version>
+  <name>MaryTTS</name>
+  <description>An open-source, multilingual Text-to-Speech Synthesis platform written in Java</description>
+  <url>http://mary.dfki.de</url>
+  <inceptionYear>2000</inceptionYear>
+  <organization>
+    <name>DFKI GmbH</name>
+    <url>https://dfki.de/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License v3.0</name>
+      <url>https://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Sébastien Le Maguer</name>
+      <url>https://github.com/seblemaguer</url>
+    </developer>
+    <developer>
+      <name>Ingmar Steiner</name>
+      <url>https://github.com/psibre</url>
+    </developer>
+    <developer>
+      <name>Marc Schröder</name>
+      <url>https://github.com/marc1s</url>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Timo Baumann</name>
+      <url>https://github.com/timobaumann</url>
+    </contributor>
+    <contributor>
+      <name>Stefanie Becker</name>
+    </contributor>
+    <contributor>
+      <name>Harald Berthelsen</name>
+      <url>https://github.com/HaraldBerthelsen</url>
+    </contributor>
+    <contributor>
+      <name>Marcela Charfuelan</name>
+      <url>https://github.com/marcelach1</url>
+    </contributor>
+    <contributor>
+      <name>Aitor Martínez Egurcegui</name>
+      <url>https://github.com/aitorme</url>
+    </contributor>
+    <contributor>
+      <name>Paulo Faria</name>
+    </contributor>
+    <contributor>
+      <name>Peter Gilles</name>
+      <url>https://github.com/PeterGilles</url>
+    </contributor>
+    <contributor>
+      <name>Tristan Hamilton</name>
+      <url>https://github.com/munzey</url>
+    </contributor>
+    <contributor>
+      <name>Anna Hunecke</name>
+    </contributor>
+    <contributor>
+      <name>Sacha Krstulović</name>
+    </contributor>
+    <contributor>
+      <name>Giulio Paci</name>
+      <url>https://github.com/giuliopaci</url>
+    </contributor>
+    <contributor>
+      <name>Sathish Chandra Pammi</name>
+      <url>https://github.com/sathishpc</url>
+    </contributor>
+    <contributor>
+      <name>Jonathan Poitz</name>
+      <url>https://github.com/jonathanPoitz</url>
+    </contributor>
+    <contributor>
+      <name>Benjamin Roth</name>
+    </contributor>
+    <contributor>
+      <name>Ali Shah</name>
+      <url>https://github.com/alishah-ahmed</url>
+    </contributor>
+    <contributor>
+      <name>Atta Ur Rehman Shah</name>
+      <url>https://github.com/attacomsian</url>
+    </contributor>
+    <contributor>
+      <name>Nickolay Shmyrev</name>
+      <url>https://github.com/nshmyrev</url>
+    </contributor>
+    <contributor>
+      <name>Jochen Steigner</name>
+    </contributor>
+    <contributor>
+      <name>Maureen Tanuadji</name>
+      <url>https://github.com/mochanz</url>
+    </contributor>
+    <contributor>
+      <name>Fabio Tesser</name>
+      <url>https://github.com/ftesser</url>
+    </contributor>
+    <contributor>
+      <name>Oytun Türk</name>
+    </contributor>
+    <contributor>
+      <name>Mat Wilson</name>
+    </contributor>
+    <contributor>
+      <name>Sotaya Yakubu</name>
+      <url>https://github.com/Rootex</url>
+    </contributor>
+  </contributors>
+  <scm>
+    <connection>scm:git:https://github.com/marytts/marytts.git</connection>
+    <developerConnection>scm:git:git@github.com/marytts/marytts.git</developerConnection>
+    <url>https://github.com/marytts/marytts</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/marytts/marytts/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/marytts/marytts/actions</url>
+  </ciManagement>
+  <distributionManagement>
+    <downloadUrl>https://bintray.com/marytts/marytts/marytts</downloadUrl>
+  </distributionManagement>
+  <dependencies>
+    <dependency>
+      <groupId>de.dfki.mary</groupId>
+      <artifactId>marytts-runtime</artifactId>
+      <version>5.2.1</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>gov.nist.math</groupId>
+          <artifactId>Jampack</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.twmacinta</groupId>
+          <artifactId>fast-md5</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>groovy-all</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>de.dfki.mary</groupId>
+      <artifactId>marytts-runtime</artifactId>
+      <version>5.3-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>de.dfki.mary</groupId>
+      <artifactId>marytts-lexicon-tr</artifactId>
+      <version>0.1.1</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,244 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "marytts-runtime",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-common",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-signalproc",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "commons-collections",
+          "module": "commons-collections",
+          "version": {
+            "requires": "3.2.2"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "33.4.0-jre"
+          }
+        },
+        {
+          "group": "com.ibm.icu",
+          "module": "icu4j",
+          "version": {
+            "requires": "76.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-runtime-5.3-SNAPSHOT.jar",
+          "url": "marytts-runtime-5.3-SNAPSHOT.jar",
+          "size": 987404,
+          "sha512": "8939978ad86174277e14633c3d27ef8ca444ae069d7f888a28fe49669733823e51238203e15ca86c6056e68874f412cbabcee4c71110a65cf2e2064525778fa9",
+          "sha256": "dc2410981c160f0b841e9b01d92aa639be7dd5fcbd6fa19b35be704a46d7adbe",
+          "sha1": "3869fb66b0d6aacee062dea6150d35771cf8b765",
+          "md5": "d30cc6f2c46f524c9d0f4fe7edd99b18"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "emotionml-checker-java",
+          "version": {
+            "requires": "1.2.2"
+          }
+        },
+        {
+          "group": "org.hsqldb",
+          "module": "hsqldb",
+          "version": {
+            "requires": "2.7.4"
+          },
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "hsqldb",
+              "type": "jar",
+              "extension": "jar",
+              "classifier": "jdk8"
+            }
+          }
+        },
+        {
+          "group": "org.apache.httpcomponents",
+          "module": "httpcore",
+          "version": {
+            "requires": "4.1"
+          }
+        },
+        {
+          "group": "org.apache.httpcomponents",
+          "module": "httpcore-nio",
+          "version": {
+            "requires": "4.1"
+          }
+        },
+        {
+          "group": "de.dfki.lt.jtok",
+          "module": "jtok-core",
+          "version": {
+            "requires": "1.9.3"
+          },
+          "excludes": [
+            {
+              "group": "log4j",
+              "module": "log4j"
+            }
+          ]
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-log4j12",
+          "version": {
+            "requires": "2.0.16"
+          }
+        },
+        {
+          "group": "org.apache.opennlp",
+          "module": "opennlp-tools",
+          "version": {
+            "requires": "1.9.2"
+          }
+        },
+        {
+          "group": "net.sf.trove4j",
+          "module": "trove4j",
+          "version": {
+            "requires": "2.0.2"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-common",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-signalproc",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "commons-collections",
+          "module": "commons-collections",
+          "version": {
+            "requires": "3.2.2"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "33.4.0-jre"
+          }
+        },
+        {
+          "group": "com.ibm.icu",
+          "module": "icu4j",
+          "version": {
+            "requires": "76.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "marytts-runtime-5.3-SNAPSHOT.jar",
+          "url": "marytts-runtime-5.3-SNAPSHOT.jar",
+          "size": 987404,
+          "sha512": "8939978ad86174277e14633c3d27ef8ca444ae069d7f888a28fe49669733823e51238203e15ca86c6056e68874f412cbabcee4c71110a65cf2e2064525778fa9",
+          "sha256": "dc2410981c160f0b841e9b01d92aa639be7dd5fcbd6fa19b35be704a46d7adbe",
+          "sha1": "3869fb66b0d6aacee062dea6150d35771cf8b765",
+          "md5": "d30cc6f2c46f524c9d0f4fe7edd99b18"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-runtime-5.3-SNAPSHOT-sources.jar",
+          "url": "marytts-runtime-5.3-SNAPSHOT-sources.jar",
+          "size": 731458,
+          "sha512": "aee7f65001dd53ee3272b05d3076bfbf6c1688fbcde393d6eb9ae21d8019281b49fdc5b173434f5f02afbd451d434f7126e6ec33a1c7f9373899dd872e690e4b",
+          "sha256": "329848acbe434c138d1560647996f986a17191e516a6bdd94444d275bcb23a47",
+          "sha1": "3cdd163f8bba29f02f57113307929aec833a1a5c",
+          "md5": "00f908106011337db9b08a6786f33f72"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "marytts-runtime-5.3-SNAPSHOT-javadoc.jar",
+          "url": "marytts-runtime-5.3-SNAPSHOT-javadoc.jar",
+          "size": 2022199,
+          "sha512": "6262e00c13a1503ae9c7c00a95c6bf1f086727ec560581a4570e703b6be5bad3a07c0369f7e24f608b436d70e9b481730ed66b221b11ad3a41f7b38988dc73c1",
+          "sha256": "0370cc491b603092ceea6bcfbfc15446df4ea9612a8d48ba88a1cbc0faf354a6",
+          "sha1": "849abf0dddee12861e9a7775c388d2ac13e56aa0",
+          "md5": "3bd40845534d337e5fab46a6b9bcb876"
+        }
+      ]
+    }
+  ]
+}

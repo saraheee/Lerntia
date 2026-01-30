@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "de.dfki.mary",
+    "module": "voice-cmu-slt-hsmm",
+    "version": "5.3-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.6.4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.2.1"
+          },
+          "excludes": [
+            {
+              "group": "gov.nist.math",
+              "module": "Jampack"
+            },
+            {
+              "group": "com.twmacinta",
+              "module": "fast-md5"
+            },
+            {
+              "group": "*",
+              "module": "groovy-all"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "voice-cmu-slt-hsmm-5.3-SNAPSHOT.jar",
+          "url": "voice-cmu-slt-hsmm-5.3-SNAPSHOT.jar",
+          "size": 1239724,
+          "sha512": "181547c6cdc07ce1f15276ae6783bc983ee428d2febebcc7be20fa5ff280e9de14a952de0e6f53cc80b313c3db35c6be1fa60398dadc20ec8fcb7298d196cfd1",
+          "sha256": "15a8442f2a3238934e0258ecf402e27787b3d790b4df021dc6e665bb51ca5e9e",
+          "sha1": "0ba1ce9e9a5747c1d395b8b1c8aceaa38d47be5d",
+          "md5": "c6b3fad9706f656f8fdd9617654a9c46"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-lang-en",
+          "version": {
+            "requires": "5.3-SNAPSHOT"
+          }
+        },
+        {
+          "group": "de.dfki.mary",
+          "module": "marytts-runtime",
+          "version": {
+            "requires": "5.2.1"
+          },
+          "excludes": [
+            {
+              "group": "gov.nist.math",
+              "module": "Jampack"
+            },
+            {
+              "group": "com.twmacinta",
+              "module": "fast-md5"
+            },
+            {
+              "group": "*",
+              "module": "groovy-all"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "name": "voice-cmu-slt-hsmm-5.3-SNAPSHOT.jar",
+          "url": "voice-cmu-slt-hsmm-5.3-SNAPSHOT.jar",
+          "size": 1239724,
+          "sha512": "181547c6cdc07ce1f15276ae6783bc983ee428d2febebcc7be20fa5ff280e9de14a952de0e6f53cc80b313c3db35c6be1fa60398dadc20ec8fcb7298d196cfd1",
+          "sha256": "15a8442f2a3238934e0258ecf402e27787b3d790b4df021dc6e665bb51ca5e9e",
+          "sha1": "0ba1ce9e9a5747c1d395b8b1c8aceaa38d47be5d",
+          "md5": "c6b3fad9706f656f8fdd9617654a9c46"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "voice-cmu-slt-hsmm-5.3-SNAPSHOT-sources.jar",
+          "url": "voice-cmu-slt-hsmm-5.3-SNAPSHOT-sources.jar",
+          "size": 1238586,
+          "sha512": "578aa21e8c8e3618857e95222b7a10d484d867e873821968073a3a42428e1bf0f9ce8e38d9208255315a9227bdb16e936642179b376a860eaac0f5ff26821c44",
+          "sha256": "d5de32c6d0e7ad5b30566ec2908c7bd4e3cc560759e5eec433b747202ff17d5d",
+          "sha1": "b376dc48bf62d858f71dbbde69abfba1a3db9baf",
+          "md5": "d9780e9b037358771072a50c688224de"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "voice-cmu-slt-hsmm-5.3-SNAPSHOT-javadoc.jar",
+          "url": "voice-cmu-slt-hsmm-5.3-SNAPSHOT-javadoc.jar",
+          "size": 366368,
+          "sha512": "89fc297a5bdcca8b7b5de0f9076f7ffba8cfe4eea5bf5ec976e58eada7d92d26b64b53f91f5cdaead91684e729e5d33b50c7dcedddac13f6402621ec454d8cf5",
+          "sha256": "441a9a0e7b00ee31f115b1fcc26e9aa76eeed5f31efe9e6b8b6e49dc27d5576d",
+          "sha1": "0f65e3dd3cc3ac348d6b3c580c835f1917f95f82",
+          "md5": "47b8d1a2f21cbfce6e4addd88c4fb22e"
+        }
+      ]
+    }
+  ]
+}
