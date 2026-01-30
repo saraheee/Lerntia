@@ -1,0 +1,6 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Jul 06 12:49:46 CEST 2018
+jsr305-2.0.1.jar>central=
+jsr305-2.0.1.pom>central=
+jsr305-2.0.1.jar>MaryTTS=
+jsr305-2.0.1.pom>MaryTTS=
